@@ -1,0 +1,49 @@
+.image-zoomer-toolbar {
+  display: inline-block;
+  text-align: center;
+  color: $color-border-toolbar;
+  position: absolute;
+  bottom: .7em;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 14.4em;
+
+  button {
+    float: left;
+    transition: $transition-global;
+    font-size: 2em;
+    background: $bg-image-zoomer-toolbar;
+    border: $border-zoomer-toolbar;
+    padding-top: 0;
+    padding-bottom: 9;
+    padding-left: $padding-zoomer-toolbar-btn-h;
+    padding-right: $padding-zoomer-toolbar-btn-h;
+    height: 1.1em;
+    line-height: .01;
+    &:hover {
+      color: rgba(255, 255, 255, .8);
+    }
+  }
+  .button-minus, .button-add {
+    overflow: hidden;
+    i {
+      font-size: 0.5em;
+    }
+  }
+  .input {
+    text-align: center;
+    color: $color-border-toolbar;
+    height: 2.2em;
+    width: 8em;
+    background: $bg-image-zoomer-toolbar;
+    border: $border-zoomer-toolbar;
+    float: left;
+    border-left: transparent;
+    border-right: transparent;
+  }
+  &:after {
+    @include clearfix();
+  }
+}

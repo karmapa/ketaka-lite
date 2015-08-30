@@ -1,0 +1,49 @@
+
+.tab-box.nav.nav-tabs {
+  > li > a {
+    line-height: 1.9;
+    background-color: $bg-tab;
+    color: $color-tab;
+    padding-top: $padding-vertical-tab;
+    padding-bottom: $padding-vertical-tab;
+    padding-left: .8em;
+    padding-right: 0;
+    width: $width-tab;
+    border-color: $border-color-tab $border-color-tab $border-color-tab-ex;
+    transition: $transition-global;
+    &:hover {
+      background-color: $bg-tab-ex;
+    }
+  }
+  li.active > a {
+    background-color: #fff;
+    border-bottom-color: transparent;
+  }
+  li.active > a:hover {
+    background-color: #fff;
+  }
+  > li.button-add > a {
+    transition: $transition-global;
+    &:hover {
+      color: $bg-tab-add-ex;
+      background-color: $bg-tab-add-ex;
+    }
+    margin-top: .5em;
+    height: 1.7em;
+    display: block;
+    width: auto;
+    background-color: $bg-tab-add;
+    border: 1px solid darken($bg-tab-add, 15);
+    color: $bg-tab-add;
+  }
+  .close {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    line-height: 1.1;
+    display: inline-block;
+    color: $color-tab-close;
+    font-size: 1.2em;
+  }
+}

@@ -1,0 +1,19 @@
+.ReactCodeMirror {
+  .CodeMirror {
+    border: $border-global;
+    height: calc(50vh - (#{$height-non-editor-area} / 2));
+  }
+}
+
+.editor-area.vertical {
+  .editor {
+    display: inline-block;
+    width: 50%;
+  }
+  .ReactCodeMirror {
+    width: 100%;
+    .CodeMirror {
+      height: calc(100vh - #{$height-non-editor-area});
+    }
+  }
+}

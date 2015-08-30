@@ -1,0 +1,41 @@
+// paths
+$icon-font-path: './node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+
+// globals
+$transition-global: 0.3s all;
+$border-color-global: #bfbfbf;
+$border-global: 1px solid $border-color-global;
+
+// navigation
+$bg-navigation: #f8f8f8;
+$border-navigation: 1px solid darken($bg-navigation, 10);
+$height-non-editor-area: 8.4em;
+
+// tabs
+$color-tab: #555;
+$bg-tab: #ededed;
+$bg-tab-ex: lighten($bg-tab, 4);
+
+$bg-tab-add: #d8d8d8;
+$bg-tab-add-ex: lighten($bg-tab-add, 2);
+
+$border-color-tab: $border-color-global;
+$border-color-tab-ex: #ddd;
+
+$color-tab-close: #000;
+
+$width-tab: 8.6em;;
+$padding-vertical-tab: 0.1em;
+
+// image zoomer toolbar
+$color-border-toolbar: rgba(255, 255, 255, 0.7);
+$border-zoomer-toolbar: 1px solid $color-border-toolbar;
+$padding-zoomer-toolbar-btn-h: .5em;
+$bg-image-zoomer-toolbar: rgba(0, 0, 0, 0.5);
+
+// editor toolbar
+$color-editor-toolbar: black;
+$border-color-editor-toolbar: $border-color-global;
+$border-editor-toolbar: 1px solid $border-color-global;
+$border-editor-toolbar-ex: 1px solid #3276b1;
+$bg-editor-toolbar: white;

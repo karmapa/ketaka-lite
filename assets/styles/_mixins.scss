@@ -1,0 +1,6 @@
+
+@mixin no-outline () {
+  &, &:active {
+    outline: 0;
+  }
+}

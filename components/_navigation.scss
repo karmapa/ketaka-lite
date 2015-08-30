@@ -1,0 +1,35 @@
+
+.navigation.navbar {
+  background: $bg-navigation;
+  border: $border-navigation;
+  min-height: 2.8em;
+  a.dropdown-toggle {
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+  }
+  margin-bottom: 0.7em;
+  .caret {
+    margin-left: .6em;
+  }
+  .item-direction {
+    a {
+      margin: 0;
+      padding: 0;
+    }
+    @include no-outline();
+  }
+  .btn-direction {
+    transition: $transition-global;
+    transform: rotate(90deg);
+
+    padding: 0.38em 1em;
+
+    &, &:active {
+      outline: 0;
+    }
+    font-size: 1.2em;
+  }
+  .btn-direction.vertical {
+    transform: rotate(0deg);
+  }
+}

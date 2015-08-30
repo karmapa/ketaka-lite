@@ -1,0 +1,29 @@
+
+// set font-family to inital to override twitter bootstrap's font-family
+// DO NOT USE Helvetica Neue to display tibetain
+// chararacter (\u3897) will not display properly.
+body, .CodeMirror {
+  font-family: initial;
+}
+
+// disable default outline
+* {
+  outline: none;
+}
+
+// node-sass can't parse \2b well
+.glyphicon-plus:before {
+  content: "\002b";
+}
+
+.progress {
+  margin-bottom: 1em;
+}
+
+.box-readonly {
+  cursor: not-allowed;
+}
+
+.readonly {
+  pointer-events: none;
+}
