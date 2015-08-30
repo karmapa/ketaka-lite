@@ -3,11 +3,12 @@ let stackingState = 'no';
 
 /*
  * What we want is to stack only two letters, except if the third is
- * ra, ya or wa (for standard tibetan) or ha (for sanskrit). This makes
+ * ra (only after certain stacks), ya or wa (for standard tibetan),
+ * or ha or aa (for sanskrit, under specific conditions). This makes
  * complex mantra stacks impossible, but feels more like the original
  * Sambhota keyboard.
  */
-function normalOrSub(normal, sub, canBeThird) {
+function normalOrSub(normal, sub, canBeThird, canBeFourth) {
   switch (stackingState) {
     case 'no':
       return normal;
@@ -18,9 +19,16 @@ function normalOrSub(normal, sub, canBeThird) {
     case 'nextissecond':
       stackingState = 'nextisthird';
       return sub;
-    default:    // nextisthird
-      stackingState = 'no';
+    case 'nextisthird':
+      stackingState = 'nextisfourth';
       if (canBeThird) {
+        return sub;
+      } else {
+        return normal;
+      }
+    default:    // nextisfourth
+      stackingState = 'no';
+      if (canBeFourth) {
         return sub;
       }
       else {
@@ -82,9 +90,15 @@ const BoSambhota = {
     ['W', () => normalOrSub('ཝ', 'ྺ')],
     ['Z', () => normalOrSub('ཞ', 'ྮ')],
     ['z', () => normalOrSub('ཟ', 'ྯ')],
-    ['\'', () => normalOrSub('འ', 'ཱ', true)],
+    ['\'', () => normalOrSub('འ', 'ཱ', true, true)],
     ['y', () => normalOrSub('ཡ', 'ྱ', true)],
-    ['r', () => normalOrSub('ར', 'ྲ', true)],
+    ['སྐr', () => normalOrSub('སྐར', 'སྐྲ', true)],
+    ['སྒr', () => normalOrSub('སྒར', 'སྒྲ', true)],
+    ['སྣr', () => normalOrSub('སྣར', 'སྣྲ', true)],
+    ['སྤr', () => normalOrSub('སྤར', 'སྤྲ', true)],
+    ['སྦr', () => normalOrSub('སྦར', 'སྦྲ', true)],
+    ['སྨr', () => normalOrSub('སྨར', 'སྨྲ', true)],
+    ['r', () => normalOrSub('ར', 'ྲ')],
     ['l', () => normalOrSub('ལ', 'ླ')],
     ['S', () => normalOrSub('ཤ', 'ྴ')],
     ['ཀB', () => normalOrSub('ཀཥ', 'ཀྵ')],
