@@ -9,8 +9,10 @@
 
 ## Front-end environment setup
 
+* npm install electron-prebuilt -g
 * npm install
 * npm run dev
+* npm run electron-dev
 
 ## Project dependencies:
 
@@ -31,8 +33,6 @@
 * redux - Architecture stuff.
 * whatwg-fetch - Polyfill of window.fetch (available after Chrome 39)
 
-## Browser Compatibility
-* Latest chrome only.
 
 ## Terminology
 * PB - Page break
