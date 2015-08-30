@@ -37,3 +37,6 @@
 ## Terminology
 * PB - Page break
 * doc - Document, each document can have several pages and user import ONE document at each time.
+
+## Wiki
+* [Package Import Rules](https://github.com/kmsheng/ketaka-lite/wiki/Package-Import-Rules)
