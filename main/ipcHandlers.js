@@ -6,7 +6,9 @@ var _ = require('lodash');
 var dialog = require('dialog');
 var PATH_APP_DOC = require('./constants').PATH_APP_DOC;
 
-exports.importButtonClicked = function(event, arg) {
+exports.importButtonClicked = function(event, overridePaths) {
+
+  overridePaths = overridePaths || [];
 
   var send = event.sender.send.bind(event.sender);
   var options = {
@@ -17,7 +19,14 @@ exports.importButtonClicked = function(event, arg) {
     ]
   };
 
-  dialog.showOpenDialog(options, function(paths) {
+  // force import, will override bamboo
+  if (overridePaths.length > 0) {
+    importPaths(overridePaths, true);
+  } else {
+    dialog.showOpenDialog(options, importPaths);
+  }
+
+  function importPaths(paths, force) {
 
     if (_.isEmpty(paths)) {
       return;
@@ -25,19 +34,23 @@ exports.importButtonClicked = function(event, arg) {
 
     send('import-start');
 
-    Importer.handleImportPaths(paths, onProgress)
+    Importer.handleImportPaths(paths, onProgress, force)
       .then(function(doc) {
         send('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
         send('import-done', {message: 'Imported successfully', doc: doc});
       })
-      .catch(function(errors) {
-        send('import-error', {message: errors});
+      .catch(function(err) {
+
+        if ('bambooExisted' === err.type) {
+          return send('confirm-bamboo-override', err);
+        }
+        send('import-error', {message: err});
       });
 
     function onProgress(res) {
       send('import-progress', res);
     }
-  });
+  }
 };
 
 exports.save = function(event, doc) {

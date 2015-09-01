@@ -240,11 +240,11 @@ function warnInvalidImages(bambooName, rows, onProgress) {
   }
 }
 
-function handleImportPaths(paths, onProgress) {
+function handleImportPaths(paths, onProgress, override) {
 
   onProgress = onProgress || _.noop;
 
-  var bambooName;
+  var bambooName, importedRows;
 
   if (_.isEmpty(paths)) {
     return Promise.resolve([]);
@@ -270,6 +270,7 @@ function handleImportPaths(paths, onProgress) {
     .then(function(rows) {
       onProgress({progress: 60, type: 'info', message: 'Step5: Find Bamboo Name'});
       bambooName = getBambooName(rows);
+
       if (! bambooName) {
         onProgress({type: 'danger', message: 'Unable to find bamboo name'});
         return Promise.reject('unable to find bamboo name');
@@ -278,11 +279,18 @@ function handleImportPaths(paths, onProgress) {
 
       warnInvalidImages(bambooName, rows, onProgress);
 
-      return rows;
+      importedRows = rows;
+
+      return Doc.getExistedDocNames();
     })
-    .then(function(rows) {
+    .then(function(names) {
+
+      if (-1 !== names.indexOf(bambooName) && (true !== override)) {
+        return Promise.reject({type: 'bambooExisted', bambooName: bambooName, paths: paths});
+      }
+
       onProgress({progress: 70, type: 'info', message: 'Step6: Create Bamboo By Imported Rows'});
-      return createDocByRows(bambooName, rows);
+      return createDocByRows(bambooName, importedRows);
     })
     .then(function(doc) {
       onProgress({progress: 80, type: 'info', message: 'Step7: Copy Images'});

@@ -1,12 +1,18 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Alert, Button, Modal, ProgressBar} from 'react-bootstrap';
 import _ from 'lodash';
 
 export default class ModalImportStatus extends React.Component {
 
+  static PropTypes = {
+    promptConfirm: PropTypes.func.isRequired
+  };
+
   state = {
     show: false,
+    showPrompt: false,
+    progressStyle: 'info',
     progress: 0,
     messages: [],
   };
@@ -18,6 +24,14 @@ export default class ModalImportStatus extends React.Component {
     this.setState(_.extend({
       show: true
     }, args));
+  }
+
+  showPrompt(args) {
+    this.setState({
+      showPrompt: true,
+      progressStyle: 'warning',
+      promptMessage: args.promptMessage
+    });
   }
 
   addMessage(args) {
@@ -38,7 +52,10 @@ export default class ModalImportStatus extends React.Component {
   close() {
     this.setState({
       show: false,
+      showPrompt: false,
+      promptMessage: '',
       messages: [],
+      progressStyle: 'info',
       progress: 0
     });
   }
@@ -48,7 +65,7 @@ export default class ModalImportStatus extends React.Component {
   render() {
 
     let {className} = this.props;
-    let {show, progress, messages} = this.state;
+    let {show, progress, messages, progressStyle} = this.state;
 
     return (
       <Modal show={show} className={className} backdrop="static" onHide={::this.onModalHide}>
@@ -56,21 +73,43 @@ export default class ModalImportStatus extends React.Component {
           <Modal.Title>Import Status</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <ProgressBar active bsStyle="info" now={progress} />
-        {this.renderMessages(messages)}
+          <ProgressBar active bsStyle={progressStyle} now={progress} />
+          {this.renderMessages(messages)}
         </Modal.Body>
         <Modal.Footer>
-          <Button bsStyle='primary' onClick={::this.close}>OK</Button>
+          {this.renderButtons()}
         </Modal.Footer>
       </Modal>
     );
   }
 
+  renderButtons() {
+    if (this.state.showPrompt) {
+      return (
+        <div>
+          <Button onClick={::this.close}>Cancel</Button>
+          <Button bsStyle='warning' onClick={this.props.promptConfirm}>Override</Button>
+        </div>
+      );
+    }
+    else {
+      return <Button bsStyle='primary' onClick={::this.close}>OK</Button>;
+    }
+  }
+
   renderMessages(messages) {
-    return _.chain(messages)
-      .groupBy('type')
-      .map((rows, type) => (<Alert key={type} bsStyle={type}>{this.renderRows(rows)}</Alert>))
-      .value();
+
+    if (this.state.showPrompt) {
+      return (
+        <Alert bsStyle="warning">{this.state.promptMessage}</Alert>
+      );
+    }
+    else {
+      return _.chain(messages)
+        .groupBy('type')
+        .map((rows, type) => (<Alert key={type} bsStyle={type}>{this.renderRows(rows)}</Alert>))
+        .value();
+    }
   }
 
   renderRows(rows) {
