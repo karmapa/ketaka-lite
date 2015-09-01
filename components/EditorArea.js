@@ -349,6 +349,10 @@ export default class EditorArea extends React.Component {
       });
   }
 
+  onSpellCheckButtonClick() {
+    this.checkSpelling();
+  }
+
   getEditorKey(uuid) {
     return uuid + '.editor';
   }
@@ -423,6 +427,7 @@ export default class EditorArea extends React.Component {
       onCodemirrorChange: ::this.onCodemirrorChange,
       onSettingsButtonClick: ::this.onSettingsButtonClick,
       onPageAddButtonClick: ::this.onPageAddButtonClick,
+      onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
       onReadonlyButtonClick: toggleReadonly,
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
       setInputMethod: this.props.setInputMethod,

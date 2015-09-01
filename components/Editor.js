@@ -21,6 +21,7 @@ export default class Editor extends React.Component {
     onApplyChunksButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     onReadonlyButtonClick: PropTypes.func,
+    onSpellCheckButtonClick: PropTypes.func,
     readonly: PropTypes.bool,
     setInputMethod: PropTypes.func
   };
@@ -76,7 +77,7 @@ export default class Editor extends React.Component {
     let {code, className, onInputChange, inputMethod,
       setInputMethod, pageNames, pageIndex, onSettingsButtonClick,
       onPageAddButtonClick, readonly, onApplyChunksButtonClick,
-      onReadonlyButtonClick} = this.props;
+      onReadonlyButtonClick, onSpellCheckButtonClick} = this.props;
 
     let editorToolbarProps = {
       readonly,
@@ -91,6 +92,7 @@ export default class Editor extends React.Component {
       onReadonlyButtonClick,
       onSettingsButtonClick,
       onPageAddButtonClick,
+      onSpellCheckButtonClick,
       onApplyChunksButtonClick
     };
 

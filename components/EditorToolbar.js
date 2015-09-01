@@ -20,6 +20,7 @@ export default class EditorToolbar extends React.Component {
     onColorButtonClick: PropTypes.func,
     onSettingsButtonClick: PropTypes.func,
     onApplyChunksButtonClick: PropTypes.func,
+    onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     setInputMethod: PropTypes.func,
     inputMethod: PropTypes.string
@@ -30,7 +31,8 @@ export default class EditorToolbar extends React.Component {
   render() {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick, onColorButtonClick,
-      onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex, readonly} = this.props;
+      onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
+      readonly, onSpellCheckButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
