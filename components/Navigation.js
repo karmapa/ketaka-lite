@@ -34,12 +34,6 @@ export default class Navigation extends React.Component {
 
     let self = this;
 
-    ipc.on('import-done', function(res) {
-      self.props.importDoc(res.doc);
-      self.refs.toast.success(res.message);
-      DocHelper.import();
-    });
-
     ipc.on('import-start', function() {
       self.refs.modalImportStatus.open({
         title: 'Import Status'
@@ -48,6 +42,12 @@ export default class Navigation extends React.Component {
 
     ipc.on('import-progress', function(res) {
       self.refs.modalImportStatus.addMessage(res);
+    });
+
+    ipc.on('import-done', function(res) {
+      self.props.importDoc(res.doc);
+      self.refs.toast.success(res.message);
+      DocHelper.import();
     });
 
     ipc.on('import-error', function(res) {
