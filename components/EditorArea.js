@@ -9,6 +9,8 @@ import {DocHelper, Helper} from '../services/';
 
 import ReactToastr from 'react-toastr';
 
+import {checkSyllables} from 'check-tibetan';
+
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
@@ -331,6 +333,20 @@ export default class EditorArea extends React.Component {
     this.refs.modalPageAdd.open({
       pageNames: _.get(this.getDoc(), 'pages', []).map(page => page.name)
     });
+  }
+
+  checkSpelling() {
+    let codemirror = this.getCurrentCodemirror();
+    let content = codemirror.getValue();
+
+    checkSyllables(content)
+      .forEach(result => {
+        let [start, length] = result;
+        let pos = codemirror.posFromIndex(start);
+        let from = {line: pos.line, ch: pos.ch};
+        let to = {line: pos.line, ch: pos.ch + length};
+        codemirror.markText(from, to, {className: 'wrong-spelt'});
+      });
   }
 
   getEditorKey(uuid) {
