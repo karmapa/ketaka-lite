@@ -105,6 +105,7 @@ export default class EditorToolbar extends React.Component {
               <i className="glyphicon glyphicon-plus"></i>
             </button>
           </OverlayTrigger>
+
         </div>
 
         <div className="section language-section">
