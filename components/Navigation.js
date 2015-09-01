@@ -30,6 +30,8 @@ export default class Navigation extends React.Component {
     ipc.send('import-button-clicked');
   }
 
+  overridePaths = [];
+
   componentDidMount() {
 
     let self = this;
@@ -50,9 +52,26 @@ export default class Navigation extends React.Component {
       DocHelper.import();
     });
 
+    ipc.on('confirm-bamboo-override', function(res) {
+      self.overridePaths = res.paths;
+      self.refs.modalImportStatus.showPrompt({
+        promptMessage: 'Bamboo ' + res.bambooName + ' exists. Do you want to override it ?'
+      });
+    });
+
     ipc.on('import-error', function(res) {
       self.refs.toast.error(res.message);
     });
+  }
+
+  overrideBamboo() {
+    this.refs.modalImportStatus.close();
+    ipc.send('import-button-clicked', this.overridePaths);
+  }
+
+  cancelOverride() {
+    this.overridePaths.length = 0;
+    this.refs.modalImportStatus.close();
   }
 
   render() {
@@ -83,7 +102,7 @@ export default class Navigation extends React.Component {
             </Nav>
           </CollapsibleNav>
         </Navbar>
-        <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
+        <ModalImportStatus className="modal-import-status" ref="modalImportStatus" promptConfirm={::this.overrideBamboo} promptCancel={::this.cancelOverride} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

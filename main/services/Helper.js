@@ -6,6 +6,7 @@ var fs = require('fs');
 var mkdirp = require('mkdirp');
 var readChunk = require('read-chunk');
 var rimraf = require('rimraf');
+var _ = require('lodash');
 
 function chunkString(str, length) {
   return str.match(new RegExp('.{1,' + length + '}', 'g'));
@@ -122,11 +123,12 @@ function writeFile(path, content) {
 function getPathsType(paths) {
 
   var rows = [];
+  var clonedPaths = _.clone(paths);
 
   return new Promise(function(resolve, reject) {
 
     (function recurse() {
-      var path = paths.pop();
+      var path = clonedPaths.pop();
 
       if (! path) {
         resolve(rows);
