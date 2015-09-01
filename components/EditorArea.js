@@ -372,10 +372,14 @@ export default class EditorArea extends React.Component {
     this.refs.modalChunksApply.close();
   }
 
-  applyChunksAndClose(chunks) {
+  getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
-    let codemirror = this.refs[editorKey].codemirror;
+    return this.refs[editorKey].codemirror;
+  }
+
+  applyChunksAndClose(chunks) {
+    let codemirror = this.getCurrentCodemirror();
     let content = '\n\n' + chunks.join('\n\n');
     codemirror.replaceRange(content, {line: Infinity});
     this.refs.modalChunksApply.close();
