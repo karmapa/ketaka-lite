@@ -82,6 +82,12 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
+          <OverlayTrigger placement='top' overlay={<Tooltip>Spell Check</Tooltip>}>
+            <button className="button-spell-check" onClick={onSpellCheckButtonClick}>
+              <i className="glyphicon glyphicon-ok"></i>
+            </button>
+          </OverlayTrigger>
+
           <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
             <button className="button-settings" onClick={onSettingsButtonClick}>
               <i className="glyphicon glyphicon-cog"></i>
