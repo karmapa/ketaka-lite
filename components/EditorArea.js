@@ -9,6 +9,8 @@ import {DocHelper, Helper} from '../services/';
 
 import ReactToastr from 'react-toastr';
 
+import {checkSyllables} from 'check-tibetan';
+
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
@@ -333,6 +335,24 @@ export default class EditorArea extends React.Component {
     });
   }
 
+  checkSpelling() {
+    let codemirror = this.getCurrentCodemirror();
+    let content = codemirror.getValue();
+
+    checkSyllables(content)
+      .forEach(result => {
+        let [start, length] = result;
+        let pos = codemirror.posFromIndex(start);
+        let from = {line: pos.line, ch: pos.ch};
+        let to = {line: pos.line, ch: pos.ch + length};
+        codemirror.markText(from, to, {className: 'wrong-spelt'});
+      });
+  }
+
+  onSpellCheckButtonClick() {
+    this.checkSpelling();
+  }
+
   getEditorKey(uuid) {
     return uuid + '.editor';
   }
@@ -372,10 +392,14 @@ export default class EditorArea extends React.Component {
     this.refs.modalChunksApply.close();
   }
 
-  applyChunksAndClose(chunks) {
+  getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
-    let codemirror = this.refs[editorKey].codemirror;
+    return this.refs[editorKey].codemirror;
+  }
+
+  applyChunksAndClose(chunks) {
+    let codemirror = this.getCurrentCodemirror();
     let content = '\n\n' + chunks.join('\n\n');
     codemirror.replaceRange(content, {line: Infinity});
     this.refs.modalChunksApply.close();
@@ -403,6 +427,7 @@ export default class EditorArea extends React.Component {
       onCodemirrorChange: ::this.onCodemirrorChange,
       onSettingsButtonClick: ::this.onSettingsButtonClick,
       onPageAddButtonClick: ::this.onPageAddButtonClick,
+      onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
       onReadonlyButtonClick: toggleReadonly,
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
       setInputMethod: this.props.setInputMethod,

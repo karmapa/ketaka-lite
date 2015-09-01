@@ -20,6 +20,7 @@ export default class EditorToolbar extends React.Component {
     onColorButtonClick: PropTypes.func,
     onSettingsButtonClick: PropTypes.func,
     onApplyChunksButtonClick: PropTypes.func,
+    onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     setInputMethod: PropTypes.func,
     inputMethod: PropTypes.string
@@ -30,7 +31,8 @@ export default class EditorToolbar extends React.Component {
   render() {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick, onColorButtonClick,
-      onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex, readonly} = this.props;
+      onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
+      readonly, onSpellCheckButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -80,6 +82,12 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
+          <OverlayTrigger placement='top' overlay={<Tooltip>Spell Check</Tooltip>}>
+            <button className="button-spell-check" onClick={onSpellCheckButtonClick}>
+              <i className="glyphicon glyphicon-ok"></i>
+            </button>
+          </OverlayTrigger>
+
           <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
             <button className="button-settings" onClick={onSettingsButtonClick}>
               <i className="glyphicon glyphicon-cog"></i>
@@ -97,6 +105,7 @@ export default class EditorToolbar extends React.Component {
               <i className="glyphicon glyphicon-plus"></i>
             </button>
           </OverlayTrigger>
+
         </div>
 
         <div className="section language-section">
