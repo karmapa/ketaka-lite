@@ -2,17 +2,17 @@
   label {
     width: 100%;
   }
-  ul {
+  .chunks {
     height: 55vh;
     overflow: scroll;
     padding-left: 0;
     list-style-type: none;
-    li.selected {
+    .chunk.selected {
       color: #3c763d;
       background-color: #dff0d8;
       border-color: #d6e9c6;
     }
-    li {
+    .chunk {
       margin-bottom: 0.6em;
       border-radius: 4px;
       padding-top: 1em;
