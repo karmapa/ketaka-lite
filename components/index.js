@@ -7,6 +7,7 @@ export Navigation from './Navigation';
 export TabBox from './TabBox';
 export TabItem from './TabItem';
 export ModalConfirm from './ModalConfirm';
+export ModalOpen from './ModalOpen';
 export ModalImportStatus from './ModalImportStatus';
 export ModalDocSettings from './ModalDocSettings';
 export ModalPageAdd from './ModalPageAdd';

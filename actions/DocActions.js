@@ -38,6 +38,13 @@ export function addDoc(doc) {
   };
 }
 
+export function openDoc(doc) {
+  return {
+    type: types.ADD_DOC,
+    doc
+  };
+}
+
 export function addPage(uuid, pageName) {
   return {
     type: types.ADD_PAGE,

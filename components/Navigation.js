@@ -1,6 +1,6 @@
 import DocHelper from '../services/DocHelper';
 import React, {PropTypes} from 'react';
-import {ModalImportStatus} from '.';
+import {ModalImportStatus, ModalOpen} from '.';
 import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, CollapsibleNav, DropdownButton, Glyphicon,  MenuItem, Nav, Navbar} from 'react-bootstrap';
@@ -19,7 +19,6 @@ export default class Navigation extends React.Component {
     direction: PropTypes.bool.isRequired,
     exportData: PropTypes.func.isRequired,
     importData: PropTypes.func.isRequired,
-    saveAs: PropTypes.func.isRequired,
     settings: PropTypes.func.isRequired,
     toggleDirection: PropTypes.func.isRequired
   };
@@ -33,6 +32,8 @@ export default class Navigation extends React.Component {
   overridePaths = [];
 
   componentDidMount() {
+
+    this.open();
 
     let self = this;
 
@@ -62,6 +63,18 @@ export default class Navigation extends React.Component {
     ipc.on('import-error', function(res) {
       self.refs.toast.error(res.message);
     });
+
+    ipc.on('open-done', function(res) {
+      self.refs.modalOpen.open({
+        names: res.names
+      });
+    });
+
+    ipc.on('open-bamboo-done', function(res) {
+      self.props.openDoc(res.doc);
+      DocHelper.openDoc();
+      self.refs.modalOpen.close();
+    });
   }
 
   overrideBamboo() {
@@ -74,9 +87,17 @@ export default class Navigation extends React.Component {
     this.refs.modalImportStatus.close();
   }
 
+  onBambooClick(name) {
+    ipc.send('open-bamboo', {name});
+  }
+
+  open() {
+    ipc.send('open');
+  }
+
   render() {
 
-    let {saveAs, exportData, settings, toggleDirection, direction} = this.props;
+    let {exportData, settings, toggleDirection, direction} = this.props;
     let classes = {
       'btn-direction': true,
       'vertical': direction
@@ -89,8 +110,8 @@ export default class Navigation extends React.Component {
             <Nav navbar>
               <DropdownButton eventKey={3} title="Ketaka Lite">
                 <MenuItem eventKey="1" onSelect={::this.import}>Import</MenuItem>
-                <MenuItem eventKey="2" onSelect={DocHelper.save}>Save</MenuItem>
-                <MenuItem eventKey="3" onSelect={saveAs}>Save As</MenuItem>
+                <MenuItem eventKey="2" onSelect={::this.open}>open</MenuItem>
+                <MenuItem eventKey="3" onSelect={DocHelper.save}>Save</MenuItem>
                 <MenuItem eventKey="4" onSelect={exportData}>Export</MenuItem>
                 <MenuItem eventKey="5" onSelect={settings}>Settings</MenuItem>
               </DropdownButton>
@@ -103,6 +124,7 @@ export default class Navigation extends React.Component {
           </CollapsibleNav>
         </Navbar>
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" promptConfirm={::this.overrideBamboo} promptCancel={::this.cancelOverride} />
+        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );
