@@ -41,7 +41,7 @@ export default class ModalConfirm extends React.Component {
           <Modal.Title>Bamboos</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="modal-open">
+          <div className="modal-open-content">
             {this.renderBamboos()}
           </div>
         </Modal.Body>
