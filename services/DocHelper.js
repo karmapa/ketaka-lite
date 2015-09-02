@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
-import {EVENT_ON_SAVE, EVENT_ON_IMPORT, EVENT_ON_OPEN_DOC} from '../constants/AppConstants';
+import {EVENT_ON_SAVE, EVENT_ON_IMPORT, EVENT_ON_OPEN_DOC,
+  EVENT_ON_ACTIVATE_TAB} from '../constants/AppConstants';
 
 export default class DocHelper {
 
@@ -39,5 +40,17 @@ export default class DocHelper {
 
   static offOpenDoc(fn) {
     DocHelper.ee.off(EVENT_ON_OPEN_DOC, fn);
+  }
+
+  static activateTab(args) {
+    DocHelper.ee.emit(EVENT_ON_ACTIVATE_TAB, args);
+  }
+
+  static onActivateTab(fn) {
+    DocHelper.ee.on(EVENT_ON_ACTIVATE_TAB, fn);
+  }
+
+  static offActivateTab(fn) {
+    DocHelper.ee.off(EVENT_ON_ACTIVATE_TAB, fn);
   }
 }

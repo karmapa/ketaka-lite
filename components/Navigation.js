@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, CollapsibleNav, DropdownButton, Glyphicon,  MenuItem, Nav, Navbar} from 'react-bootstrap';
 import ReactToastr from 'react-toastr';
+import _ from 'lodash';
 
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
@@ -14,6 +15,7 @@ let ipc = window.require('ipc');
 export default class Navigation extends React.Component {
 
   static PropTypes = {
+    docs: PropTypes.array.isRequired,
     closeDoc: PropTypes.func.isRequired,
     importDoc: PropTypes.func.isRequired,
     direction: PropTypes.bool.isRequired,
@@ -86,7 +88,15 @@ export default class Navigation extends React.Component {
   }
 
   onBambooClick(name) {
-    ipc.send('open-bamboo', {name});
+    let openedDoc = _.find(this.props.docs, {name});
+    if (openedDoc) {
+      // active this doc if its already opened
+      DocHelper.activateTab(openedDoc);
+      this.refs.modalOpen.close();
+    }
+    else {
+      ipc.send('open-bamboo', {name});
+    }
   }
 
   open() {

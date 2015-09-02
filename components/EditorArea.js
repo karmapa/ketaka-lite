@@ -197,6 +197,13 @@ export default class EditorArea extends React.Component {
     this.refs[this.getEditorKey(uuid)].refresh();
   }
 
+  onActivateTab(doc) {
+    let index = _.findIndex(this.props.docs, {uuid: doc.uuid});
+    if (-1 !== index) {
+      this.activateTab(index);
+    }
+  }
+
   componentDidMount() {
     let self = this;
     let keypressListener = this.keypressListener;
@@ -213,10 +220,12 @@ export default class EditorArea extends React.Component {
     this.saveFunc = ::this.save;
     this.onImportFunc = ::this.onImport;
     this.onOpenDocFunc = ::this.onOpenDoc;
+    this.onActivateTabFunc = ::this.onActivateTab;
 
     DocHelper.onSave(this.saveFunc);
     DocHelper.onImport(this.onImportFunc);
     DocHelper.onOpenDoc(this.onOpenDocFunc);
+    DocHelper.onActivateTab(this.onActivateTabFunc);
 
     ipc.on('save-done', function() {
       self.props.save(self.state.docKey);
@@ -272,10 +281,13 @@ export default class EditorArea extends React.Component {
   }
 
   componentWillUnmount() {
+
     this.keypressListener.distroy();
+
     DocHelper.offSave(this.saveFunc);
     DocHelper.offImport(this.onImportFunc);
     DocHelper.offOpenDoc(this.onOpenDocFunc);
+    DocHelper.offActivateTab(this.onActivateTabFunc);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;

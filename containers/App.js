@@ -24,7 +24,7 @@ export default class App extends React.Component {
     const docActions = bindActionCreators(DocActions, dispatch);
     const appActions = bindActionCreators(AppActions, dispatch);
 
-    const navigationProps = {direction, ...docActions, ...appActions};
+    const navigationProps = {direction, docs, ...docActions, ...appActions};
     const editorAreaProps = {readonly, docs, inputMethod, direction, ...docActions, ...appActions};
     return (
       <div className="container-fluid">
