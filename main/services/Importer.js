@@ -9,7 +9,6 @@ var Doc = require('./Doc');
 var constants = require('../constants');
 var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
-var REGEXP_PB = constants.REGEXP_PB;
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -81,7 +80,7 @@ function imageFileWithBambooName(bambooName, row) {
 }
 
 function pbRowWithBambooName(bambooName, row) {
-  return _.isObject(row.pathData) ? (row.pathData.name === (bambooName + '_PB')) : false;
+  return _.isObject(row.pathData) ? (row.pathData.name === bambooName) : false;
 }
 
 function textRowWithBambooName(bambooName, row) {
@@ -292,7 +291,7 @@ function handleImportPaths(paths, onProgress, override) {
 function findBambooName(row) {
 
   if (isValidPbFile(row)) {
-    return _.get(REGEXP_PB.exec(row.pathData.name), 1);
+    return row.pathData.name;
   }
   if (isValidTextRow(row)) {
     return row.pathData.name;
@@ -331,7 +330,7 @@ function isValidImageFileType(row) {
 
 function isValidPbFile(row) {
   var pathData = row.pathData;
-  return row.stats.isFile() && ('.csv' === pathData.ext) && REGEXP_PB.test(pathData.name);
+  return row.stats.isFile() && ('.csv' === pathData.ext);
 }
 
 function isValidTextRow(row) {
