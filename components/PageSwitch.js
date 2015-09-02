@@ -79,8 +79,8 @@ export default class PageSwitch extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   componentWillUpdate(nextProps) {
-    let {pageIndex} = this.props;
-    if (pageIndex !== nextProps.pageIndex) {
+    let {pageIndex, pageNames} = this.props;
+    if ((pageIndex !== nextProps.pageIndex) || (pageNames.length !== nextProps.pageNames.length)) {
       this.setState({
         inputValue: nextProps.pageNames[nextProps.pageIndex]
       });
