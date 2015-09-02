@@ -33,8 +33,6 @@ export default class Navigation extends React.Component {
 
   componentDidMount() {
 
-    this.open();
-
     let self = this;
 
     ipc.on('import-start', function() {
