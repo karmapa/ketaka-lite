@@ -74,15 +74,24 @@ function addPage(state, action) {
   if (! doc) {
     return state;
   }
+  let insertIndex = _.findIndex(doc.pages, page => action.pageName < page.name);
+
+  if (-1 === insertIndex) {
+    insertIndex = doc.pages.length + 1;
+  }
+
   let newPage = {
     name: action.pageName,
     content: '',
     destImagePath: '',
     config: {}
   };
+
+  doc.pages.splice(insertIndex, 0, newPage);
+
   return [
     ...state.slice(0, index),
-    Object.assign({}, doc, {pages: [...doc.pages, newPage]}),
+    Object.assign({}, doc),
     ...state.slice(index + 1)
   ];
 }
