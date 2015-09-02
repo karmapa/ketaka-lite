@@ -119,7 +119,7 @@ export default class ModalChunksApply extends React.Component {
 
   render() {
     let {cancel} = this.props;
-    let {show, chunks, keywords, loading, rows} = this.state;
+    let {show, keywords, loading, rows} = this.state;
 
     return (
       <Modal bsSize="large" show={show} onHide={this.onModalHide}>
