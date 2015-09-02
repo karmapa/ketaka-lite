@@ -162,3 +162,23 @@ exports.changeDocSettings = function(event, data) {
     send('change-doc-settings-error', {message: err});
   });
 };
+
+exports.open = function(event) {
+
+  var send = event.sender.send.bind(event.sender);
+
+  Doc.getExistedDocNames()
+    .then(function(names) {
+      send('open-done', {names: names});
+    });
+};
+
+exports.openBamboo = function(event, arg) {
+
+  var send = event.sender.send.bind(event.sender);
+
+  Doc.getDoc(arg.name)
+    .then(function(doc) {
+      send('open-bamboo-done', {doc: doc});
+    });
+};

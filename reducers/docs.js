@@ -10,6 +10,7 @@ const actionsMap = {
   [types.EXPORT_DATA]: exportData,
   [types.SETTINGS]: settings,
   [types.ADD_DOC]: addDoc,
+  [types.OPEN_DOC]: openDoc,
   [types.ADD_PAGE]: addPage,
   [types.IMPORT_DOC]: importDoc,
   [types.CLOSE_DOC]: closeDoc,
@@ -66,6 +67,10 @@ function addDoc(state, action) {
   } else {
     return [...state, action.doc];
   }
+}
+
+function openDoc(state, action) {
+  return [...state, action.doc];
 }
 
 function addPage(state, action) {

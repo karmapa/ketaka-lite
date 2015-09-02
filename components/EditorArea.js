@@ -192,6 +192,11 @@ export default class EditorArea extends React.Component {
     this.refs[this.getEditorKey(uuid)].refresh();
   }
 
+  onOpenDoc() {
+    let uuid = _.get(this.getDoc(), 'uuid');
+    this.refs[this.getEditorKey(uuid)].refresh();
+  }
+
   componentDidMount() {
     let self = this;
     let keypressListener = this.keypressListener;
@@ -207,9 +212,11 @@ export default class EditorArea extends React.Component {
 
     this.saveFunc = ::this.save;
     this.onImportFunc = ::this.onImport;
+    this.onOpenDocFunc = ::this.onOpenDoc;
 
     DocHelper.onSave(this.saveFunc);
     DocHelper.onImport(this.onImportFunc);
+    DocHelper.onOpenDoc(this.onOpenDocFunc);
 
     ipc.on('save-done', function() {
       self.props.save(self.state.docKey);
@@ -267,6 +274,8 @@ export default class EditorArea extends React.Component {
   componentWillUnmount() {
     this.keypressListener.distroy();
     DocHelper.offSave(this.saveFunc);
+    DocHelper.offImport(this.onImportFunc);
+    DocHelper.offOpenDoc(this.onOpenDocFunc);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;

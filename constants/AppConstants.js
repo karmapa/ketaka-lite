@@ -11,6 +11,7 @@ export const TOGGLE_READONLY = 'TOGGLE_READONLY';
 
 export const EVENT_ON_SAVE = 'EVENT_ON_SAVE';
 export const EVENT_ON_IMPORT = 'EVENT_ON_IMPORT';
+export const EVENT_ON_OPEN_DOC = 'EVENT_ON_OPEN_DOC';
 
 export const PB_FILENAME_REGEXP = new RegExp('^(.+)_PB\.xml$');
 

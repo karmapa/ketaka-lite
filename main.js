@@ -37,3 +37,8 @@ ipc.on('add-doc', ipcHandlers.addDoc);
 ipc.on('find-doc-names', ipcHandlers.findDocNames);
 
 ipc.on('change-doc-settings', ipcHandlers.changeDocSettings);
+
+ipc.on('open', ipcHandlers.open);
+
+ipc.on('open-bamboo', ipcHandlers.openBamboo);
+

@@ -30,6 +30,14 @@ function createPage(args) {
   }, args);
 }
 
+function getDoc(name) {
+  var path = Path.resolve(PATH_APP_DOC, name, name + '.json');
+  return Helper.readFile(path)
+    .then(function(json) {
+      return JSON.parse(json);
+    });
+}
+
 function getImageFilenameByDoc(doc) {
   var page = doc.pages[doc.pageIndex];
   return doc.name + '-' + page.name.replace(/(\d+)\.(\d+)/, function(all, volume, page) {
@@ -179,6 +187,7 @@ module.exports = {
   createPage: createPage,
   changeDocSettings: changeDocSettings,
   findUniqueUntitledName: findUniqueUntitledName,
+  getDoc: getDoc,
   getImageFilenameByDoc: getImageFilenameByDoc,
   getPageNameByImageFilename: getPageNameByImageFilename,
   getExistedDocNames: getExistedDocNames,

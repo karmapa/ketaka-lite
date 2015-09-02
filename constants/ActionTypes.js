@@ -4,6 +4,7 @@ export const SAVE_AS = 'SAVE_AS';
 export const EXPORT_DATA = 'EXPORT_DATA';
 export const SETTINGS = 'SETTINGS';
 export const ADD_DOC = 'ADD_DOC';
+export const OPEN_DOC = 'OPEN_DOC';
 export const ADD_PAGE = 'ADD_PAGE';
 export const IMPORT_DOC = 'IMPORT_DOC';
 export const CLOSE_DOC = 'CLOSE_DOC';
