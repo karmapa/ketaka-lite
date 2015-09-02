@@ -9,14 +9,6 @@ export default class DocHelper {
     DocHelper.ee.emit(EVENT_ON_SAVE);
   }
 
-  static import() {
-    DocHelper.ee.emit(EVENT_ON_IMPORT);
-  }
-
-  static openDoc() {
-    DocHelper.ee.emit(EVENT_ON_OPEN_DOC);
-  }
-
   static onSave(fn) {
     DocHelper.ee.on(EVENT_ON_SAVE, fn);
   }
@@ -25,12 +17,20 @@ export default class DocHelper {
     DocHelper.ee.off(EVENT_ON_SAVE, fn);
   }
 
+  static import() {
+    DocHelper.ee.emit(EVENT_ON_IMPORT);
+  }
+
   static onImport(fn) {
     DocHelper.ee.on(EVENT_ON_IMPORT, fn);
   }
 
   static offImport(fn) {
     DocHelper.ee.off(EVENT_ON_IMPORT, fn);
+  }
+
+  static openDoc() {
+    DocHelper.ee.emit(EVENT_ON_OPEN_DOC);
   }
 
   static onOpenDoc(fn) {
