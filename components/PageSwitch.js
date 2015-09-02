@@ -82,7 +82,7 @@ export default class PageSwitch extends React.Component {
     let {pageIndex} = this.props;
     if (pageIndex !== nextProps.pageIndex) {
       this.setState({
-        inputValue: this.props.pageNames[nextProps.pageIndex]
+        inputValue: nextProps.pageNames[nextProps.pageIndex]
       });
     }
   }
