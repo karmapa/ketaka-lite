@@ -361,7 +361,8 @@ export default class EditorArea extends React.Component {
   addPageAndCloseModal(pageName) {
     let doc = this.getDoc();
     this.props.addPage(doc.uuid, pageName);
-    this.props.setPageIndex(this.state.docKey, doc.pages.length);
+    let pageIndex = _.findIndex(doc.pages, {name: pageName});
+    this.props.setPageIndex(this.state.docKey, pageIndex);
     this.refs.modalPageAdd.close();
   }
 
