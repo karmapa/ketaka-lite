@@ -210,7 +210,6 @@ export default class Ime {
       cm.replaceRange(value, {line: pos.line, ch: 0}, {line: pos.line, ch: pos.ch});
     }
     else {
-      console.log(start, end);
       let value = e.target.value;
       return value.substring(0, start) + replacement + value.substring(end, value.length);
     }
