@@ -5,6 +5,7 @@ import {MAP_INPUT_METHODS} from '../constants/AppConstants';
 import classNames from 'classnames';
 import Ime from '../services/Ime';
 import _ from 'lodash';
+import ReactList from 'react-list';
 
 export default class ModalChunksApply extends React.Component {
 
@@ -20,6 +21,7 @@ export default class ModalChunksApply extends React.Component {
     show: false,
     loading: false,
     chunks: [],
+    rows: [],
     keywords: ''
   };
 
@@ -33,6 +35,7 @@ export default class ModalChunksApply extends React.Component {
       state[prop] = false;
     });
     this.setState(state);
+    this.handleChunks({chunks: args.chunks});
   }
 
   close() {
@@ -90,9 +93,9 @@ export default class ModalChunksApply extends React.Component {
   }
 
   onChange(e) {
-    this.setState({
-      keywords: e.target.value
-    });
+    let keywords = e.target.value;
+    this.setState({keywords});
+    this.handleChunks({keywords});
   }
 
   onKeyPress(e) {
@@ -102,6 +105,7 @@ export default class ModalChunksApply extends React.Component {
       this.setState({
         keywords
       });
+      this.handleChunks({keywords});
     }
   }
 
@@ -115,7 +119,7 @@ export default class ModalChunksApply extends React.Component {
 
   render() {
     let {cancel} = this.props;
-    let {show, chunks, keywords, loading} = this.state;
+    let {show, chunks, keywords, loading, rows} = this.state;
 
     return (
       <Modal bsSize="large" show={show} onHide={this.onModalHide}>
@@ -133,9 +137,9 @@ export default class ModalChunksApply extends React.Component {
               <input className="form-control" type="text" value={keywords} placeholder="Enter Text" ref="searchInput"
                      onChange={::this.onChange} onKeyPress={::this.onKeyPress} onKeyDown={::this.onKeyDown} onKeyUp={::this.onKeyUp} />
             </div>
-            <ul>
-              {this.renderChunks(chunks, keywords)}
-            </ul>
+            <div className="chunks">
+              <ReactList key="chunks" itemRenderer={::this.renderChunk} length={rows.length} type='simple' />
+            </div>
           </div>
         </Modal.Body>
 
@@ -147,11 +151,14 @@ export default class ModalChunksApply extends React.Component {
     );
   }
 
-  renderChunks(chunks, keywords) {
+  handleChunks(options = {}) {
+
+    let chunks = 'chunks' in options ? options.chunks : this.state.chunks;
+    let keywords = 'keywords' in options ? options.keywords : this.state.keywords;
 
     let keywordsLength = keywords.length;
 
-    return chunks.map((chunk, index) => {
+    let rows = chunks.map((chunk, index) => {
 
       let matchedIndex = chunk.indexOf(keywords);
 
@@ -165,9 +172,11 @@ export default class ModalChunksApply extends React.Component {
     .filter(row => {
       return row.matched || this.state[row.key];
     })
-    .sort(row => {
-      // if keywords present, put matched items on the bottom
-      return row.matched ? 0 : 1;
+    .sort((a, b) => {
+      // if keywords present, put selected items on the top
+      let scoreA = this.state[a.key] ? 0 : 1;
+      let scoreB = this.state[b.key] ? 0 : 1;
+      return scoreA - scoreB;
     })
     .map(row => {
 
@@ -176,20 +185,24 @@ export default class ModalChunksApply extends React.Component {
       if (keywordsLength > 0) {
         row.tinyChunk = row.tinyChunk.replace(new RegExp(keywords, 'g'), '<span class="danger">' + keywords + '</span>');
       }
-
-      let key = row.key;
-      let classnames = {
-        selected: this.state[key]
-      };
-
-      return (
-        <li className={classNames(classnames)} key={'li.' + row.key}>
-          <label>
-            <input type="checkbox" onChange={this.onCheckboxChange.bind(this, key)} checked={this.state[key]} />
-            <p dangerouslySetInnerHTML={{__html: row.tinyChunk}}></p>
-          </label>
-        </li>
-      );
+      return row;
     });
+    this.setState({rows});
+  }
+
+  renderChunk(index, key) {
+    let row = this.state.rows[index];
+    let classnames = {
+      chunk: true,
+      selected: this.state[row.key]
+    };
+    return (
+      <div className={classNames(classnames)} key={key}>
+        <label>
+          <input type="checkbox" onChange={this.onCheckboxChange.bind(this, row.key)} checked={this.state[row.key]} />
+          <p dangerouslySetInnerHTML={{__html: row.tinyChunk}}></p>
+        </label>
+      </div>
+    );
   }
 }
