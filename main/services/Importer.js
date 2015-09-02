@@ -3,7 +3,6 @@ var _ = require('lodash');
 var app = require('app');
 var fs = require('fs');
 var readChunk = require('read-chunk');
-var rtf = require('./Rtf')();
 var Helper = require('./Helper');
 var Doc = require('./Doc');
 
@@ -11,7 +10,6 @@ var constants = require('../constants');
 var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
 var REGEXP_PB = constants.REGEXP_PB;
-var REGEXP_RTF = constants.REGEXP_RTF;
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -71,10 +69,10 @@ function findPbFile(rows, bambooName) {
     .value();
 }
 
-function findRtfRow(rows, bambooName) {
+function findTextRow(rows, bambooName) {
   return _.chain(rows)
-    .filter(isValidRtfRow)
-    .find(rtfRowWithBambooName.bind(null, bambooName))
+    .filter(isValidTextRow)
+    .find(textRowWithBambooName.bind(null, bambooName))
     .value();
 }
 
@@ -86,8 +84,8 @@ function pbRowWithBambooName(bambooName, row) {
   return _.isObject(row.pathData) ? (row.pathData.name === (bambooName + '_PB')) : false;
 }
 
-function rtfRowWithBambooName(bambooName, row) {
-  return _.isObject(row.pathData) ? (row.pathData.name === (bambooName + '_RTF')) : false;
+function textRowWithBambooName(bambooName, row) {
+  return _.isObject(row.pathData) ? (row.pathData.name === bambooName) : false;
 }
 
 function filterImageRows(rows, bambooName) {
@@ -124,24 +122,13 @@ function createPagesByPbRow(pbRow) {
     });
 }
 
-function parseRtfBuffer(buffer) {
-  return new Promise(function(resolve, reject) {
-    rtf.parse(buffer, function(err, data) {
-      resolve(data);
-    });
-  });
-}
-
-function createChunksByRtfRow(rtfRow) {
-  if (! rtfRow) {
+function createChunksByTextRow(textRow) {
+  if (! textRow) {
     return null;
   }
-  return Helper.readFile(rtfRow.path)
+  return Helper.readFile(textRow.path)
     .then(function(buffer) {
-      return parseRtfBuffer(buffer);
-    })
-    .then(function(data) {
-      return Helper.chunkString(data.text, 2000);
+      return Helper.chunkString(buffer.toString(), 7000);
     });
 }
 
@@ -168,7 +155,7 @@ function createDocByRows(bambooName, rows) {
   var promises = [];
   var pbRow = findPbFile(rows, bambooName);
   var imageRows = filterImageRows(rows, bambooName);
-  var rtfRow = findRtfRow(rows, bambooName);
+  var textRow = findTextRow(rows, bambooName);
 
   promises.push(createPagesByPbRow(pbRow));
   promises.push(createPagesByImageRows(bambooName, imageRows));
@@ -181,7 +168,7 @@ function createDocByRows(bambooName, rows) {
       doc.pages = pages;
     })
     .then(function() {
-      return createChunksByRtfRow(rtfRow);
+      return createChunksByTextRow(textRow);
     })
     .then(function(chunks) {
       doc.chunks = chunks;
@@ -307,8 +294,8 @@ function findBambooName(row) {
   if (isValidPbFile(row)) {
     return _.get(REGEXP_PB.exec(row.pathData.name), 1);
   }
-  if (isValidRtfRow(row)) {
-    return _.get(REGEXP_RTF.exec(row.pathData.name), 1);
+  if (isValidTextRow(row)) {
+    return row.pathData.name;
   }
   if (isValidImageFileType(row)) {
     return _.get(REGEXP_IMAGE.exec(row.pathData.name), 1);
@@ -347,9 +334,9 @@ function isValidPbFile(row) {
   return row.stats.isFile() && ('.csv' === pathData.ext) && REGEXP_PB.test(pathData.name);
 }
 
-function isValidRtfRow(row) {
+function isValidTextRow(row) {
   var pathData = row.pathData;
-  return row.stats.isFile() && ('.rtf' === pathData.ext) && REGEXP_RTF.test(pathData.name);
+  return row.stats.isFile() && ('.txt' === pathData.ext);
 }
 
 function markPathData(rows) {

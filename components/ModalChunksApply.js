@@ -120,7 +120,7 @@ export default class ModalChunksApply extends React.Component {
     return (
       <Modal bsSize="large" show={show} onHide={this.onModalHide}>
         <Modal.Header>
-          <Modal.Title>Apply Chunks Based On RTF File Content</Modal.Title>
+          <Modal.Title>Apply Chunks Based On Text File Content</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
