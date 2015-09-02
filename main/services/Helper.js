@@ -9,7 +9,7 @@ var rimraf = require('rimraf');
 var _ = require('lodash');
 
 function chunkString(str, length) {
-  return str.match(new RegExp('.{1,' + length + '}', 'g'));
+  return str.match(new RegExp('[\\S\\s]{1,' + length + '}', 'g'));
 }
 
 function copyFile(source, dest) {

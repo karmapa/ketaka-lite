@@ -15,7 +15,7 @@ exports.importButtonClicked = function(event, overridePaths) {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
       {name: 'Images', extensions: ['jpg']},
-      {name: 'Text Files', extensions: ['csv', 'rtf']}
+      {name: 'Text Files', extensions: ['csv', 'txt']}
     ]
   };
 
