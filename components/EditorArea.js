@@ -44,7 +44,6 @@ export default class EditorArea extends React.Component {
     this.state = {
       docKey: doc.uuid
     };
-    this.state.pageInputValue = this.getPageInputValue();
   }
 
   handleSelect(key) {
@@ -56,9 +55,6 @@ export default class EditorArea extends React.Component {
       let page = doc.pages[doc.pageIndex];
       let state = {docKey: key};
 
-      if (page) {
-        state.pageInputValue = this.getPageInputValue(page);
-      }
       this.setState(state);
     }
   }
@@ -266,9 +262,6 @@ export default class EditorArea extends React.Component {
     ipc.on('change-doc-settings-done', function(res) {
       let doc = res.doc;
       self.props.addDoc(doc);
-      self.setState({
-        pageInputValue: self.getPageInputValue()
-      });
       self.refs.toast.success(res.message);
     });
   }
@@ -369,9 +362,6 @@ export default class EditorArea extends React.Component {
     let doc = this.getDoc();
     this.props.addPage(doc.uuid, pageName);
     this.props.setPageIndex(this.state.docKey, doc.pages.length);
-    this.setState({
-      pageInputValue: pageName
-    });
     this.refs.modalPageAdd.close();
   }
 
