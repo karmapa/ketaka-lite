@@ -23,7 +23,9 @@ export default class ModalPageAdd extends React.Component {
     let {pageNames} = args;
     this.pageNames = pageNames;
     this.setState({
-      show: true
+      show: true,
+      loading: false,
+      dirty: false
     });
   }
 
