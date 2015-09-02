@@ -51,11 +51,9 @@ export default class EditorArea extends React.Component {
       return this.addDoc();
     }
     if (key !== this.state.docKey) {
-      let doc = this.getDoc(key);
-      let page = doc.pages[doc.pageIndex];
-      let state = {docKey: key};
-
-      this.setState(state);
+      this.setState({
+        docKey: key
+      });
     }
   }
 
