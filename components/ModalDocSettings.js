@@ -48,6 +48,10 @@ export default class ModalDocSettings extends React.Component {
   onModalHide() {
   }
 
+  isValidDocNameFormat(name) {
+    return name.match(/^[a-zA-Z0-9]+$/);
+  }
+
   isDocNameExisted(docName) {
     return this.docNames.includes(docName);
   }
@@ -57,6 +61,9 @@ export default class ModalDocSettings extends React.Component {
     let {originDocName} = this;
 
     if (_.isEmpty(docName)) {
+      return false;
+    }
+    if (! this.isValidDocNameFormat(docName)) {
       return false;
     }
     if (docName === originDocName) {
@@ -96,6 +103,9 @@ export default class ModalDocSettings extends React.Component {
 
     if (_.isEmpty(docName)) {
       return 'Doc name cannot be empty.';
+    }
+    if (! this.isValidDocNameFormat(docName)) {
+      return 'Doc name can only consist of lowercase letters, capitalized letters or digits.';
     }
     if (this.isDocNameExisted(docName) && (docName !== this.originDocName)) {
       return 'Doc name ' + docName + ' is existed in file system, try another one.';
