@@ -1,16 +1,18 @@
 var Doc = require('./services/Doc');
 var Helper = require('./services/Helper');
 var Importer = require('./services/Importer');
+var PATH_APP_DOC = require('./constants').PATH_APP_DOC;
 var Path = require('path');
 var _ = require('lodash');
 var dialog = require('dialog');
-var PATH_APP_DOC = require('./constants').PATH_APP_DOC;
+var ipcHandler = require('./decorators/ipcHandler');
 
-exports.importButtonClicked = function(event, overridePaths) {
+exports.importButtonClicked = ipcHandler(function(event, args) {
 
-  overridePaths = overridePaths || [];
+  var overridePaths = args.overridePaths || [];
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
+  var broadcast = this.broadcast;
   var options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
@@ -32,44 +34,44 @@ exports.importButtonClicked = function(event, overridePaths) {
       return;
     }
 
-    send('import-start');
+    broadcast('import-start');
 
     Importer.handleImportPaths(paths, onProgress, force)
       .then(function(doc) {
-        send('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
-        send('import-done', {message: 'Imported successfully', doc: doc});
+        broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
+        send({message: 'Imported successfully', doc: doc});
       })
       .catch(function(err) {
 
         if ('bambooExisted' === err.type) {
-          return send('confirm-bamboo-override', err);
+          return broadcast('confirm-bamboo-override', err);
         }
-        send('import-error', {message: err});
+        send({error: true, message: err});
       });
 
     function onProgress(res) {
-      send('import-progress', res);
+      broadcast('import-progress', res);
     }
   }
-};
+});
 
-exports.save = function(event, doc) {
+exports.save = ipcHandler(function(event, doc) {
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
   doc.changed = false;
 
   Doc.writeDoc(doc)
     .then(function() {
-      send('save-done', {message: 'Saved successfully', doc: doc});
+      send({message: 'Saved successfully', doc: doc});
     })
     .catch(function(error) {
-      send({message: error});
+      send({error: true, message: error});
     });
-};
+});
 
-exports.pageImageUploadButtonClicked = function(event, doc) {
+exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
   var options = {
     properties: ['openFile'],
     filters: [
@@ -99,21 +101,21 @@ exports.pageImageUploadButtonClicked = function(event, doc) {
           return Helper.copyFile(source, dest);
         })
         .then(function() {
-          send('page-image-upload-done', {message: 'Image uploaded successfully', destImagePath: dest});
+          send({message: 'Image uploaded successfully', destImagePath: dest});
         })
         .catch(function(err) {
-          send('page-image-upload-error', {message: err});
+          send({error: true, message: err});
         });
     }
     else {
-      send('page-image-upload-error', {message: 'Invalid image file type: ' + fileType.mime});
+      send({error: true, message: 'Invalid image file type: ' + fileType.mime});
     }
   });
-};
+});
 
-exports.addDoc = function(event) {
+exports.addDoc = ipcHandler(function(event) {
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
   var docName;
 
   Doc.findUniqueUntitledName()
@@ -128,24 +130,24 @@ exports.addDoc = function(event) {
       return Doc.writeDoc(doc);
     })
     .then(function(doc) {
-      send('add-doc-done', {doc: doc});
+      send({doc: doc});
     })
     .catch(function(err) {
-      send('add-doc-error', {message: err});
+      send({error: true, message: err});
     });
-};
+});
 
-exports.findDocNames = function(event) {
-  var send = event.sender.send.bind(event.sender);
+exports.findDocNames = ipcHandler(function(event) {
+  var send = this.send;
   Doc.getExistedDocNames()
     .then(function(docNames) {
-      send('find-doc-names-done', docNames);
+      send({docNames: docNames});
     });
-};
+});
 
-exports.changeDocSettings = function(event, data) {
+exports.changeDocSettings = ipcHandler(function(event, data) {
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
   var doc = data.doc;
 
   Doc.changeDocSettings({
@@ -156,40 +158,41 @@ exports.changeDocSettings = function(event, data) {
     oldPageName: doc.pages[doc.pageIndex].name
   })
   .then(function(doc) {
-    send('change-doc-settings-done', {message: 'Doc settings have been changed', doc: doc});
+    send({message: 'Doc settings have been changed', doc: doc});
   })
   .catch(function(err) {
-    send('change-doc-settings-error', {message: err});
+    send({error: true, message: err});
   });
-};
+});
 
-exports.open = function(event) {
+exports.open = ipcHandler(function(event) {
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
 
   Doc.getExistedDocNames()
     .then(function(names) {
-      send('open-done', {names: names});
+      send({names: names});
     });
-};
+});
 
-exports.openBamboo = function(event, arg) {
+exports.openBamboo = ipcHandler(function(event, arg) {
 
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
 
   Doc.getDoc(arg.name)
     .then(function(doc) {
-      send('open-bamboo-done', {doc: doc});
+      send({doc: doc});
     });
-};
+});
 
-exports.deleteDoc = function(event, res) {
+exports.deleteDoc = ipcHandler(function(event, res) {
 
   var name = res.name;
-  var send = event.sender.send.bind(event.sender);
+  var send = this.send;
   var path = Path.resolve(PATH_APP_DOC, name);
 
   if (! name) {
+    send();
     return;
   }
 
@@ -198,6 +201,6 @@ exports.deleteDoc = function(event, res) {
       return Doc.getExistedDocNames()
     })
     .then(function(names) {
-      send('delete-doc-done', {names: names});
+      send({names: names});
     });
-};
+});
