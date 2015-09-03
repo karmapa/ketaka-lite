@@ -150,7 +150,7 @@ function mergePages(pbPages, imagePages) {
 
 function createDocByRows(bambooName, rows) {
 
-  var doc = Doc.createDoc({name: bambooName});
+  var doc;
   var promises = [];
   var pbRow = findPbFile(rows, bambooName);
   var imageRows = filterImageRows(rows, bambooName);
@@ -159,12 +159,26 @@ function createDocByRows(bambooName, rows) {
   promises.push(createPagesByPbRow(pbRow));
   promises.push(createPagesByImageRows(bambooName, imageRows));
 
-  return Promise.all(promises)
+  return Doc.getDoc(bambooName)
+    .then(function(data) {
+
+      if (data) {
+        doc = data;
+      }
+      else {
+        doc = Doc.createDoc({name: bambooName});
+        doc.pages.push(Doc.createPage());
+      }
+
+      return Promise.all(promises);
+    })
     .then(function(sets) {
       return _.spread(mergePages)(sets);
     })
     .then(function(pages) {
-      doc.pages = pages;
+      if (pages.length > 0) {
+        doc.pages = pages;
+      }
     })
     .then(function() {
       return createChunksByTextRow(textRow);

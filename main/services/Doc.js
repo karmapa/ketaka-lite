@@ -35,6 +35,9 @@ function getDoc(name) {
   return Helper.readFile(path)
     .then(function(json) {
       return JSON.parse(json);
+    })
+    .catch(function() {
+      return null;
     });
 }
 
