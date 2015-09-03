@@ -2,33 +2,61 @@ import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
 import _ from 'lodash';
+import classNames from 'classnames';
 
 export default class ModalConfirm extends React.Component {
 
   static PropTypes = {
-    onBambooClick: PropTypes.func.isRequired
+    onBambooClick: PropTypes.func.isRequired,
+    onBambooDeleteClick: PropTypes.func.isRequired
   };
 
   state = {
     show: false,
+    isEdit: false,
     names: []
   };
 
   open(args) {
     this.setState(_.extend({
       show: true,
+      isEdit: false,
       names: args.names
     }, args));
+  }
+
+  setNames(names) {
+    this.setState({
+      names
+    });
   }
 
   close() {
     this.setState({
       show: false,
+      isEdit: false,
       names: []
     });
   }
 
   onModalHide() {
+  }
+
+  toggleEditMode() {
+    this.setState({
+      isEdit: ! this.state.isEdit
+    });
+  }
+
+  showEditButtonText() {
+    return this.state.isEdit ? 'Cancel Edit' : 'Edit';
+  }
+
+  onBambooClick(name) {
+    if (this.state.isEdit) {
+      return;
+    }
+    this.props.onBambooClick(name);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -38,7 +66,12 @@ export default class ModalConfirm extends React.Component {
     return (
       <Modal show={show} onHide={this.onModalHide}>
         <Modal.Header>
-          <Modal.Title>Bamboos</Modal.Title>
+          <Modal.Title>
+            <div className="modal-open-title">
+              <span>Bamboos</span>
+              <Button className="button-edit" onClick={::this.toggleEditMode}>{this.showEditButtonText()}</Button>
+            </div>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="modal-open-content">
@@ -54,6 +87,18 @@ export default class ModalConfirm extends React.Component {
 
   renderBamboos() {
     let {names} = this.state;
-    return names.map(name => (<Button bsStyle="success" onClick={this.props.onBambooClick.bind(this, name)}>{name}</Button>));
+    let {onBambooDeleteClick} = this.props;
+    let buttonDeleteClasses = {
+      'button-delete': true,
+      'hidden': ! this.state.isEdit
+    };
+    return names.map(name => {
+      return (
+        <span className="button-wrap">
+          <Button className={classNames(buttonDeleteClasses)} onClick={onBambooDeleteClick.bind(this, name)}>&times;</Button>
+          <Button bsStyle="success" onClick={this.onBambooClick.bind(this, name)}>{name}</Button>
+        </span>
+      );
+    });
   }
 }
