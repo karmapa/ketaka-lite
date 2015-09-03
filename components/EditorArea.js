@@ -422,6 +422,23 @@ export default class EditorArea extends React.Component {
     this.refs.modalChunksApply.close();
   }
 
+  cancelDeletePage() {
+    this.refs.modalPageDeleteConfirm.close();
+  }
+
+  deleteCurrentPage() {
+    let doc = this.getDoc();
+    let currentPageIndex = doc.pageIndex;
+
+    if (currentPageIndex === (doc.pages.length - 1)) {
+      doc.pageIndex = currentPageIndex - 1;
+      this.props.setPageIndex(currentPageIndex - 1);
+    }
+    doc.pages.splice(currentPageIndex, 1);
+    this.forceUpdate();
+    this.refs.modalPageDeleteConfirm.close();
+  }
+
   renderDoc(doc) {
 
     let pageIndex = this.getPageIndex(doc);
@@ -459,23 +476,6 @@ export default class EditorArea extends React.Component {
         <Editor {...editorProps} />
       </TabItem>
     );
-  }
-
-  cancelDeletePage() {
-    this.refs.modalPageDeleteConfirm.close();
-  }
-
-  deleteCurrentPage() {
-    let doc = this.getDoc();
-    let currentPageIndex = doc.pageIndex;
-
-    if (currentPageIndex === (doc.pages.length - 1)) {
-      doc.pageIndex = currentPageIndex - 1;
-      this.props.setPageIndex(currentPageIndex - 1);
-    }
-    doc.pages.splice(currentPageIndex, 1);
-    this.forceUpdate();
-    this.refs.modalPageDeleteConfirm.close();
   }
 
   render() {
