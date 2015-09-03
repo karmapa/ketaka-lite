@@ -41,10 +41,10 @@ export default class EditorArea extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    let doc = this.props.docs[0];
+    let {docs} = this.props;
 
     this.state = {
-      docKey: doc.uuid
+      docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
   }
 

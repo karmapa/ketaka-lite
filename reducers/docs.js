@@ -1,8 +1,6 @@
 import * as types from '../actions/DocActions';
 import _ from 'lodash';
 
-import {SAMPLE_DOC} from '../constants/SampleDoc';
-
 const actionsMap = {
   [types.IMPORT_DATA]: importData,
   [types.SAVE]: save,
@@ -20,7 +18,7 @@ const actionsMap = {
   [types.WRITE_PAGE_CONTENT]: writePageContent
 };
 
-export default function docs(state = [_.cloneDeep(SAMPLE_DOC)], action) {
+export default function docs(state = [], action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
 }
