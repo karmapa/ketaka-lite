@@ -103,7 +103,7 @@ export default class EditorArea extends React.Component {
 
   closeTab(key) {
     if (this.docChanged()) {
-      this.refs.modalConfirm.open({
+      this.refs.modalSaveConfirm.open({
         title: 'Oops',
         message: 'You have unsaved content ! Do you want to save it ?'
       });
@@ -115,12 +115,12 @@ export default class EditorArea extends React.Component {
   saveAndClose() {
     this.save();
     this.closeDoc();
-    this.refs.modalConfirm.close();
+    this.refs.modalSaveConfirm.close();
   }
 
   discard() {
     this.closeDoc();
-    this.refs.modalConfirm.close();
+    this.refs.modalSaveConfirm.close();
   }
 
   closeDoc(key) {
@@ -464,7 +464,11 @@ export default class EditorArea extends React.Component {
           {docs.map(::this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
         </TabBox>
-        <ModalConfirm ref="modalConfirm" confirmText="Save and close" confirm={::this.saveAndClose} cancelText="Discard" cancel={::this.discard} />
+
+        <ModalConfirm ref="modalSaveConfirm" confirmText="Save and close" confirm={::this.saveAndClose} cancelText="Discard" cancel={::this.discard} />
+
+
+
         <ModalDocSettings ref="modalDocSettings" cancel={::this.closeModalDocSettings} confirm={::this.saveAndCloseModalDocSettings} />
         <ModalPageAdd ref="modalPageAdd" cancel={::this.closeModalPageAdd} confirm={::this.addPageAndCloseModal} />
         <ModalChunksApply ref="modalChunksApply" cancel={::this.closeModalChunksApply} confirm={::this.applyChunksAndClose} inputMethod={inputMethod} />
