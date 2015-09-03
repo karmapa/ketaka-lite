@@ -40,7 +40,7 @@ export function addDoc(doc) {
 
 export function openDoc(doc) {
   return {
-    type: types.ADD_DOC,
+    type: types.OPEN_DOC,
     doc
   };
 }

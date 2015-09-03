@@ -75,6 +75,10 @@ export default class Navigation extends React.Component {
       DocHelper.openDoc();
       self.refs.modalOpen.close();
     });
+
+    ipc.on('delete-doc-done', function(res) {
+      self.refs.modalOpen.setNames(res.names);
+    });
   }
 
   overrideBamboo() {
@@ -85,6 +89,11 @@ export default class Navigation extends React.Component {
   cancelOverride() {
     this.overridePaths.length = 0;
     this.refs.modalImportStatus.close();
+  }
+
+  onBambooDeleteClick(name) {
+    DocHelper.closeDoc(name);
+    ipc.send('delete-doc', {name});
   }
 
   onBambooClick(name) {
@@ -132,7 +141,7 @@ export default class Navigation extends React.Component {
           </CollapsibleNav>
         </Navbar>
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" promptConfirm={::this.overrideBamboo} promptCancel={::this.cancelOverride} />
-        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} />
+        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} onBambooDeleteClick={::this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

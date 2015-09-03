@@ -204,7 +204,15 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  onCloseDoc(name) {
+    let doc = _.find(this.props.docs, {name});
+    if (doc) {
+      this.closeDoc(doc.uuid);
+    }
+  }
+
   componentDidMount() {
+
     let self = this;
     let keypressListener = this.keypressListener;
 
@@ -221,11 +229,13 @@ export default class EditorArea extends React.Component {
     this.onImportFunc = ::this.onImport;
     this.onOpenDocFunc = ::this.onOpenDoc;
     this.onActivateTabFunc = ::this.onActivateTab;
+    this.onCloseDocFunc = ::this.onCloseDoc;
 
     DocHelper.onSave(this.saveFunc);
     DocHelper.onImport(this.onImportFunc);
     DocHelper.onOpenDoc(this.onOpenDocFunc);
     DocHelper.onActivateTab(this.onActivateTabFunc);
+    DocHelper.onCloseDoc(this.onCloseDocFunc);
 
     ipc.on('save-done', function() {
       self.props.save(self.state.docKey);
@@ -288,6 +298,7 @@ export default class EditorArea extends React.Component {
     DocHelper.offImport(this.onImportFunc);
     DocHelper.offOpenDoc(this.onOpenDocFunc);
     DocHelper.offActivateTab(this.onActivateTabFunc);
+    DocHelper.offCloseDoc(this.onCloseDocFunc);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
