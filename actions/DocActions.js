@@ -31,9 +31,11 @@ export function settings() {
   };
 }
 
-export function addDoc(doc) {
+export const RECEIVE_DOC = 'RECEIVE_DOC';
+
+export function receiveDoc(doc) {
   return {
-    type: types.ADD_DOC,
+    type: RECEIVE_DOC,
     doc
   };
 }
