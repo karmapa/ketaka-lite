@@ -23,3 +23,16 @@ export const MAP_INPUT_METHODS = {
   [INPUT_METHOD_TIBETAN_SAMBHOTA]: 'BoSambhota',
   [INPUT_METHOD_TIBETAN_SAMBHOTA2]: 'BoSambhotaTwo'
 };
+
+export const MAP_COLORS = {
+  'turquoise': '#1abc9c',
+  'emerald': '#2ecc71',
+  'peter-river': '#3498db',
+  'amethyst': '#9b59b6',
+  'black': '#000000',
+  'sun-flower': '#f1c40f',
+  'carrot': '#e67e22',
+  'alizarin': '#e74c3c',
+  'silver': '#bdc3c7',
+  'asbestos': '#7f8c8d'
+};
