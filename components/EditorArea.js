@@ -23,6 +23,7 @@ export default class EditorArea extends React.Component {
 
   static PropTypes = {
     addDoc: PropTypes.func.isRequired,
+    createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
     direction: PropTypes.bool.isRequired,
@@ -68,7 +69,7 @@ export default class EditorArea extends React.Component {
   }
 
   addDoc() {
-    ipc.send('add-doc');
+    this.props.createDoc();
   }
 
   componentDidUpdate(previousProps, previousState) {

@@ -1,5 +1,7 @@
 import * as types from '../constants/ActionTypes';
 
+import Ipc from '../services/Ipc';
+
 export function importData() {
   return {
     type: types.IMPORT_DATA
@@ -37,6 +39,13 @@ export function receiveDoc(doc) {
   return {
     type: RECEIVE_DOC,
     doc
+  };
+}
+
+export function createDoc() {
+  return dispatch => {
+    Ipc.send('add-doc')
+      .then(res => dispatch(receiveDoc(res.doc)));
   };
 }
 
