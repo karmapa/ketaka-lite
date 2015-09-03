@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import {DropdownButton, MenuItem, OverlayTrigger, Tooltip} from 'react-bootstrap';
+import {DropdownButton, MenuItem, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
 import {INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
   INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 import {PageSwitch} from '.';
@@ -28,7 +28,40 @@ export default class EditorToolbar extends React.Component {
     inputMethod: PropTypes.string
   };
 
+  state = {
+    showColorBox: false
+  };
+
   shouldComponentUpdate = shouldPureComponentUpdate;
+
+  onColorButtonClick(color) {
+    this.props.onColorButtonClick(color);
+    this.refs.colorBoxOverlay.hide();
+  }
+
+  renderColorBox() {
+
+    let {onColorButtonClick} = this.props;
+
+    return (
+      <div className="box-colors">
+        <div className="row">
+          <span className="turquoise" onClick={this.onColorButtonClick.bind(this, 'turquoise')}></span>
+          <span className="emerald" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
+          <span className="peter-river" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
+          <span className="amethyst" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
+          <span className="black" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
+        </div>
+        <div className="row">
+          <span className="sun-flower" onClick={this.onColorButtonClick.bind(this, 'sun-flower')}></span>
+          <span className="carrot" onClick={this.onColorButtonClick.bind(this, 'carrot')}></span>
+          <span className="alizarin" onClick={this.onColorButtonClick.bind(this, 'alizarin')}></span>
+          <span className="silver" onClick={this.onColorButtonClick.bind(this, 'silver')}></span>
+          <span className="asbestos" onClick={this.onColorButtonClick.bind(this, 'asbestos')}></span>
+        </div>
+      </div>
+    );
+  }
 
   render() {
 
@@ -68,8 +101,11 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Font Color</Tooltip>}>
-            <input type="color" className="button-color" />
+          <OverlayTrigger ref="colorBoxOverlay" placement='top' trigger="click" overlay={<Popover>{this.renderColorBox()}</Popover>}>
+            <button className="button-color" onClick={onRedoButtonClick}>
+              <i className="glyphicon glyphicon-font"></i>
+              <span className="underline"></span>
+            </button>
           </OverlayTrigger>
 
           <OverlayTrigger placement='top' overlay={<Tooltip>Cut</Tooltip>}>

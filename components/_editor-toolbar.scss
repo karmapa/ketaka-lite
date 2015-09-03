@@ -75,10 +75,21 @@ $height-editor-toolbar: 1.9em;
       }
     }
     .button-color {
+      padding: 0 0.2em 0.1em;
       width: 2em;
       height: $height-editor-toolbar;
       display: block;
       float: left;
+      .glyphicon {
+        font-size: 0.7em;
+      }
+      .underline {
+        display: block;
+        background-color: #f00;
+        height: 2px;
+        width: 1em;
+        margin: 1px auto 0;
+      }
     }
     .button-undo, .button-redo {
       i {
@@ -117,4 +128,58 @@ $height-editor-toolbar: 1.9em;
   &:after {
     @include clearfix();
   }
+}
+
+.box-colors {
+  padding: 0 0.2em;
+  .row {
+    margin-bottom: 0;
+  }
+  span {
+    cursor: pointer;
+    display: inline-block;
+    width: 2.4em;
+    height: 2.4em;
+    margin: 0 0.2em;
+  }
+}
+
+.turquoise {
+  background-color: #1abc9c;
+}
+
+.emerald {
+  background-color: #2ecc71;
+}
+
+.peter-river {
+  background-color: #3498db;
+}
+
+.amethyst {
+  background-color: #9b59b6;
+}
+
+.black {
+  background-color: #000;
+}
+
+.sun-flower {
+  background-color: #f1c40f;
+}
+
+.carrot {
+  background-color: #e67e22;
+}
+
+.alizarin {
+  background-color: #e74c3c;
+}
+
+.silver {
+  background-color: #bdc3c7;
+}
+
+.asbestos {
+  background-color: #7f8c8d;
 }

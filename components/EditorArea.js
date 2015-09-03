@@ -362,6 +362,10 @@ export default class EditorArea extends React.Component {
       });
   }
 
+  onColorButtonClick(color) {
+    let codemirror = this.getCurrentCodemirror();
+  }
+
   onSpellCheckButtonClick() {
     this.checkSpelling();
   }
@@ -456,6 +460,7 @@ export default class EditorArea extends React.Component {
       onSettingsButtonClick: ::this.onSettingsButtonClick,
       onPageAddButtonClick: ::this.onPageAddButtonClick,
       onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
+      onColorButtonClick: ::this.onColorButtonClick,
       onReadonlyButtonClick: toggleReadonly,
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
       onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
