@@ -7,6 +7,8 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalDocSettings, ModalPageAdd, ModalChunksApply} from '.';
 import {DocHelper, Helper} from '../services/';
 
+import {MAP_COLORS} from '../constants/AppConstants';
+
 import ReactToastr from 'react-toastr';
 import Ipc from '../services/Ipc';
 
@@ -364,6 +366,11 @@ export default class EditorArea extends React.Component {
 
   onColorButtonClick(color) {
     let codemirror = this.getCurrentCodemirror();
+
+    codemirror.listSelections()
+      .forEach(selection => {
+        codemirror.markText(selection.anchor, selection.head, {css: 'color: ' + MAP_COLORS[color]});
+      });
   }
 
   onSpellCheckButtonClick() {
