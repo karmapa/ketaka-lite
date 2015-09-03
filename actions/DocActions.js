@@ -1,35 +1,35 @@
-import * as types from '../constants/ActionTypes';
-
 import Ipc from '../services/Ipc';
+
+export const IMPORT_DATA = 'IMPORT_DATA';
 
 export function importData() {
   return {
-    type: types.IMPORT_DATA
+    type: IMPORT_DATA
   };
 }
 
+export const SAVE = 'SAVE';
+
 export function save(uuid) {
   return {
-    type: types.SAVE,
+    type: SAVE,
     uuid
   };
 }
 
-export function saveAs() {
-  return {
-    type: types.SAVE_AS
-  };
-}
+export const EXPORT_DATA = 'EXPORT_DATA';
 
 export function exportData() {
   return {
-    type: types.EXPORT_DATA
+    type: EXPORT_DATA
   };
 }
 
+export const SETTINGS = 'SETTINGS';
+
 export function settings() {
   return {
-    type: types.SETTINGS
+    type: SETTINGS
   };
 }
 
@@ -49,60 +49,76 @@ export function createDoc() {
   };
 }
 
+export const OPEN_DOC = 'OPEN_DOC';
+
 export function openDoc(doc) {
   return {
-    type: types.OPEN_DOC,
+    type: OPEN_DOC,
     doc
   };
 }
 
+export const ADD_PAGE = 'ADD_PAGE';
+
 export function addPage(uuid, pageName) {
   return {
-    type: types.ADD_PAGE,
+    type: ADD_PAGE,
     uuid,
     pageName
   };
 }
 
+export const IMPORT_DOC = 'IMPORT_DOC';
+
 export function importDoc(doc) {
   return {
-    type: types.IMPORT_DOC,
+    type: IMPORT_DOC,
     doc
   };
 }
 
+export const CLOSE_DOC = 'CLOSE_DOC';
+
 export function closeDoc(uuid) {
   return {
-    type: types.CLOSE_DOC,
+    type: CLOSE_DOC,
     uuid
   };
 }
+
+export const TO_NEXT_PAGE = 'TO_NEXT_PAGE';
 
 export function toNextPage(uuid) {
   return {
-    type: types.TO_NEXT_PAGE,
+    type: TO_NEXT_PAGE,
     uuid
   };
 }
+
+export const TO_PREVIOUS_PAGE = 'TO_PREVIOUS_PAGE';
 
 export function toPreviousPage(uuid) {
   return {
-    type: types.TO_PREVIOUS_PAGE,
+    type: TO_PREVIOUS_PAGE,
     uuid
   };
 }
 
+export const SET_PAGE_INDEX = 'SET_PAGE_INDEX';
+
 export function setPageIndex(uuid, pageIndex) {
   return {
-    type: types.SET_PAGE_INDEX,
+    type: SET_PAGE_INDEX,
     uuid,
     pageIndex
   };
 }
 
+export const WRITE_PAGE_CONTENT = 'WRITE_PAGE_CONTENT';
+
 export function writePageContent(uuid, pageIndex, content) {
   return {
-    type: types.WRITE_PAGE_CONTENT,
+    type: WRITE_PAGE_CONTENT,
     uuid,
     pageIndex,
     content

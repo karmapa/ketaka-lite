@@ -1,7 +1,8 @@
+import * as types from '../actions/AppActions';
 import * as constants from '../constants/AppConstants';
 
 const actionsMap = {
-  [constants.TOGGLE_DIRECTION]: toggleDirection
+  [types.TOGGLE_DIRECTION]: toggleDirection
 };
 
 export default function direction(state = constants.DIRECTION_HORIZONTAL, action) {

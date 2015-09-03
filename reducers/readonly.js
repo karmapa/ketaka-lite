@@ -1,7 +1,7 @@
-import * as constants from '../constants/AppConstants';
+import * as types from '../actions/AppActions';
 
 const actionsMap = {
-  [constants.TOGGLE_READONLY]: toggleReadonly
+  [types.TOGGLE_READONLY]: toggleReadonly
 };
 
 export default function direction(state = false, action) {

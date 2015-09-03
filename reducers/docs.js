@@ -1,5 +1,4 @@
-import * as types from '../constants/ActionTypes';
-import * as actions from '../actions/DocActions';
+import * as types from '../actions/DocActions';
 import _ from 'lodash';
 
 import {SAMPLE_DOC} from '../constants/SampleDoc';
@@ -10,7 +9,7 @@ const actionsMap = {
   [types.SAVE_AS]: saveAs,
   [types.EXPORT_DATA]: exportData,
   [types.SETTINGS]: settings,
-  [actions.RECEIVE_DOC]: receiveDoc,
+  [types.RECEIVE_DOC]: receiveDoc,
   [types.OPEN_DOC]: openDoc,
   [types.ADD_PAGE]: addPage,
   [types.IMPORT_DOC]: importDoc,
