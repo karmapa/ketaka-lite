@@ -1,7 +1,30 @@
+.modal-open-title {
+  .button-edit {
+    float: right;
+  }
+  &:after {
+    @include clearfix();
+  }
+}
+
 .modal-open-content {
+  padding: 0.5em 0;
   height: 45vh;
   overflow: scroll;
   button {
     margin: 0.6em;
+  }
+  .button-wrap {
+    display: inline-block;
+    position: relative;
+  }
+  .button-delete {
+    border-radius: 100%;
+    padding: 0 0.25em;
+    line-height: 1.1em;
+    font-size: 1.4em;
+    position: absolute;
+    right: -0.7em;
+    top: -0.7em;
   }
 }
