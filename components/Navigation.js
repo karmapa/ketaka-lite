@@ -75,6 +75,10 @@ export default class Navigation extends React.Component {
       DocHelper.openDoc();
       self.refs.modalOpen.close();
     });
+
+    ipc.on('delete-doc-done', function(res) {
+      self.refs.modalOpen.setNames(res.names);
+    });
   }
 
   overrideBamboo() {
