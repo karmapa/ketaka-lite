@@ -137,7 +137,7 @@ export default class Navigation extends React.Component {
             <Nav navbar>
               <DropdownButton eventKey={3} title="Ketaka Lite">
                 <MenuItem eventKey="1" onSelect={::this.import}>Import</MenuItem>
-                <MenuItem eventKey="2" onSelect={::this.open}>open</MenuItem>
+                <MenuItem eventKey="2" onSelect={::this.open}>Open</MenuItem>
                 <MenuItem eventKey="3" onSelect={DocHelper.save}>Save</MenuItem>
                 <MenuItem eventKey="4" onSelect={exportData}>Export</MenuItem>
                 <MenuItem eventKey="5" onSelect={settings}>Settings</MenuItem>
