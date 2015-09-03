@@ -87,6 +87,11 @@ export default class Navigation extends React.Component {
     this.refs.modalImportStatus.close();
   }
 
+  onBambooDeleteClick(name) {
+    DocHelper.closeDoc(name);
+    ipc.send('delete-doc', {name});
+  }
+
   onBambooClick(name) {
     let openedDoc = _.find(this.props.docs, {name});
     if (openedDoc) {
@@ -132,7 +137,7 @@ export default class Navigation extends React.Component {
           </CollapsibleNav>
         </Navbar>
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" promptConfirm={::this.overrideBamboo} promptCancel={::this.cancelOverride} />
-        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} />
+        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} onBambooDeleteClick={::this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );
