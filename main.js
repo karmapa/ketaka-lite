@@ -42,3 +42,4 @@ ipc.on('open', ipcHandlers.open);
 
 ipc.on('open-bamboo', ipcHandlers.openBamboo);
 
+ipc.on('delete-doc', ipcHandlers.deleteDoc);
