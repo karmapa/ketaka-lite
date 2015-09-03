@@ -48,9 +48,9 @@ export default class EditorToolbar extends React.Component {
         <div className="row">
           <span className="turquoise" onClick={this.onColorButtonClick.bind(this, 'turquoise')}></span>
           <span className="emerald" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
-          <span className="peter-river" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
-          <span className="amethyst" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
-          <span className="black" onClick={this.onColorButtonClick.bind(this, 'emerald')}></span>
+          <span className="peter-river" onClick={this.onColorButtonClick.bind(this, 'peter-river')}></span>
+          <span className="amethyst" onClick={this.onColorButtonClick.bind(this, 'amethyst')}></span>
+          <span className="black" onClick={this.onColorButtonClick.bind(this, 'black')}></span>
         </div>
         <div className="row">
           <span className="sun-flower" onClick={this.onColorButtonClick.bind(this, 'sun-flower')}></span>
