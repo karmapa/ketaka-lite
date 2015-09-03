@@ -20,7 +20,9 @@ export default class Editor extends React.Component {
     onSettingsButtonClick: PropTypes.func,
     onApplyChunksButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
+    onPageDeleteButtonClick: PropTypes.func,
     onReadonlyButtonClick: PropTypes.func,
+    canShowPageDeleteButton: PropTypes.bool,
     onSpellCheckButtonClick: PropTypes.func,
     readonly: PropTypes.bool,
     setInputMethod: PropTypes.func
@@ -77,7 +79,8 @@ export default class Editor extends React.Component {
     let {code, className, onInputChange, inputMethod,
       setInputMethod, pageNames, pageIndex, onSettingsButtonClick,
       onPageAddButtonClick, readonly, onApplyChunksButtonClick,
-      onReadonlyButtonClick, onSpellCheckButtonClick} = this.props;
+      onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
+      canShowPageDeleteButton} = this.props;
 
     let editorToolbarProps = {
       readonly,
@@ -89,9 +92,11 @@ export default class Editor extends React.Component {
       onInputChange,
       onRedoButtonClick: ::this.onRedoButtonClick,
       onUndoButtonClick: ::this.onUndoButtonClick,
+      canShowPageDeleteButton,
       onReadonlyButtonClick,
       onSettingsButtonClick,
       onPageAddButtonClick,
+      onPageDeleteButtonClick,
       onSpellCheckButtonClick,
       onApplyChunksButtonClick
     };

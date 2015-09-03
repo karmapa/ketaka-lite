@@ -15,6 +15,7 @@ export default class EditorToolbar extends React.Component {
     className: PropTypes.string,
     onInputChange: PropTypes.func,
     onRedoButtonClick: PropTypes.func,
+    canShowPageDeleteButton: PropTypes.bool,
     onUndoButtonClick: PropTypes.func,
     onReadonlyButtonClick: PropTypes.func,
     onColorButtonClick: PropTypes.func,
@@ -22,6 +23,7 @@ export default class EditorToolbar extends React.Component {
     onApplyChunksButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
+    onPageDeleteButtonClick: PropTypes.func,
     setInputMethod: PropTypes.func,
     inputMethod: PropTypes.string
   };
@@ -32,7 +34,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick, onColorButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      readonly, onSpellCheckButtonClick} = this.props;
+      readonly, onSpellCheckButtonClick, canShowPageDeleteButton} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -106,6 +108,8 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
+          {this.renderPageDeleteButton()}
+
         </div>
 
         <div className="section language-section">
@@ -115,6 +119,19 @@ export default class EditorToolbar extends React.Component {
         </div>
       </div>
     );
+  }
+
+  renderPageDeleteButton() {
+    let {canShowPageDeleteButton, onPageDeleteButtonClick} = this.props;
+    if (canShowPageDeleteButton) {
+      return (
+        <OverlayTrigger placement='top' overlay={<Tooltip>Delete Current Page</Tooltip>}>
+          <button className="button-page-delete" onClick={onPageDeleteButtonClick}>
+            <i className="glyphicon glyphicon-trash"></i>
+          </button>
+        </OverlayTrigger>
+      );
+    }
   }
 
   renderMenuItem(currentMethod, methods) {

@@ -103,7 +103,7 @@ export default class EditorArea extends React.Component {
 
   closeTab(key) {
     if (this.docChanged()) {
-      this.refs.modalConfirm.open({
+      this.refs.modalSaveConfirm.open({
         title: 'Oops',
         message: 'You have unsaved content ! Do you want to save it ?'
       });
@@ -115,12 +115,12 @@ export default class EditorArea extends React.Component {
   saveAndClose() {
     this.save();
     this.closeDoc();
-    this.refs.modalConfirm.close();
+    this.refs.modalSaveConfirm.close();
   }
 
   discard() {
     this.closeDoc();
-    this.refs.modalConfirm.close();
+    this.refs.modalSaveConfirm.close();
   }
 
   closeDoc(key) {
@@ -347,6 +347,13 @@ export default class EditorArea extends React.Component {
     });
   }
 
+  onPageDeleteButtonClick() {
+    this.refs.modalPageDeleteConfirm.open({
+      title: 'Oops',
+      message: 'Are you sure to delete this page ?'
+    });
+  }
+
   checkSpelling() {
     let codemirror = this.getCurrentCodemirror();
     let content = codemirror.getValue();
@@ -415,6 +422,23 @@ export default class EditorArea extends React.Component {
     this.refs.modalChunksApply.close();
   }
 
+  cancelDeletePage() {
+    this.refs.modalPageDeleteConfirm.close();
+  }
+
+  deleteCurrentPage() {
+    let doc = this.getDoc();
+    let currentPageIndex = doc.pageIndex;
+
+    if (currentPageIndex === (doc.pages.length - 1)) {
+      doc.pageIndex = currentPageIndex - 1;
+      this.props.setPageIndex(currentPageIndex - 1);
+    }
+    doc.pages.splice(currentPageIndex, 1);
+    this.forceUpdate();
+    this.refs.modalPageDeleteConfirm.close();
+  }
+
   renderDoc(doc) {
 
     let pageIndex = this.getPageIndex(doc);
@@ -440,6 +464,8 @@ export default class EditorArea extends React.Component {
       onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
       onReadonlyButtonClick: toggleReadonly,
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
+      onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
+      canShowPageDeleteButton: doc.pages.length > 1,
       setInputMethod: this.props.setInputMethod,
       pageNames: doc.pages.map(page => page.name)
     };
@@ -464,7 +490,9 @@ export default class EditorArea extends React.Component {
           {docs.map(::this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
         </TabBox>
-        <ModalConfirm ref="modalConfirm" confirmText="Save and close" confirm={::this.saveAndClose} cancelText="Discard" cancel={::this.discard} />
+        <ModalConfirm ref="modalSaveConfirm" confirmText="Save and close" confirm={::this.saveAndClose} cancelText="Discard" cancel={::this.discard} />
+        <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
+          confirm={::this.deleteCurrentPage} cancelText="Cancel" cancel={::this.cancelDeletePage} />
         <ModalDocSettings ref="modalDocSettings" cancel={::this.closeModalDocSettings} confirm={::this.saveAndCloseModalDocSettings} />
         <ModalPageAdd ref="modalPageAdd" cancel={::this.closeModalPageAdd} confirm={::this.addPageAndCloseModal} />
         <ModalChunksApply ref="modalChunksApply" cancel={::this.closeModalChunksApply} confirm={::this.applyChunksAndClose} inputMethod={inputMethod} />
