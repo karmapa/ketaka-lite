@@ -1,13 +1,15 @@
 import React, {PropTypes} from 'react';
 import {Redirect, Router, Route} from 'react-router';
 import {Provider} from 'react-redux';
-import {createStore, combineReducers} from 'redux';
+import {createStore, applyMiddleware, combineReducers} from 'redux';
+import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import App from './containers/App';
 import About from './containers/About';
 
 const reducer = combineReducers(reducers);
-const store = createStore(reducer);
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const store = createStoreWithMiddleware(reducer);
 
 export default class Root extends React.Component {
 
