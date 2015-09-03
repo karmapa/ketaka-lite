@@ -13,6 +13,7 @@ export const EVENT_SAVE = 'EVENT_SAVE';
 export const EVENT_IMPORT = 'EVENT_IMPORT';
 export const EVENT_OPEN_DOC = 'EVENT_OPEN_DOC';
 export const EVENT_ACTIVATE_TAB = 'EVENT_ACTIVATE_TAB';
+export const EVENT_CLOSE_DOC = 'EVENT_CLOSE_DOC';
 
 export const PB_FILENAME_REGEXP = new RegExp('^(.+)_PB\.xml$');
 
