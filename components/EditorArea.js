@@ -71,10 +71,13 @@ export default class EditorArea extends React.Component {
     ipc.send('add-doc');
   }
 
-  componentDidUpdate(previousProps) {
+  componentDidUpdate(previousProps, previousState) {
     let docs = this.props.docs;
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
+    }
+    if (previousState.docKey !== this.state.docKey) {
+      this.getCurrentCodemirror().refresh();
     }
   }
 
