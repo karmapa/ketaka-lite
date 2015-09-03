@@ -182,3 +182,22 @@ exports.openBamboo = function(event, arg) {
       send('open-bamboo-done', {doc: doc});
     });
 };
+
+exports.deleteDoc = function(event, res) {
+
+  var name = res.name;
+  var send = event.sender.send.bind(event.sender);
+  var path = Path.resolve(PATH_APP_DOC, name);
+
+  if (! name) {
+    return;
+  }
+
+  Helper.rimraf(path)
+    .then(function() {
+      return Doc.getExistedDocNames()
+    })
+    .then(function(names) {
+      send('delete-doc-done', {names: names});
+    });
+};
