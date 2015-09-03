@@ -2,6 +2,7 @@ var BrowserWindow = require('browser-window');
 var app = require('app');
 var ipc = require('ipc');
 var ipcHandlers = require('./main/ipcHandlers');
+var bindEventName = require('./main/decorators/bindEventName');
 
 require('crash-reporter').start();
 
@@ -25,6 +26,8 @@ app.on('ready', function() {
     mainWindow = null;
   });
 });
+
+ipc = bindEventName(ipc);
 
 ipc.on('import-button-clicked', ipcHandlers.importButtonClicked);
 

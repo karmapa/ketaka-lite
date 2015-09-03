@@ -1,4 +1,4 @@
-import * as types from '../constants/ActionTypes';
+import * as types from '../actions/DocActions';
 import _ from 'lodash';
 
 import {SAMPLE_DOC} from '../constants/SampleDoc';
@@ -9,7 +9,7 @@ const actionsMap = {
   [types.SAVE_AS]: saveAs,
   [types.EXPORT_DATA]: exportData,
   [types.SETTINGS]: settings,
-  [types.ADD_DOC]: addDoc,
+  [types.RECEIVE_DOC]: receiveDoc,
   [types.OPEN_DOC]: openDoc,
   [types.ADD_PAGE]: addPage,
   [types.IMPORT_DOC]: importDoc,
@@ -54,7 +54,7 @@ function settings(state) {
   return state;
 }
 
-function addDoc(state, action) {
+function receiveDoc(state, action) {
   let {doc, index} = findDocDataByUuid(state, action.doc.uuid);
 
   // override existed doc

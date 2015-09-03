@@ -34,7 +34,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick, onColorButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      readonly, onSpellCheckButtonClick, canShowPageDeleteButton} = this.props;
+      readonly, onSpellCheckButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',

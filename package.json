@@ -29,6 +29,7 @@
     "react-toastr": "^1.5.1",
     "read-chunk": "^1.0.1",
     "redux": "1.0.0-rc",
+    "redux-thunk": "^0.1.0",
     "rimraf": "^2.4.3",
     "through2": "^2.0.0",
     "toastr": "^2.1.2",
