@@ -6,6 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, CollapsibleNav, DropdownButton, Glyphicon,  MenuItem, Nav, Navbar} from 'react-bootstrap';
 import ReactToastr from 'react-toastr';
 import _ from 'lodash';
+import Ipc from '../services/Ipc';
 
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
@@ -28,7 +29,17 @@ export default class Navigation extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   import() {
-    ipc.send('import-button-clicked');
+
+    let self = this;
+
+    Ipc.send('import-button-clicked')
+      .then(res => {
+        self.props.importDoc(res.doc);
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => {
+        self.refs.toast.error(res.message);
+      });
   }
 
   overridePaths = [];
@@ -47,43 +58,28 @@ export default class Navigation extends React.Component {
       self.refs.modalImportStatus.addMessage(res);
     });
 
-    ipc.on('import-done', function(res) {
-      self.props.importDoc(res.doc);
-      self.refs.toast.success(res.message);
-      DocHelper.import();
-    });
-
     ipc.on('confirm-bamboo-override', function(res) {
       self.overridePaths = res.paths;
       self.refs.modalImportStatus.showPrompt({
         promptMessage: 'Bamboo ' + res.bambooName + ' exists. Do you want to override it ?'
       });
     });
-
-    ipc.on('import-error', function(res) {
-      self.refs.toast.error(res.message);
-    });
-
-    ipc.on('open-done', function(res) {
-      self.refs.modalOpen.open({
-        names: res.names
-      });
-    });
-
-    ipc.on('open-bamboo-done', function(res) {
-      self.props.openDoc(res.doc);
-      DocHelper.openDoc();
-      self.refs.modalOpen.close();
-    });
-
-    ipc.on('delete-doc-done', function(res) {
-      self.refs.modalOpen.setNames(res.names);
-    });
   }
 
   overrideBamboo() {
-    this.refs.modalImportStatus.close();
-    ipc.send('import-button-clicked', this.overridePaths);
+
+    let self = this;
+
+    self.refs.modalImportStatus.close();
+
+    Ipc.send('import-button-clicked', {overridePaths: self.overridePaths})
+      .then(res => {
+        self.props.importDoc(res.doc);
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => {
+        self.refs.toast.error(res.message);
+      });
   }
 
   cancelOverride() {
@@ -92,11 +88,14 @@ export default class Navigation extends React.Component {
   }
 
   onBambooDeleteClick(name) {
+    let self = this;
     DocHelper.closeDoc(name);
-    ipc.send('delete-doc', {name});
+    Ipc.send('delete-doc', {name})
+      .then(res => self.refs.modalOpen.setNames(res.names));
   }
 
   onBambooClick(name) {
+    let self = this;
     let openedDoc = _.find(this.props.docs, {name});
     if (openedDoc) {
       // active this doc if its already opened
@@ -104,12 +103,23 @@ export default class Navigation extends React.Component {
       this.refs.modalOpen.close();
     }
     else {
-      ipc.send('open-bamboo', {name});
+      Ipc.send('open-bamboo', {name})
+        .then(res => {
+          self.props.receiveDoc(res.doc);
+          self.refs.modalOpen.close();
+        });
     }
   }
 
   open() {
-    ipc.send('open');
+    let self = this;
+
+    Ipc.send('open')
+      .then(res => {
+        self.refs.modalOpen.open({
+          names: res.names
+        });
+      });
   }
 
   render() {

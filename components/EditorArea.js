@@ -8,6 +8,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
 import {DocHelper, Helper} from '../services/';
 
 import ReactToastr from 'react-toastr';
+import Ipc from '../services/Ipc';
 
 import {checkSyllables} from 'check-tibetan';
 
@@ -183,18 +184,9 @@ export default class EditorArea extends React.Component {
   }
 
   save() {
-    let doc = this.getDoc();
-    ipc.send('save', doc);
-  }
-
-  onImport() {
-    let uuid = _.get(this.getDoc(), 'uuid');
-    this.refs[this.getEditorKey(uuid)].refresh();
-  }
-
-  onOpenDoc() {
-    let uuid = _.get(this.getDoc(), 'uuid');
-    this.refs[this.getEditorKey(uuid)].refresh();
+    let self = this;
+    Ipc.send('save', self.getDoc())
+      .then(() => self.props.save(self.state.docKey));
   }
 
   onActivateTab(doc) {
@@ -226,46 +218,17 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl s', ::this.save);
 
     this.saveFunc = ::this.save;
-    this.onImportFunc = ::this.onImport;
-    this.onOpenDocFunc = ::this.onOpenDoc;
     this.onActivateTabFunc = ::this.onActivateTab;
     this.onCloseDocFunc = ::this.onCloseDoc;
 
     DocHelper.onSave(this.saveFunc);
-    DocHelper.onImport(this.onImportFunc);
-    DocHelper.onOpenDoc(this.onOpenDocFunc);
     DocHelper.onActivateTab(this.onActivateTabFunc);
     DocHelper.onCloseDoc(this.onCloseDocFunc);
-
-    ipc.on('save-done', function() {
-      self.props.save(self.state.docKey);
-    });
-
-    ipc.on('save-error', function(res) {
-      self.refs.toast.error(res.message);
-    });
-
-    ipc.on('page-image-upload-done', function(res) {
-      let doc = self.getDoc();
-      let page = self.getCurrentPage(doc);
-      page.destImagePath = res.destImagePath;
-      doc.changed = true;
-      self.forceUpdate();
-      self.refs.toast.success(res.message);
-    });
-
-    ipc.on('page-image-upload-error', function(res) {
-      self.refs.toast.error(res.message);
-    });
 
     ipc.on('add-doc-done', function(res) {
       let doc = res.doc;
       self.props.addDoc(doc);
       self.refs[self.getEditorKey(doc.uuid)].refresh();
-    });
-
-    ipc.on('add-doc-error', function(res) {
-      self.refs.toast.error(res.message);
     });
 
     ipc.on('find-doc-names-done', function(docNames) {
@@ -278,16 +241,6 @@ export default class EditorArea extends React.Component {
         pageNames: _.get(doc, 'pages', []).map(page => page.name)
       });
     });
-
-    ipc.on('change-doc-settings-error', function(res) {
-      self.refs.toast.error(res.message);
-    });
-
-    ipc.on('change-doc-settings-done', function(res) {
-      let doc = res.doc;
-      self.props.addDoc(doc);
-      self.refs.toast.success(res.message);
-    });
   }
 
   componentWillUnmount() {
@@ -295,8 +248,6 @@ export default class EditorArea extends React.Component {
     this.keypressListener.distroy();
 
     DocHelper.offSave(this.saveFunc);
-    DocHelper.offImport(this.onImportFunc);
-    DocHelper.offOpenDoc(this.onOpenDocFunc);
     DocHelper.offActivateTab(this.onActivateTabFunc);
     DocHelper.offCloseDoc(this.onCloseDocFunc);
   }
@@ -323,8 +274,17 @@ export default class EditorArea extends React.Component {
   }
 
   onUploadButtonClick() {
+    let self = this;
     let doc = this.getDoc();
-    ipc.send('page-image-upload-button-clicked', doc);
+    Ipc.send('page-image-upload-button-clicked', doc)
+      .then(res => {
+        let page = self.getCurrentPage(doc);
+        page.destImagePath = res.destImagePath;
+        doc.changed = true;
+        self.forceUpdate();
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => self.refs.toast.error(res.message));
   }
 
   getImageSrc(page) {
@@ -332,7 +292,19 @@ export default class EditorArea extends React.Component {
   }
 
   onSettingsButtonClick() {
-    ipc.send('find-doc-names');
+    let self = this;
+
+    Ipc.send('find-doc-names')
+      .then(res => {
+        let doc = self.getDoc();
+        let page = self.getCurrentPage(doc);
+        self.refs.modalDocSettings.open({
+          docName: _.get(doc, 'name'),
+          pageName: _.get(page, 'name'),
+          docNames: res.docNames,
+          pageNames: _.get(doc, 'pages', []).map(page => page.name)
+        });
+      });
   }
 
   closeModalDocSettings() {
@@ -340,6 +312,7 @@ export default class EditorArea extends React.Component {
   }
 
   saveAndCloseModalDocSettings(data) {
+    let self = this;
     let doc = this.getDoc();
     let page = doc.pages[doc.pageIndex];
     data.doc = doc;
@@ -348,8 +321,14 @@ export default class EditorArea extends React.Component {
       return this.refs.modalDocSettings.close();
     }
 
-    ipc.send('change-doc-settings', data);
-    this.refs.modalDocSettings.close();
+    Ipc.send('change-doc-settings', data)
+      .then(res => {
+        let doc = res.doc;
+        self.props.receiveDoc(doc);
+        self.refs.toast.success(res.message);
+        self.refs.modalDocSettings.close();
+      })
+      .catch(res => self.refs.toast.error(res.message));
   }
 
   onPageAddButtonClick() {
