@@ -258,7 +258,7 @@ export default class EditorArea extends React.Component {
   }
 
   onCodemirrorChange(cm, content) {
-    console.log('onCodemirrorChange');
+
     let doc = this.getDoc();
     let {uuid, pageIndex} = doc;
     let page = this.getCurrentPage(doc);
