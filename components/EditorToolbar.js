@@ -106,12 +106,6 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Cut</Tooltip>}>
-            <button className="button-cut" onClick={onColorButtonClick}>
-              <i className="glyphicon glyphicon-scissors"></i>
-            </button>
-          </OverlayTrigger>
-
           <OverlayTrigger placement='top' overlay={<Tooltip>Toggle Read Only</Tooltip>}>
             <button className="button-readonly" onClick={onReadonlyButtonClick}>
               <i className={classNames(classButtonReadonly)}></i>
