@@ -49,15 +49,6 @@ export function createDoc() {
   };
 }
 
-export const OPEN_DOC = 'OPEN_DOC';
-
-export function openDoc(doc) {
-  return {
-    type: OPEN_DOC,
-    doc
-  };
-}
-
 export const ADD_PAGE = 'ADD_PAGE';
 
 export function addPage(uuid, pageName) {
@@ -122,5 +113,37 @@ export function writePageContent(uuid, pageIndex, content) {
     uuid,
     pageIndex,
     content
+  };
+}
+
+export const SAVE_FONT_RECORD = 'SAVE_FONT_RECORD';
+
+export function saveFontRecord(uuid, pageIndex, fontRecords) {
+  return {
+    type: SAVE_FONT_RECORD,
+    uuid,
+    pageIndex,
+    fontRecords
+  };
+}
+
+export const DELETE_PAGE = 'DELETE_PAGE';
+
+export function deletePage(uuid, pageIndex) {
+  return {
+    type: DELETE_PAGE,
+    uuid,
+    pageIndex
+  };
+}
+
+export const UPDATE_PAGE_IMAGE_PATH = 'UPDATE_PAGE_IMAGE_PATH';
+
+export function updatePageImagePath(uuid, pageIndex, destImagePath) {
+  return {
+    type: UPDATE_PAGE_IMAGE_PATH,
+    uuid,
+    pageIndex,
+    destImagePath
   };
 }

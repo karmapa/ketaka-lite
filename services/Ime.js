@@ -104,7 +104,7 @@ export default class Ime {
 
     e.stopPropagation();
 
-    return this.replaceText(replacement.output, startPos - input.length + 1, endPos, {cm, e});
+    return this.replaceText(replacement.output, startPos - input.length + 1, endPos, {cm, e, pos});
   }
 
   static keyup(e) {
@@ -200,14 +200,10 @@ export default class Ime {
 
   static replaceText(replacement, start, end, options = {}) {
 
-    let {cm, e} = options;
+    let {cm, e, pos} = options;
 
     if (cm) {
-      let pos = cm.getCursor();
-      let content = cm.getLine(pos.line).substring(0, pos.ch);
-      let value = content.substring(0, start) + replacement + content.substring(end, content.length);
-
-      cm.replaceRange(value, {line: pos.line, ch: 0}, {line: pos.line, ch: pos.ch});
+      cm.replaceRange(replacement, {line: pos.line, ch: start}, {line: pos.line, ch: end});
     }
     else {
       let value = e.target.value;

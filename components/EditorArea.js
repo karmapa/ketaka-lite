@@ -17,8 +17,6 @@ import {checkSyllables} from 'check-tibetan';
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
-let ipc = window.require('ipc');
-
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 export default class EditorArea extends React.Component {
@@ -27,6 +25,8 @@ export default class EditorArea extends React.Component {
     addDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
+    deletePage: PropTypes.func.isRequired,
+    updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
     direction: PropTypes.bool.isRequired,
     docs: PropTypes.array.isRequired,
@@ -74,13 +74,23 @@ export default class EditorArea extends React.Component {
     this.props.createDoc();
   }
 
+  markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
+    let fontRecords = page.config.fontRecords || [];
+    fontRecords.forEach(record => {
+      let {from, to, css} = record;
+      codemirror.markText(from, to, css);
+    });
+  }
+
   componentDidUpdate(previousProps, previousState) {
     let docs = this.props.docs;
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
     }
     if (previousState.docKey !== this.state.docKey) {
-      this.getCurrentCodemirror().refresh();
+      let codemirror = this.getCurrentCodemirror();
+      codemirror.refresh();
+      this.markFontColor(codemirror);
     }
   }
 
@@ -211,7 +221,6 @@ export default class EditorArea extends React.Component {
 
   componentDidMount() {
 
-    let self = this;
     let keypressListener = this.keypressListener;
 
     keypressListener = new keypress.Listener();
@@ -219,8 +228,8 @@ export default class EditorArea extends React.Component {
 
     keypressListener.simpleCombo('cmd j', ::this.addDoc);
     keypressListener.simpleCombo('cmd k', this.closeTab.bind(this, null));
-    keypressListener.simpleCombo('shift left', ::this.rotateTabLeft);
-    keypressListener.simpleCombo('shift right', ::this.rotateTabRight);
+    keypressListener.simpleCombo('ctrl alt left', ::this.rotateTabLeft);
+    keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
 
     this.saveFunc = ::this.save;
@@ -230,23 +239,6 @@ export default class EditorArea extends React.Component {
     DocHelper.onSave(this.saveFunc);
     DocHelper.onActivateTab(this.onActivateTabFunc);
     DocHelper.onCloseDoc(this.onCloseDocFunc);
-
-    ipc.on('add-doc-done', function(res) {
-      let doc = res.doc;
-      self.props.addDoc(doc);
-      self.refs[self.getEditorKey(doc.uuid)].refresh();
-    });
-
-    ipc.on('find-doc-names-done', function(docNames) {
-      let doc = self.getDoc();
-      let page = self.getCurrentPage(doc);
-      self.refs.modalDocSettings.open({
-        docName: _.get(doc, 'name'),
-        pageName: _.get(page, 'name'),
-        docNames,
-        pageNames: _.get(doc, 'pages', []).map(page => page.name)
-      });
-    });
   }
 
   componentWillUnmount() {
@@ -266,9 +258,18 @@ export default class EditorArea extends React.Component {
   }
 
   onCodemirrorChange(cm, content) {
+
     let doc = this.getDoc();
-    this.props.writePageContent(doc.uuid, doc.pageIndex, content);
-    this.forceUpdate();
+    let {uuid, pageIndex} = doc;
+    let page = this.getCurrentPage(doc);
+
+    // switching pages
+    if (page.content === content) {
+      this.markFontColor(cm, page);
+    }
+    else {
+      this.props.writePageContent(uuid, pageIndex, content);
+    }
   }
 
   getTabName(doc) {
@@ -282,12 +283,10 @@ export default class EditorArea extends React.Component {
   onUploadButtonClick() {
     let self = this;
     let doc = this.getDoc();
+    let {uuid, pageIndex} = doc;
     Ipc.send('page-image-upload-button-clicked', doc)
       .then(res => {
-        let page = self.getCurrentPage(doc);
-        page.destImagePath = res.destImagePath;
-        doc.changed = true;
-        self.forceUpdate();
+        self.props.updatePageImagePath(uuid, pageIndex, res.destImagePath);
         self.refs.toast.success(res.message);
       })
       .catch(res => self.refs.toast.error(res.message));
@@ -365,12 +364,20 @@ export default class EditorArea extends React.Component {
   }
 
   onColorButtonClick(color) {
+    let doc = this.getDoc();
     let codemirror = this.getCurrentCodemirror();
+    let hexColor = MAP_COLORS[color];
+    let fontRecords = [];
 
     codemirror.listSelections()
       .forEach(selection => {
-        codemirror.markText(selection.anchor, selection.head, {css: 'color: ' + MAP_COLORS[color]});
+        let [from, to] = Helper.handleReverseSelection(selection.anchor, selection.head);
+        let css = {css: 'color: ' + hexColor};
+        codemirror.markText(from, to, css);
+        fontRecords.push({from, to, css});
       });
+
+    this.props.saveFontRecord(doc.uuid, doc.pageIndex, fontRecords);
   }
 
   onSpellCheckButtonClick() {
@@ -439,8 +446,7 @@ export default class EditorArea extends React.Component {
       doc.pageIndex = currentPageIndex - 1;
       this.props.setPageIndex(currentPageIndex - 1);
     }
-    doc.pages.splice(currentPageIndex, 1);
-    this.forceUpdate();
+    this.props.deletePage(doc.uuid, currentPageIndex);
     this.refs.modalPageDeleteConfirm.close();
   }
 
