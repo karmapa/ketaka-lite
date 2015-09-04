@@ -63,7 +63,7 @@ export default class EditorToolbar extends React.Component {
 
   render() {
 
-    let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick, onColorButtonClick,
+    let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       readonly, onSpellCheckButtonClick} = this.props;
 
