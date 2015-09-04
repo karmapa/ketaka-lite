@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import humps from 'humps';
 
 export default class Helper {
@@ -11,4 +10,7 @@ export default class Helper {
     return obj;
   }
 
+  static handleReverseSelection(from, to) {
+    return (from.ch > to.ch) ? [to, from] : [from, to];
+  }
 }

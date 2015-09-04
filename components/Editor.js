@@ -32,6 +32,7 @@ export default class Editor extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   componentDidMount() {
+
     this.ime = Ime;
     this.codemirror = this.refs.codemirror.getCodeMirror();
 

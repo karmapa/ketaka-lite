@@ -27,6 +27,8 @@ export default class EditorArea extends React.Component {
     addDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
+    deletePage: PropTypes.func.isRequired,
+    updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
     direction: PropTypes.bool.isRequired,
     docs: PropTypes.array.isRequired,
@@ -219,8 +221,8 @@ export default class EditorArea extends React.Component {
 
     keypressListener.simpleCombo('cmd j', ::this.addDoc);
     keypressListener.simpleCombo('cmd k', this.closeTab.bind(this, null));
-    keypressListener.simpleCombo('shift left', ::this.rotateTabLeft);
-    keypressListener.simpleCombo('shift right', ::this.rotateTabRight);
+   // keypressListener.simpleCombo('shift left', ::this.rotateTabLeft);
+   // keypressListener.simpleCombo('shift right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
 
     this.saveFunc = ::this.save;
@@ -267,8 +269,12 @@ export default class EditorArea extends React.Component {
 
   onCodemirrorChange(cm, content) {
     let doc = this.getDoc();
-    this.props.writePageContent(doc.uuid, doc.pageIndex, content);
-    this.forceUpdate();
+    let {uuid, pageIndex} = doc;
+    let page = this.getCurrentPage(doc);
+
+    if (page.content !== content) {
+      this.props.writePageContent(uuid, pageIndex, content);
+    }
   }
 
   getTabName(doc) {
@@ -282,12 +288,10 @@ export default class EditorArea extends React.Component {
   onUploadButtonClick() {
     let self = this;
     let doc = this.getDoc();
+    let {uuid, pageIndex} = doc;
     Ipc.send('page-image-upload-button-clicked', doc)
       .then(res => {
-        let page = self.getCurrentPage(doc);
-        page.destImagePath = res.destImagePath;
-        doc.changed = true;
-        self.forceUpdate();
+        self.props.updatePageImagePath(uuid, pageIndex, res.destImagePath);
         self.refs.toast.success(res.message);
       })
       .catch(res => self.refs.toast.error(res.message));
@@ -365,12 +369,19 @@ export default class EditorArea extends React.Component {
   }
 
   onColorButtonClick(color) {
+    let doc = this.getDoc();
     let codemirror = this.getCurrentCodemirror();
+    let hexColor = MAP_COLORS[color];
+    let fontRecords = [];
 
     codemirror.listSelections()
       .forEach(selection => {
-        codemirror.markText(selection.anchor, selection.head, {css: 'color: ' + MAP_COLORS[color]});
+        let [from, to] = Helper.handleReverseSelection(selection.anchor, selection.head);
+        codemirror.markText(from, to, {css: 'color: ' + hexColor});
+        fontRecords.push({selection, hexColor});
       });
+
+    this.props.saveFontRecord(doc.uuid, doc.pageIndex, fontRecords);
   }
 
   onSpellCheckButtonClick() {
@@ -439,8 +450,7 @@ export default class EditorArea extends React.Component {
       doc.pageIndex = currentPageIndex - 1;
       this.props.setPageIndex(currentPageIndex - 1);
     }
-    doc.pages.splice(currentPageIndex, 1);
-    this.forceUpdate();
+    this.props.deletePage(doc.uuid, currentPageIndex);
     this.refs.modalPageDeleteConfirm.close();
   }
 

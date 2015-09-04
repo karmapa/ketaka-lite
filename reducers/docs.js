@@ -13,7 +13,10 @@ const actionsMap = {
   [types.TO_NEXT_PAGE]: toNextPage,
   [types.TO_PREVIOUS_PAGE]: toPreviousPage,
   [types.SET_PAGE_INDEX]: setPageIndex,
-  [types.WRITE_PAGE_CONTENT]: writePageContent
+  [types.WRITE_PAGE_CONTENT]: writePageContent,
+  [types.SAVE_FONT_RECORD]: saveFontRecord,
+  [types.DELETE_PAGE]: deletePage,
+  [types.UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath
 };
 
 export default function docs(state = [], action) {
@@ -85,6 +88,29 @@ function addPage(state, action) {
   return [
     ...state.slice(0, index),
     Object.assign({}, doc),
+    ...state.slice(index + 1)
+  ];
+}
+
+function deletePage(state, action) {
+  let {doc, index} = findDocDataByUuid(state, action.uuid);
+  let {pageIndex} = action;
+
+  if (! doc) {
+    return state;
+  }
+
+  let page = doc.pages[pageIndex];
+
+  if (! page) {
+    return state;
+  }
+
+  doc.pages.splice(pageIndex, 1);
+
+  return [
+    ...state.slice(0, index),
+    Object.assign({}, doc, {pages: doc.pages}),
     ...state.slice(index + 1)
   ];
 }
@@ -196,6 +222,27 @@ function setPageIndex(state, action) {
 
 function writePageContent(state, action) {
 
+  let {doc, index} = findDocDataByUuid(state, action.uuid);
+
+  if (! doc) {
+    return state;
+  }
+
+  let page = doc.pages[action.pageIndex];
+
+  if (! page) {
+    return state;
+  }
+  page.content = action.content;
+  return [
+    ...state.slice(0, index),
+    Object.assign({}, state[index], {changed: true, pages: doc.pages}),
+    ...state.slice(index + 1)
+  ];
+}
+
+function saveFontRecord(state, action) {
+
   let doc = state.find(doc => doc.uuid === action.uuid);
 
   if (! doc) {
@@ -207,8 +254,36 @@ function writePageContent(state, action) {
   if (! page) {
     return state;
   }
-  doc.changed = true;
-  page.content = action.content;
 
-  return state;
+  if (! _.isArray(page.config.fontRecords)) {
+    page.config.fontRecords = [];
+  }
+
+  page.config.fontRecords = page.config.fontRecords.concat(action.fontRecords);
+
+  return Object.assign([], state);
+}
+
+function updatePageImagePath(state, action) {
+
+  let {doc, index} = findDocDataByUuid(state, action.uuid);
+  let {pageIndex} = action;
+
+  if (! doc) {
+    return state;
+  }
+
+  let page = doc.pages[pageIndex];
+
+  if (! page) {
+    return state;
+  }
+
+  page.destImagePath = action.destImagePath;
+
+  return [
+    ...state.slice(0, index),
+    Object.assign({}, doc, {changed: true, pages: doc.pages}),
+    ...state.slice(index + 1)
+  ];
 }

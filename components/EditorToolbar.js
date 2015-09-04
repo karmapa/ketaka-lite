@@ -41,8 +41,6 @@ export default class EditorToolbar extends React.Component {
 
   renderColorBox() {
 
-    let {onColorButtonClick} = this.props;
-
     return (
       <div className="box-colors">
         <div className="row">

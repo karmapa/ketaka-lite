@@ -189,7 +189,7 @@ export default class ImageZoomer extends React.Component {
   }
 
   onImageError(err) {
-    console.log('error', err);
+    console.error('ImageZoomer error: ', err);
   }
 
   setOffsetSize() {

@@ -32,7 +32,7 @@ export const MAP_COLORS = {
   'black': '#000000',
   'sun-flower': '#f1c40f',
   'carrot': '#e67e22',
-  'alizarin': '#e74c3c',
+  'alizarin': '#99505f',
   'silver': '#bdc3c7',
   'asbestos': '#7f8c8d'
 };
