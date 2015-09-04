@@ -17,8 +17,6 @@ import {checkSyllables} from 'check-tibetan';
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
-let ipc = window.require('ipc');
-
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 export default class EditorArea extends React.Component {
@@ -76,13 +74,23 @@ export default class EditorArea extends React.Component {
     this.props.createDoc();
   }
 
+  markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
+    let fontRecords = page.config.fontRecords || [];
+    fontRecords.forEach(record => {
+      let {from, to, css} = record;
+      codemirror.markText(from, to, css);
+    });
+  }
+
   componentDidUpdate(previousProps, previousState) {
     let docs = this.props.docs;
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
     }
     if (previousState.docKey !== this.state.docKey) {
-      this.getCurrentCodemirror().refresh();
+      let codemirror = this.getCurrentCodemirror();
+      codemirror.refresh();
+      this.markFontColor(codemirror);
     }
   }
 
@@ -213,7 +221,6 @@ export default class EditorArea extends React.Component {
 
   componentDidMount() {
 
-    let self = this;
     let keypressListener = this.keypressListener;
 
     keypressListener = new keypress.Listener();
@@ -251,11 +258,16 @@ export default class EditorArea extends React.Component {
   }
 
   onCodemirrorChange(cm, content) {
+    console.log('onCodemirrorChange');
     let doc = this.getDoc();
     let {uuid, pageIndex} = doc;
     let page = this.getCurrentPage(doc);
 
-    if (page.content !== content) {
+    // switching pages
+    if (page.content === content) {
+      this.markFontColor(cm, page);
+    }
+    else {
       this.props.writePageContent(uuid, pageIndex, content);
     }
   }
@@ -360,8 +372,9 @@ export default class EditorArea extends React.Component {
     codemirror.listSelections()
       .forEach(selection => {
         let [from, to] = Helper.handleReverseSelection(selection.anchor, selection.head);
-        codemirror.markText(from, to, {css: 'color: ' + hexColor});
-        fontRecords.push({selection, hexColor});
+        let css = {css: 'color: ' + hexColor};
+        codemirror.markText(from, to, css);
+        fontRecords.push({from, to, css});
       });
 
     this.props.saveFontRecord(doc.uuid, doc.pageIndex, fontRecords);
