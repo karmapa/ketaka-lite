@@ -221,8 +221,8 @@ export default class EditorArea extends React.Component {
 
     keypressListener.simpleCombo('cmd j', ::this.addDoc);
     keypressListener.simpleCombo('cmd k', this.closeTab.bind(this, null));
-   // keypressListener.simpleCombo('shift left', ::this.rotateTabLeft);
-   // keypressListener.simpleCombo('shift right', ::this.rotateTabRight);
+    keypressListener.simpleCombo('ctrl alt left', ::this.rotateTabLeft);
+    keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
 
     this.saveFunc = ::this.save;
@@ -232,23 +232,6 @@ export default class EditorArea extends React.Component {
     DocHelper.onSave(this.saveFunc);
     DocHelper.onActivateTab(this.onActivateTabFunc);
     DocHelper.onCloseDoc(this.onCloseDocFunc);
-
-    ipc.on('add-doc-done', function(res) {
-      let doc = res.doc;
-      self.props.addDoc(doc);
-      self.refs[self.getEditorKey(doc.uuid)].refresh();
-    });
-
-    ipc.on('find-doc-names-done', function(docNames) {
-      let doc = self.getDoc();
-      let page = self.getCurrentPage(doc);
-      self.refs.modalDocSettings.open({
-        docName: _.get(doc, 'name'),
-        pageName: _.get(page, 'name'),
-        docNames,
-        pageNames: _.get(doc, 'pages', []).map(page => page.name)
-      });
-    });
   }
 
   componentWillUnmount() {
