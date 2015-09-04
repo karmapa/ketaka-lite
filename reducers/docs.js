@@ -4,11 +4,9 @@ import _ from 'lodash';
 const actionsMap = {
   [types.IMPORT_DATA]: importData,
   [types.SAVE]: save,
-  [types.SAVE_AS]: saveAs,
   [types.EXPORT_DATA]: exportData,
   [types.SETTINGS]: settings,
   [types.RECEIVE_DOC]: receiveDoc,
-  [types.OPEN_DOC]: openDoc,
   [types.ADD_PAGE]: addPage,
   [types.IMPORT_DOC]: importDoc,
   [types.CLOSE_DOC]: closeDoc,
@@ -40,10 +38,6 @@ function save(state, action) {
   ];
 }
 
-function saveAs(state) {
-  return state;
-}
-
 function exportData(state) {
   return state;
 }
@@ -65,10 +59,6 @@ function receiveDoc(state, action) {
   } else {
     return [...state, action.doc];
   }
-}
-
-function openDoc(state, action) {
-  return [...state, action.doc];
 }
 
 function addPage(state, action) {

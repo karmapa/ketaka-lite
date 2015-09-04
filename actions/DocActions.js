@@ -49,15 +49,6 @@ export function createDoc() {
   };
 }
 
-export const OPEN_DOC = 'OPEN_DOC';
-
-export function openDoc(doc) {
-  return {
-    type: OPEN_DOC,
-    doc
-  };
-}
-
 export const ADD_PAGE = 'ADD_PAGE';
 
 export function addPage(uuid, pageName) {
