@@ -3,6 +3,8 @@ var app = require('app');
 var ipc = require('ipc');
 var ipcHandlers = require('./main/ipcHandlers');
 var bindEventName = require('./main/decorators/bindEventName');
+var Helper = require('./main/services/Helper');
+var PATH_APP_DOC = require('./main/constants').PATH_APP_DOC;
 
 require('crash-reporter').start();
 
@@ -16,15 +18,19 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
 
-  var screen = require('screen');
-  var size = screen.getPrimaryDisplay().workAreaSize;
+  Helper.mkdirp(PATH_APP_DOC)
+    .then(function() {
 
-  mainWindow = new BrowserWindow({width: size.width, height: size.height});
-  mainWindow.loadUrl('file://' + __dirname + '/index.html');
+      var screen = require('screen');
+      var size = screen.getPrimaryDisplay().workAreaSize;
 
-  mainWindow.on('closed', function() {
-    mainWindow = null;
-  });
+      mainWindow = new BrowserWindow({width: size.width, height: size.height});
+      mainWindow.loadUrl('file://' + __dirname + '/index.html');
+
+      mainWindow.on('closed', function() {
+        mainWindow = null;
+      });
+    });
 });
 
 ipc = bindEventName(ipc);
