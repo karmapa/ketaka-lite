@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import {DropdownButton, MenuItem, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
+import {Input, DropdownButton, MenuItem, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
 import {INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
   INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 import {PageSwitch} from '.';
@@ -9,6 +9,7 @@ import classNames from 'classnames';
 export default class EditorToolbar extends React.Component {
 
   static PropTypes = {
+    settings: PropTypes.object,
     pageIndex: PropTypes.number,
     pageNames: PropTypes.array,
     readonly: PropTypes.bool,
@@ -24,6 +25,7 @@ export default class EditorToolbar extends React.Component {
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
+    onFontSizeInputChange: PropTypes.func,
     setInputMethod: PropTypes.func,
     inputMethod: PropTypes.string
   };
@@ -65,7 +67,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      readonly, onSpellCheckButtonClick} = this.props;
+      readonly, onSpellCheckButtonClick, onFontSizeInputChange, settings} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -140,6 +142,20 @@ export default class EditorToolbar extends React.Component {
 
         </div>
 
+        <div className="section">
+          <OverlayTrigger placement='top' overlay={<Tooltip>Font Size</Tooltip>}>
+            <div className="box-font-size">
+              <span>
+                <i className="glyphicon glyphicon-text-height"></i>
+              </span>
+              <Input bsSize="small" type="select"
+                     onChange={onFontSizeInputChange} placeholder="Select Font Size" value={settings.fontSize}>
+                {this.renderFontSizeOptions()}
+              </Input>
+            </div>
+          </OverlayTrigger>
+        </div>
+
         <div className="section language-section">
           <DropdownButton title={this.props.inputMethod} id='bg-nested-dropdown'>
             {this.renderMenuItem(this.props.inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
@@ -147,6 +163,12 @@ export default class EditorToolbar extends React.Component {
         </div>
       </div>
     );
+  }
+
+  renderFontSizeOptions() {
+    return Array.from(Array(30).keys()).map((value, index) => {
+      return <option key={index} value={index + 1}>{index + 1}</option>;
+    });
   }
 
   renderPageDeleteButton() {

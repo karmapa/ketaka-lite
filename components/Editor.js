@@ -26,7 +26,9 @@ export default class Editor extends React.Component {
     onColorButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     readonly: PropTypes.bool,
-    setInputMethod: PropTypes.func
+    setInputMethod: PropTypes.func,
+    settings: PropTypes.object,
+    setFontSize: PropTypes.func,
   };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -49,6 +51,10 @@ export default class Editor extends React.Component {
 
   onCodemirrorChange(content) {
     this.props.onCodemirrorChange(this.codemirror, content);
+  }
+
+  onFontSizeInputChange(e) {
+    this.props.setFontSize(e.target.value);
   }
 
   refresh() {
@@ -76,13 +82,19 @@ export default class Editor extends React.Component {
     this.codemirror.execCommand('redo');
   }
 
+  componentDidUpdate(previousProps) {
+    if (previousProps.settings.fontSize !== this.props.settings.fontSize) {
+      this.refresh();
+    }
+  }
+
   render() {
 
     let {code, className, onInputChange, inputMethod,
       setInputMethod, pageNames, pageIndex, onSettingsButtonClick,
       onPageAddButtonClick, readonly, onApplyChunksButtonClick,
       onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
-      canShowPageDeleteButton, onColorButtonClick} = this.props;
+      canShowPageDeleteButton, onColorButtonClick, settings} = this.props;
 
     let editorToolbarProps = {
       readonly,
@@ -101,6 +113,8 @@ export default class Editor extends React.Component {
       onPageAddButtonClick,
       onPageDeleteButtonClick,
       onSpellCheckButtonClick,
+      settings,
+      onFontSizeInputChange: ::this.onFontSizeInputChange,
       onApplyChunksButtonClick
     };
 
@@ -119,7 +133,8 @@ export default class Editor extends React.Component {
     };
 
     let classReadonly = {
-      'readonly': readonly
+      'readonly': readonly,
+      ['fs' + settings.fontSize]: true
     };
 
     return (
