@@ -11,6 +11,12 @@
   }
 }
 
+@for $i from 1 through 30 {
+  .lh#{$i} .CodeMirror {
+    line-height: #{1 + $i * 0.1}em;
+  }
+}
+
 .editor-area.vertical {
   .editor {
     display: inline-block;

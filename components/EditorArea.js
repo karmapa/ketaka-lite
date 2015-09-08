@@ -34,6 +34,7 @@ export default class EditorArea extends React.Component {
     save: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setFontSize: PropTypes.func.isRequired,
+    setLineHeight: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
@@ -458,7 +459,7 @@ export default class EditorArea extends React.Component {
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
     let imageZoomerKey = this.getImageZoomerKey(key);
-    let {toggleReadonly} = this.props;
+    let {setInputMethod, toggleReadonly, setFontSize, setLineHeight} = this.props;
 
     let editorProps = {
       className: 'editor',
@@ -477,8 +478,9 @@ export default class EditorArea extends React.Component {
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
       onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
       canShowPageDeleteButton: doc.pages.length > 1,
-      setInputMethod: this.props.setInputMethod,
-      setFontSize: this.props.setFontSize,
+      setInputMethod,
+      setFontSize,
+      setLineHeight,
       pageNames: doc.pages.map(page => page.name)
     };
 

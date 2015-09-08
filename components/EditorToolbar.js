@@ -24,8 +24,10 @@ export default class EditorToolbar extends React.Component {
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
-    onFontSizeInputChange: PropTypes.func,
-    setInputMethod: PropTypes.func
+    onLineHeightInputChange: PropTypes.func,
+    setInputMethod: PropTypes.func,
+    setFontSize: PropTypes.func,
+    setLineHeight: PropTypes.func
   };
 
   state = {
@@ -37,6 +39,14 @@ export default class EditorToolbar extends React.Component {
   onColorButtonClick(color) {
     this.props.onColorButtonClick(color);
     this.refs.colorBoxOverlay.hide();
+  }
+
+  onFontSizeInputChange(e) {
+    this.props.setFontSize(e.target.value);
+  }
+
+  onLineHeightInputChange(e) {
+    this.props.setLineHeight(e.target.value);
   }
 
   renderColorBox() {
@@ -65,7 +75,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      onSpellCheckButtonClick, onFontSizeInputChange, settings} = this.props;
+      onSpellCheckButtonClick, settings} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -143,14 +153,27 @@ export default class EditorToolbar extends React.Component {
         </div>
 
         <div className="section">
+
           <OverlayTrigger placement='top' overlay={<Tooltip>Font Size</Tooltip>}>
             <div className="box-font-size">
               <span>
                 <i className="glyphicon glyphicon-text-height"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={onFontSizeInputChange} placeholder="Select Font Size" value={settings.fontSize}>
+                     onChange={::this.onFontSizeInputChange} value={settings.fontSize}>
                 {this.renderFontSizeOptions()}
+              </Input>
+            </div>
+          </OverlayTrigger>
+
+          <OverlayTrigger placement='top' overlay={<Tooltip>Font Size</Tooltip>}>
+            <div className="box-font-size">
+              <span>
+                <i className="glyphicon glyphicon-sort-by-attributes"></i>
+              </span>
+              <Input bsSize="small" type="select"
+                     onChange={::this.onLineHeightInputChange} value={settings.lineHeight}>
+                {this.renderLineHeightOptions()}
               </Input>
             </div>
           </OverlayTrigger>
@@ -161,8 +184,14 @@ export default class EditorToolbar extends React.Component {
             {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
           </DropdownButton>
         </div>
+
       </div>
     );
+  }
+  renderLineHeightOptions() {
+    return Array.from(Array(30).keys()).map((value, index) => {
+      return <option key={index} value={index + 1}>{index + 1}</option>;
+    });
   }
 
   renderFontSizeOptions() {
