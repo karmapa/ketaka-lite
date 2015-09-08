@@ -3,7 +3,8 @@ import * as types from '../actions/AppActions';
 const settings = {
   fontSize: 1,
   letterSpacing: 1,
-  lineHeight: 1
+  lineHeight: 1,
+  direction: false
 };
 
 const actionsMap = {
