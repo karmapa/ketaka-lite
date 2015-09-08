@@ -15,7 +15,6 @@ export default class Editor extends React.Component {
     pageIndex: PropTypes.number,
     pageNames: PropTypes.array,
     onInputChange: PropTypes.func,
-    inputMethod: PropTypes.string,
     onCodemirrorChange: PropTypes.func,
     onSettingsButtonClick: PropTypes.func,
     onApplyChunksButtonClick: PropTypes.func,
@@ -28,6 +27,7 @@ export default class Editor extends React.Component {
     setInputMethod: PropTypes.func,
     settings: PropTypes.object,
     setFontSize: PropTypes.func,
+    setLineHeight: PropTypes.func
   };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -52,10 +52,6 @@ export default class Editor extends React.Component {
     this.props.onCodemirrorChange(this.codemirror, content);
   }
 
-  onFontSizeInputChange(e) {
-    this.props.setFontSize(e.target.value);
-  }
-
   refresh() {
     if (this.codemirror) {
       this.codemirror.refresh();
@@ -70,7 +66,7 @@ export default class Editor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.inputMethod]);
+    this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.settings.inputMethod]);
   }
 
   onUndoButtonClick() {
@@ -82,26 +78,35 @@ export default class Editor extends React.Component {
   }
 
   componentDidUpdate(previousProps) {
-    if (previousProps.settings.fontSize !== this.props.settings.fontSize) {
-      this.refresh();
-    }
+
+    let self = this;
+    let previousSettings = previousProps.settings;
+    let settings = self.props.settings;
+
+    ['fontSize', 'lineHeight'].every(prop => {
+      if (previousSettings[prop] !== settings[prop]) {
+        self.refresh();
+        return false;
+      }
+      return true;
+    });
   }
 
   render() {
 
-    let {code, className, onInputChange, inputMethod,
-      setInputMethod, pageNames, pageIndex, onSettingsButtonClick,
-      onPageAddButtonClick, onApplyChunksButtonClick,
+    let {code, className, onInputChange, setInputMethod, pageNames, pageIndex,
+      onSettingsButtonClick, onPageAddButtonClick, onApplyChunksButtonClick,
       onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
-      canShowPageDeleteButton, onColorButtonClick, settings} = this.props;
+      canShowPageDeleteButton, onColorButtonClick, settings, setFontSize, setLineHeight} = this.props;
 
     let editorToolbarProps = {
       className: 'editor-toolbar',
-      inputMethod,
       pageNames,
       pageIndex,
       setInputMethod,
       onInputChange,
+      setFontSize,
+      setLineHeight,
       onRedoButtonClick: ::this.onRedoButtonClick,
       onUndoButtonClick: ::this.onUndoButtonClick,
       onColorButtonClick,
@@ -112,7 +117,6 @@ export default class Editor extends React.Component {
       onPageDeleteButtonClick,
       onSpellCheckButtonClick,
       settings,
-      onFontSizeInputChange: ::this.onFontSizeInputChange,
       onApplyChunksButtonClick
     };
 
@@ -134,7 +138,8 @@ export default class Editor extends React.Component {
 
     let classReadonly = {
       'readonly': readonly,
-      ['fs' + settings.fontSize]: true
+      ['fs' + settings.fontSize]: true,
+      ['lh' + settings.lineHeight]: true
     };
 
     return (

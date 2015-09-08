@@ -53,6 +53,18 @@ export function setFontSize(fontSize) {
   };
 }
 
+export function setLineHeight(lineHeight) {
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    settings.lineHeight = lineHeight;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function initSettings() {
   return dispatch => {
     let settings = Store.get('settings') || {};
