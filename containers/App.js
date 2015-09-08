@@ -26,7 +26,7 @@ export default class App extends React.Component {
     const docActions = bindActionCreators(DocActions, dispatch);
     const appActions = bindActionCreators(AppActions, dispatch);
 
-    const navigationProps = {direction, docs, ...docActions, ...appActions};
+    const navigationProps = {settings, direction, docs, ...docActions, ...appActions};
     const editorAreaProps = {settings, readonly, docs, inputMethod, direction, ...docActions, ...appActions};
 
     return (
