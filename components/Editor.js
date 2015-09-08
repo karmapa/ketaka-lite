@@ -25,7 +25,6 @@ export default class Editor extends React.Component {
     canShowPageDeleteButton: PropTypes.bool,
     onColorButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
-    readonly: PropTypes.bool,
     setInputMethod: PropTypes.func,
     settings: PropTypes.object,
     setFontSize: PropTypes.func,
@@ -92,12 +91,11 @@ export default class Editor extends React.Component {
 
     let {code, className, onInputChange, inputMethod,
       setInputMethod, pageNames, pageIndex, onSettingsButtonClick,
-      onPageAddButtonClick, readonly, onApplyChunksButtonClick,
+      onPageAddButtonClick, onApplyChunksButtonClick,
       onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
       canShowPageDeleteButton, onColorButtonClick, settings} = this.props;
 
     let editorToolbarProps = {
-      readonly,
       className: 'editor-toolbar',
       inputMethod,
       pageNames,
@@ -127,6 +125,8 @@ export default class Editor extends React.Component {
       ref: 'codemirror',
       value: code
     };
+
+    let {readonly} = settings;
 
     let classBoxReadonly = {
       'box-readonly': readonly

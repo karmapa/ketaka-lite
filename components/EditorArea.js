@@ -29,14 +29,12 @@ export default class EditorArea extends React.Component {
     deletePage: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
-    direction: PropTypes.bool.isRequired,
     docs: PropTypes.array.isRequired,
     inputMethod: PropTypes.string.isRequired,
     save: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setFontSize: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
-    readonly: PropTypes.bool.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
 
@@ -408,7 +406,7 @@ export default class EditorArea extends React.Component {
 
   renderImageArea(key, src) {
     if (src) {
-      return <ImageZoomer key={key} className="image-zoomer" direction={this.props.direction} src={src} />;
+      return <ImageZoomer key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
     }
     return <ImageUploader key={key} className="image-uploader" onUploadButtonClick={::this.onUploadButtonClick} />;
   }
@@ -460,17 +458,15 @@ export default class EditorArea extends React.Component {
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
     let imageZoomerKey = this.getImageZoomerKey(key);
-    let {readonly, toggleReadonly} = this.props;
+    let {toggleReadonly} = this.props;
 
     let editorProps = {
       className: 'editor',
       pageIndex: pageIndex,
       onInputChange: ::this.onInputChange,
       code: page.content,
-      inputMethod: this.props.inputMethod,
       ref: editorKey,
       key: editorKey,
-      readonly,
       settings: this.props.settings,
       onCodemirrorChange: ::this.onCodemirrorChange,
       onSettingsButtonClick: ::this.onSettingsButtonClick,
@@ -495,10 +491,10 @@ export default class EditorArea extends React.Component {
   }
 
   render() {
-    let {docs, direction, inputMethod} = this.props;
+    let {docs, settings} = this.props;
     let classes = {
       [this.props.className]: true,
-      'vertical': direction
+      'vertical': settings.direction
     };
     return (
       <div className={classNames(classes)}>
@@ -511,7 +507,7 @@ export default class EditorArea extends React.Component {
           confirm={::this.deleteCurrentPage} cancelText="Cancel" cancel={::this.cancelDeletePage} />
         <ModalDocSettings ref="modalDocSettings" cancel={::this.closeModalDocSettings} confirm={::this.saveAndCloseModalDocSettings} />
         <ModalPageAdd ref="modalPageAdd" cancel={::this.closeModalPageAdd} confirm={::this.addPageAndCloseModal} />
-        <ModalChunksApply ref="modalChunksApply" cancel={::this.closeModalChunksApply} confirm={::this.applyChunksAndClose} inputMethod={inputMethod} />
+        <ModalChunksApply ref="modalChunksApply" cancel={::this.closeModalChunksApply} confirm={::this.applyChunksAndClose} inputMethod={settings.inputMethod} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

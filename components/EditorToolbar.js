@@ -12,7 +12,6 @@ export default class EditorToolbar extends React.Component {
     settings: PropTypes.object,
     pageIndex: PropTypes.number,
     pageNames: PropTypes.array,
-    readonly: PropTypes.bool,
     className: PropTypes.string,
     onInputChange: PropTypes.func,
     onRedoButtonClick: PropTypes.func,
@@ -26,8 +25,7 @@ export default class EditorToolbar extends React.Component {
     onPageAddButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
     onFontSizeInputChange: PropTypes.func,
-    setInputMethod: PropTypes.func,
-    inputMethod: PropTypes.string
+    setInputMethod: PropTypes.func
   };
 
   state = {
@@ -67,7 +65,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      readonly, onSpellCheckButtonClick, onFontSizeInputChange, settings} = this.props;
+      onSpellCheckButtonClick, onFontSizeInputChange, settings} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -75,6 +73,8 @@ export default class EditorToolbar extends React.Component {
       pageNames,
       pageIndex
     };
+
+    let {readonly, inputMethod} = settings;
 
     let classButtonReadonly = {
       'glyphicon': true,
@@ -157,8 +157,8 @@ export default class EditorToolbar extends React.Component {
         </div>
 
         <div className="section language-section">
-          <DropdownButton title={this.props.inputMethod} id='bg-nested-dropdown'>
-            {this.renderMenuItem(this.props.inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
+          <DropdownButton title={inputMethod} id='bg-nested-dropdown'>
+            {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
           </DropdownButton>
         </div>
       </div>

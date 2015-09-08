@@ -1,10 +1,13 @@
 import * as types from '../actions/AppActions';
+import * as consts from '../constants/AppConstants';
 
 const settings = {
   fontSize: 1,
   letterSpacing: 1,
   lineHeight: 1,
-  direction: false
+  direction: false,
+  inputMethod: consts.INPUT_METHOD_SYSTEM,
+  readonly: false
 };
 
 const actionsMap = {

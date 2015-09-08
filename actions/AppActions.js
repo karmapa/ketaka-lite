@@ -1,28 +1,34 @@
-import _ from 'lodash';
 import Store from '../services/Store';
 
-export const TOGGLE_DIRECTION = 'TOGGLE_DIRECTION';
-
 export function toggleDirection() {
-  return {
-    type: TOGGLE_DIRECTION
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    settings.direction = ! settings.direction;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
   };
 }
-
-export const SET_INPUT_METHOD = 'SET_INPUT_METHOD';
 
 export function setInputMethod(inputMethod) {
-  return {
-    type: SET_INPUT_METHOD,
-    inputMethod
+  return dispatch => {
+    let settings = Store.get('settings') || {};
+
+    settings.inputMethod = inputMethod;
+    Store.set('settings', settings);
+    dispatch(receiveSettings(settings));
   };
 }
 
-export const TOGGLE_READONLY = 'TOGGLE_READONLY';
-
 export function toggleReadonly() {
-  return {
-    type: TOGGLE_READONLY
+  return dispatch => {
+    let settings = Store.get('settings') || {};
+
+    settings.readonly = ! settings.readonly;
+    Store.set('settings', settings);
+    dispatch(receiveSettings(settings));
   };
 }
 
@@ -35,8 +41,6 @@ export function receiveSettings(settings) {
   };
 }
 
-export const SET_FONT_SIZE = 'SET_FONT_SIZE';
-
 export function setFontSize(fontSize) {
   return dispatch => {
 
@@ -48,8 +52,6 @@ export function setFontSize(fontSize) {
     dispatch(receiveSettings(settings));
   };
 }
-
-export const INIT_SETTINGS = 'INIT_SETTINGS';
 
 export function initSettings() {
   return dispatch => {

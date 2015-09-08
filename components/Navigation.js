@@ -19,10 +19,9 @@ export default class Navigation extends React.Component {
     docs: PropTypes.array.isRequired,
     closeDoc: PropTypes.func.isRequired,
     importDoc: PropTypes.func.isRequired,
-    direction: PropTypes.bool.isRequired,
     exportData: PropTypes.func.isRequired,
     importData: PropTypes.func.isRequired,
-    settings: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired,
     toggleDirection: PropTypes.func.isRequired
   };
 
@@ -124,10 +123,10 @@ export default class Navigation extends React.Component {
 
   render() {
 
-    let {exportData, settings, toggleDirection, direction} = this.props;
+    let {exportData, settings, toggleDirection} = this.props;
     let classes = {
       'btn-direction': true,
-      'vertical': direction
+      'vertical': settings.direction
     };
 
     return (
@@ -140,7 +139,7 @@ export default class Navigation extends React.Component {
                 <MenuItem eventKey="2" onSelect={::this.open}>Open</MenuItem>
                 <MenuItem eventKey="3" onSelect={DocHelper.save}>Save</MenuItem>
                 <MenuItem eventKey="4" onSelect={exportData}>Export</MenuItem>
-                <MenuItem eventKey="5" onSelect={settings}>Settings</MenuItem>
+                <MenuItem eventKey="5">Settings</MenuItem>
               </DropdownButton>
             </Nav>
             <Nav navbar right>
