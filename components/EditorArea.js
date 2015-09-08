@@ -22,6 +22,7 @@ const KEY_ADD_DOC = 'KEY_ADD_DOC';
 export default class EditorArea extends React.Component {
 
   static PropTypes = {
+    settings: PropTypes.object.isRequired,
     addDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
@@ -33,6 +34,7 @@ export default class EditorArea extends React.Component {
     inputMethod: PropTypes.string.isRequired,
     save: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
+    setFontSize: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     readonly: PropTypes.bool.isRequired,
     writePageContent: PropTypes.func.isRequired
@@ -469,6 +471,7 @@ export default class EditorArea extends React.Component {
       ref: editorKey,
       key: editorKey,
       readonly,
+      settings: this.props.settings,
       onCodemirrorChange: ::this.onCodemirrorChange,
       onSettingsButtonClick: ::this.onSettingsButtonClick,
       onPageAddButtonClick: ::this.onPageAddButtonClick,
@@ -479,6 +482,7 @@ export default class EditorArea extends React.Component {
       onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
       canShowPageDeleteButton: doc.pages.length > 1,
       setInputMethod: this.props.setInputMethod,
+      setFontSize: this.props.setFontSize,
       pageNames: doc.pages.map(page => page.name)
     };
 

@@ -25,14 +25,6 @@ export function exportData() {
   };
 }
 
-export const SETTINGS = 'SETTINGS';
-
-export function settings() {
-  return {
-    type: SETTINGS
-  };
-}
-
 export const RECEIVE_DOC = 'RECEIVE_DOC';
 
 export function receiveDoc(doc) {

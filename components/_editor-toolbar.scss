@@ -128,6 +128,35 @@ $height-editor-toolbar: 1.9em;
   &:after {
     @include clearfix();
   }
+
+}
+
+.box-font-size {
+  float: left;
+  span {
+    padding: 0 0.7em;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .input-group-addon {
+    border-radius: 0;
+    i {
+      font-size: 0.7em;
+    }
+    padding: 0 0.7em;
+    background-color: transparent;
+  }
+  select.form-control {
+    width: 3.6em;
+    height: 2.1em;
+    border: 0;
+    outline: 1px solid #bfbfbf;
+    background-color: white;
+  }
+  .form-group {
+    display: inline-block;
+    margin: 0;
+  }
 }
 
 .box-colors {
