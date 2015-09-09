@@ -27,6 +27,7 @@ export default class Editor extends React.Component {
     setInputMethod: PropTypes.func,
     settings: PropTypes.object,
     setFontSize: PropTypes.func,
+    setLetterSpacing: PropTypes.func,
     setLineHeight: PropTypes.func
   };
 
@@ -83,7 +84,7 @@ export default class Editor extends React.Component {
     let previousSettings = previousProps.settings;
     let settings = self.props.settings;
 
-    ['fontSize', 'lineHeight'].every(prop => {
+    ['fontSize', 'lineHeight', 'letterSpacing'].every(prop => {
       if (previousSettings[prop] !== settings[prop]) {
         self.refresh();
         return false;
@@ -97,7 +98,8 @@ export default class Editor extends React.Component {
     let {code, className, onInputChange, setInputMethod, pageNames, pageIndex,
       onSettingsButtonClick, onPageAddButtonClick, onApplyChunksButtonClick,
       onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
-      canShowPageDeleteButton, onColorButtonClick, settings, setFontSize, setLineHeight} = this.props;
+      canShowPageDeleteButton, onColorButtonClick, settings, setFontSize, setLineHeight,
+      setLetterSpacing} = this.props;
 
     let editorToolbarProps = {
       className: 'editor-toolbar',
@@ -107,6 +109,7 @@ export default class Editor extends React.Component {
       onInputChange,
       setFontSize,
       setLineHeight,
+      setLetterSpacing,
       onRedoButtonClick: ::this.onRedoButtonClick,
       onUndoButtonClick: ::this.onUndoButtonClick,
       onColorButtonClick,
@@ -139,7 +142,8 @@ export default class Editor extends React.Component {
     let classReadonly = {
       'readonly': readonly,
       ['fs' + settings.fontSize]: true,
-      ['lh' + settings.lineHeight]: true
+      ['lh' + settings.lineHeight]: true,
+      ['ls' + settings.letterSpacing]: true
     };
 
     return (

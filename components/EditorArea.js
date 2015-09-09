@@ -35,6 +35,7 @@ export default class EditorArea extends React.Component {
     setInputMethod: PropTypes.func.isRequired,
     setFontSize: PropTypes.func.isRequired,
     setLineHeight: PropTypes.func.isRequired,
+    setLetterSpacing: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
@@ -459,7 +460,7 @@ export default class EditorArea extends React.Component {
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
     let imageZoomerKey = this.getImageZoomerKey(key);
-    let {setInputMethod, toggleReadonly, setFontSize, setLineHeight} = this.props;
+    let {setInputMethod, toggleReadonly, setFontSize, setLineHeight, setLetterSpacing} = this.props;
 
     let editorProps = {
       className: 'editor',
@@ -481,6 +482,7 @@ export default class EditorArea extends React.Component {
       setInputMethod,
       setFontSize,
       setLineHeight,
+      setLetterSpacing,
       pageNames: doc.pages.map(page => page.name)
     };
 
