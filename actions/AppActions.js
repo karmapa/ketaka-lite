@@ -65,9 +65,22 @@ export function setLineHeight(lineHeight) {
   };
 }
 
+export function setLetterSpacing(letterSpacing) {
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    settings.letterSpacing = letterSpacing;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function initSettings() {
   return dispatch => {
     let settings = Store.get('settings') || {};
     dispatch(receiveSettings(settings));
   };
 }
+

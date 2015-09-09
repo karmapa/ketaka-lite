@@ -17,6 +17,12 @@
   }
 }
 
+@for $i from 1 through 30 {
+  .ls#{$i} .CodeMirror {
+    letter-spacing: #{$i * 0.1}em;
+  }
+}
+
 .editor-area.vertical {
   .editor {
     display: inline-block;
