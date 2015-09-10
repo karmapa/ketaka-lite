@@ -1,7 +1,7 @@
 .ReactCodeMirror {
   .CodeMirror {
     border: $border-global;
-    height: calc(50vh - (#{$height-non-editor-area} / 2));
+    height: calc(50vh - (#{$height-non-editor-area - 0.4em} / 2));
   }
 }
 
@@ -31,7 +31,7 @@
   .ReactCodeMirror {
     width: 100%;
     .CodeMirror {
-      height: calc(100vh - #{$height-non-editor-area});
+      height: calc(100vh - #{$height-non-editor-area - 0.6em});
     }
   }
 }

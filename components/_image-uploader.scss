@@ -1,5 +1,7 @@
 
 .image-uploader {
+  vertical-align: top;
+  border: $border-global;
   height: calc(50vh - (#{$height-non-editor-area} / 2));
   position: relative;
   width: 100%;

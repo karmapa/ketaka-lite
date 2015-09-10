@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
-  ModalDocSettings, ModalPageAdd, ModalChunksApply} from '.';
+  ModalDocSettings, ModalPageAdd, ChunkEditor} from '.';
 import {DocHelper, Helper} from '../services/';
 
 import {MAP_COLORS} from '../constants/AppConstants';
@@ -48,7 +48,8 @@ export default class EditorArea extends React.Component {
     let {docs} = this.props;
 
     this.state = {
-      docKey: docs.length > 0 ? _.first(docs).uuid : null
+      docKey: docs.length > 0 ? _.first(docs).uuid : null,
+      editChunk: true
     };
   }
 
@@ -93,6 +94,11 @@ export default class EditorArea extends React.Component {
       let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
       this.markFontColor(codemirror);
+    }
+
+    if (previousState.editChunk && (false === this.state.editChunk)) {
+      let codemirror = this.getCurrentCodemirror();
+      codemirror.refresh();
     }
   }
 
@@ -414,13 +420,9 @@ export default class EditorArea extends React.Component {
   }
 
   onApplyChunksButtonClick() {
-    this.refs.modalChunksApply.open({
-      chunks: _.get(this.getDoc(), 'chunks', [])
+    this.setState({
+      editChunk: true
     });
-  }
-
-  closeModalChunksApply() {
-    this.refs.modalChunksApply.close();
   }
 
   getCurrentCodemirror() {
@@ -458,13 +460,50 @@ export default class EditorArea extends React.Component {
     let page = doc.pages[pageIndex];
     let src = this.getImageSrc(page);
     let key = doc.uuid;
-    let editorKey = this.getEditorKey(key);
     let imageZoomerKey = this.getImageZoomerKey(key);
-    let {setInputMethod, toggleReadonly, setFontSize, setLineHeight, setLetterSpacing} = this.props;
+
+    return (
+      <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key}>
+        {::this.renderImageArea(imageZoomerKey, src)}
+        {::this.renderEditorArea(doc, pageIndex)}
+      </TabItem>
+    );
+  }
+
+  applyChunk(chunk) {
+    this.closeChunkEditor();
+    let codemirror = this.getCurrentCodemirror();
+    codemirror.replaceRange(chunk, {line: Infinity});
+  }
+
+  closeChunkEditor() {
+    this.setState({
+      editChunk: false
+    });
+  }
+
+  renderEditorArea(doc, pageIndex) {
+
+    let {editChunk} = this.state;
+
+    let chunkEditorProps = {
+      className: classNames({'hidden': ! editChunk}),
+      chunk: doc.chunk,
+      inputMethod: this.props.settings.inputMethod,
+      apply: ::this.applyChunk,
+      cancel: ::this.closeChunkEditor
+    };
+
+    let page = doc.pages[pageIndex];
+
+    let key = doc.uuid;
+    let editorKey = this.getEditorKey(key);
+    let {setInputMethod, toggleReadonly, setFontSize, setLineHeight,
+      setLetterSpacing} = this.props;
 
     let editorProps = {
-      className: 'editor',
-      pageIndex: pageIndex,
+      className: classNames({'editor': true, 'hidden': editChunk}),
+      pageIndex,
       onInputChange: ::this.onInputChange,
       code: page.content,
       ref: editorKey,
@@ -487,10 +526,10 @@ export default class EditorArea extends React.Component {
     };
 
     return (
-      <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key}>
-        {::this.renderImageArea(imageZoomerKey, src)}
+      <div>
+        <ChunkEditor {...chunkEditorProps} />
         <Editor {...editorProps} />
-      </TabItem>
+      </div>
     );
   }
 
@@ -511,7 +550,6 @@ export default class EditorArea extends React.Component {
           confirm={::this.deleteCurrentPage} cancelText="Cancel" cancel={::this.cancelDeletePage} />
         <ModalDocSettings ref="modalDocSettings" cancel={::this.closeModalDocSettings} confirm={::this.saveAndCloseModalDocSettings} />
         <ModalPageAdd ref="modalPageAdd" cancel={::this.closeModalPageAdd} confirm={::this.addPageAndCloseModal} />
-        <ModalChunksApply ref="modalChunksApply" cancel={::this.closeModalChunksApply} confirm={::this.applyChunksAndClose} inputMethod={settings.inputMethod} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

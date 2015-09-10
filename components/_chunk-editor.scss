@@ -1,0 +1,50 @@
+.chunk-editor {
+  overflow: hidden;
+  position: relative;
+  padding: 1em;
+  border: $border-global;
+  height: calc(50vh - (#{$height-non-editor-area - 3.7em} / 2));
+  .button-groups {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1em;
+    .button-cancel {
+      margin-right: 1em;
+    }
+  }
+  .chunks {
+    max-height: 79%;
+    overflow: auto;
+    .chunk {
+      .danger {
+        color: #a94442;
+      }
+      border-radius: 4px;
+      padding: 0.5em 1em;
+      font-size: 1.1em;
+      line-height: 1.6em;
+    }
+    .chunk.checked {
+      background: #dff0d8;
+      color: #3c763d;
+      border-color: #d6e9c6;
+    }
+    .info-chars {
+      padding-left: 1em;
+      color: #3c763d;
+    }
+  }
+}
+
+.editor-area.vertical {
+  .chunk-editor {
+    vertical-align: top;
+    display: inline-block;
+    width: 50%;
+    height: calc(100vh - #{$height-non-editor-area - 1.8em});
+    .chunks {
+      max-height: 89%;
+    }
+  }
+}

@@ -126,6 +126,7 @@ export default class Editor extends React.Component {
     let codemirrorProps = {
       onChange: ::this.onCodemirrorChange,
       options: {
+        lineWrapping: true,
         lineNumbers: true,
         styleActiveLine: true
       },

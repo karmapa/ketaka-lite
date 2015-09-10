@@ -1,5 +1,6 @@
 import * as types from '../actions/DocActions';
 import _ from 'lodash';
+import {SAMPLE_DOC2} from '../constants/SampleDoc2';
 
 const actionsMap = {
   [types.IMPORT_DATA]: importData,
@@ -19,7 +20,7 @@ const actionsMap = {
   [types.UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath
 };
 
-export default function docs(state = [], action) {
+export default function docs(state = [SAMPLE_DOC2], action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
 }

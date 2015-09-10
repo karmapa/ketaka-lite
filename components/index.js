@@ -11,5 +11,5 @@ export ModalOpen from './ModalOpen';
 export ModalImportStatus from './ModalImportStatus';
 export ModalDocSettings from './ModalDocSettings';
 export ModalPageAdd from './ModalPageAdd';
-export ModalChunksApply from './ModalChunksApply';
+export ChunkEditor from './ChunkEditor';
 export PageSwitch from './PageSwitch';

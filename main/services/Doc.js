@@ -16,7 +16,7 @@ function createDoc(args) {
     name: '',
     pageIndex: 0,
     pages: [],
-    chunks: []
+    chunk: ''
   }, args);
 }
 

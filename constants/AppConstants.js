@@ -36,3 +36,5 @@ export const MAP_COLORS = {
   'silver': '#bdc3c7',
   'asbestos': '#7f8c8d'
 };
+
+export const CHUNK_SIZE = 800;
