@@ -488,6 +488,7 @@ export default class EditorArea extends React.Component {
 
     let chunkEditorProps = {
       className: classNames({'hidden': ! editChunk}),
+      hidden: ! editChunk,
       chunk: doc.chunk,
       inputMethod: this.props.settings.inputMethod,
       apply: ::this.applyChunk,

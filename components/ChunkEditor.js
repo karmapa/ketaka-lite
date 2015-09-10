@@ -11,6 +11,7 @@ import {ModalConfirm} from '.';
 export default class ChunkEditor extends React.Component {
 
   static PropTypes = {
+    hidden: PropTypes.bool.isRequire,
     className: PropTypes.string,
     apply: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired,
@@ -30,7 +31,13 @@ export default class ChunkEditor extends React.Component {
   componentDidMount() {
     this.ime = Ime;
     this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
-    this.handleChunks();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // when button apply chunks clicked
+    if ((true === this.props.hidden) && (false === nextProps.hidden)) {
+      this.handleChunks();
+    }
   }
 
   onKeyPress(ref, e) {
