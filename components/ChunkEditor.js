@@ -142,11 +142,13 @@ export default class ChunkEditor extends React.Component {
       valueEndsWith: '',
       valueStartsWith: ''
     });
+    this.forceUpdate();
   }
 
   apply() {
     let {chunkIndex, chunks} = this.state;
     let chunk = chunks[chunkIndex];
+    this.initState();
     this.refs.modalApplyConfirm.close();
     this.props.apply(chunk);
   }
@@ -171,6 +173,7 @@ export default class ChunkEditor extends React.Component {
   }
 
   cancel() {
+    this.initState();
     this.props.cancel();
   }
 
