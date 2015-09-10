@@ -1,6 +1,8 @@
 import * as types from '../actions/DocActions';
 import _ from 'lodash';
 
+import {SAMPLE_DOC2} from '../constants/SampleDoc2';
+
 const actionsMap = {
   [types.IMPORT_DATA]: importData,
   [types.SAVE]: save,
@@ -16,10 +18,11 @@ const actionsMap = {
   [types.WRITE_PAGE_CONTENT]: writePageContent,
   [types.SAVE_FONT_RECORD]: saveFontRecord,
   [types.DELETE_PAGE]: deletePage,
+  [types.TOGGLE_EDIT_CHUNK]: toggleEditChunk,
   [types.UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath
 };
 
-export default function docs(state = [], action) {
+export default function docs(state = [SAMPLE_DOC2], action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
 }
@@ -37,6 +40,20 @@ function save(state, action) {
   return [
     ...state.slice(0, index),
     Object.assign({}, state[index], {changed: false}),
+    ...state.slice(index + 1)
+  ];
+}
+
+function toggleEditChunk(state, action) {
+  let {doc, index} = findDocDataByUuid(state, action.uuid);
+
+  if (! doc) {
+    return state;
+  }
+
+  return [
+    ...state.slice(0, index),
+    Object.assign({}, doc, {editChunk: ! doc.editChunk}),
     ...state.slice(index + 1)
   ];
 }

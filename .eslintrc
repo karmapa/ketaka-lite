@@ -18,7 +18,7 @@
     "dot-notation": 0,
     "eol-last": 2,
     "eqeqeq": 2,
-    "max-len": [1, 180, 4],
+    "max-len": [0, 180, 4],
     "new-cap": [2, {"capIsNew": false}],
     "no-eq-null": 2,
     "no-mixed-spaces-and-tabs": 2,

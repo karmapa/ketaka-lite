@@ -139,3 +139,12 @@ export function updatePageImagePath(uuid, pageIndex, destImagePath) {
     destImagePath
   };
 }
+
+export const TOGGLE_EDIT_CHUNK = 'TOGGLE_EDIT_CHUNK';
+
+export function toggleEditChunk(uuid) {
+  return {
+    type: TOGGLE_EDIT_CHUNK,
+    uuid
+  };
+}

@@ -15,6 +15,7 @@ function createDoc(args) {
     uuid: uuid.v4(),
     name: '',
     pageIndex: 0,
+    editChunk: false,
     pages: [],
     chunk: ''
   }, args);

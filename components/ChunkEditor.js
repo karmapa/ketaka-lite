@@ -33,21 +33,29 @@ export default class ChunkEditor extends React.Component {
     this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
   }
 
-  componentWillReceiveProps(nextProps) {
-    // when button apply chunks clicked
-    if ((true === this.props.hidden) && (false === nextProps.hidden)) {
-      this.handleChunks();
+  componentWillUpdate(nextProps, nextState) {
+    let {valueStartsWith, valueEndsWith} = this.state;
+    if ((valueStartsWith !== nextState.valueStartsWith) || (valueEndsWith !== nextState.valueEndsWith)) {
+      this.handleChunks(nextState);
     }
   }
 
   onKeyPress(ref, e) {
     let searchInput = React.findDOMNode(this.refs[ref]);
     let keywords = this.ime.keypress(e, {element: searchInput});
+
     if (_.isString(keywords)) {
-      let prop = ('inputStartsWith' === ref) ? 'valueStartsWith' : 'valueEndsWith';
-      this.setState({
-        [prop]: keywords
-      });
+
+      if ('inputStartsWith' === ref) {
+        this.setState({
+          valueStartsWith: keywords
+        });
+      }
+      else {
+        this.setState({
+          valueEndsWith: keywords
+        });
+      }
     }
   }
 
@@ -71,17 +79,10 @@ export default class ChunkEditor extends React.Component {
     });
   }
 
-  componentDidUpdate(previousProps, previousState) {
-    let state = this.state;
+  handleChunks(state = this.state) {
 
-    if ((state.valueStartsWith !== previousState.valueStartsWith) || (state.valueEndsWith !== previousState.valueEndsWith)) {
-      this.handleChunks();
-    }
-  }
-
-  handleChunks() {
     let {chunk} = this.props;
-    let {valueStartsWith, valueEndsWith} = this.state;
+    let {valueStartsWith, valueEndsWith} = state;
 
     // both empty
     if (('' === valueStartsWith) && ('' === valueEndsWith) && chunk) {
@@ -146,10 +147,8 @@ export default class ChunkEditor extends React.Component {
   apply() {
     let {chunkIndex, chunks} = this.state;
     let chunk = chunks[chunkIndex];
-    this.props.apply(chunk);
-    this.initState();
-    this.handleChunks();
     this.refs.modalApplyConfirm.close();
+    this.props.apply(chunk);
   }
 
   openModalApplyConfirm() {
@@ -171,8 +170,11 @@ export default class ChunkEditor extends React.Component {
     this.refs.modalApplyConfirm.close();
   }
 
+  cancel() {
+    this.props.cancel();
+  }
+
   render() {
-    let {cancel} = this.props;
     let {valueStartsWith, valueEndsWith, chunks} = this.state;
 
     let inputStartsWithProps = {
@@ -211,7 +213,7 @@ export default class ChunkEditor extends React.Component {
           <ReactList key="chunks" itemRenderer={::this.renderChunk} length={chunks.length} type='simple' />
         </div>
         <div className="button-groups">
-          <Button className="button-cancel" onClick={cancel}>Cancel</Button>
+          <Button className="button-cancel" onClick={::this.cancel}>Cancel</Button>
           <Button bsStyle="primary" disabled={! this.canApply()} onClick={::this.openModalApplyConfirm}>Apply</Button>
         </div>
         <ModalConfirm ref="modalApplyConfirm" confirmText="I know What I am doing" confirm={::this.apply} cancelText="Cancel" cancel={::this.cancelApplyChunk} />

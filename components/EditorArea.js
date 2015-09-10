@@ -48,8 +48,7 @@ export default class EditorArea extends React.Component {
     let {docs} = this.props;
 
     this.state = {
-      docKey: docs.length > 0 ? _.first(docs).uuid : null,
-      editChunk: false
+      docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
   }
 
@@ -96,7 +95,10 @@ export default class EditorArea extends React.Component {
       this.markFontColor(codemirror);
     }
 
-    if (previousState.editChunk && (false === this.state.editChunk)) {
+    let doc = this.getDoc();
+    let previousDoc = this.getDoc(this.state.docKey, previousProps);
+
+    if (previousDoc.editChunk && (false === doc.editChunk)) {
       let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
     }
@@ -186,8 +188,8 @@ export default class EditorArea extends React.Component {
     this.activateTab(nextIndex);
   }
 
-  getDoc(key = this.state.docKey) {
-    return this.props.docs.find(doc => doc.uuid === key);
+  getDoc(key = this.state.docKey, props = this.props) {
+    return props.docs.find(doc => doc.uuid === key);
   }
 
   findPageIndexByName(name) {
@@ -420,22 +422,14 @@ export default class EditorArea extends React.Component {
   }
 
   onApplyChunksButtonClick() {
-    this.setState({
-      editChunk: true
-    });
+    let doc = this.getDoc();
+    this.props.toggleEditChunk(doc.uuid);
   }
 
   getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
     return this.refs[editorKey].codemirror;
-  }
-
-  applyChunksAndClose(chunks) {
-    let codemirror = this.getCurrentCodemirror();
-    let content = '\n\n' + chunks.join('\n\n');
-    codemirror.replaceRange(content, {line: Infinity});
-    this.refs.modalChunksApply.close();
   }
 
   cancelDeletePage() {
@@ -477,14 +471,13 @@ export default class EditorArea extends React.Component {
   }
 
   closeChunkEditor() {
-    this.setState({
-      editChunk: false
-    });
+    let doc = this.getDoc();
+    this.props.toggleEditChunk(doc.uuid);
   }
 
   renderEditorArea(doc, pageIndex) {
 
-    let {editChunk} = this.state;
+    let {editChunk} = doc;
 
     let chunkEditorProps = {
       className: classNames({'hidden': ! editChunk}),
