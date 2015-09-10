@@ -98,7 +98,7 @@ export default class EditorArea extends React.Component {
     let doc = this.getDoc();
     let previousDoc = this.getDoc(this.state.docKey, previousProps);
 
-    if (previousDoc.editChunk && (false === doc.editChunk)) {
+    if (previousDoc && doc && previousDoc.editChunk && (false === doc.editChunk)) {
       let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
     }
