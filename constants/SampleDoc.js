@@ -5,6 +5,7 @@ export const SAMPLE_DOC = {
   name: 'default',
   pageIndex: 0,
   changed: false,
+  editChunk: false,
   pages: [
     {name: '1.1b', content: '༄༅།།བསོད་ནམས་ཡེ་ཤེས་ཚོགས་གཉིས་', destImagePath: ''},
     {name: '1.2a', content: 'ལྡན་ཟླ་བའི་བཞིན་རས་ཅན། །སྤྲིན་དཀར་ཕུང་པོའི་གོས་ཟུང་གིས་མཛེས་མ། ',
