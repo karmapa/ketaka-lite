@@ -1,5 +1,6 @@
 
 .image-zoomer {
+  vertical-align: top;
   cursor: url(assets/images/openhand.cur), auto;
   position: relative;
   overflow: hidden;
@@ -40,6 +41,6 @@
     width: 50%;
     height: 100%;
     display: inline-block;
-    height: calc(100vh - #{$height-non-editor-area});
+    height: calc(100vh - #{$height-non-editor-area - 1.8em});
   }
 }

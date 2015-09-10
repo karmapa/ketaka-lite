@@ -121,13 +121,13 @@ function createPagesByPbRow(pbRow) {
     });
 }
 
-function createChunksByTextRow(textRow) {
+function createChunkByTextRow(textRow) {
   if (! textRow) {
     return null;
   }
   return Helper.readFile(textRow.path)
     .then(function(buffer) {
-      return Helper.chunkString(buffer.toString(), 7000);
+      return buffer.toString();
     });
 }
 
@@ -181,10 +181,10 @@ function createDocByRows(bambooName, rows) {
       }
     })
     .then(function() {
-      return createChunksByTextRow(textRow);
+      return createChunkByTextRow(textRow);
     })
-    .then(function(chunks) {
-      doc.chunks = chunks;
+    .then(function(chunk) {
+      doc.chunk = chunk;
       return doc;
     });
 }

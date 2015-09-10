@@ -131,6 +131,23 @@ $height-editor-toolbar: 1.9em;
 
 }
 
+.editor-area.vertical {
+  .language-section {
+    .dropdown-menu {
+      left: initial;
+      right: 0;
+    }
+    .dropdown-toggle {
+      min-width: 2em;
+      span:not(.caret) {
+        @media (max-width: 1440px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
 .box-font {
   float: left;
   span {
