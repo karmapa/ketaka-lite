@@ -18,9 +18,9 @@ export default class Helper {
     return str.match(new RegExp('[\\S\\s]{1,' + length + '}', 'g'));
   }
 
-  static allIndexOf(str, toSearch) {
+  static allIndexOf(str, toSearch, limit = 10) {
     let indices = [];
-    for (let pos = str.indexOf(toSearch); pos !== -1; pos = str.indexOf(toSearch, pos + 1)) {
+    for (let pos = str.indexOf(toSearch); (-1 !== pos) && (indices.length <= limit); pos = str.indexOf(toSearch, pos + 1)) {
       indices.push(pos);
     }
     return indices;
