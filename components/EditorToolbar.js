@@ -141,7 +141,7 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Apply Chunks From RTF file</Tooltip>}>
+          <OverlayTrigger placement='top' overlay={<Tooltip>Apply Chunks</Tooltip>}>
             <button className="button-apply-chunks" onClick={onApplyChunksButtonClick}>
               <i className="glyphicon glyphicon-align-center"></i>
             </button>
