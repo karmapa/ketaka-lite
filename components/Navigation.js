@@ -121,9 +121,13 @@ export default class Navigation extends React.Component {
       });
   }
 
+  exportData() {
+    DocHelper.exportData(this.refs.dropdownButton);
+  }
+
   render() {
 
-    let {exportData, settings, toggleDirection} = this.props;
+    let {settings, toggleDirection} = this.props;
     let classes = {
       'btn-direction': true,
       'vertical': settings.direction
@@ -134,11 +138,11 @@ export default class Navigation extends React.Component {
         <Navbar className="navigation" fluid>
           <CollapsibleNav eventKey={0}>
             <Nav navbar>
-              <DropdownButton eventKey={3} title="Ketaka Lite">
+              <DropdownButton refs="dropdownButton" eventKey={3} title="Ketaka Lite">
                 <MenuItem eventKey="1" onSelect={::this.import}>Import</MenuItem>
                 <MenuItem eventKey="2" onSelect={::this.open}>Open</MenuItem>
                 <MenuItem eventKey="3" onSelect={DocHelper.save}>Save</MenuItem>
-                <MenuItem eventKey="4" onSelect={exportData}>Export</MenuItem>
+                <MenuItem eventKey="4" onSelect={::this.exportData}>Export</MenuItem>
                 <MenuItem eventKey="5">Settings</MenuItem>
               </DropdownButton>
             </Nav>
