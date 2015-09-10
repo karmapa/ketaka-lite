@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Row, Col, Input} from 'react-bootstrap';
 import {MAP_INPUT_METHODS, CHUNK_SIZE} from '../constants/AppConstants';
+import {ModalConfirm} from '.';
 
 export default class ChunkEditor extends React.Component {
 
@@ -141,10 +142,30 @@ export default class ChunkEditor extends React.Component {
     this.props.apply(chunk);
     this.initState();
     this.handleChunks();
+    this.refs.modalApplyConfirm.close();
+  }
+
+  openModalApplyConfirm() {
+    let {chunkIndex, chunks} = this.state;
+    let chunk = chunks[chunkIndex];
+
+    if (chunk.length > 10000) {
+      this.refs.modalApplyConfirm.open({
+        title: 'Oops',
+        message: 'You are about to apply a large chunk. Are you sure ?'
+      });
+    }
+    else {
+      this.apply();
+    }
+  }
+
+  cancelApplyChunk() {
+    this.refs.modalApplyConfirm.close();
   }
 
   render() {
-    let {apply, cancel} = this.props;
+    let {cancel} = this.props;
     let {valueStartsWith, valueEndsWith, chunks} = this.state;
 
     let inputStartsWithProps = {
@@ -184,8 +205,9 @@ export default class ChunkEditor extends React.Component {
         </div>
         <div className="button-groups">
           <Button className="button-cancel" onClick={cancel}>Cancel</Button>
-          <Button bsStyle="primary" disabled={! this.canApply()} onClick={::this.apply}>Apply</Button>
+          <Button bsStyle="primary" disabled={! this.canApply()} onClick={::this.openModalApplyConfirm}>Apply</Button>
         </div>
+        <ModalConfirm ref="modalApplyConfirm" confirmText="I know What I am doing" confirm={::this.apply} cancelText="Cancel" cancel={::this.cancelApplyChunk} />
       </div>
     );
   }
@@ -228,7 +250,7 @@ export default class ChunkEditor extends React.Component {
     };
 
     return (
-      <div className={classNames(chunkClass)}>
+      <div key={key} className={classNames(chunkClass)}>
         <label>
           <input type="radio" onChange={::this.onRadioChange} name="chunk" value={index} />
           <span className="info-chars">( {chunk.length} characters )</span>

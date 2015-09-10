@@ -49,7 +49,7 @@ export default class EditorArea extends React.Component {
 
     this.state = {
       docKey: docs.length > 0 ? _.first(docs).uuid : null,
-      editChunk: true
+      editChunk: false
     };
   }
 
@@ -78,7 +78,7 @@ export default class EditorArea extends React.Component {
   }
 
   markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
-    let fontRecords = page.config.fontRecords || [];
+    let fontRecords = _.get(page, 'config.fontRecords', []);
     fontRecords.forEach(record => {
       let {from, to, css} = record;
       codemirror.markText(from, to, css);
@@ -526,10 +526,10 @@ export default class EditorArea extends React.Component {
     };
 
     return (
-      <div>
+      <span>
         <ChunkEditor {...chunkEditorProps} />
         <Editor {...editorProps} />
-      </div>
+      </span>
     );
   }
 
