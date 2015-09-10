@@ -7,7 +7,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor} from '.';
 import {DocHelper, Helper} from '../services/';
 
-import {MAP_COLORS} from '../constants/AppConstants';
+import {MAP_COLORS, MAP_INPUT_METHODS} from '../constants/AppConstants';
 
 import ReactToastr from 'react-toastr';
 import Ipc from '../services/Ipc';
@@ -232,6 +232,8 @@ export default class EditorArea extends React.Component {
   componentDidMount() {
 
     let keypressListener = this.keypressListener;
+    let inputMethods = _.values(MAP_INPUT_METHODS);
+    let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
 
     keypressListener = new keypress.Listener();
     keypressListener = Helper.camelize(['simple_combo'], keypressListener);
@@ -241,6 +243,20 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt left', ::this.rotateTabLeft);
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
+
+    keypressListener.simpleCombo('alt space', () => {
+      let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
+      let index = inputMethods.indexOf(currentInputMethod);
+      if (-1 === index) {
+        index = 0;
+      }
+      ++index;
+      if (index >= inputMethods.length) {
+        index = 0;
+      }
+      let newMethod = inputMethods[index];
+      this.props.setInputMethod(invertedInputMethods[newMethod]);
+    });
 
     this.saveFunc = ::this.save;
     this.onActivateTabFunc = ::this.onActivateTab;
