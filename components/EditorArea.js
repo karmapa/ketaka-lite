@@ -98,7 +98,7 @@ export default class EditorArea extends React.Component {
     let doc = this.getDoc();
     let previousDoc = this.getDoc(this.state.docKey, previousProps);
 
-    if (previousDoc.editChunk && (false === doc.editChunk)) {
+    if (previousDoc && doc && previousDoc.editChunk && (false === doc.editChunk)) {
       let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
     }
@@ -229,6 +229,14 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  onExportData(dropdownButton) {
+    let doc = this.getDoc();
+    Ipc.send('export-data', {name: doc.name})
+      .then(res => {
+        dropdownButton.setDropDownState(false);
+      });
+  }
+
   componentDidMount() {
 
     let keypressListener = this.keypressListener;
@@ -261,10 +269,13 @@ export default class EditorArea extends React.Component {
     this.saveFunc = ::this.save;
     this.onActivateTabFunc = ::this.onActivateTab;
     this.onCloseDocFunc = ::this.onCloseDoc;
+    this.onExportDataFunc = ::this.onExportData;
 
     DocHelper.onSave(this.saveFunc);
     DocHelper.onActivateTab(this.onActivateTabFunc);
     DocHelper.onCloseDoc(this.onCloseDocFunc);
+
+    DocHelper.onExportData(this.onExportDataFunc);
   }
 
   componentWillUnmount() {
@@ -274,6 +285,7 @@ export default class EditorArea extends React.Component {
     DocHelper.offSave(this.saveFunc);
     DocHelper.offActivateTab(this.onActivateTabFunc);
     DocHelper.offCloseDoc(this.onCloseDocFunc);
+    DocHelper.offExportData(this.onExportDataFunc);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;

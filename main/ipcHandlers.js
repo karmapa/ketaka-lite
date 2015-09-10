@@ -6,6 +6,8 @@ var Path = require('path');
 var _ = require('lodash');
 var dialog = require('dialog');
 var ipcHandler = require('./decorators/ipcHandler');
+var archiver = require('archiver');
+var fs = require('fs');
 
 exports.importButtonClicked = ipcHandler(function(event, args) {
 
@@ -203,4 +205,35 @@ exports.deleteDoc = ipcHandler(function(event, res) {
     .then(function(names) {
       send({names: names});
     });
+});
+
+exports.exportData = ipcHandler(function(event, arg) {
+  var send = this.send;
+  var name = arg.name;
+  var filename = name + '.zip';
+  var options = {
+    title: 'Choose Export Path',
+    defaultPath: filename
+  };
+
+  dialog.showSaveDialog(options, function(savePath) {
+
+    var archive = archiver('zip');
+    var sourcePath = Path.resolve(PATH_APP_DOC, name);
+    var output = fs.createWriteStream(savePath);
+
+    output.on('close', function() {
+      console.log(archive.pointer() + ' total bytes');
+      console.log('archiver has been finalized and the output file descriptor has closed.');
+      send({message: 'Bamboo ' + name + ' exported successfully'});
+    });
+
+    archive.on('error', function(err) {
+      send({error: true, message: err});
+    });
+
+    archive.pipe(output);
+    archive.bulk([{expand: true, cwd: sourcePath, src: ['**'], dest: name}]);
+    archive.finalize();
+  });
 });

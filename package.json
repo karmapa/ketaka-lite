@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "animate.css": "^3.4.0",
+    "archiver": "^0.15.1",
     "bootstrap-sass": "3.3.5",
     "bufferhelper": "^0.2.0",
     "check-tibetan": "git+https://git@github.com/karmapa/checkTibetan_for_ketaka.git",
