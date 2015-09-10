@@ -23,6 +23,10 @@ function isSupportedType(row) {
   return stats.isFile() || stats.isDirectory();
 }
 
+function isZip(row) {
+  return 'application/zip' === _.get(row, 'fileType.mime');
+}
+
 function scanPaths(rows) {
 
   var dirPaths = _.chain(rows).filter(isDirectory).pluck('path').value();
@@ -322,6 +326,18 @@ function getBambooName(rows) {
 
   if (dirRow) {
     return _.last(dirRow.path.split(Path.sep));
+  }
+
+  var zipRows = rows.filter(isZip);
+
+  if (zipRows.length > 1) {
+    throw 'Import multiple zip rows is not supported yet.';
+  }
+
+  var zipRow = _.first(zipRows);
+
+  if (zipRow) {
+    return Helper.unzip(zipRow.path);
   }
 
   // find the name by occurrence

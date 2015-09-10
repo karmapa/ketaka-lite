@@ -3,10 +3,12 @@ var Path = require('path');
 var csv = require('csv');
 var fileType = require('file-type');
 var fs = require('fs');
+var Decompress = require('decompress');
 var mkdirp = require('mkdirp');
 var readChunk = require('read-chunk');
 var rimraf = require('rimraf');
 var _ = require('lodash');
+var PATH_APP_CACHE = require('../constants').PATH_APP_CACHE;
 
 function chunkString(str, length) {
   return str.match(new RegExp('[\\S\\s]{1,' + length + '}', 'g'));
@@ -206,6 +208,19 @@ function recursiveRemove(path) {
   });
 }
 
+function unzip(path) {
+
+  return new Promise(function(resolve, reject) {
+    new Decompress({mode: '755'})
+      .src(path)
+      .dest(PATH_APP_CACHE)
+      .use(Decompress.zip())
+      .run(function(err, files) {
+        return err ? reject(err) : resolve(files);
+      });
+  });
+}
+
 module.exports = {
   chunkString: chunkString,
   copyFile: copyFile,
@@ -220,5 +235,6 @@ module.exports = {
   readDir: readDir,
   readDirs: readDirs,
   readFile: readFile,
-  readFiles: readFiles
+  readFiles: readFiles,
+  unzip: unzip
 };
