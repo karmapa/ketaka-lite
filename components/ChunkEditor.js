@@ -77,7 +77,7 @@ export default class ChunkEditor extends React.Component {
     let {valueStartsWith, valueEndsWith} = this.state;
 
     // both empty
-    if (('' === valueStartsWith) && ('' === valueEndsWith)) {
+    if (('' === valueStartsWith) && ('' === valueEndsWith) && chunk) {
       this.setState({
         chunks: Helper.chunkString(chunk, CHUNK_SIZE)
       });
