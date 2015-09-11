@@ -232,9 +232,7 @@ export default class EditorArea extends React.Component {
   onExportData(dropdownButton) {
     let doc = this.getDoc();
     Ipc.send('export-data', {name: doc.name})
-      .then(res => {
-        dropdownButton.setDropDownState(false);
-      });
+      .then(() => dropdownButton.setDropDownState(false));
   }
 
   componentDidMount() {

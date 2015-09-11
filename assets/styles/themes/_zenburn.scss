@@ -129,8 +129,12 @@ $bg-zenburn-error: #e74c3c;
     background: none;
     color: $color-zenburn;
     border-color: $border-color-zenburn;
+    .CodeMirror-activeline-background.CodeMirror-linebackground {
+      background: #2c2d2d;
+    }
   }
   .CodeMirror-gutters {
+    background: transparent;
     border-right-color: $border-color-zenburn;
   }
 

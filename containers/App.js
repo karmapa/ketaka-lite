@@ -19,6 +19,18 @@ export default class App extends React.Component {
   componentDidMount() {
     document.title = constants.APP_NAME;
     this.props.dispatch(AppActions.initSettings());
+    this.setBodyClassName(this.props.settings.theme);
+  }
+
+  setBodyClassName(className) {
+    document.body.className = className;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let nextTheme = nextProps.settings.theme;
+    if (this.props.settings.theme !== nextTheme) {
+      this.setBodyClassName(nextTheme);
+    }
   }
 
   render() {
