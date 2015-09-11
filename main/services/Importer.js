@@ -10,6 +10,7 @@ var constants = require('../constants');
 var PATH_APP_CACHE = constants.PATH_APP_CACHE;
 var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
+var REGEXP_PAGE = constants.REGEXP_PAGE;
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -91,7 +92,6 @@ function textRowWithBambooName(bambooName, row) {
 function filterImageRows(rows, bambooName) {
   return _.chain(rows)
     .filter(isValidImageFileType)
-    .filter(imageFileWithBambooName.bind(null, bambooName))
     .value();
 }
 
@@ -177,8 +177,22 @@ function createDocByRows(bambooName, rows) {
       return _.spread(mergePages)(sets);
     })
     .then(function(pages) {
+
       if (pages.length > 0) {
-        doc.pages = pages;
+
+        var validPages = _.filter(pages, function(page) {
+          return REGEXP_PAGE.exec(page.name);
+        });
+        var invalidPages = _.filter(pages, function(page) {
+          return ! REGEXP_PAGE.exec(page.name);
+        });
+
+        // sort page name in order
+        validPages = validPages.sort(function(a, b) {
+          return a.name > b.name;
+        });
+
+        doc.pages = validPages.concat(invalidPages);
       }
     })
     .then(function() {
@@ -232,8 +246,7 @@ function warnInvalidImages(bambooName, rows, onProgress) {
         row.pathData.base + ' with an invalid file type ' + fileType});
     }
     else if (! imageFileWithBambooName(bambooName, row)) {
-      messages.push({type: 'warning', message: 'Ignore image ' +
-        row.pathData.basename + ' which doesn\'t match bamboo name ' + bambooName});
+      messages.push({type: 'warning', message: row.pathData.base + ' doesn\'t match page name format thus order is not guaranteed'});
     }
   });
   if (messages.length > 0) {
@@ -366,7 +379,7 @@ function findBambooName(row) {
     return row.pathData.name;
   }
   if (isValidImageFileType(row)) {
-    return _.get(REGEXP_IMAGE.exec(row.pathData.name), 1);
+    return row.pathData.name;
   }
   return null;
 }
@@ -394,7 +407,7 @@ function getBambooName(rows) {
 
 function isValidImageFileType(row) {
   var pathData = _.get(row, 'pathData', {});
-  return row.stats.isFile() && ('.jpg' === pathData.ext) && REGEXP_IMAGE.test(pathData.name) && ('image/jpeg' === _.get(row, 'fileType.mime'));
+  return row.stats.isFile() && ('.jpg' === pathData.ext) && ('image/jpeg' === _.get(row, 'fileType.mime'));
 }
 
 function isValidPbFile(row) {
