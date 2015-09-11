@@ -155,7 +155,7 @@ export default class Navigation extends React.Component {
         <Navbar className="navigation" fluid>
           <CollapsibleNav eventKey={0}>
             <Nav navbar>
-              <DropdownButton refs="dropdownButton" eventKey={3} title="Ketaka Lite">
+              <DropdownButton ref="dropdownButton" eventKey={3} title="Ketaka Lite">
                 <MenuItem eventKey="1" onSelect={::this.import}>Import</MenuItem>
                 <MenuItem eventKey="2" onSelect={::this.open}>Open</MenuItem>
                 <MenuItem eventKey="3" onSelect={DocHelper.save}>Save</MenuItem>

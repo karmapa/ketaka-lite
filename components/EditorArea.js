@@ -230,9 +230,21 @@ export default class EditorArea extends React.Component {
   }
 
   onExportData(dropdownButton) {
-    let doc = this.getDoc();
+
+    let self = this;
+    let doc = self.getDoc();
+
+    if (! doc) {
+      self.refs.toast.error('Open a bamboo then try export again');
+      return;
+    }
+
     Ipc.send('export-data', {name: doc.name})
-      .then(() => dropdownButton.setDropDownState(false));
+      .then(res => {
+        dropdownButton.setDropdownState(false);
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => self.refs.toast.error(res.message));
   }
 
   componentDidMount() {
