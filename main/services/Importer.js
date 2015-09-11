@@ -179,20 +179,7 @@ function createDocByRows(bambooName, rows) {
     .then(function(pages) {
 
       if (pages.length > 0) {
-
-        var validPages = _.filter(pages, function(page) {
-          return REGEXP_PAGE.exec(page.name);
-        });
-        var invalidPages = _.filter(pages, function(page) {
-          return ! REGEXP_PAGE.exec(page.name);
-        });
-
-        // sort page name in order
-        validPages = validPages.sort(function(a, b) {
-          return a.name > b.name;
-        });
-
-        doc.pages = validPages.concat(invalidPages);
+        doc.pages = Doc.sortPages(pages);
       }
     })
     .then(function() {
