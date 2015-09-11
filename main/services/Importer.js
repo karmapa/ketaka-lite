@@ -331,7 +331,7 @@ function getBambooName(rows) {
   var zipRows = rows.filter(isZip);
 
   if (zipRows.length > 1) {
-    throw 'Import multiple zip rows is not supported yet.';
+    throw 'Importing multiple zip files is not supported yet.';
   }
 
   var zipRow = _.first(zipRows);
