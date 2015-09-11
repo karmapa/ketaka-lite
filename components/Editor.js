@@ -1,4 +1,5 @@
 require('codemirror/addon/selection/active-line');
+
 import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
 import EditorToolbar from './EditorToolbar';
@@ -126,6 +127,7 @@ export default class Editor extends React.Component {
     let codemirrorProps = {
       onChange: ::this.onCodemirrorChange,
       options: {
+        theme: settings.theme,
         lineWrapping: true,
         lineNumbers: true,
         styleActiveLine: true

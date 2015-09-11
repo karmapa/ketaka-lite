@@ -220,6 +220,11 @@ exports.exportData = ipcHandler(function(event, arg) {
 
   dialog.showSaveDialog(options, function(savePath) {
 
+    if (! savePath) {
+      send({message: 'canceled'});
+      return;
+    }
+
     var archive = archiver('zip');
     var sourcePath = Path.resolve(PATH_APP_DOC, name);
     var output = fs.createWriteStream(savePath);

@@ -77,6 +77,17 @@ export function setLetterSpacing(letterSpacing) {
   };
 }
 
+export function updateSettings(newSettings) {
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+    newSettings = Object.assign({}, settings, newSettings);
+    Store.set('settings', newSettings);
+
+    dispatch(receiveSettings(newSettings));
+  };
+}
+
 export function initSettings() {
   return dispatch => {
     let settings = Store.get('settings') || {};

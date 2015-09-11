@@ -7,7 +7,8 @@ const settings = {
   lineHeight: 1,
   direction: false,
   inputMethod: consts.INPUT_METHOD_SYSTEM,
-  readonly: false
+  readonly: false,
+  theme: 'default'
 };
 
 const actionsMap = {

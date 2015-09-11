@@ -1,6 +1,6 @@
 import DocHelper from '../services/DocHelper';
 import React, {PropTypes} from 'react';
-import {ModalImportStatus, ModalOpen} from '.';
+import {ModalImportStatus, ModalOpen, ModalSettings} from '.';
 import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, CollapsibleNav, DropdownButton, Glyphicon,  MenuItem, Nav, Navbar} from 'react-bootstrap';
@@ -22,6 +22,7 @@ export default class Navigation extends React.Component {
     exportData: PropTypes.func.isRequired,
     importData: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
+    updateSettings: PropTypes.func.isRequired,
     toggleDirection: PropTypes.func.isRequired
   };
 
@@ -125,6 +126,22 @@ export default class Navigation extends React.Component {
     DocHelper.exportData(this.refs.dropdownButton);
   }
 
+  openSettingsModal() {
+    this.refs.modalSettings.open({
+      theme: this.props.settings.theme
+    });
+  }
+
+  submitSettings(settings) {
+    console.log('submit', settings.theme);
+    this.props.updateSettings(settings);
+    this.closeModalSettings();
+  }
+
+  closeModalSettings() {
+    this.refs.modalSettings.close();
+  }
+
   render() {
 
     let {settings, toggleDirection} = this.props;
@@ -143,7 +160,7 @@ export default class Navigation extends React.Component {
                 <MenuItem eventKey="2" onSelect={::this.open}>Open</MenuItem>
                 <MenuItem eventKey="3" onSelect={DocHelper.save}>Save</MenuItem>
                 <MenuItem eventKey="4" onSelect={::this.exportData}>Export</MenuItem>
-                <MenuItem eventKey="5">Settings</MenuItem>
+                <MenuItem eventKey="5" onSelect={::this.openSettingsModal}>Settings</MenuItem>
               </DropdownButton>
             </Nav>
             <Nav navbar right>
@@ -153,6 +170,8 @@ export default class Navigation extends React.Component {
             </Nav>
           </CollapsibleNav>
         </Navbar>
+
+        <ModalSettings ref="modalSettings" submit={::this.submitSettings} cancel={this.closeModalSettings} />
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" promptConfirm={::this.overrideBamboo} promptCancel={::this.cancelOverride} />
         <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} onBambooDeleteClick={::this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />

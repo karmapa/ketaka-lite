@@ -1,0 +1,224 @@
+$color-zenburn: #dcdcba;
+$button-color-zenburn: #464545;
+
+$bg-zenburn: #3f3f3f;
+$bg-zenburn-ex: #303030;
+$border-color-zenburn: lighten($bg-zenburn, 10);
+
+
+$bg-zenburn-default: #464545;
+$bg-zenburn-primary: #375a7f;
+$bg-zenburn-success: #00bc8c;
+$bg-zenburn-error: #e74c3c;
+
+.zenburn {
+
+  .navbar-default .navbar-nav > .open > a,
+  .navbar-default .navbar-nav > .open > a:hover,
+  .navbar-default .navbar-nav > .open > a:focus {
+    background-color: lighten($bg-zenburn, 10);
+  }
+
+  background-color: $bg-zenburn;
+
+  .navigation.navbar {
+
+    border-color: $border-color-zenburn;
+
+    .btn-direction {
+      color: $color-zenburn;
+      &:hover {
+        color: lighten($color-zenburn, 10);
+      }
+    }
+
+    .dropdown-toggle {
+      color: $color-zenburn;
+      &:hover, &:focus {
+        background-color: lighten($bg-zenburn, 10);
+        color: lighten($color-zenburn, 10);
+      }
+    }
+    background-color: $bg-zenburn;
+  }
+  .dropdown-menu {
+    background-color: $bg-zenburn;
+    > li > a {
+      color: $color-zenburn;
+      &:hover {
+        color: lighten($color-zenburn, 10);
+        background-color: lighten($bg-zenburn, 10);
+      }
+    }
+  }
+
+  .tab-box.nav.nav-tabs {
+    border-bottom: 1px solid $border-color-zenburn;
+    li.active > a {
+      background-color: $bg-zenburn;
+      border-bottom-color: transparent;
+      &:hover {
+        color: lighten($color-zenburn, 10);
+        background-color: lighten($bg-zenburn, 3);
+      }
+    }
+    > li > a {
+      background-color: darken($bg-zenburn, 7);
+      color: $color-zenburn;
+      border-color: $border-color-zenburn $border-color-zenburn transparent;
+      &:hover {
+        color: lighten($color-zenburn, 10);
+        background-color: darken($bg-zenburn, 0);
+      }
+    }
+    > li.button-add > a {
+      border-bottom-color: transparent;
+      color: transparent;
+      background-color: darken($bg-zenburn, 10);
+      &:hover {
+        background-color: darken($bg-zenburn, 7);
+      }
+    }
+    .close {
+      color: $color-zenburn;
+    }
+  }
+  .image-uploader {
+    border-top-color: transparent;
+    border-left-color: $border-color-zenburn;
+    border-right-color: $border-color-zenburn;
+    border-bottom-color: $border-color-zenburn;
+  }
+
+  .image-zoomer {
+    border: 1px solid $color-zenburn;
+  }
+
+  .upload-info h1 {
+    color: $color-zenburn;
+  }
+
+  .button-warning {
+    background-color: #f39c12;
+    &:hover {
+      background-color: darken(#f39c12, 5);
+    }
+  }
+
+  .editor-toolbar {
+    button {
+      background-color: $button-color-zenburn;
+      color: $color-zenburn;
+      border-color: $button-color-zenburn;
+      &:hover {
+        background-color: lighten($button-color-zenburn, 10);
+      }
+    }
+    .box-font {
+      color: $color-zenburn;
+      .form-control {
+        outline: 0;
+      }
+    }
+  }
+
+  .CodeMirror {
+    div.CodeMirror-cursor {
+      border-left: 2px solid white;
+    }
+    background: none;
+    color: $color-zenburn;
+    border-color: $border-color-zenburn;
+    .CodeMirror-activeline-background.CodeMirror-linebackground {
+      background: #2c2d2d;
+    }
+  }
+  .CodeMirror-gutters {
+    background: transparent;
+    border-right-color: $border-color-zenburn;
+  }
+
+  .modal-content {
+    background-color: #303030;
+    color: $color-zenburn;
+    .modal-header {
+      border-bottom-color: $border-color-zenburn;
+    }
+    .modal-footer {
+      border-top-color: $border-color-zenburn;
+    }
+  }
+  .has-success .help-block,
+  .has-success .control-label,
+  .has-success .radio,
+  .has-success .checkbox,
+  .has-success .radio-inline,
+  .has-success .checkbox-inline,
+  .has-success.radio label,
+  .has-success.checkbox label,
+  .has-success.radio-inline label,
+  .has-success.checkbox-inline label,
+  .has-success .form-control-feedback {
+    color: $bg-zenburn-success;
+  }
+
+  .has-error .help-block,
+  .has-error .control-label,
+  .has-error .radio,
+  .has-error .checkbox,
+  .has-error .radio-inline,
+  .has-error .checkbox-inline,
+  .has-error.radio label,
+  .has-error.checkbox label,
+  .has-error.radio-inline label,
+  .has-error.checkbox-inline label,
+  .has-error .form-control-feedback {
+    color: $bg-zenburn-error;
+  }
+
+  .chunk-editor {
+    border-color: $border-color-zenburn;
+    .chunk {
+      p {
+        color: $color-zenburn;
+      }
+      .info-chars {
+        color: #0ce3ac;
+      }
+      &.checked {
+        p {
+          color: #3c763d;
+        }
+        .info-chars {
+          color: #3c763d;
+        }
+      }
+    }
+  }
+
+  .btn-success {
+    background-color: #00bc8c;
+    &:hover {
+      background-color: darken(#00bc8c, 5);
+    }
+  }
+  .btn-default {
+    background-color: $bg-zenburn-default;
+    border-color: $bg-zenburn-default;
+    color: white;
+  }
+  .btn-primary {
+    background-color: $bg-zenburn-primary;
+    border-color: $bg-zenburn-primary;
+  }
+  .popover {
+    background-color: $bg-zenburn-ex;
+    border-color: #333;
+    .popover-content {
+      background-color: $bg-zenburn-ex;
+    }
+    .popover.top > .arrow:after {
+      border-top-color: $bg-zenburn-ex;
+    }
+  }
+}
