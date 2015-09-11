@@ -26,6 +26,8 @@ export default class ChunkEditor extends React.Component {
     valueStartsWith: ''
   };
 
+  initState = false;
+
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   componentDidMount() {
@@ -34,7 +36,14 @@ export default class ChunkEditor extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
+
+    if (this.initState) {
+      this.initState = false;
+      return;
+    }
+
     let {valueStartsWith, valueEndsWith} = this.state;
+
     if ((valueStartsWith !== nextState.valueStartsWith) || (valueEndsWith !== nextState.valueEndsWith)) {
       this.handleChunks(nextState);
     }
@@ -135,7 +144,7 @@ export default class ChunkEditor extends React.Component {
     return chunk.length > 0;
   }
 
-  initState() {
+  resetState() {
     this.setState({
       chunks: [],
       chunkIndex: null,
@@ -143,12 +152,13 @@ export default class ChunkEditor extends React.Component {
       valueStartsWith: ''
     });
     this.forceUpdate();
+    this.initState = true;
   }
 
   apply() {
     let {chunkIndex, chunks} = this.state;
     let chunk = chunks[chunkIndex];
-    this.initState();
+    this.resetState();
     this.refs.modalApplyConfirm.close();
     this.props.apply(chunk);
   }
@@ -173,7 +183,7 @@ export default class ChunkEditor extends React.Component {
   }
 
   cancel() {
-    this.initState();
+    this.resetState();
     this.props.cancel();
   }
 
