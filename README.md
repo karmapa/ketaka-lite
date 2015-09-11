@@ -16,7 +16,7 @@
 
 ## Packaging
 * npm run build
-* cd build
+* cd dist
 * electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version=0.30.4
 
 ## Project dependencies:
