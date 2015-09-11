@@ -133,7 +133,6 @@ export default class Navigation extends React.Component {
   }
 
   submitSettings(settings) {
-    console.log('submit', settings.theme);
     this.props.updateSettings(settings);
     this.closeModalSettings();
   }
