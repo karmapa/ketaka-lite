@@ -212,6 +212,9 @@ $bg-zenburn-error: #e74c3c;
     border-color: $bg-zenburn-primary;
   }
   .popover {
+    .arrow:after {
+      border-top-color: $bg-zenburn-ex;
+    }
     background-color: $bg-zenburn-ex;
     border-color: #333;
     .popover-content {
