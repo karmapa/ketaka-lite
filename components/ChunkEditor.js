@@ -35,6 +35,13 @@ export default class ChunkEditor extends React.Component {
     this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
   }
 
+  componentWillReceiveProps(nextProps) {
+    // switch from editor to chunk editor
+    if (true === this.props.hidden && false === nextProps.hidden) {
+      this.handleChunks();
+    }
+  }
+
   componentWillUpdate(nextProps, nextState) {
 
     if (this.initState) {
