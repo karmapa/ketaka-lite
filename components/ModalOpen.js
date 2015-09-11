@@ -91,9 +91,9 @@ export default class ModalConfirm extends React.Component {
       'button-delete': true,
       'hidden': ! this.state.isEdit
     };
-    return names.map(name => {
+    return names.map((name, index) => {
       return (
-        <span className="button-wrap">
+        <span className="button-wrap" key={index}>
           <Button className={classNames(buttonDeleteClasses)} onClick={onBambooDeleteClick.bind(this, name)}>&times;</Button>
           <Button bsStyle="success" onClick={this.onBambooClick.bind(this, name)}>{name}</Button>
         </span>
