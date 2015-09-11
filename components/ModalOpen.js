@@ -69,7 +69,6 @@ export default class ModalConfirm extends React.Component {
           <Modal.Title>
             <div className="modal-open-title">
               <span>Bamboos</span>
-              <Button className="button-edit" onClick={::this.toggleEditMode}>{this.showEditButtonText()}</Button>
             </div>
           </Modal.Title>
         </Modal.Header>
