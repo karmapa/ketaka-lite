@@ -123,6 +123,9 @@ $bg-zenburn-error: #e74c3c;
   }
 
   .CodeMirror {
+    .CodeMirror-selected {
+      background: rgba(152, 135, 162, 0.41);
+    }
     div.CodeMirror-cursor {
       border-left: 2px solid white;
     }
