@@ -113,6 +113,13 @@ function replaceImageName(bambooName, path) {
   });
 }
 
+function getNewIndexByPageName(pages, pageName) {
+  return pages.map(function(page) {
+    return page.name;
+  })
+  .indexOf(pageName);
+}
+
 function changeDocSettings(args) {
 
   var doc = args.doc;
@@ -139,6 +146,7 @@ function changeDocSettings(args) {
     }
 
     doc.pages = sortPages(doc.pages);
+    doc.pageIndex = getNewIndexByPageName(doc.pages, pageName);
 
     return Helper.writeFile(newJsonPath, JSON.stringify(doc))
       .then(function() {
@@ -167,6 +175,7 @@ function changeDocSettings(args) {
           return page;
         });
         doc.pages = sortPages(doc.pages);
+        doc.pageIndex = getNewIndexByPageName(doc.pages, pageName);
 
         return Helper.writeFile(newJsonPath, JSON.stringify(doc));
       })
