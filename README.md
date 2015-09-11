@@ -14,6 +14,11 @@
 * npm run dev
 * npm run electron-dev
 
+## Packaging
+* npm run build
+* cd build
+* electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version=0.30.4
+
 ## Project dependencies:
 
 * bootstrap-sass - The SCSS ( Sassy CSS ) version of Twitter Bootstrap.
