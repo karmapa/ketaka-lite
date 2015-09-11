@@ -67,7 +67,7 @@
     "electron": "electron .",
     "electron-dev": "NODE_ENV=development electron .",
     "lint": "eslint *.js",
-    "build": "webpack",
+    "build": "./scripts/build.sh",
     "dev": "node server.js",
     "test": "jest"
   },
