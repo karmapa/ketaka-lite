@@ -40,4 +40,6 @@ export default class Api {
       });
     }
   }
+
+  static on = ipc.on.bind(ipc);
 }

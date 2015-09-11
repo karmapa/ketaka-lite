@@ -11,8 +11,6 @@ import Api from '../services/Api';
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
-let ipc = window.require('ipc');
-
 export default class Navigation extends React.Component {
 
   static PropTypes = {
@@ -48,17 +46,17 @@ export default class Navigation extends React.Component {
 
     let self = this;
 
-    ipc.on('import-start', function() {
+    Api.on('import-start', function() {
       self.refs.modalImportStatus.open({
         title: 'Import Status'
       });
     });
 
-    ipc.on('import-progress', function(res) {
+    Api.on('import-progress', function(res) {
       self.refs.modalImportStatus.addMessage(res);
     });
 
-    ipc.on('confirm-bamboo-override', function(res) {
+    Api.on('confirm-bamboo-override', function(res) {
       self.overridePaths = res.paths;
       self.refs.modalImportStatus.showPrompt({
         promptMessage: 'Bamboo ' + res.bambooName + ' exists. Do you want to override it ?'
