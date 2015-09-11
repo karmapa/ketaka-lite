@@ -1,8 +1,7 @@
 # KETAKA Lite
  A standalone application that enables file format conversion and file import and has a built-in simple editor allowing users edit their imported data.
  
-# Download
-https://goo.gl/Q851bH
+[Download KETAKA Lite](https://goo.gl/Q851bH)
 
 [KETAKA Lite Technical Specification Documentation](https://github.com/kmsheng/ketaka-lite/blob/master/files/documentation/Ketaka%20Lite%20Techinical%20Documentation%20v1.2.pdf)
 
