@@ -6,7 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, CollapsibleNav, DropdownButton, Glyphicon,  MenuItem, Nav, Navbar} from 'react-bootstrap';
 import ReactToastr from 'react-toastr';
 import _ from 'lodash';
-import Ipc from '../services/Ipc';
+import Api from '../services/Api';
 
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
@@ -32,7 +32,7 @@ export default class Navigation extends React.Component {
 
     let self = this;
 
-    Ipc.send('import-button-clicked')
+    Api.send('import-button-clicked')
       .then(res => {
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
@@ -72,7 +72,7 @@ export default class Navigation extends React.Component {
 
     self.refs.modalImportStatus.close();
 
-    Ipc.send('import-button-clicked', {overridePaths: self.overridePaths})
+    Api.send('import-button-clicked', {overridePaths: self.overridePaths})
       .then(res => {
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
@@ -90,7 +90,7 @@ export default class Navigation extends React.Component {
   onBambooDeleteClick(name) {
     let self = this;
     DocHelper.closeDoc(name);
-    Ipc.send('delete-doc', {name})
+    Api.send('delete-doc', {name})
       .then(res => self.refs.modalOpen.setNames(res.names));
   }
 
@@ -103,7 +103,7 @@ export default class Navigation extends React.Component {
       this.refs.modalOpen.close();
     }
     else {
-      Ipc.send('open-bamboo', {name})
+      Api.send('open-bamboo', {name})
         .then(res => {
           self.props.receiveDoc(res.doc);
           self.refs.modalOpen.close();
@@ -114,7 +114,7 @@ export default class Navigation extends React.Component {
   open() {
     let self = this;
 
-    Ipc.send('open')
+    Api.send('open')
       .then(res => {
         self.refs.modalOpen.open({
           names: res.names

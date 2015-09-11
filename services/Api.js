@@ -3,7 +3,7 @@ import uuid from 'node-uuid';
 
 let ipc = window.require('ipc');
 
-export default class Ipc {
+export default class Api {
 
   static events = {};
 

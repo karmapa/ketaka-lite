@@ -10,7 +10,7 @@ import {DocHelper, Helper} from '../services/';
 import {MAP_COLORS, MAP_INPUT_METHODS} from '../constants/AppConstants';
 
 import ReactToastr from 'react-toastr';
-import Ipc from '../services/Ipc';
+import Api from '../services/Api';
 
 import {checkSyllables} from 'check-tibetan';
 
@@ -211,7 +211,7 @@ export default class EditorArea extends React.Component {
 
   save() {
     let self = this;
-    Ipc.send('save', self.getDoc())
+    Api.send('save', self.getDoc())
       .then(() => self.props.save(self.state.docKey));
   }
 
@@ -239,7 +239,7 @@ export default class EditorArea extends React.Component {
       return;
     }
 
-    Ipc.send('export-data', {name: doc.name})
+    Api.send('export-data', {name: doc.name})
       .then(res => {
         dropdownButton.setDropdownState(false);
         self.refs.toast.success(res.message);
@@ -332,7 +332,7 @@ export default class EditorArea extends React.Component {
     let self = this;
     let doc = this.getDoc();
     let {uuid, pageIndex} = doc;
-    Ipc.send('page-image-upload-button-clicked', doc)
+    Api.send('page-image-upload-button-clicked', doc)
       .then(res => {
         self.props.updatePageImagePath(uuid, pageIndex, res.destImagePath);
         self.refs.toast.success(res.message);
@@ -347,7 +347,7 @@ export default class EditorArea extends React.Component {
   onSettingsButtonClick() {
     let self = this;
 
-    Ipc.send('find-doc-names')
+    Api.send('find-doc-names')
       .then(res => {
         let doc = self.getDoc();
         let page = self.getCurrentPage(doc);
@@ -374,7 +374,7 @@ export default class EditorArea extends React.Component {
       return this.refs.modalDocSettings.close();
     }
 
-    Ipc.send('change-doc-settings', data)
+    Api.send('change-doc-settings', data)
       .then(res => {
         let doc = res.doc;
         self.props.receiveDoc(doc);

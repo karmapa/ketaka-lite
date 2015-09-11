@@ -1,4 +1,4 @@
-import Ipc from '../services/Ipc';
+import Api from '../services/Api';
 
 export const IMPORT_DATA = 'IMPORT_DATA';
 
@@ -36,7 +36,7 @@ export function receiveDoc(doc) {
 
 export function createDoc() {
   return dispatch => {
-    Ipc.send('add-doc')
+    Api.send('add-doc')
       .then(res => dispatch(receiveDoc(res.doc)));
   };
 }
