@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
-import _ from 'lodash';
 
 export default class ModalSettings extends React.Component {
 
