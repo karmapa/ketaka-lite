@@ -221,7 +221,7 @@ exports.exportData = ipcHandler(function(event, arg) {
   dialog.showSaveDialog(options, function(savePath) {
 
     if (! savePath) {
-      send({message: 'canceled'});
+      send({message: 'Export was canceled'});
       return;
     }
 
