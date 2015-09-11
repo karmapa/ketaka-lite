@@ -51,6 +51,9 @@ function getImageFilenameByDoc(doc) {
 
 function getPageNameByImageFilename(filename) {
   return _.spread(function(all, name, volume, page, char) {
+    if (! all) {
+      return Path.basename(filename);
+    }
     return parseInt(volume, 10) + '.' + parseInt(page, 10) + char;
   })(REGEXP_IMAGE.exec(filename));
 }
