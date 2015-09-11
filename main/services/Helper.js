@@ -3,6 +3,7 @@ var Path = require('path');
 var csv = require('csv');
 var fileType = require('file-type');
 var fs = require('fs');
+var Decompress = require('decompress');
 var mkdirp = require('mkdirp');
 var readChunk = require('read-chunk');
 var rimraf = require('rimraf');
@@ -206,6 +207,19 @@ function recursiveRemove(path) {
   });
 }
 
+function unzip(path, dest) {
+
+  return new Promise(function(resolve, reject) {
+    new Decompress({mode: '755'})
+      .src(path)
+      .dest(dest)
+      .use(Decompress.zip())
+      .run(function(err, files) {
+        return err ? reject(err) : resolve(files);
+      });
+  });
+}
+
 module.exports = {
   chunkString: chunkString,
   copyFile: copyFile,
@@ -220,5 +234,6 @@ module.exports = {
   readDir: readDir,
   readDirs: readDirs,
   readFile: readFile,
-  readFiles: readFiles
+  readFiles: readFiles,
+  unzip: unzip
 };

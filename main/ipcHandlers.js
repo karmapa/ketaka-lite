@@ -18,6 +18,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
   var options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
+      {name: 'zip', extensions: ['zip']},
       {name: 'Images', extensions: ['jpg']},
       {name: 'Text Files', extensions: ['csv', 'txt']}
     ]
@@ -163,6 +164,7 @@ exports.changeDocSettings = ipcHandler(function(event, data) {
     send({message: 'Doc settings have been changed', doc: doc});
   })
   .catch(function(err) {
+    console.error('error', err);
     send({error: true, message: err});
   });
 });
