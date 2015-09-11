@@ -8,7 +8,6 @@ var mkdirp = require('mkdirp');
 var readChunk = require('read-chunk');
 var rimraf = require('rimraf');
 var _ = require('lodash');
-var PATH_APP_CACHE = require('../constants').PATH_APP_CACHE;
 
 function chunkString(str, length) {
   return str.match(new RegExp('[\\S\\s]{1,' + length + '}', 'g'));
@@ -208,12 +207,12 @@ function recursiveRemove(path) {
   });
 }
 
-function unzip(path) {
+function unzip(path, dest) {
 
   return new Promise(function(resolve, reject) {
     new Decompress({mode: '755'})
       .src(path)
-      .dest(PATH_APP_CACHE)
+      .dest(dest)
       .use(Decompress.zip())
       .run(function(err, files) {
         return err ? reject(err) : resolve(files);

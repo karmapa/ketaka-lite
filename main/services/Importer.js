@@ -7,6 +7,7 @@ var Helper = require('./Helper');
 var Doc = require('./Doc');
 
 var constants = require('../constants');
+var PATH_APP_CACHE = constants.PATH_APP_CACHE;
 var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
 
@@ -21,10 +22,6 @@ function isFile(row) {
 function isSupportedType(row) {
   var stats = row.stats;
   return stats.isFile() || stats.isDirectory();
-}
-
-function isZip(row) {
-  return 'application/zip' === _.get(row, 'fileType.mime');
 }
 
 function scanPaths(rows) {
@@ -244,6 +241,54 @@ function warnInvalidImages(bambooName, rows, onProgress) {
   }
 }
 
+function isZipUpload(paths) {
+  return ('.zip' === Path.extname(_.first(paths))) && (1 === paths.length);
+}
+
+function getJsonFileFromVinylFiles(files) {
+  return _.find(files, function(file) {
+    return file.path.match(/\/([a-zA-Z0-9]+\.json)$/);
+  });
+}
+
+function handleZipPaths(paths, override) {
+
+  var zipPath = _.first(paths);
+  var bambooName;
+
+  return Helper.unzip(zipPath, PATH_APP_CACHE)
+    .then(function(files) {
+
+      var jsonFile = getJsonFileFromVinylFiles(files);
+
+      if (! jsonFile) {
+        throw 'JSON file is missing.';
+      }
+
+      bambooName = Path.basename(jsonFile.path, '.json');
+
+      return Doc.getExistedDocNames()
+    })
+    .then(function(names) {
+
+      if (-1 !== names.indexOf(bambooName) && (true !== override)) {
+        return Promise.reject({type: 'bambooExisted', bambooName: bambooName, paths: paths});
+      }
+      return Helper.unzip(zipPath, PATH_APP_DOC);
+    })
+    .then(function(files) {
+
+      var jsonFile = getJsonFileFromVinylFiles(files);
+
+      if (! jsonFile) {
+        throw 'JSON file is missing.';
+      }
+      bambooName = Path.basename(jsonFile.path, '.json');
+
+      return Doc.getDoc(bambooName);
+    });
+}
+
 function handleImportPaths(paths, onProgress, override) {
 
   onProgress = onProgress || _.noop;
@@ -252,6 +297,10 @@ function handleImportPaths(paths, onProgress, override) {
 
   if (_.isEmpty(paths)) {
     return Promise.resolve([]);
+  }
+
+  if (isZipUpload(paths)) {
+    return handleZipPaths(paths, override);
   }
 
   return Helper.getPathsType(paths)
@@ -326,18 +375,6 @@ function getBambooName(rows) {
 
   if (dirRow) {
     return _.last(dirRow.path.split(Path.sep));
-  }
-
-  var zipRows = rows.filter(isZip);
-
-  if (zipRows.length > 1) {
-    throw 'Importing multiple zip files is not supported yet.';
-  }
-
-  var zipRow = _.first(zipRows);
-
-  if (zipRow) {
-    return Helper.unzip(zipRow.path);
   }
 
   // find the name by occurrence
