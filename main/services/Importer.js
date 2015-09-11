@@ -285,6 +285,8 @@ function handleZipPaths(paths, override) {
       }
       bambooName = Path.basename(jsonFile.path, '.json');
 
+      Helper.rimraf(Path.resolve(PATH_APP_CACHE, bambooName));
+
       return Doc.getDoc(bambooName);
     });
 }
