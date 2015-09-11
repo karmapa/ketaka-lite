@@ -151,6 +151,9 @@ $height-editor-toolbar: 1.9em;
 }
 
 .box-font {
+  .form-group {
+    background-color: white;
+  }
   float: left;
   span {
     padding: 0 0.7em;
