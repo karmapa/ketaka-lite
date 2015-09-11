@@ -5,6 +5,8 @@
 
 // vendors
 @import url("node_modules/animate.css/animate.css");
+@import url("node_modules/codemirror/theme/zenburn.css");
+
 @import 'node_modules/toastr/toastr';
 @import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
 @import './assets/styles/vendors/codemirror';
@@ -23,3 +25,6 @@
 @import 'components/modal-import-status';
 @import 'components/modal-open';
 @import 'components/chunk-editor';
+
+// themes
+@import 'assets/styles/themes/zenburn';
