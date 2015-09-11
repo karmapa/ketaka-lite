@@ -2,6 +2,7 @@ var constants = require('../constants');
 
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
 var PATH_APP_DOC = constants.PATH_APP_DOC;
+var REGEXP_PAGE = constants.REGEXP_PAGE;
 
 var Helper = require('./Helper');
 var Path = require('path');
@@ -136,6 +137,9 @@ function changeDocSettings(args) {
     if (page) {
       page.name = pageName;
     }
+
+    doc.pages = sortPages(doc.pages);
+
     return Helper.writeFile(newJsonPath, JSON.stringify(doc))
       .then(function() {
         return doc;
@@ -162,6 +166,8 @@ function changeDocSettings(args) {
           }
           return page;
         });
+        doc.pages = sortPages(doc.pages);
+
         return Helper.writeFile(newJsonPath, JSON.stringify(doc));
       })
       .then(function() {
@@ -189,6 +195,20 @@ function changeDocSettings(args) {
   }
 }
 
+function sortPages(pages) {
+  // sort page name in order
+  pages = pages.sort(function(a, b) {
+    return a.name > b.name;
+  });
+  var validPages = _.filter(pages, function(page) {
+    return REGEXP_PAGE.exec(page.name);
+  });
+  var invalidPages = _.filter(pages, function(page) {
+    return ! REGEXP_PAGE.exec(page.name);
+  });
+  return validPages.concat(invalidPages);
+}
+
 module.exports = {
   createDoc: createDoc,
   createPage: createPage,
@@ -198,5 +218,6 @@ module.exports = {
   getImageFilenameByDoc: getImageFilenameByDoc,
   getPageNameByImageFilename: getPageNameByImageFilename,
   getExistedDocNames: getExistedDocNames,
+  sortPages: sortPages,
   writeDoc: writeDoc
 };
