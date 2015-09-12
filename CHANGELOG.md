@@ -3,7 +3,7 @@
 
 ## Bug Fixes
 
-- Sort page numbers in order, valid format page number first then the others.
+- Sort page numbers in order, valid format page numbers come first then the others.
 For example, 1.1a, blah, 1.1b, anyThing would be sorted to 1.1a, 1.1b, anyThing, blah
 
 - Put apply chunk at the bottom, not a modal anymore. This makes user to view the image easier.
