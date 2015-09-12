@@ -486,6 +486,10 @@ export default class EditorArea extends React.Component {
     this.refs.modalPageDeleteConfirm.close();
   }
 
+  isCurrentDoc(doc) {
+    return doc.uuid === this.state.docKey;
+  }
+
   renderDoc(doc) {
 
     let pageIndex = this.getPageIndex(doc);
@@ -494,12 +498,18 @@ export default class EditorArea extends React.Component {
     let key = doc.uuid;
     let imageZoomerKey = this.getImageZoomerKey(key);
 
-    return (
-      <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key}>
-        {::this.renderImageArea(imageZoomerKey, src)}
-        {::this.renderEditorArea(doc, pageIndex)}
-      </TabItem>
-    );
+    if (this.isCurrentDoc(doc)) {
+      return (
+        <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key}>
+          {::this.renderImageArea(imageZoomerKey, src)}
+          {::this.renderEditorArea(doc, pageIndex)}
+        </TabItem>
+      );
+    }
+    else {
+      return <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key} />;
+    }
+
   }
 
   applyChunk(chunk) {
