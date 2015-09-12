@@ -527,16 +527,35 @@ export default class EditorArea extends React.Component {
 
     let {editChunk} = doc;
 
+    let page = doc.pages[pageIndex];
+    let startKeyword = '';
+
+    // find start keyword
+    if ((pageIndex > 0) && _.isEmpty(page.content)) {
+      let previousPage = doc.pages[pageIndex - 1];
+      let previousPageContent = previousPage.content;
+      let previousPageLength = previousPageContent.length;
+
+      if (previousPageLength > 60) {
+        let search = previousPageContent.substring(previousPageLength - 61);
+        let index = doc.chunk.indexOf(search);
+        let start = index + search.length;
+        let end = start + 30;
+        if ((-1 !== index) && (end < doc.chunk.length)) {
+          startKeyword = doc.chunk.substring(start, end);
+        }
+      }
+    }
+
     let chunkEditorProps = {
       className: classNames({'hidden': ! editChunk}),
       hidden: ! editChunk,
+      startKeyword,
       chunk: doc.chunk,
       inputMethod: this.props.settings.inputMethod,
       apply: ::this.applyChunk,
       cancel: ::this.closeChunkEditor
     };
-
-    let page = doc.pages[pageIndex];
 
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);

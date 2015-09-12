@@ -13,6 +13,7 @@ export default class ChunkEditor extends React.Component {
   static PropTypes = {
     hidden: PropTypes.bool.isRequire,
     className: PropTypes.string,
+    startKeyword: PropTypes.string,
     apply: PropTypes.func.isRequired,
     cancel: PropTypes.func.isRequired,
     chunk: PropTypes.string.isRequired,
@@ -21,7 +22,7 @@ export default class ChunkEditor extends React.Component {
 
   state = {
     chunks: [],
-    chunkIndex: null,
+    chunkIndex: 0,
     valueEndsWith: '',
     valueStartsWith: ''
   };
@@ -38,7 +39,9 @@ export default class ChunkEditor extends React.Component {
   componentWillReceiveProps(nextProps) {
     // switch from editor to chunk editor
     if (true === this.props.hidden && false === nextProps.hidden) {
-      this.handleChunks();
+      let state = this.state;
+      state.valueStartsWith = this.props.startKeyword;
+      this.handleChunks(state);
     }
   }
 
@@ -154,7 +157,7 @@ export default class ChunkEditor extends React.Component {
   resetState() {
     this.setState({
       chunks: [],
-      chunkIndex: null,
+      chunkIndex: 0,
       valueEndsWith: '',
       valueStartsWith: ''
     });
@@ -281,7 +284,7 @@ export default class ChunkEditor extends React.Component {
     return (
       <div key={key} className={classNames(chunkClass)}>
         <label>
-          <input type="radio" onChange={::this.onRadioChange} name="chunk" value={index} />
+          <input type="radio" onChange={::this.onRadioChange} name="chunk" value={index} checked={index === chunkIndex} />
           <span className="info-chars">( {chunk.length} characters )</span>
           <p dangerouslySetInnerHTML={{__html: this.decorateChunk(chunk, [valueStartsWith, valueEndsWith])}}></p>
         </label>
