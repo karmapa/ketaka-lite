@@ -18,4 +18,4 @@ For example, 1.1a, blah, 1.1b, anyThing would be sorted to 1.1a, 1.1b, anyThing,
 
 - Implement zip exporting.
 
-- Auto-fill start keyword if current page is empty and previous page has at least 60 chars.
+- Auto-fill start keyword if current page is empty and previous page has at least 60 characters.
