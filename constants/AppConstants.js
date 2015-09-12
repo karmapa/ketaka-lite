@@ -39,3 +39,5 @@ export const MAP_COLORS = {
 };
 
 export const CHUNK_SIZE = 800;
+
+export const REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
