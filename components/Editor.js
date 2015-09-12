@@ -69,6 +69,11 @@ export default class Editor extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.settings.inputMethod]);
+
+    if (this.props.settings.theme !== nextProps.settings.theme) {
+      // force codemirror to reload theme
+      this.forceUpdate();
+    }
   }
 
   onUndoButtonClick() {
