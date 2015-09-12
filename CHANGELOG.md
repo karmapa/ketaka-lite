@@ -14,6 +14,7 @@ For example, 1.1a, blah, 1.1b, anyThing would be sorted to 1.1a, 1.1b, anyThing,
 ## Features
 
 - Add a new dark theme Zenburn.
+![Zenburn Theme](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/files/documentation/ketaka-lite-zenburn.png)
 
 - Implement zip exporting.
 
