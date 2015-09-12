@@ -1,4 +1,5 @@
 import * as types from '../actions/DocActions';
+import {REGEXP_PAGE} from '../constants/AppConstants';
 import _ from 'lodash';
 
 const actionsMap = {
@@ -79,17 +80,43 @@ function receiveDoc(state, action) {
   }
 }
 
+function findPageInsertIndex(pages, pageName) {
+
+  // wether matches format like 1.1a, 1.1b ..etc
+  let isInsertPageValid = REGEXP_PAGE.test(pageName);
+
+  let validPages = pages.filter(page => REGEXP_PAGE.test(page.name));
+  let inValidPages = pages.filter(page => ! REGEXP_PAGE.test(page.name));
+
+  if (isInsertPageValid) {
+    for (let i = 0, len = validPages.length; i < len; i++) {
+      let page = validPages[i];
+      if (pageName < page.name) {
+        return i;
+      }
+    }
+    return validPages.length;
+  }
+  else {
+    for (let i = 0, len = inValidPages.length; i < len; i++) {
+      let page = inValidPages[i];
+      if (pageName < page.name) {
+        return i + validPages.length;
+      }
+    }
+    return pages.length;
+  }
+
+}
+
 function addPage(state, action) {
   let {doc, index} = findDocDataByUuid(state, action.uuid);
 
   if (! doc) {
     return state;
   }
-  let insertIndex = _.findIndex(doc.pages, page => action.pageName < page.name);
 
-  if (-1 === insertIndex) {
-    insertIndex = doc.pages.length + 1;
-  }
+  let insertIndex = findPageInsertIndex(doc.pages, action.pageName);
 
   let newPage = {
     name: action.pageName,
@@ -99,6 +126,7 @@ function addPage(state, action) {
   };
 
   doc.pages.splice(insertIndex, 0, newPage);
+  doc.changed = true;
 
   return [
     ...state.slice(0, index),
