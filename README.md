@@ -3,24 +3,24 @@
  
 [Download KETAKA Lite](https://goo.gl/Q851bH)
 
-![Default Theme](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/files/documentation/ketaka-lite-default.png)
-![Zenburn Theme](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/files/documentation/ketaka-lite-zenburn.png)
-
 [KETAKA Lite Technical Specification Documentation](https://github.com/kmsheng/ketaka-lite/blob/master/files/documentation/Ketaka%20Lite%20Techinical%20Documentation%20v1.2.pdf)
 
 ![KETAKA Lite](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/files/documentation/ketaka-lite-explain.png)
 
 ## Front-end environment setup
-
-* npm install electron-prebuilt -g
-* npm install
-* npm run dev
-* npm run electron-dev
+```
+npm install electron-prebuilt -g
+npm install
+npm run dev
+npm run electron-dev
+```
 
 ## Packaging
-* npm run build
-* cd dist
-* electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version=0.30.4
+```
+npm run build
+cd dist
+electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version=0.30.4
+```
 
 ## Project dependencies:
 
