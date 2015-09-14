@@ -37,6 +37,7 @@ export default class Api {
         else {
           event.resolve(res);
         }
+        delete self.events[name];
       });
     }
   }
