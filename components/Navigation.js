@@ -168,7 +168,7 @@ export default class Navigation extends React.Component {
           </CollapsibleNav>
         </Navbar>
 
-        <ModalSettings ref="modalSettings" submit={::this.submitSettings} cancel={this.closeModalSettings} />
+        <ModalSettings ref="modalSettings" submit={::this.submitSettings} cancel={::this.closeModalSettings} />
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" promptConfirm={::this.overrideBamboo} promptCancel={::this.cancelOverride} />
         <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} onBambooDeleteClick={::this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
