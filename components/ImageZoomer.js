@@ -251,7 +251,7 @@ export default class ImageZoomer extends React.Component {
              src={src} />
         <ImageZoomerToolbar className="image-zoomer-toolbar" inputValue={this.state.inputValue} onInputChange={::this.handleInputChange}
                             onInputBlur={::this.handleInputBlur} onAddButtonClick={::this.enlarge} onMinusButtonClick={::this.shrink} />
-        <span className="filename">{Path.basename(src)}</span>
+        <span className="filename">{Path.basename(src.replace(/\\/g, '/'))}</span>
       </div>
     );
   }
