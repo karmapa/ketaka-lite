@@ -1,7 +1,9 @@
 
 .tab-box.nav.nav-tabs {
   > li > a {
-    line-height: 1.9;
+    line-height: 2.2;
+    height: 2.4em;
+    display: block;
     background-color: $bg-tab;
     color: $color-tab;
     padding-top: $padding-vertical-tab;
@@ -11,6 +13,13 @@
     width: $width-tab;
     border-color: $border-color-tab $border-color-tab $border-color-tab-ex;
     transition: $transition-global;
+    position: relative;
+    span {
+      max-width: 10em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: inline-block;
+    }
     &:hover {
       background-color: $bg-tab-ex;
     }
@@ -23,6 +32,10 @@
     background-color: #fff;
   }
   > li.button-add > a {
+    width: 2em;
+    span {
+      width: 1em;
+    }
     transition: $transition-global;
     &:hover {
       color: $bg-tab-add-ex;
@@ -37,6 +50,10 @@
     color: $bg-tab-add;
   }
   .close {
+    width: 1.8em;
+    position: absolute;
+    top: 0;
+    right: 0;
     padding-left: 0.6em;
     padding-right: 0.6em;
     padding-top: 0.2em;
