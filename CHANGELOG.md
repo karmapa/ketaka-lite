@@ -3,8 +3,8 @@
 
 ## Bug Fixes
 
-- \#21
-- \#22
+- [\#21](https://github.com/karmapa/ketaka-lite/issues/21)
+- [\#22](https://github.com/karmapa/ketaka-lite/issues/22)
 
 <a name="0.1.1"></a>
 # 0.1.1 (2015-09-14)
