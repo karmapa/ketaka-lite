@@ -1,3 +1,18 @@
+<a name="0.1.2"></a>
+# 0.1.2 (2015-09-20)
+
+## Bug Fixes
+
+- \#21
+- \#22
+
+<a name="0.1.1"></a>
+# 0.1.1 (2015-09-14)
+
+## Bug Fixes
+
+- Release memory when promises have been resolved / rejected
+
 <a name="0.1.0"></a>
 # 0.1.0 (2015-09-12)
 
