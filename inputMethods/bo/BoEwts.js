@@ -18,7 +18,7 @@ const BoEwts = {
     ['བྲj', 'r', 'བརྗ'],
     ['བྲt', 'r', 'བརྟ'],
     ['བྲd', 'r', 'བརྡ'],
-    ['བྲn', 'r', 'བརྣ '],
+    ['བྲn', 'r', 'བརྣ'],
     ['བླt', 'l', 'བལྟ'],
     ['བླd', 'l', 'བལྡ'],
     // Standard Tibetan Stacks listed at <http://www.thlib.org/reference/transliteration/tibstacks.php>
@@ -47,7 +47,7 @@ const BoEwts = {
     ['རj', 'r', 'རྗ'],
     ['རt', 'r', 'རྟ'],
     ['རd', 'r', 'རྡ'],
-    ['རn', 'r', 'རྣ '],
+    ['རn', 'r', 'རྣ'],
     ['རb', 'r', 'རྦ'],
     ['རm', 'r', 'རྨ'],
     ['ལk', 'l', 'ལྐ'],
@@ -170,6 +170,7 @@ const BoEwts = {
     // consonants
     ['k', 'ཀ'],
     ['ཀh', 'k', 'ཁ'],
+    ['ལནg', 'ln', 'ལྔ'],
     ['ནg', 'n', 'ང'],
     ['g', 'ག'],
     ['c', 'ཅ'],
