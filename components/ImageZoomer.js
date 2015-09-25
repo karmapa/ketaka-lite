@@ -105,13 +105,13 @@ export default class ImageZoomer extends React.Component {
     }
   }
 
-  isOverflowX() {
-    let ratio = this.state.percent / 100;
+  isOverflowX(percent = this.state.percent) {
+    let ratio = percent / 100;
     return ((this.image.width * ratio) > this.container.width);
   }
 
-  isOverflowY() {
-    let ratio = this.state.percent / 100;
+  isOverflowY(percent = this.state.percent) {
+    let ratio = percent / 100;
     return ((this.image.height * ratio) > this.container.height);
   }
 
@@ -132,7 +132,7 @@ export default class ImageZoomer extends React.Component {
       percent: newPercent,
       inputValue: newPercent + '%'
     });
-    this.adjustTranslate();
+    this.adjustTranslate(newPercent);
   }
 
   shrink(e) {
@@ -145,7 +145,7 @@ export default class ImageZoomer extends React.Component {
         percent: newPercent,
         inputValue: newPercent + '%'
       });
-      this.adjustTranslate();
+      this.adjustTranslate(newPercent);
     }
   }
 
@@ -161,13 +161,14 @@ export default class ImageZoomer extends React.Component {
     this.adjustTranslate();
   }
 
-  adjustTranslate() {
-    if (! this.isOverflowX()) {
+  adjustTranslate(percent = this.state.percent) {
+
+    if (! this.isOverflowX(percent)) {
       this.setState({
         translateX: 0
       });
     }
-    if (! this.isOverflowY()) {
+    if (! this.isOverflowY(percent)) {
       this.setState({
         translateY: 0
       });
