@@ -207,7 +207,7 @@ export default class EditorToolbar extends React.Component {
   }
 
   renderLetterSpacingOptions() {
-    return Array.from(Array(30).keys()).map((value, index) => {
+    return Array.from(Array(5).keys()).map((value, index) => {
       return <option key={index} value={index + 1}>{index + 1}</option>;
     });
   }
