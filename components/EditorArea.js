@@ -529,11 +529,12 @@ export default class EditorArea extends React.Component {
 
     let page = doc.pages[pageIndex];
     let startKeyword = '';
+    let pageContent = page.content || '';
 
     // find start keyword
-    if ((pageIndex > 0) && _.isEmpty(page.content)) {
+    if ((pageIndex > 0) && _.isEmpty(pageContent)) {
       let previousPage = doc.pages[pageIndex - 1];
-      let previousPageContent = previousPage.content;
+      let previousPageContent = previousPage.content || '';
       let previousPageLength = previousPageContent.length;
 
       if (previousPageLength > 60) {
@@ -566,7 +567,7 @@ export default class EditorArea extends React.Component {
       className: classNames({'editor': true, 'hidden': editChunk}),
       pageIndex,
       onInputChange: ::this.onInputChange,
-      code: page.content,
+      code: page.content || '',
       ref: editorKey,
       key: editorKey,
       settings: this.props.settings,
