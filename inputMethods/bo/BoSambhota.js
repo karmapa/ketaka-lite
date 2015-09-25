@@ -1,38 +1,46 @@
 
-let stackingState = 0;
+let stackingState;
 
-/*
- * What we want is to stack only two letters, except if the third is
- * ra (only after certain stacks), ya or wa (for standard tibetan),
- * or ha or aa (for sanskrit, under specific conditions). This makes
- * complex mantra stacks impossible, but feels more like the original
- * Sambhota keyboard.
- */
-function normalOrSub(normal, sub, alwaysEndsStack) {
+function changeStackingState(newState) {
+  stackingState = newState;
+}
+
+function reinit() {
+  changeStackingState(0);
+}
+
+reinit();
+
+// isOneChar is true for composed sanskrit characters (ex གྷ)
+function normalOrSub(normal, sub, alwaysStacked, isOneChar) {
   switch (stackingState) {
     case 0:
       return normal;
       break;
     case 1:
-      stackingState = 'nextissecond';
+      if (! isOneChar) {
+        changeStackingState(2);
+      }
       return normal;
-    default:
-      if (alwaysEndsStack) {
-        stackingState = 0;
+    case 2:
+      if (! isOneChar) {
+        changeStackingState(3);
       }
       return sub;
+    default:
+      if (alwaysStacked) {
+        return sub;
+      }
+      changeStackingState(0);
+      return normal;;
   }
 }
 
-function reinit() {
-  stackingState = 0;
-}
-
 function switchStacking() {
-  if (0 === stackingState) {
-    stackingState = 1;
+  if (! stackingState) {
+    changeStackingState(1);
   } else {
-    stackingState = 0;
+    changeStackingState(0);
   }
 }
 
@@ -47,8 +55,10 @@ const BoSambhota = {
   version: '1.0',
   maxKeyLength: 5,
   patterns: [
-    ['\\^', () => {reinit(); return '྄';}],
     [' ', () => {reinit(); return '་';}],
+    ['\\.', () => {reinit(); return ' ';}],
+    [',', () => {reinit(); return '།';}],
+    [';', () => {reinit(); return '༔';}],
     ['f', () => {switchStacking(); return '';}],
     ['a', () => {reinit(); return '';}],
     ['k', () => normalOrSub('ཀ', 'ྐ')],
@@ -66,43 +76,59 @@ const BoSambhota = {
     ['t', () => normalOrSub('ཏ', 'ྟ')],
     ['T', () => normalOrSub('ཐ', 'ྠ')],
     ['d', () => normalOrSub('ད', 'ྡ')],
+    ['གྷn', () => normalOrSub('གྷན', 'གྷྣ')],
     ['n', () => normalOrSub('ན', 'ྣ')],
     ['p', () => normalOrSub('པ', 'ྤ')],
     ['P', () => normalOrSub('ཕ', 'ྥ')],
     ['b', () => normalOrSub('བ', 'ྦ')],
+    ['རྨm', () => normalOrSub('རྨམ', 'རྨྨ')],
     ['m', () => normalOrSub('མ', 'ྨ')],
     ['x', () => normalOrSub('ཙ', 'ྩ')],
     ['X', () => normalOrSub('ཚ', 'ྪ')],
     ['D', () => normalOrSub('ཛ', 'ྫ')],
+    ['ྭw', () => normalOrSub('ྭཝ', 'ྭྭ')],
     ['w', () => normalOrSub('ཝ', 'ྭ', true)],
     ['W', () => normalOrSub('ཝ', 'ྺ')],
     ['Z', () => normalOrSub('ཞ', 'ྮ')],
     ['z', () => normalOrSub('ཟ', 'ྯ')],
+    ['ཱ\'', () => normalOrSub('ཱ\'འ', 'ཱཱ')],
     ['\'', () => normalOrSub('འ', 'ཱ', true)],
+    ['ྱy', () => normalOrSub('ྱཡ', 'ྱྱ')],
     ['y', () => normalOrSub('ཡ', 'ྱ', true)],
+    ['l', () => normalOrSub('ལ', 'ླ')],
     ['i', () => {reinit(); return 'ི';}],
     ['u', () => {reinit(); return 'ུ';}],
     ['e', () => {reinit(); return 'ེ';}],
     ['o', () => {reinit(); return 'ོ';}],
-    ['r', () => {return normalOrSub('ར', 'ྲ', true);}],
-    ['l', () => normalOrSub('ལ', 'ླ')],
+    ['ྒr', () => normalOrSub('ྒར', 'ྒྲ', true)],
+    ['ྣr', () => normalOrSub('ྣར', 'ྣྲ', true)],
+    ['ྤr', () => normalOrSub('ྤར', 'ྤྲ', true)],
+    ['ྦr', () => normalOrSub('ྦར', 'ྦྲ', true)],
+    ['ྨr', () => normalOrSub('ྨར', 'ྨྲ', true)],
+    ['ྡr', () => normalOrSub('ྡར', 'ྡྲ', true)],
+    ['ྦྷr', () => normalOrSub('ྦྷར', 'ྦྷྲ', true)],
+    ['ྡྷr', () => normalOrSub('ྡྷར', 'ྡྷྲ', true)],
+    ['ྒྷr', () => normalOrSub('ྒྷར', 'ྒྷྲ', true)],
+    ['ྜྷr', () => normalOrSub('ྜྷར', 'ྜྷྲ', true)],
+    ['ྟr', () => normalOrSub('ྟར', 'ྟྲ', true)],
+    ['r', () => normalOrSub('ར', 'ྲ')],
     ['S', () => normalOrSub('ཤ', 'ྴ')],
-    ['ཀB', () => normalOrSub('ཀཥ', 'ཀྵ')],
-    ['ྐB', () => normalOrSub('ྐཥ', 'ྐྵ')],
+    ['ཀB', () => normalOrSub('ཀཥ', 'ཀྵ', true, true)],
+    ['ྐB', () => normalOrSub('ྐཥ', 'ྐྵ', true, true)],
     ['B', () => normalOrSub('ཥ', 'ྵ')],
     ['s', () => normalOrSub('ས', 'ྶ')],
-    ['གh', () => normalOrSub('གཧ', 'གྷ')],
-    ['ཌh', () => normalOrSub('ཌཧ', 'ཌྷ')],
-    ['དh', () => normalOrSub('དཧ', 'དྷ')],
-    ['བh', () => normalOrSub('བཧ', 'བྷ')],
-    ['ཛh', () => normalOrSub('ཛཧ', 'ཛྷ')],
-    ['ྒh', () => normalOrSub('ྒཧ', 'ྒྷ')],
-    ['ྜh', () => normalOrSub('ྜཧ', 'ྜྷ')],
-    ['ྡh', () => normalOrSub('ྡཧ', 'ྡྷ')],
-    ['ྦh', () => normalOrSub('ྦཧ', 'ྦྷ')],
-    ['ྫh', () => normalOrSub('ྫཧ', 'ྫྷ')],
-    ['h', () => normalOrSub('ཧ', 'ྷ')],
-    ['A', () => normalOrSub('ཨ', 'ཨ')],
+    ['གh', () => normalOrSub('གཧ', 'གྷ', true, true)],
+    ['ཌh', () => normalOrSub('ཌཧ', 'ཌྷ', true, true)],
+    ['དh', () => normalOrSub('དཧ', 'དྷ', true, true)],
+    ['བh', () => normalOrSub('བཧ', 'བྷ', true, true)],
+    ['ཛh', () => normalOrSub('ཛཧ', 'ཛྷ', true, true)],
+    ['ྒh', () => normalOrSub('ྒཧ', 'ྒྷ', true, true)],
+    ['ྜh', () => normalOrSub('ྜཧ', 'ྜྷ', true, true)],
+    ['ྡh', () => normalOrSub('ྡཧ', 'ྡྷ', true, true)],
+    ['ྦh', () => normalOrSub('ྦཧ', 'ྦྷ', true, true)],
+    ['ྫh', () => normalOrSub('ྫཧ', 'ྫྷ', true, true)],
+    ['h', () => normalOrSub('ཧ', 'ྷ', true)],
+    ['A', () => normalOrSub('ཨ', 'ྸ')],
     ['R', () => normalOrSub('ཪ', 'ྼ')],
     ['Y', 'ྻ'],
     ['ྲI', () => {reinit(); return 'ྲྀ';}],
@@ -116,7 +142,7 @@ const BoSambhota = {
     ['L', () => {reinit(); return 'ོཾ';}],
     ['`', () => {reinit(); return 'ཽཾ';}],
     ['~', () => {reinit(); return 'ཻཾ';}],
-    ['\\.', () => {reinit(); return ' ';}],
+    ['\\^', () => {reinit(); return '྄';}],
     ['\\!', () => {reinit(); return '༄༅༅';}],
     ['\\#', () => {reinit(); return '༁ྃ';}],
     ['\\%', () => {reinit(); return 'ྃ';}],
@@ -125,7 +151,6 @@ const BoSambhota = {
     ['\\<', () => {reinit(); return 'ༀ';}],
     ['\\=', () => {reinit(); return 'ཨཱཿ';}],
     ['\\>', () => {reinit(); return 'ཧཱུྃ';}],
-    [';', () => {reinit(); return '༔';}],
     ['\\:', () => {reinit(); return 'ཿ';}],
     ['"', () => {reinit(); return '༄༅';}],
     ['@', () => {reinit(); return '༄';}],
@@ -133,7 +158,6 @@ const BoSambhota = {
     ['\\/', () => {reinit(); return '༴';}],
     ['\\?', () => {reinit(); return '༈';}],
     ['\\|', () => {reinit(); return '྅';}],
-    [',', () => {reinit(); return '།';}],
     ['-', () => {reinit(); return '༑';}],
     ['\\(', () => {reinit(); return '༼';}],
     ['\\)', () => {reinit(); return '༽';}],
