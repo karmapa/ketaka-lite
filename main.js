@@ -6,6 +6,7 @@ var bindEventName = require('./main/decorators/bindEventName');
 var Helper = require('./main/services/Helper');
 var PATH_APP_DOC = require('./main/constants').PATH_APP_DOC;
 var Menu = require('menu');
+var shell = require('shell');
 
 require('crash-reporter').start();
 
@@ -146,19 +147,27 @@ app.once('ready', function() {
       submenu: [
         {
           label: 'Learn More',
-          click: function() { require('shell').openExternal('http://electron.atom.io') }
+          click: function() {
+            shell.openExternal('http://electron.atom.io');
+          }
         },
         {
           label: 'Documentation',
-          click: function() { require('shell').openExternal('https://github.com/atom/electron/tree/master/docs#readme') }
+          click: function() {
+            shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
+          }
         },
         {
           label: 'Community Discussions',
-          click: function() { require('shell').openExternal('https://discuss.atom.io/c/electron') }
+          click: function() {
+            shell.openExternal('https://discuss.atom.io/c/electron');
+          }
         },
         {
           label: 'Search Issues',
-          click: function() { require('shell').openExternal('https://github.com/atom/electron/issues') }
+          click: function() {
+            shell.openExternal('https://github.com/atom/electron/issues');
+          }
         }
       ]
     }
