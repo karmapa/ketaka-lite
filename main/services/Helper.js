@@ -9,6 +9,10 @@ var readChunk = require('read-chunk');
 var rimraf = require('rimraf');
 var _ = require('lodash');
 
+function isDarwin() {
+  return 'darwin' === process.platform;
+}
+
 function chunkString(str, length) {
   return str.match(new RegExp('[\\S\\s]{1,' + length + '}', 'g'));
 }
@@ -228,6 +232,7 @@ module.exports = {
   getPathType: getPathType,
   getPathsType: getPathsType,
   writeFile: writeFile,
+  isDarwin: isDarwin,
   mkdirp: recursiveCreateFolder,
   rimraf: recursiveRemove,
   parseCsvBuffer: parseCsvBuffer,

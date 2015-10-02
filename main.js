@@ -10,10 +10,6 @@ var shell = require('shell');
 
 require('crash-reporter').start();
 
-function isDarwin() {
-  return 'darwin' === process.platform;
-}
-
 var mainWindow = null;
 
 app.on('window-all-closed', function() {
@@ -96,7 +92,7 @@ app.once('ready', function() {
         {
           label: 'Toggle Full Screen',
           accelerator: (function() {
-            return isDarwin() ? 'Ctrl+Command+F' : 'F11';
+            return Helper.isDarwin() ? 'Ctrl+Command+F' : 'F11';
           })(),
           click: function(item, focusedWindow) {
             if (focusedWindow) {
@@ -107,7 +103,7 @@ app.once('ready', function() {
         {
           label: 'Toggle Developer Tools',
           accelerator: (function() {
-              return isDarwin() ? 'Alt+Command+I' : 'Ctrl+Shift+I';
+              return Helper.isDarwin() ? 'Alt+Command+I' : 'Ctrl+Shift+I';
           })(),
           click: function(item, focusedWindow) {
             if (focusedWindow) {
@@ -165,7 +161,7 @@ app.once('ready', function() {
     }
   ];
 
-  if (isDarwin()) {
+  if (Helper.isDarwin()) {
     template.unshift({
       label: 'Electron',
       submenu: [
