@@ -19,7 +19,7 @@
 
 @for $i from 1 through 5 {
   .ls#{$i} .CodeMirror {
-    letter-spacing: #{$i * 0.05}em;
+    letter-spacing: #{($i * 0.054125) - 0.020625}em;
   }
 }
 
