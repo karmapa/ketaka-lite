@@ -41,13 +41,10 @@ app.on('ready', function() {
 
 app.once('ready', function() {
 
-  console.log('once ready');
-
   if (Menu.getApplicationMenu()) {
     return;
   }
 
-  console.log('creating menu');
   var submenu = [
     {
       label: 'Undo',
