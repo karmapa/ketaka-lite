@@ -231,14 +231,14 @@ module.exports = {
   getFileType: getFileType,
   getPathType: getPathType,
   getPathsType: getPathsType,
-  writeFile: writeFile,
   isDarwin: isDarwin,
   mkdirp: recursiveCreateFolder,
-  rimraf: recursiveRemove,
   parseCsvBuffer: parseCsvBuffer,
   readDir: readDir,
   readDirs: readDirs,
   readFile: readFile,
   readFiles: readFiles,
-  unzip: unzip
+  rimraf: recursiveRemove,
+  unzip: unzip,
+  writeFile: writeFile
 };
