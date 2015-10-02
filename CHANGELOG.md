@@ -1,3 +1,21 @@
+<a name="0.1.4"></a>
+# 0.1.4 (2015-10-02)
+
+## Bug Fixes
+
+- [\#29](https://github.com/karmapa/ketaka-lite/issues/29)
+- [\#24](https://github.com/karmapa/ketaka-lite/issues/25)
+- [\#24](https://github.com/karmapa/ketaka-lite/issues/24)
+
+
+<a name="0.1.3"></a>
+# 0.1.3 (2015-09-21)
+
+## Bug Fixes
+
+- [\#23](https://github.com/karmapa/ketaka-lite/issues/23)
+
+
 <a name="0.1.2"></a>
 # 0.1.2 (2015-09-20)
 
