@@ -95,8 +95,9 @@ app.once('ready', function() {
           label: 'Reload',
           accelerator: 'CmdOrCtrl+R',
           click: function(item, focusedWindow) {
-            if (focusedWindow)
+            if (focusedWindow) {
               focusedWindow.reload();
+            }
           }
         },
         {
@@ -106,7 +107,7 @@ app.once('ready', function() {
           })(),
           click: function(item, focusedWindow) {
             if (focusedWindow) {
-              focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
+              focusedWindow.setFullScreen(! focusedWindow.isFullScreen());
             }
           }
         },
