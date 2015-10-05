@@ -1,3 +1,11 @@
+<a name="0.1.7"></a>
+
+# 0.1.7 (2015-10-05)
+
+## Bug Fixes
+
+- handle bamboo that does not have chunk
+
 <a name="0.1.6"></a>
 
 # 0.1.6 (2015-10-02)
