@@ -537,7 +537,7 @@ export default class EditorArea extends React.Component {
       let previousPageContent = previousPage.content || '';
       let previousPageLength = previousPageContent.length;
 
-      if (previousPageLength > 60) {
+      if ((previousPageLength > 60) && doc.chunk) {
         let search = previousPageContent.substring(previousPageLength - 61);
         let index = doc.chunk.indexOf(search);
         let start = index + search.length;
