@@ -91,9 +91,29 @@ function findPageInsertIndex(pages, pageName) {
   if (isInsertPageValid) {
     for (let i = 0, len = validPages.length; i < len; i++) {
       let page = validPages[i];
-      if (pageName < page.name) {
+
+      let aRes = REGEXP_PAGE.exec(pageName);
+      let aFirstNum = parseInt(aRes[1], 10);
+      let aSecondNum = parseInt(aRes[2], 10);
+      let aChar = aRes[3];
+
+      let bRes = REGEXP_PAGE.exec(page.name);
+      let bFirstNum = parseInt(bRes[1], 10);
+      let bSecondNum = parseInt(bRes[2], 10);
+      let bChar = bRes[3];
+
+      if (aFirstNum < bFirstNum) {
         return i;
       }
+
+      if ((aFirstNum === bFirstNum) && (aSecondNum < bSecondNum)) {
+        return i;
+      }
+
+      if ((aFirstNum === bFirstNum) && (aSecondNum === bSecondNum) && (aChar < bChar)) {
+        return i;
+      }
+
     }
     return validPages.length;
   }
