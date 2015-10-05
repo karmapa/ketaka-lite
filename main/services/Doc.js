@@ -205,13 +205,49 @@ function changeDocSettings(args) {
 }
 
 function sortPages(pages) {
-  // sort page name in order
-  pages = pages.sort(function(a, b) {
-    return a.name > b.name;
-  });
+
   var validPages = _.filter(pages, function(page) {
     return REGEXP_PAGE.exec(page.name);
   });
+
+  validPages = validPages.sort(function(a, b) {
+
+    var aRes = REGEXP_PAGE.exec(a.name);
+    var aFirstNumber = parseInt(aRes[1], 10);
+    var aSecondNumber = parseInt(aRes[2], 10);
+    var aChar = aRes[3];
+
+    var bRes = REGEXP_PAGE.exec(b.name);
+    var bFirstNumber = parseInt(bRes[1], 10);
+    var bSecondNumber = parseInt(bRes[2], 10);
+    var bChar = bRes[3];
+
+    if (aFirstNumber > bFirstNumber) {
+      return 1;
+    }
+
+    if (bFirstNumber < bFirstNumber) {
+      return -1;
+    }
+
+    if (aSecondNumber > bSecondNumber) {
+      return 1;
+    }
+
+    if (aSecondNumber < bSecondNumber) {
+      return -1;
+    }
+
+    if (aChar > bChar) {
+      return 1;
+    }
+
+    if (aChar < bChar) {
+      return -1;
+    }
+    return 0;
+  });
+
   var invalidPages = _.filter(pages, function(page) {
     return ! REGEXP_PAGE.exec(page.name);
   });
