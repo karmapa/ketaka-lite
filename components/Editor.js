@@ -1,4 +1,5 @@
 require('codemirror/addon/selection/active-line');
+require('codemirror/addon/search/search');
 
 import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
