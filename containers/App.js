@@ -1,8 +1,7 @@
 import * as AppActions from '../actions/AppActions';
 import * as DocActions from '../actions/DocActions';
 import * as constants from '../constants/AppConstants';
-import EditorArea from '../components/EditorArea';
-import Navigation from '../components/Navigation';
+import {EditorArea, Navigation} from '../components';
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
