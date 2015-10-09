@@ -86,11 +86,11 @@ export default class EditorArea extends React.Component {
 
   componentDidUpdate(previousProps, previousState) {
     let docs = this.props.docs;
+    let codemirror = this.getCurrentCodemirror();
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
     }
     if (previousState.docKey !== this.state.docKey) {
-      let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
       this.markFontColor(codemirror);
     }
@@ -99,8 +99,11 @@ export default class EditorArea extends React.Component {
     let previousDoc = this.getDoc(this.state.docKey, previousProps);
 
     if (previousDoc && doc && previousDoc.editChunk && (false === doc.editChunk)) {
-      let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
+    }
+    let searchBar = this.refs.searchBar;
+    if (searchBar) {
+      searchBar.cm = codemirror;
     }
   }
 
