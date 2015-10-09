@@ -15,7 +15,7 @@ const actionsMap = {
   [types.RECEIVE_SETTINGS]: receiveSettings
 };
 
-export default function fontSize(state = settings, action) {
+export default function(state = settings, action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
 }
