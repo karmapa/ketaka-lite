@@ -280,6 +280,11 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
 
+    keypressListener.simpleCombo('ctrl f', ::this.openSearchBar);
+    keypressListener.simpleCombo('cmd f', ::this.openSearchBar);
+
+    keypressListener.simpleCombo('esc', ::this.cancel);
+
     keypressListener.simpleCombo('alt space', () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
