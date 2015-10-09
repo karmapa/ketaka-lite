@@ -490,7 +490,7 @@ export default class EditorArea extends React.Component {
   getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
-    return this.refs[editorKey].codemirror;
+    return _.get(this.refs[editorKey], 'codemirror');
   }
 
   cancelDeletePage() {
