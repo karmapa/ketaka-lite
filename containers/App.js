@@ -7,11 +7,11 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 @connect(state => ({
-  settings: state.settings,
   direction: state.direction,
-  readonly: state.readonly,
   docs: state.docs,
-  inputMethod: state.inputMethod
+  inputMethod: state.inputMethod,
+  readonly: state.readonly,
+  settings: state.settings
 }))
 export default class App extends React.Component {
 
