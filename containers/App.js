@@ -16,9 +16,12 @@ import {connect} from 'react-redux';
 export default class App extends React.Component {
 
   componentDidMount() {
+
+    let {dispatch, settings} = this.props;
+
     document.title = constants.APP_NAME;
-    this.props.dispatch(AppActions.initSettings());
-    this.setBodyClassName(this.props.settings.theme);
+    dispatch(AppActions.initSettings());
+    this.setBodyClassName(settings.theme);
   }
 
   setBodyClassName(className) {
