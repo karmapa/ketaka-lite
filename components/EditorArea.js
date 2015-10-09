@@ -258,6 +258,13 @@ export default class EditorArea extends React.Component {
     searchBar.find();
   }
 
+  cancel() {
+    let searchBar = this.refs.searchBar;
+    if (searchBar) {
+      searchBar.close();
+    }
+  }
+
   componentDidMount() {
 
     let keypressListener = this.keypressListener;
