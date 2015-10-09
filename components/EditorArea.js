@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
-  ModalDocSettings, ModalPageAdd, ChunkEditor} from '.';
+  ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar} from '.';
 import {DocHelper, Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS} from '../constants/AppConstants';
@@ -596,13 +596,19 @@ export default class EditorArea extends React.Component {
   }
 
   render() {
-    let {docs, settings} = this.props;
+    let {docs, settings, inputMethod} = this.props;
     let classes = {
       [this.props.className]: true,
       'vertical': settings.direction
     };
+
+    let searchBarProps = {
+      inputMethod
+    };
+
     return (
       <div className={classNames(classes)}>
+        <SearchBar ref="searchBar" {...searchBarProps} />
         <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={::this.handleSelect} onClose={::this.handleClose}>
           {docs.map(::this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />

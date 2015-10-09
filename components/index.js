@@ -14,3 +14,4 @@ export ModalPageAdd from './ModalPageAdd';
 export ModalSettings from './ModalSettings';
 export ChunkEditor from './ChunkEditor';
 export PageSwitch from './PageSwitch';
+export SearchBar from './SearchBar';
