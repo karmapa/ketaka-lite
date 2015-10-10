@@ -10,7 +10,9 @@ import CodeMirror from 'codemirror';
 export default class SearchBar extends React.Component {
 
   static PropTypes = {
-    inputMethod: PropTypes.string.isRequired
+    inputMethod: PropTypes.string.isRequired,
+    toNextPage: PropTypes.func.isRequired,
+    toPrevPage: PropTypes.func.isRequired
   };
 
   state = {

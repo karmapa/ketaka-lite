@@ -36,6 +36,7 @@ export default class EditorArea extends React.Component {
     setFontSize: PropTypes.func.isRequired,
     setLineHeight: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
+    setPageIndex: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
@@ -619,15 +620,43 @@ export default class EditorArea extends React.Component {
     );
   }
 
+  toNextPage() {
+    let doc = this.getDoc();
+    let pageCount = _.get(doc, 'pages', []).length;
+    let nextPageIndex = doc.pageIndex + 1;
+    if (nextPageIndex < pageCount) {
+      this.props.setPageIndex(doc.uuid, nextPageIndex);
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  toPrevPage() {
+    let doc = this.getDoc();
+    let pageCount = _.get(doc, 'pages', []).length;
+    let prevPageIndex = doc.pageIndex - 1;
+    if (prevPageIndex >= 0) {
+      this.props.setPageIndex(doc.uuid, prevPageIndex);
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   render() {
-    let {docs, settings, inputMethod} = this.props;
+    let {docs, settings, inputMethod, setPageIndex} = this.props;
     let classes = {
       [this.props.className]: true,
       'vertical': settings.direction
     };
 
     let searchBarProps = {
-      inputMethod
+      inputMethod,
+      toNextPage: ::this.toNextPage,
+      toPrevPage: ::this.toPrevPage
     };
 
     return (
