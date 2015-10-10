@@ -281,6 +281,7 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt left', ::this.rotateTabLeft);
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
+    keypressListener.simpleCombo('cmd s', ::this.save);
 
     keypressListener.simpleCombo('ctrl f', ::this.openSearchBar);
     keypressListener.simpleCombo('cmd f', ::this.openSearchBar);
