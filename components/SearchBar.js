@@ -83,20 +83,79 @@ export default class SearchBar extends React.Component {
   }
 
   find(query = this.state.keyword) {
-    let {cm} = this;
+    let {cm, cursor} = this;
     clearSearch(cm);
-    doSearch({cm, query});
+    this.doSearch({cm, query, cursor});
   }
 
-  findPrev() {
-    doSearch({
+  prev() {
+    this.doSearch({
       cm: this.cm,
       rev: true
     });
+    this.cursor = this.cm.getCursor();
   }
 
-  findNext() {
-    doSearch({cm: this.cm});
+  next() {
+    this.doSearch({cm: this.cm});
+    this.cursor = this.cm.getCursor();
+  }
+
+  doSearch(args = {}) {
+
+    let self = this;
+    let {cm, rev, query, cursor} = args;
+    let state = getSearchState(cm);
+
+    if (state.query) {
+      return self.findNext(cm, rev);
+    }
+
+    if (query && (! state.query)) {
+
+      cm.operation(function() {
+        startSearch(cm, state, query);
+        state.posTo = cursor ? cursor : cm.getCursor();
+        state.posFrom = state.posTo;
+        self.findNext(cm, rev);
+      });
+    }
+  }
+
+  findNext(cm, rev) {
+
+    let self = this;
+
+    cm.operation(function() {
+      let state = getSearchState(cm);
+      let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
+
+      if (! cursor.find(rev)) {
+
+        let pageSwitched = false;
+
+        if (rev) {
+          pageSwitched = self.props.toPrevPage();
+          cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
+        }
+        else {
+          pageSwitched = self.props.toNextPage();
+          cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
+        }
+
+        if (! pageSwitched) {
+          return;
+        }
+
+        if (! cursor.find(rev)) {
+          return;
+        }
+      }
+      cm.setSelection(cursor.from(), cursor.to());
+      cm.scrollIntoView({from: cursor.from(), to: cursor.to()}, 20);
+      state.posFrom = cursor.from();
+      state.posTo = cursor.to();
+    });
   }
 
   focus() {
@@ -141,10 +200,10 @@ export default class SearchBar extends React.Component {
       <div className={classNames(classnames)}>
         <span>Search: </span>
         <input {...inputProps} />
-        <button ref="buttonFindPrev" onClick={::this.findPrev}>
+        <button ref="buttonFindPrev" onClick={::this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
-        <button ref="buttonFindNext" onClick={::this.findNext}>
+        <button ref="buttonFindNext" onClick={::this.next}>
           <i className="glyphicon glyphicon-chevron-down"></i>
         </button>
         <button className="button-close" onClick={::this.close}>
@@ -176,51 +235,12 @@ function clearSearch(cm) {
   });
 }
 
-function doSearch(args = {}) {
-
-  let {cm, rev, query} = args;
-
-  let state = getSearchState(cm);
-
-  if (state.query) {
-    return findNext(cm, rev);
-  }
-
-  if (query && (! state.query)) {
-
-    cm.operation(function() {
-      startSearch(cm, state, query);
-      state.posTo = cm.getCursor();
-      state.posFrom = state.posTo;
-      findNext(cm, rev);
-    });
-  }
-}
-
 function SearchState() {
   this.lastQuery = null;
   this.overlay = null;
   this.posFrom = null;
   this.posTo = null;
   this.query = null;
-}
-
-function findNext(cm, rev) {
-  cm.operation(function() {
-    let state = getSearchState(cm);
-    let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
-
-    if (! cursor.find(rev)) {
-      cursor = getSearchCursor(cm, state.query, rev ? CodeMirror.Pos(cm.lastLine()) : CodeMirror.Pos(cm.firstLine(), 0));
-      if (! cursor.find(rev)) {
-        return;
-      }
-    }
-    cm.setSelection(cursor.from(), cursor.to());
-    cm.scrollIntoView({from: cursor.from(), to: cursor.to()}, 20);
-    state.posFrom = cursor.from();
-    state.posTo = cursor.to();
-  });
 }
 
 function getSearchCursor(cm, query, pos) {
