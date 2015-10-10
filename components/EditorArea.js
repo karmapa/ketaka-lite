@@ -255,6 +255,7 @@ export default class EditorArea extends React.Component {
 
     searchBar.open();
     searchBar.focus();
+    searchBar.saveCursor();
     searchBar.find();
   }
 

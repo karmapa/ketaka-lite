@@ -19,9 +19,14 @@ export default class SearchBar extends React.Component {
   }
 
   cm = null;
+  cursor = null;
   shiftKeyHolding = false;
 
   shouldComponentUpdate = shouldPureComponentUpdate;
+
+  saveCursor() {
+    this.cursor = this.cm.getCursor();
+  }
 
   componentDidMount() {
     this.ime = Ime;
