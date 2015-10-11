@@ -19,8 +19,9 @@ export default class SearchBar extends React.Component {
   };
 
   state = {
-    searchKeyword: '',
-    opened: false
+    mode: MODE_SEARCH,
+    opened: false,
+    searchKeyword: ''
   }
 
   cm = null;
