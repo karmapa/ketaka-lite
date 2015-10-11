@@ -70,7 +70,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onKeyPress(ref, e) {
+  onSearchInputKeyPress(ref, e) {
 
     let searchInput = React.findDOMNode(this.refs[ref]);
     let inputValue = this.ime.keypress(e, {element: searchInput});
@@ -190,7 +190,7 @@ export default class SearchBar extends React.Component {
       onChange: ::this.onSearchInputChange,
       onKeyDown: ::this.onSearchInputKeyDown,
       onKeyUp: ::this.onSearchInputKeyUp,
-      onKeyPress: this.onKeyPress.bind(this, 'searchInput'),
+      onKeyPress: this.onSearchInputKeyPress.bind(this, 'searchInput'),
       value: this.state.searchKeyword,
       ref: 'searchInput',
       type: 'text'
