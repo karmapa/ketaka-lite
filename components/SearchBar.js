@@ -182,7 +182,7 @@ export default class SearchBar extends React.Component {
     clearSearch(this.cm);
   }
 
-  render() {
+  renderSearch() {
 
     let classnames = {
       'box-search': true,
@@ -215,6 +215,33 @@ export default class SearchBar extends React.Component {
         </button>
       </div>
     );
+  }
+
+  renderReplace() {
+
+    let classnames = {
+      'box-search': true,
+      'hidden': ! this.state.opened
+    };
+
+    return (
+      <div className={classNames(classnames)}>
+        <span>Replace: </span>
+        <input type="text" />
+        <span>With: </span>
+        <input type="text" />
+      </div>
+    );
+  }
+
+  render() {
+    let {mode} = this.state;
+    if (MODE_SEARCH === mode) {
+      return this.renderSearch();
+    }
+    if (MODE_REPLACE === mode) {
+      return this.renderReplace();
+    }
   }
 }
 
