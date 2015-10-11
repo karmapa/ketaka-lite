@@ -636,7 +636,6 @@ export default class EditorArea extends React.Component {
 
   toPrevPage() {
     let doc = this.getDoc();
-    let pageCount = _.get(doc, 'pages', []).length;
     let prevPageIndex = doc.pageIndex - 1;
     if (prevPageIndex >= 0) {
       this.props.setPageIndex(doc.uuid, prevPageIndex);
@@ -648,7 +647,7 @@ export default class EditorArea extends React.Component {
   }
 
   render() {
-    let {docs, settings, inputMethod, setPageIndex} = this.props;
+    let {docs, settings, inputMethod} = this.props;
     let classes = {
       [this.props.className]: true,
       'vertical': settings.direction
