@@ -44,7 +44,7 @@ export default class SearchBar extends React.Component {
     this.find(searchKeyword);
   }
 
-  onKeyUp(e) {
+  onSearchInputKeyUp(e) {
     this.ime.keyup(e);
 
     // shift
@@ -189,7 +189,7 @@ export default class SearchBar extends React.Component {
       className: 'search-input',
       onChange: ::this.onSearchInputChange,
       onKeyDown: ::this.onSearchInputKeyDown,
-      onKeyUp: ::this.onKeyUp,
+      onKeyUp: ::this.onSearchInputKeyUp,
       onKeyPress: this.onKeyPress.bind(this, 'searchInput'),
       value: this.state.searchKeyword,
       ref: 'searchInput',
