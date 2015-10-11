@@ -7,6 +7,9 @@ import classNames from 'classnames';
 
 import CodeMirror from 'codemirror';
 
+const MODE_SEARCH = 1;
+const MODE_REPLACE = 2;
+
 export default class SearchBar extends React.Component {
 
   static PropTypes = {
