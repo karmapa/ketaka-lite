@@ -36,7 +36,7 @@ export default class SearchBar extends React.Component {
     CodeMirror.commands.find = () => {};
   }
 
-  onChange(e) {
+  onSearchInputChange(e) {
     let searchKeyword = e.target.value;
     this.setState({
       searchKeyword
@@ -187,7 +187,7 @@ export default class SearchBar extends React.Component {
 
     let searchInputProps = {
       className: 'search-input',
-      onChange: ::this.onChange,
+      onChange: ::this.onSearchInputChange,
       onKeyDown: ::this.onKeyDown,
       onKeyUp: ::this.onKeyUp,
       onKeyPress: this.onKeyPress.bind(this, 'searchInput'),
