@@ -62,7 +62,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onKeyDown(e) {
+  onSearchInputKeyDown(e) {
     this.ime.keydown(e);
 
     if (16 === e.keyCode) {
@@ -188,7 +188,7 @@ export default class SearchBar extends React.Component {
     let searchInputProps = {
       className: 'search-input',
       onChange: ::this.onSearchInputChange,
-      onKeyDown: ::this.onKeyDown,
+      onKeyDown: ::this.onSearchInputKeyDown,
       onKeyUp: ::this.onKeyUp,
       onKeyPress: this.onKeyPress.bind(this, 'searchInput'),
       value: this.state.searchKeyword,
