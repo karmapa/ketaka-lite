@@ -2,7 +2,7 @@
 .box-search {
   border: 1px solid darken($border-color-global, 10);
   border-radius: 0 0 4px 4px;
-  padding: 0.3em 0 0.3em 0.5em;
+  padding: 0.3em;
   z-index: 1;
   position: absolute;
   right: 10em;
@@ -27,5 +27,8 @@
   }
   button.button-close {
     border: 1px solid transparent;
+  }
+  span {
+    padding: 0 0.4em;
   }
 }
