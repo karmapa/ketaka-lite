@@ -185,7 +185,7 @@ export default class SearchBar extends React.Component {
       'hidden': ! this.state.opened
     };
 
-    let inputProps = {
+    let searchInputProps = {
       className: 'search-input',
       onChange: ::this.onChange,
       onKeyDown: ::this.onKeyDown,
@@ -199,7 +199,7 @@ export default class SearchBar extends React.Component {
     return (
       <div className={classNames(classnames)}>
         <span>Search: </span>
-        <input {...inputProps} />
+        <input {...searchInputProps} />
         <button ref="buttonFindPrev" onClick={::this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
