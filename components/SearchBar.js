@@ -16,7 +16,7 @@ export default class SearchBar extends React.Component {
   };
 
   state = {
-    keyword: '',
+    searchKeyword: '',
     opened: false
   }
 
@@ -37,11 +37,11 @@ export default class SearchBar extends React.Component {
   }
 
   onChange(e) {
-    let keyword = e.target.value;
+    let searchKeyword = e.target.value;
     this.setState({
-      keyword
+      searchKeyword
     });
-    this.find(keyword);
+    this.find(searchKeyword);
   }
 
   onKeyUp(e) {
@@ -77,12 +77,12 @@ export default class SearchBar extends React.Component {
 
     if (_.isString(inputValue)) {
       this.setState({
-        keyword: inputValue
+        searchKeyword: inputValue
       });
     }
   }
 
-  find(query = this.state.keyword) {
+  find(query = this.state.searchKeyword) {
     let {cm, cursor} = this;
     clearSearch(cm);
     this.doSearch({cm, query, cursor});
@@ -191,7 +191,7 @@ export default class SearchBar extends React.Component {
       onKeyDown: ::this.onKeyDown,
       onKeyUp: ::this.onKeyUp,
       onKeyPress: this.onKeyPress.bind(this, 'searchInput'),
-      value: this.state.keyword,
+      value: this.state.searchKeyword,
       ref: 'searchInput',
       type: 'text'
     };
