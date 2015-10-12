@@ -292,10 +292,8 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl s', ::this.save);
     keypressListener.simpleCombo('cmd s', ::this.save);
 
-    keypressListener.simpleCombo('alt shift f', ::this.openReplaceBar);
-
     keypressListener.simpleCombo('ctrl f', ::this.openSearchBar);
-    keypressListener.simpleCombo('cmd f', ::this.openSearchBar);
+    keypressListener.simpleCombo('cmd option f', ::this.openReplaceBar);
 
     keypressListener.simpleCombo('esc', ::this.cancel);
 
