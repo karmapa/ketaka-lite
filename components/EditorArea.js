@@ -215,8 +215,12 @@ export default class EditorArea extends React.Component {
 
   save() {
     let self = this;
-    Api.send('save', self.getDoc())
-      .then(() => self.props.save(self.state.docKey));
+    let doc = self.getDoc();
+
+    if (doc) {
+      Api.send('save', doc)
+        .then(() => self.props.save(self.state.docKey));
+    }
   }
 
   onActivateTab(doc) {
@@ -253,11 +257,16 @@ export default class EditorArea extends React.Component {
 
   openSearchBar() {
     let searchBar = this.refs.searchBar;
-
-    searchBar.open();
+    searchBar.openSearchBar();
     searchBar.focus();
     searchBar.saveCursor();
     searchBar.find();
+  }
+
+  openReplaceBar() {
+    let searchBar = this.refs.searchBar;
+    searchBar.openReplaceBar();
+    searchBar.focus();
   }
 
   cancel() {
@@ -282,6 +291,8 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
     keypressListener.simpleCombo('cmd s', ::this.save);
+
+    keypressListener.simpleCombo('alt shift f', ::this.openReplaceBar);
 
     keypressListener.simpleCombo('ctrl f', ::this.openSearchBar);
     keypressListener.simpleCombo('cmd f', ::this.openSearchBar);
