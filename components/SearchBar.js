@@ -19,9 +19,11 @@ export default class SearchBar extends React.Component {
   };
 
   state = {
-    mode: MODE_SEARCH,
-    opened: false,
-    searchKeyword: ''
+    mode: MODE_REPLACE,
+    opened: true,
+    replaceKeyword: '',
+    searchKeyword: '',
+    withKeyword: ''
   }
 
   cm = null;
@@ -82,6 +84,60 @@ export default class SearchBar extends React.Component {
     if (_.isString(inputValue)) {
       this.setState({
         searchKeyword: inputValue
+      });
+    }
+  }
+
+  onReplaceInputChange(e) {
+    let replaceKeyword = e.target.value;
+    this.setState({
+      replaceKeyword
+    });
+  }
+
+  onReplaceInputKeyUp(e) {
+    this.ime.keyup(e);
+  }
+
+  onReplaceInputKeyDown(e) {
+    this.ime.keydown(e);
+  }
+
+  onReplaceInputKeyPress(ref, e) {
+
+    let replaceInput = React.findDOMNode(this.refs[ref]);
+    let inputValue = this.ime.keypress(e, {element: replaceInput});
+
+    if (_.isString(inputValue)) {
+      this.setState({
+        replaceKeyword: inputValue
+      });
+    }
+  }
+
+  onWithInputChange(e) {
+    let replaceKeyword = e.target.value;
+    this.setState({
+      replaceKeyword
+    });
+  }
+
+  onWithInputKeyUp(e) {
+    this.ime.keyup(e);
+  }
+
+  onWithInputKeyDown(e) {
+    this.ime.keydown(e);
+  }
+
+  onWithInputKeyPress(ref, e) {
+
+    let withInput = React.findDOMNode(this.refs[ref]);
+    let inputValue = this.ime.keypress(e, {element: withInput});
+
+    if (_.isString(inputValue)) {
+      this.setState({
+        withKeyword: inputValue
       });
     }
   }
@@ -219,17 +275,39 @@ export default class SearchBar extends React.Component {
 
   renderReplace() {
 
+    let {opened, replaceKeyword, withKeyword} = this.state;
+
     let classnames = {
       'box-search': true,
-      'hidden': ! this.state.opened
+      'hidden': ! opened
+    };
+
+    let replaceInputProps = {
+      onChange: ::this.onReplaceInputChange,
+      onKeyDown: ::this.onReplaceInputKeyDown,
+      onKeyPress: this.onReplaceInputKeyPress.bind(this, 'replaceInput'),
+      onKeyUp: ::this.onReplaceInputKeyUp,
+      ref: 'replaceInput',
+      type: 'text',
+      value: replaceKeyword
+    };
+
+    let withInputProps = {
+      onChange: ::this.onWithInputChange,
+      onKeyDown: ::this.onWithInputKeyDown,
+      onKeyPress: this.onWithInputKeyPress.bind(this, 'withInput'),
+      onKeyUp: ::this.onWithInputKeyUp,
+      ref: 'withInput',
+      type: 'text',
+      value: withKeyword
     };
 
     return (
       <div className={classNames(classnames)}>
         <span>Replace: </span>
-        <input type="text" />
+        <input {...replaceInputProps} />
         <span>With: </span>
-        <input type="text" />
+        <input {...withInputProps} />
       </div>
     );
   }
