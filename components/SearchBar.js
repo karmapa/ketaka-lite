@@ -116,9 +116,8 @@ export default class SearchBar extends React.Component {
   }
 
   onWithInputChange(e) {
-    let replaceKeyword = e.target.value;
     this.setState({
-      replaceKeyword
+      withKeyword: e.target.value
     });
   }
 
