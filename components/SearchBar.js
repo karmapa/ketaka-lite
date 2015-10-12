@@ -58,12 +58,12 @@ export default class SearchBar extends React.Component {
       this.shiftKeyHolding = false;
     }
 
-    if ((13 === e.keyCode) && (! this.shiftKeyHolding)) {
+    if (enterKeyPressed(e) && (! this.shiftKeyHolding)) {
       React.findDOMNode(this.refs.buttonFindNext).click();
     }
 
     // enter
-    if ((13 === e.keyCode) && this.shiftKeyHolding) {
+    if (enterKeyPressed(e) && this.shiftKeyHolding) {
       React.findDOMNode(this.refs.buttonFindPrev).click();
     }
   }
@@ -442,4 +442,8 @@ function parseString(string) {
     let char = map[ch];
     return char ? char : ch;
   });
+}
+
+function enterKeyPressed(e) {
+  return 13 === e.keyCode;
 }
