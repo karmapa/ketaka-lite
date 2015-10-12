@@ -54,7 +54,7 @@ export default class SearchBar extends React.Component {
     this.ime.keyup(e);
 
     // shift
-    if (16 === e.keyCode) {
+    if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = false;
     }
 
@@ -71,7 +71,7 @@ export default class SearchBar extends React.Component {
   onSearchInputKeyDown(e) {
     this.ime.keydown(e);
 
-    if (16 === e.keyCode) {
+    if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
   }
@@ -446,4 +446,8 @@ function parseString(string) {
 
 function enterKeyPressed(e) {
   return 13 === e.keyCode;
+}
+
+function shiftKeyPressed(e) {
+  return 16 === e.keyCode;
 }
