@@ -9,6 +9,7 @@ import CodeMirror from 'codemirror';
 
 const MODE_SEARCH = 1;
 const MODE_REPLACE = 2;
+const MODE_CONFIRM = 3;
 
 export default class SearchBar extends React.Component {
 
@@ -19,8 +20,8 @@ export default class SearchBar extends React.Component {
   };
 
   state = {
-    mode: MODE_REPLACE,
-    opened: true,
+    mode: MODE_SEARCH,
+    opened: false,
     replaceKeyword: '',
     searchKeyword: '',
     withKeyword: ''
@@ -37,9 +38,25 @@ export default class SearchBar extends React.Component {
   }
 
   componentDidMount() {
-    this.ime = Ime;
-    this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
+    let self = this;
+    self.ime = Ime;
+    self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
     CodeMirror.commands.find = () => {};
+    CodeMirror.commands.replace = () => {};
+
+    document.addEventListener('keyup', e => {
+
+      let keyCode = e.keyCode;
+      if (89 === keyCode) {
+        self.yes();
+      }
+      if (78 === keyCode) {
+        self.no();
+      }
+      if (escKeyPressed(e)) {
+        self.stop();
+      }
+    });
   }
 
   onSearchInputChange(e) {
@@ -123,6 +140,10 @@ export default class SearchBar extends React.Component {
 
   onWithInputKeyUp(e) {
     this.ime.keyup(e);
+
+    if (enterKeyPressed(e)) {
+      this.replace(this.cm);
+    }
   }
 
   onWithInputKeyDown(e) {
@@ -188,10 +209,9 @@ export default class SearchBar extends React.Component {
     cm.operation(function() {
       let state = getSearchState(cm);
       let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
+      let pageSwitched = false;
 
       if (! cursor.find(rev)) {
-
-        let pageSwitched = false;
 
         if (rev) {
           pageSwitched = self.props.toPrevPage();
@@ -210,22 +230,42 @@ export default class SearchBar extends React.Component {
           return;
         }
       }
-      cm.setSelection(cursor.from(), cursor.to());
-      cm.scrollIntoView({from: cursor.from(), to: cursor.to()}, 20);
-      state.posFrom = cursor.from();
-      state.posTo = cursor.to();
+      setTimeout(() => {
+        cm.setSelection(cursor.from(), cursor.to());
+        cm.scrollIntoView({from: cursor.from(), to: cursor.to()}, 20);
+        state.posFrom = cursor.from();
+        state.posTo = cursor.to();
+      });
     });
   }
 
   focus() {
-    let searchInput = React.findDOMNode(this.refs.searchInput);
-    if (searchInput) {
-      searchInput.focus();
+    let {mode} = this.state;
+
+    if (MODE_SEARCH === mode) {
+      let searchInput = React.findDOMNode(this.refs.searchInput);
+      if (searchInput) {
+        searchInput.focus();
+      }
+    }
+    if (MODE_REPLACE === mode) {
+      let replaceInput = React.findDOMNode(this.refs.replaceInput);
+      if (replaceInput) {
+        replaceInput.focus();
+      }
     }
   }
 
-  open() {
+  openSearchBar() {
     this.setState({
+      mode: MODE_SEARCH,
+      opened: true
+    });
+  }
+
+  openReplaceBar() {
+    this.setState({
+      mode: MODE_REPLACE,
       opened: true
     });
   }
@@ -235,6 +275,87 @@ export default class SearchBar extends React.Component {
       opened: false
     });
     clearSearch(this.cm);
+  }
+
+  openConfirmDialog(yes, no) {
+
+    this.yes = yes;
+    this.no = no;
+    this.setState({
+      mode: MODE_CONFIRM
+    });
+  }
+
+  replace(cm, all) {
+
+    if (cm.getOption('readOnly')) {
+      return;
+    }
+
+    let self = this;
+    let query = self.state.replaceKeyword;
+    let text = self.state.withKeyword;
+
+    if (! query) {
+      return;
+    }
+
+    query = parseQuery(query);
+    text = parseString(text);
+
+    if (all) {
+      cm.operation(function() {
+        for (let cursor = getSearchCursor(cm, query); cursor.findNext();) {
+          if (! _.isString(query)) {
+            let match = cm.getRange(cursor.from(), cursor.to()).match(query);
+            cursor.replace(text.replace(/\$(\d)/g, (_, i) => match[i]));
+          }
+          else {
+            cursor.replace(text);
+          }
+        }
+      });
+    } else {
+
+      clearSearch(cm);
+
+      let cursor = getSearchCursor(cm, query, cm.getCursor());
+
+      let advance = () => {
+
+        let match = cursor.findNext();
+
+        if (! match) {
+          let pageSwitched = self.props.toNextPage();
+
+          if (pageSwitched) {
+            cursor = getSearchCursor(cm, query);
+            setTimeout(() => {
+              match = cursor.findNext();
+              let from = cursor.from();
+              let to = cursor.to();
+              cm.setSelection(from, to);
+              cm.scrollIntoView({from, to});
+            });
+            return;
+          }
+          self.stop();
+          return;
+        }
+
+        let from = cursor.from();
+        let to = cursor.to();
+        cm.setSelection(from, to);
+        cm.scrollIntoView({from, to});
+
+        self.openConfirmDialog(() => {
+          cursor.replace(_.isString(query) ? text : text.replace(/\$(\d)/g, (_, i) => match[i]));
+          advance();
+        }, advance);
+      };
+
+      advance();
+    }
   }
 
   renderSearch() {
@@ -311,14 +432,55 @@ export default class SearchBar extends React.Component {
     );
   }
 
+  yes() {
+  }
+
+  no() {
+  }
+
+  stop() {
+    this.setState({
+      mode: MODE_REPLACE,
+      opened: false,
+      withKeyword: ''
+    });
+  }
+
+  onConfirmBlur() {
+    this.setState({
+      opened: false
+    });
+  }
+
+  renderConfirm() {
+
+    let classnames = {
+      'box-search': true,
+      'hidden': ! this.state.opened
+    };
+
+    return (
+      <div className={classNames(classnames)} autoFocus={true} onBlur={::this.onConfirmBlur}>
+        <span>Replace ? </span>
+        <button onClick={::this.yes}>Yes</button>
+        <button onClick={::this.no}>No</button>
+        <button onClick={::this.stop}>Stop</button>
+      </div>
+    );
+  }
+
   render() {
-    let {mode} = this.state;
-    if (MODE_SEARCH === mode) {
-      return this.renderSearch();
+    let map = {
+      [MODE_SEARCH]: ::this.renderSearch,
+      [MODE_REPLACE]: ::this.renderReplace,
+      [MODE_CONFIRM]: ::this.renderConfirm,
+    };
+    let renderFunc = map[this.state.mode];
+
+    if (! _.isFunction(renderFunc)) {
+      throw 'Undefined render function';
     }
-    if (MODE_REPLACE === mode) {
-      return this.renderReplace();
-    }
+    return renderFunc();
   }
 }
 
@@ -451,3 +613,8 @@ function enterKeyPressed(e) {
 function shiftKeyPressed(e) {
   return 16 === e.keyCode;
 }
+
+function escKeyPressed(e) {
+  return 27 === e.keyCode;
+}
+
