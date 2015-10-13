@@ -108,6 +108,7 @@ export default class SearchBar extends React.Component {
       this.setState({
         searchKeyword: inputValue
       });
+      this.find(inputValue);
     }
   }
 
