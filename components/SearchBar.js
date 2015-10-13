@@ -465,6 +465,12 @@ export default class SearchBar extends React.Component {
     });
   }
 
+  onConfirmBoxBlur(e) {
+    if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
+      this.close();
+    }
+  }
+
   renderConfirm() {
 
     let classnames = {
@@ -473,7 +479,7 @@ export default class SearchBar extends React.Component {
     };
 
     return (
-      <div className={classNames(classnames)}>
+      <div className={classNames(classnames)} onBlur={::this.onConfirmBoxBlur}>
         <span>Replace ? </span>
         <button onClick={::this.yes}>Yes</button>
         <button onClick={::this.no}>No</button>
