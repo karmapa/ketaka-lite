@@ -172,6 +172,7 @@ export default class SearchBar extends React.Component {
   find(query = this.state.searchKeyword) {
     let {cm, cursor} = this;
     clearSearch(cm);
+    clearSelection(cm);
     this.doSearch({cm, query, cursor});
   }
 
@@ -279,6 +280,8 @@ export default class SearchBar extends React.Component {
   }
 
   close() {
+    let {cm} = this;
+    clearSelection(cm);
     this.setState({
       opened: false
     });
@@ -620,3 +623,7 @@ function escKeyPressed(e) {
   return 27 === e.keyCode;
 }
 
+function clearSelection(cm) {
+  let pos = cm.getCursor();
+  cm.setSelection(pos, pos);
+}
