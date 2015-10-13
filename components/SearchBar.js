@@ -351,6 +351,7 @@ export default class SearchBar extends React.Component {
             });
             return;
           }
+          clearSearch(cm);
           self.stop();
           return;
         }
