@@ -640,6 +640,16 @@ export default class EditorArea extends React.Component {
     return false;
   }
 
+  nextPageHasMatched(keyword) {
+    let doc = this.getDoc();
+    let nextPage = doc.pages[doc.pageIndex + 1];
+    if (nextPage) {
+      let content = _.get(nextPage, 'content', '');
+      return content.includes(keyword);
+    }
+    return false;
+  }
+
   toNextPage() {
     let doc = this.getDoc();
     let pageCount = _.get(doc, 'pages', []).length;
@@ -674,6 +684,7 @@ export default class EditorArea extends React.Component {
 
     let searchBarProps = {
       inputMethod,
+      nextPageHasMatched: ::this.nextPageHasMatched,
       prevPageHasMatched: ::this.prevPageHasMatched,
       toNextPage: ::this.toNextPage,
       toPrevPage: ::this.toPrevPage
