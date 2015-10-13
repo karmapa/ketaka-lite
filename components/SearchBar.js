@@ -216,7 +216,6 @@ export default class SearchBar extends React.Component {
     cm.operation(function() {
       let state = getSearchState(cm);
       let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
-      let pageSwitched = false;
 
       if (! cursor.find(rev)) {
 
@@ -233,10 +232,6 @@ export default class SearchBar extends React.Component {
           }
           self.props.toNextPage();
           cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
-        }
-
-        if (! pageSwitched) {
-          return;
         }
 
         if (! cursor.find(rev)) {
