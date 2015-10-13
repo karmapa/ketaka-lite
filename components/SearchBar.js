@@ -338,9 +338,9 @@ export default class SearchBar extends React.Component {
         let match = cursor.findNext();
 
         if (! match) {
-          let pageSwitched = self.props.toNextPage();
 
-          if (pageSwitched) {
+          if (self.props.nextPageHasMatched(query)) {
+            self.props.toNextPage();
             cursor = getSearchCursor(cm, query);
             setTimeout(() => {
               match = cursor.findNext();
