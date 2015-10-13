@@ -446,12 +446,6 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  onConfirmBlur() {
-    this.setState({
-      opened: false
-    });
-  }
-
   renderConfirm() {
 
     let classnames = {
@@ -460,7 +454,7 @@ export default class SearchBar extends React.Component {
     };
 
     return (
-      <div className={classNames(classnames)} autoFocus={true} onBlur={::this.onConfirmBlur}>
+      <div className={classNames(classnames)}>
         <span>Replace ? </span>
         <button onClick={::this.yes}>Yes</button>
         <button onClick={::this.no}>No</button>
