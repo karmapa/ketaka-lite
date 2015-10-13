@@ -59,6 +59,7 @@ export default class SearchBar extends React.Component {
       }
       // esc
       if (escKeyPressed(e)) {
+        clearSearch(this.cm);
         self.stop();
       }
     });
