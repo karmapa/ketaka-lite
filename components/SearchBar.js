@@ -286,6 +286,7 @@ export default class SearchBar extends React.Component {
     this.setState({
       opened: false
     });
+    cm.focus();
   }
 
   openConfirmDialog(yes, no) {
