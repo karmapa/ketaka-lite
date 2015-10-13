@@ -1,4 +1,6 @@
 require('codemirror/addon/selection/active-line');
+require('codemirror/addon/search/search');
+require('codemirror/addon/search/searchcursor');
 
 import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
@@ -133,7 +135,7 @@ export default class Editor extends React.Component {
       onChange: ::this.onCodemirrorChange,
       options: {
         theme: settings.theme,
-        lineWrapping: true,
+        lineWrapping: false,
         lineNumbers: true,
         styleActiveLine: true
       },

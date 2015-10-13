@@ -6,6 +6,7 @@
 // vendors
 @import url("node_modules/animate.css/animate.css");
 @import url("node_modules/codemirror/theme/zenburn.css");
+@import url("node_modules/codemirror/addon/dialog/dialog.css");
 
 @import 'node_modules/toastr/toastr';
 @import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
@@ -26,6 +27,7 @@
 @import 'components/modal-open';
 @import 'components/modal-settings';
 @import 'components/chunk-editor';
+@import 'components/search-bar';
 
 // themes
 @import 'assets/styles/themes/zenburn';

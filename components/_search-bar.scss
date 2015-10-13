@@ -1,0 +1,35 @@
+
+.box-search {
+  border: 1px solid darken($border-color-global, 10);
+  border-radius: 0 0 4px 4px;
+  padding: 0.3em;
+  z-index: 1;
+  position: absolute;
+  right: 10em;
+  top: 0;
+  span {
+    color: #888;
+  }
+  .search-input {
+    width: 17em;
+  }
+  button {
+    height: 1.8em;
+    border: 1px solid $border-color-global;
+    background: $bg-navigation;
+    color: #888;
+    .glyphicon {
+      top: 3px;
+    }
+    &:active {
+      background: darken($bg-navigation, 7);
+    }
+  }
+  button.button-close {
+    border: 1px solid transparent;
+    background: transparent;
+  }
+  span {
+    padding: 0 0.4em;
+  }
+}

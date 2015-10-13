@@ -227,4 +227,20 @@ $bg-zenburn-error: #e74c3c;
       border-top-color: $bg-zenburn-ex;
     }
   }
+
+  .box-search {
+    span, button {
+      color: $color-zenburn;
+    }
+    button {
+      background: transparent;
+      border: 1px solid $border-color-zenburn;
+      &:hover, &:active {
+        color: lighten($color-zenburn, 10);
+      }
+    }
+    .button-close {
+      border: 1px solid transparent;
+    }
+  }
 }

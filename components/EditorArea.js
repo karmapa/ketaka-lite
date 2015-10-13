@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
-  ModalDocSettings, ModalPageAdd, ChunkEditor} from '.';
+  ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar} from '.';
 import {DocHelper, Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS} from '../constants/AppConstants';
@@ -36,6 +36,7 @@ export default class EditorArea extends React.Component {
     setFontSize: PropTypes.func.isRequired,
     setLineHeight: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
+    setPageIndex: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
@@ -86,11 +87,11 @@ export default class EditorArea extends React.Component {
 
   componentDidUpdate(previousProps, previousState) {
     let docs = this.props.docs;
+    let codemirror = this.getCurrentCodemirror();
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
     }
     if (previousState.docKey !== this.state.docKey) {
-      let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
       this.markFontColor(codemirror);
     }
@@ -99,8 +100,11 @@ export default class EditorArea extends React.Component {
     let previousDoc = this.getDoc(this.state.docKey, previousProps);
 
     if (previousDoc && doc && previousDoc.editChunk && (false === doc.editChunk)) {
-      let codemirror = this.getCurrentCodemirror();
       codemirror.refresh();
+    }
+    let searchBar = this.refs.searchBar;
+    if (searchBar) {
+      searchBar.cm = codemirror;
     }
   }
 
@@ -211,8 +215,12 @@ export default class EditorArea extends React.Component {
 
   save() {
     let self = this;
-    Api.send('save', self.getDoc())
-      .then(() => self.props.save(self.state.docKey));
+    let doc = self.getDoc();
+
+    if (doc) {
+      Api.send('save', doc)
+        .then(() => self.props.save(self.state.docKey));
+    }
   }
 
   onActivateTab(doc) {
@@ -247,6 +255,27 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
+  openSearchBar() {
+    let searchBar = this.refs.searchBar;
+    searchBar.openSearchBar();
+    searchBar.focus();
+    searchBar.saveCursor();
+    searchBar.find();
+  }
+
+  openReplaceBar() {
+    let searchBar = this.refs.searchBar;
+    searchBar.openReplaceBar();
+    searchBar.focus();
+  }
+
+  cancel() {
+    let searchBar = this.refs.searchBar;
+    if (searchBar) {
+      searchBar.close();
+    }
+  }
+
   componentDidMount() {
 
     let keypressListener = this.keypressListener;
@@ -261,6 +290,12 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt left', ::this.rotateTabLeft);
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
+    keypressListener.simpleCombo('cmd s', ::this.save);
+
+    keypressListener.simpleCombo('ctrl f', ::this.openSearchBar);
+    keypressListener.simpleCombo('cmd option f', ::this.openReplaceBar);
+
+    keypressListener.simpleCombo('esc', ::this.cancel);
 
     keypressListener.simpleCombo('alt space', () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
@@ -467,7 +502,7 @@ export default class EditorArea extends React.Component {
   getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
-    return this.refs[editorKey].codemirror;
+    return _.get(this.refs[editorKey], 'codemirror');
   }
 
   cancelDeletePage() {
@@ -595,14 +630,69 @@ export default class EditorArea extends React.Component {
     );
   }
 
+  prevPageHasMatched(keyword) {
+    let doc = this.getDoc();
+    let prevPage = doc.pages[doc.pageIndex - 1];
+    if (prevPage) {
+      let content = _.get(prevPage, 'content', '');
+      return content.includes(keyword);
+    }
+    return false;
+  }
+
+  nextPageHasMatched(keyword) {
+    let doc = this.getDoc();
+    let nextPage = doc.pages[doc.pageIndex + 1];
+    if (nextPage) {
+      let content = _.get(nextPage, 'content', '');
+      return content.includes(keyword);
+    }
+    return false;
+  }
+
+  toNextPage() {
+    let doc = this.getDoc();
+    let pageCount = _.get(doc, 'pages', []).length;
+    let nextPageIndex = doc.pageIndex + 1;
+    if (nextPageIndex < pageCount) {
+      this.props.setPageIndex(doc.uuid, nextPageIndex);
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  toPrevPage() {
+    let doc = this.getDoc();
+    let prevPageIndex = doc.pageIndex - 1;
+    if (prevPageIndex >= 0) {
+      this.props.setPageIndex(doc.uuid, prevPageIndex);
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   render() {
-    let {docs, settings} = this.props;
+    let {docs, settings, inputMethod} = this.props;
     let classes = {
       [this.props.className]: true,
       'vertical': settings.direction
     };
+
+    let searchBarProps = {
+      inputMethod,
+      nextPageHasMatched: ::this.nextPageHasMatched,
+      prevPageHasMatched: ::this.prevPageHasMatched,
+      toNextPage: ::this.toNextPage,
+      toPrevPage: ::this.toPrevPage
+    };
+
     return (
       <div className={classNames(classes)}>
+        <SearchBar ref="searchBar" {...searchBarProps} />
         <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={::this.handleSelect} onClose={::this.handleClose}>
           {docs.map(::this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />

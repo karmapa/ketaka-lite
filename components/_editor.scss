@@ -3,6 +3,10 @@
     border: $border-global;
     height: calc(50vh - (#{$height-non-editor-area - 0.4em} / 2));
   }
+  .CodeMirror-dialog {
+    background: white;
+    color: #555;
+  }
 }
 
 @for $i from 1 through 30 {

@@ -1,25 +1,27 @@
 import * as AppActions from '../actions/AppActions';
 import * as DocActions from '../actions/DocActions';
 import * as constants from '../constants/AppConstants';
-import EditorArea from '../components/EditorArea';
-import Navigation from '../components/Navigation';
+import {EditorArea, Navigation} from '../components';
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 @connect(state => ({
-  settings: state.settings,
   direction: state.direction,
-  readonly: state.readonly,
   docs: state.docs,
-  inputMethod: state.inputMethod
+  inputMethod: state.inputMethod,
+  readonly: state.readonly,
+  settings: state.settings
 }))
 export default class App extends React.Component {
 
   componentDidMount() {
+
+    let {dispatch, settings} = this.props;
+
     document.title = constants.APP_NAME;
-    this.props.dispatch(AppActions.initSettings());
-    this.setBodyClassName(this.props.settings.theme);
+    dispatch(AppActions.initSettings());
+    this.setBodyClassName(settings.theme);
   }
 
   setBodyClassName(className) {
