@@ -16,6 +16,7 @@ export default class SearchBar extends React.Component {
   static PropTypes = {
     inputMethod: PropTypes.string.isRequired,
     nextPageHasMatched: PropTypes.func.isRequired,
+    prevPageHasMatched: PropTypes.func.isRequired,
     toNextPage: PropTypes.func.isRequired,
     toPrevPage: PropTypes.func.isRequired
   };
@@ -215,7 +216,10 @@ export default class SearchBar extends React.Component {
       if (! cursor.find(rev)) {
 
         if (rev) {
-          pageSwitched = self.props.toPrevPage();
+          if (! self.props.prevPageHasMatched(state.query)) {
+            return;
+          }
+          self.props.toPrevPage();
           cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
         }
         else {
