@@ -28,6 +28,7 @@ export default class Editor extends React.Component {
     onColorButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     setInputMethod: PropTypes.func,
+    cancelSpellCheck: PropTypes.func,
     settings: PropTypes.object,
     setFontSize: PropTypes.func,
     setLetterSpacing: PropTypes.func,

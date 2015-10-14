@@ -37,6 +37,8 @@ export default class EditorArea extends React.Component {
     setLineHeight: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
+    toggleSpellCheck: PropTypes.func.isRequired,
+    setSpellCheck: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
@@ -202,6 +204,11 @@ export default class EditorArea extends React.Component {
   }
 
   onInputChange(pageIndex) {
+    let {spellCheckOn} = this.props.settings;
+    if (spellCheckOn) {
+      this.removeSpellCheckOverlay();
+      this.addSpellCheckOverlay();
+    }
     this.props.setPageIndex(this.state.docKey, pageIndex);
   }
 
@@ -432,18 +439,77 @@ export default class EditorArea extends React.Component {
     });
   }
 
-  checkSpelling() {
+  removeSpellCheckOverlay() {
+    let lastOverlay = this.lastOverlay;
+    if (lastOverlay) {
+      let codemirror = this.getCurrentCodemirror();
+      codemirror.removeOverlay(lastOverlay, false);
+      this.lastOverlay = null;
+    }
+  }
+
+  cancelSpellCheck() {
+    this.removeSpellCheckOverlay();
+    this.props.setSpellCheck(false);
+  }
+
+  addSpellCheckOverlay() {
     let codemirror = this.getCurrentCodemirror();
     let content = codemirror.getValue();
 
-    checkSyllables(content)
-      .forEach(result => {
-        let [start, length] = result;
-        let pos = codemirror.posFromIndex(start);
-        let from = {line: pos.line, ch: pos.ch};
-        let to = {line: pos.line, ch: pos.ch + length};
-        codemirror.markText(from, to, {className: 'wrong-spelt'});
-      });
+    let queries = checkSyllables(content)
+      .map(result => result[2]);
+
+    if (_.isEmpty(queries)) {
+      return;
+    }
+
+    let overlay = this.searchOverlay(queries, true);
+    codemirror.addOverlay(overlay);
+
+    this.lastOverlay = overlay;
+  }
+
+  checkSpelling() {
+
+    let {settings, toggleSpellCheck} = this.props;
+    let {spellCheckOn} = settings;
+
+    if (spellCheckOn) {
+      this.removeSpellCheckOverlay();
+    }
+    else {
+      this.addSpellCheckOverlay();
+    }
+    toggleSpellCheck();
+  }
+
+  searchOverlay(queries, caseInsensitive) {
+
+    let str = queries.map(query => query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
+      .join('|');
+
+    let regexp = new RegExp(str, caseInsensitive ? 'gi' : 'g');
+
+    return {
+      token: function(stream) {
+
+        regexp.lastIndex = stream.pos;
+
+        let match = regexp.exec(stream.string);
+
+        if (match && match.index === stream.pos) {
+          stream.pos += match[0].length;
+          return 'searching';
+        }
+        else if (match) {
+          stream.pos = match.index;
+        }
+        else {
+          stream.skipToEnd();
+        }
+      }
+    };
   }
 
   onColorButtonClick(color) {
@@ -596,7 +662,7 @@ export default class EditorArea extends React.Component {
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
     let {setInputMethod, toggleReadonly, setFontSize, setLineHeight,
-      setLetterSpacing} = this.props;
+      setLetterSpacing, settings} = this.props;
 
     let editorProps = {
       className: classNames({'editor': true, 'hidden': editChunk}),
@@ -605,7 +671,6 @@ export default class EditorArea extends React.Component {
       code: page.content || '',
       ref: editorKey,
       key: editorKey,
-      settings: this.props.settings,
       onCodemirrorChange: ::this.onCodemirrorChange,
       onSettingsButtonClick: ::this.onSettingsButtonClick,
       onPageAddButtonClick: ::this.onPageAddButtonClick,
@@ -615,6 +680,7 @@ export default class EditorArea extends React.Component {
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
       onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
       canShowPageDeleteButton: doc.pages.length > 1,
+      settings,
       setInputMethod,
       setFontSize,
       setLineHeight,

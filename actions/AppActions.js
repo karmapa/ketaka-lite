@@ -90,6 +90,18 @@ export function toggleSpellCheck() {
   };
 }
 
+export function setSpellCheck(status) {
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    settings.spellCheckOn = status;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function updateSettings(newSettings) {
   return dispatch => {
 
