@@ -262,20 +262,6 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
-  openSearchBar() {
-    let searchBar = this.refs.searchBar;
-    searchBar.openSearchBar();
-    searchBar.focus();
-    searchBar.saveCursor();
-    searchBar.find();
-  }
-
-  openReplaceBar() {
-    let searchBar = this.refs.searchBar;
-    searchBar.openReplaceBar();
-    searchBar.focus();
-  }
-
   cancel() {
     let searchBar = this.refs.searchBar;
     if (searchBar) {
@@ -298,9 +284,6 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
     keypressListener.simpleCombo('cmd s', ::this.save);
-
-    keypressListener.simpleCombo('ctrl f', ::this.openSearchBar);
-    keypressListener.simpleCombo('cmd option f', ::this.openReplaceBar);
 
     keypressListener.simpleCombo('esc', ::this.cancel);
 
