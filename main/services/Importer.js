@@ -344,28 +344,13 @@ function handleImportPaths(paths, onProgress, override) {
       return markFileType(rows);
     })
     .then(function(rows) {
-      onProgress({progress: 60, type: 'info', message: 'Step5: Find Bamboo Name'});
-      bambooName = getBambooName(rows);
-
-      if (! bambooName) {
-        onProgress({type: 'danger', message: 'Unable to find bamboo name'});
-        return Promise.reject('unable to find bamboo name');
-      }
-      onProgress({type: 'info', message: 'Found bamboo name: ' + bambooName});
-
-      warnInvalidImages(bambooName, rows, onProgress);
-
+      onProgress({progress: 60, type: 'info', message: 'Step5: Generate Bamboo Name'});
       importedRows = rows;
-
-      return Doc.getExistedDocNames();
+      return Doc.findUniqueUntitledName();
     })
-    .then(function(names) {
-
-      if (-1 !== names.indexOf(bambooName) && (true !== override)) {
-        return Promise.reject({type: 'bambooExisted', bambooName: bambooName, paths: paths});
-      }
-
+    .then(function(bambooName) {
       onProgress({progress: 70, type: 'info', message: 'Step6: Create Bamboo By Imported Rows'});
+      warnInvalidImages(bambooName, importedRows, onProgress);
       return createDocByRows(bambooName, importedRows);
     })
     .then(function(doc) {
