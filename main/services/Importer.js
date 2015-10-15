@@ -25,6 +25,12 @@ function isSupportedType(row) {
   return stats.isFile() || stats.isDirectory();
 }
 
+function pluckDirPaths(rows) {
+  return _.chain(rows).remove(isDirectory)
+    .pluck('path')
+    .value();
+}
+
 function scanPaths(rows) {
 
   var dirPaths = _.chain(rows).filter(isDirectory).pluck('path').value();
