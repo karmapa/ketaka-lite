@@ -137,44 +137,65 @@ function createChunkByTextRow(textRow) {
     });
 }
 
-function mergePages(pbPages, imagePages) {
+function mergePages(textContent, pbPages, imagePages) {
 
-  var pages = [].concat(pbPages);
+  imagePages = Doc.sortPages(imagePages);
 
-  _.each(imagePages, function(page) {
-    var existedPbPage = _.find(pbPages, {name: page.name});
-    if (existedPbPage) {
-      existedPbPage.imagePath = page.imagePath;
-    }
-    else {
-      pages.push(page);
-    }
-  });
+  // https://github.com/karmapa/ketaka-lite/wiki/Package-Import-Rules
+  // type A: text file only
+  if (_.isString(textContent) && _.isEmpty(pbPages) && _.isEmpty(imagePages)) {
+    return [Doc.createPage({
+      name: 'txt',
+      content: textContent
+    })];
+  }
 
-  return pages;
+  // type B: image files only
+  if (_.isEmpty(textContent) && _.isEmpty(pbPages) && (imagePages.length > 0)) {
+    return imagePages;
+  }
+
+  // type C: raw text file and image files
+  if ((! _.isEmpty(textContent)) && _.isEmpty(pbPages) && (imagePages.length > 0)) {
+    imagePages[0].content = textContent;
+    return imagePages;
+  }
+}
+
+function readTextRow(row) {
+  if (! row) {
+    return Promise.resolve(null);
+  }
+  return Helper.readFile(row.path)
+    .then(function(buffer) {
+      return buffer.toString();
+    });
 }
 
 function createDocByRows(bambooName, rows) {
 
   var doc;
   var promises = [];
+
+  var textRow = _.first(findTextRow(rows, bambooName));
   var pbRow = findPbFile(rows, bambooName);
   var imageRows = filterImageRows(rows, bambooName);
-  var textRow = findTextRow(rows, bambooName);
-
-  promises.push(createPagesByPbRow(pbRow));
-  promises.push(createPagesByImageRows(bambooName, imageRows));
 
   return Doc.getDoc(bambooName)
     .then(function(data) {
 
-      if (data) {
-        doc = data;
-      }
-      else {
+      doc = data;
+
+      if (! doc) {
         doc = Doc.createDoc({name: bambooName});
-        doc.pages.push(Doc.createPage());
       }
+
+      promises.push(readTextRow(textRow).then(function(content) {
+        doc.chunk = content;
+        return content;
+      }));
+      promises.push(createPagesByPbRow(pbRow));
+      promises.push(createPagesByImageRows(bambooName, imageRows));
 
       return Promise.all(promises);
     })
