@@ -104,12 +104,12 @@ function createPagesByImageRows(bambooName, imageRows) {
   if (_.isEmpty(imageRows)) {
     return [];
   }
-  return _.map(imageRows, function(row) {
+  return Doc.sortPages(_.map(imageRows, function(row) {
     return Doc.createPage({
       name: Doc.getPageNameByImageFilename(row.pathData.name),
       imagePath: row.path
     });
-  });
+  }));
 }
 
 function createPagesByPbRow(pbRow) {
