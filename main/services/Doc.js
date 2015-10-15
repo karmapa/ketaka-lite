@@ -51,7 +51,7 @@ function getImageFilenameByDoc(doc) {
 }
 
 function getPageNameByImageFilename(filename) {
-  return _.spread(function(all, name, volume, page, char) {
+  return _.spread(function(all, volume, page, char) {
     if (! all) {
       return Path.basename(filename);
     }
