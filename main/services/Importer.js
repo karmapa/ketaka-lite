@@ -97,9 +97,7 @@ function textRowWithBambooName(bambooName, row) {
 }
 
 function filterImageRows(rows, bambooName) {
-  return _.chain(rows)
-    .filter(isValidImageFileType)
-    .value();
+  return rows.filter(isValidImageFileType);
 }
 
 function createPagesByImageRows(bambooName, imageRows) {
