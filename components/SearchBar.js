@@ -43,8 +43,18 @@ export default class SearchBar extends React.Component {
     let self = this;
     self.ime = Ime;
     self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
-    CodeMirror.commands.find = () => {};
-    CodeMirror.commands.replace = () => {};
+
+    CodeMirror.commands.find = () => {
+      self.openSearchBar();
+      self.focus();
+      self.saveCursor();
+      self.find();
+    };
+
+    CodeMirror.commands.replace = () => {
+      self.openReplaceBar();
+      self.focus();
+    };
 
     document.addEventListener('keyup', e => {
 

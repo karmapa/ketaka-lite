@@ -11,9 +11,9 @@ $height-editor-toolbar: 1.9em;
     margin: 0;
     transition: $transition-global;
     border: $border-editor-toolbar;
-    background-color: $bg-editor-toolbar;
+    background: $bg-editor-toolbar;
     &:hover {
-      background-color: darken($bg-editor-toolbar, 4);
+      background: darken($bg-editor-toolbar, 4);
     }
     &:focus {
       border: $border-editor-toolbar-ex;
@@ -23,6 +23,10 @@ $height-editor-toolbar: 1.9em;
       color: lighten($color-editor-toolbar, 80);
       cursor: not-allowed;
     }
+  }
+
+  .button-spell-check.on {
+    background: darken($bg-editor-toolbar, 10);
   }
 
   .section {
