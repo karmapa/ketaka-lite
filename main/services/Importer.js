@@ -33,7 +33,8 @@ function pluckDirPaths(rows) {
 
 function scanPaths(rows) {
 
-  var dirPaths = _.chain(rows).filter(isDirectory).pluck('path').value();
+  var dirPaths = pluckDirPaths(rows);
+
 
   return Helper.readDirs(dirPaths)
     .then(function(subpaths) {
