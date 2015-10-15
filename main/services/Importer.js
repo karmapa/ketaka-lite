@@ -35,13 +35,16 @@ function scanPaths(rows) {
 
   var dirPaths = pluckDirPaths(rows);
 
+  if (_.isEmpty(dirPaths)) {
+    return rows;
+  }
 
   return Helper.readDirs(dirPaths)
     .then(function(subpaths) {
       return Helper.getPathsType(_.flatten(subpaths, true));
     })
     .then(function(subrows) {
-      return rows.concat(subrows);
+      return scanPaths(rows.concat(subrows));
     });
 }
 
