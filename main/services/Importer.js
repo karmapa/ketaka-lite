@@ -316,7 +316,7 @@ function handleImportPaths(paths, onProgress, override) {
 
   onProgress = onProgress || _.noop;
 
-  var bambooName, importedRows;
+  var bambooName;
 
   if (_.isEmpty(paths)) {
     return Promise.resolve([]);
