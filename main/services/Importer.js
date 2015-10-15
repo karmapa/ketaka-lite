@@ -204,15 +204,10 @@ function createDocByRows(bambooName, rows) {
     })
     .then(function(pages) {
 
-      if (pages.length > 0) {
-        doc.pages = Doc.sortPages(pages);
+      if (0 === pages.length) {
+        throw 'Import failed';
       }
-    })
-    .then(function() {
-      return createChunkByTextRow(textRow);
-    })
-    .then(function(chunk) {
-      doc.chunk = chunk;
+      doc.pages = pages;
       return doc;
     });
 }
