@@ -80,11 +80,8 @@ function findPbFile(rows, bambooName) {
     .value();
 }
 
-function findTextRow(rows, bambooName) {
-  return _.chain(rows)
-    .filter(isValidTextRow)
-    .find(textRowWithBambooName.bind(null, bambooName))
-    .value();
+function findTextRow(rows) {
+  return rows.filter(isValidTextRow);
 }
 
 function imageFileWithBambooName(bambooName, row) {
