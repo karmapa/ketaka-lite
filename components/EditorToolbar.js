@@ -89,7 +89,7 @@ export default class EditorToolbar extends React.Component {
       pageIndex
     };
 
-    let {readonly, inputMethod} = settings;
+    let {readonly, inputMethod, spellCheckOn} = settings;
 
     let classButtonReadonly = {
       'glyphicon': true,
@@ -130,7 +130,8 @@ export default class EditorToolbar extends React.Component {
           </OverlayTrigger>
 
           <OverlayTrigger placement='top' overlay={<Tooltip>Spell Check</Tooltip>}>
-            <button className="button-spell-check" onClick={onSpellCheckButtonClick}>
+            <button className={classNames({'button-spell-check': true, 'on': spellCheckOn})}
+              onClick={onSpellCheckButtonClick}>
               <i className="glyphicon glyphicon-ok"></i>
             </button>
           </OverlayTrigger>

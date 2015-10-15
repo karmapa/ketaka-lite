@@ -77,6 +77,31 @@ export function setLetterSpacing(letterSpacing) {
   };
 }
 
+export function toggleSpellCheck() {
+
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    settings.spellCheckOn = ! settings.spellCheckOn;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
+  };
+}
+
+export function setSpellCheck(status) {
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    settings.spellCheckOn = status;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function updateSettings(newSettings) {
   return dispatch => {
 
