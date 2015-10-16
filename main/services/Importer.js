@@ -241,7 +241,7 @@ function createDocByRows(bambooName, rows) {
         doc.chunk = content;
         return content;
       }));
-      promises.push(createPagesByPbRow(pbRow));
+      promises.push(createPagesByPbRows(pbRows));
       promises.push(createPagesByImageRows(imageRows));
 
       return Promise.all(promises);
