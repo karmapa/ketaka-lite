@@ -12,6 +12,8 @@ var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
 var REGEXP_PAGE = constants.REGEXP_PAGE;
 
+var htmlparser = require('htmlparser');
+
 function isDirectory(row) {
   return row.stats.isDirectory();
 }
