@@ -269,6 +269,38 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  splitPage() {
+
+    let doc = this.getDoc();
+    let cm = this.getCurrentCodemirror();
+    if (_.isEmpty(cm)) {
+      return;
+    }
+
+    let cursor = cm.getCursor();
+    let content = cm.getValue();
+    let index = cm.indexFromPos(cursor);
+
+    let firstPart = content.substring(0, index);
+    let secondPart = content.substring(index, content.length);
+    let pageIndex = doc.pageIndex;
+    let pages = doc.pages;
+
+    if (pageIndex < (pages.length - 1)) {
+
+      cm.setValue(firstPart);
+      cursor = cm.getCursor();
+      cm.setCursor({line: cursor.line});
+
+      let nextPageIndex = pageIndex + 1;
+
+      let nextPage = pages[nextPageIndex];
+      let nextPageContent = secondPart + nextPage.content;
+
+      this.props.writePageContent(doc.uuid, nextPageIndex, nextPageContent);
+    }
+  }
+
   componentDidMount() {
 
     let keypressListener = this.keypressListener;
@@ -284,6 +316,8 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
     keypressListener.simpleCombo('ctrl s', ::this.save);
     keypressListener.simpleCombo('cmd s', ::this.save);
+
+    keypressListener.simpleCombo('ctrl enter', ::this.splitPage);
 
     keypressListener.simpleCombo('esc', ::this.cancel);
 
