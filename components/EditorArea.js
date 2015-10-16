@@ -290,7 +290,7 @@ export default class EditorArea extends React.Component {
 
       cm.setValue(firstPart);
       cursor = cm.getCursor();
-      cm.setCursor({line: cursor.line});
+      cm.setCursor({line: cm.lastLine()});
 
       let nextPageIndex = pageIndex + 1;
 
