@@ -299,6 +299,9 @@ export default class EditorArea extends React.Component {
 
       this.props.writePageContent(doc.uuid, nextPageIndex, nextPageContent);
     }
+    else {
+      this.refs.toast.error('You are on the last page');
+    }
   }
 
   componentDidMount() {
