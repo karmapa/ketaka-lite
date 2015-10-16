@@ -111,7 +111,7 @@ function createPagesByImageRows(imageRows) {
   }));
 }
 
-function createPagesByPbContent(content) {
+function createPagesByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
 
@@ -128,7 +128,8 @@ function createPagesByPbContent(content) {
         if (isPbNode(node)) {
           currentPage = Doc.createPage({
             name: node.attribs.id,
-            content: ''
+            content: '',
+            pathData: pathData
           });
           pages.push(currentPage);
         }
@@ -136,7 +137,6 @@ function createPagesByPbContent(content) {
           currentPage.content += node.data;
         }
       });
-
       resolve(pages);
     }));
     parser.parseComplete(content);
@@ -158,10 +158,13 @@ function createPagesByPbRows(pbRows) {
   }
 
   var paths = _.pluck(pbRows, 'path');
+  var pathDataSets = _.pluck(pbRows, 'pathData');
 
   return Helper.readFiles(paths)
     .then(function(contents) {
-      var promises = contents.map(createPagesByPbContent);
+      var promises = contents.map(function(content, index) {
+        return createPagesByPbContent(content, pathDataSets[index]);
+      });
       return Promise.all(promises);
     })
     .then(function(pages) {
@@ -179,9 +182,55 @@ function createChunkByTextRow(textRow) {
     });
 }
 
-function mergePages(textContent, pbPages, imagePages) {
+function checkDuplicatedPbPages(pbPages) {
+  var usedNames = [];
+  var references = [];
+  var duplicatedPbPages = [];
+
+  pbPages.forEach(function(page) {
+
+    var name = page.name;
+    var index = usedNames.indexOf(name);
+    var notFound = -1 === index;
+
+    if (notFound) {
+      usedNames.push(name);
+    }
+    else {
+      if (! _.find(references, {name: page.name})) {
+        references.push({
+          name: page.name,
+          base: page.pathData.base
+        });
+      }
+      duplicatedPbPages.push({
+        name: page.name,
+        base: page.pathData.base
+      });
+    }
+  });
+
+  duplicatedPbPages = references.concat(duplicatedPbPages);
+  return Doc.sortPages(duplicatedPbPages);
+}
+
+function mergePages(onProgress, textContent, pbPages, imagePages) {
 
   imagePages = Doc.sortPages(imagePages);
+  pbPages = Doc.sortPages(pbPages);
+
+  var duplicatedPbPages = checkDuplicatedPbPages(pbPages);
+
+  if (duplicatedPbPages.length > 0) {
+    var messages = duplicatedPbPages.map(function(page) {
+      return {
+        type: 'warning',
+        message: page.name + ' in ' + page.base + ' duplicated.'
+      };
+    });
+    onProgress(messages);
+    throw 'Import failed';
+  }
 
   // https://github.com/karmapa/ketaka-lite/wiki/Package-Import-Rules
   // type A: text file only
@@ -207,6 +256,11 @@ function mergePages(textContent, pbPages, imagePages) {
   if (_.isEmpty(textContent) && (pbPages.length > 0) && _.isEmpty(imagePages)) {
     return pbPages;
   }
+
+  // type E: PB files and images
+  if (_.isEmpty(textContent) && (pbPages.length > 0) && (imagePages.length > 0)) {
+    return pbPages;
+  }
 }
 
 function readTextRow(row) {
@@ -219,7 +273,7 @@ function readTextRow(row) {
     });
 }
 
-function createDocByRows(bambooName, rows) {
+function createDocByRows(bambooName, rows, onProgress) {
 
   var doc;
   var promises = [];
@@ -247,7 +301,7 @@ function createDocByRows(bambooName, rows) {
       return Promise.all(promises);
     })
     .then(function(sets) {
-      return _.spread(mergePages)(sets);
+      return _.spread(mergePages.bind(null, onProgress))(sets);
     })
     .then(function(pages) {
 
@@ -398,7 +452,7 @@ function handleImportPaths(paths, onProgress, override) {
     .then(function(bambooName) {
       onProgress({progress: 70, type: 'info', message: 'Step6: Create Bamboo By Imported Rows'});
       warnInvalidImages(bambooName, importedRows, onProgress);
-      return createDocByRows(bambooName, importedRows);
+      return createDocByRows(bambooName, importedRows, onProgress);
     })
     .then(function(doc) {
       onProgress({progress: 80, type: 'info', message: 'Step7: Copy Images'});
@@ -452,7 +506,7 @@ function isValidImageFileType(row) {
 
 function isValidPbFile(row) {
   var pathData = row.pathData;
-  return row.stats.isFile() && ('.csv' === pathData.ext);
+  return row.stats.isFile() && ('.xml' === pathData.ext);
 }
 
 function isValidTextRow(row) {
