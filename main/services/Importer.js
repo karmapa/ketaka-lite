@@ -214,13 +214,7 @@ function getDuplicatedPbPages(pbPages) {
   return Doc.sortPages(duplicatedPbPages);
 }
 
-function mergePages(onProgress, textContent, pbPages, imagePages) {
-
-  imagePages = Doc.sortPages(imagePages);
-  pbPages = Doc.sortPages(pbPages);
-
-  var duplicatedPbPages = checkDuplicatedPbPages(pbPages);
-
+function warnDuplicatePbPages(onProgress, duplicatedPbPages) {
   if (duplicatedPbPages.length > 0) {
     var messages = duplicatedPbPages.map(function(page) {
       return {
@@ -231,10 +225,22 @@ function mergePages(onProgress, textContent, pbPages, imagePages) {
     onProgress(messages);
     throw 'Import failed';
   }
+}
+
+function mergePages(onProgress, textContent, pbPages, imagePages) {
+
+  imagePages = Doc.sortPages(imagePages);
+  pbPages = Doc.sortPages(pbPages);
+
+  var hasPbs = pbPages.length > 0;
+  var hasImages = imagePages.length > 0;
+  var hasRawText = _.isString(textContent);
+
+  warnDuplicatePbPages(onProgress, getDuplicatedPbPages(pbPages));
 
   // https://github.com/karmapa/ketaka-lite/wiki/Package-Import-Rules
   // type A: text file only
-  if (_.isString(textContent) && _.isEmpty(pbPages) && _.isEmpty(imagePages)) {
+  if (hasRawText && (! hasPbs) && (! hasImages)) {
     return [Doc.createPage({
       name: 'txt',
       content: textContent
@@ -242,24 +248,52 @@ function mergePages(onProgress, textContent, pbPages, imagePages) {
   }
 
   // type B: image files only
-  if (_.isEmpty(textContent) && _.isEmpty(pbPages) && (imagePages.length > 0)) {
+  if ((! hasRawText) && (! hasPbs) && hasImages) {
     return imagePages;
   }
 
   // type C: raw text file and image files
-  if ((! _.isEmpty(textContent)) && _.isEmpty(pbPages) && (imagePages.length > 0)) {
-    imagePages[0].content = textContent;
+  if (hasRawText && (! hasPbs) && hasImages) {
+    _.first(imagePages).content = textContent;
     return imagePages;
   }
 
   // type D: PB files only
-  if (_.isEmpty(textContent) && (pbPages.length > 0) && _.isEmpty(imagePages)) {
+  if ((! hasRawText) && hasPbs && (! hasImages)) {
     return pbPages;
   }
 
   // type E: PB files and images
-  if (_.isEmpty(textContent) && (pbPages.length > 0) && (imagePages.length > 0)) {
+  if ((! hasRawText) && hasPbs && hasImages) {
+
+    imagePages.forEach(function(page) {
+      var name = page.name;
+      var pbPage = _.find(pbPages, {name: name});
+      if (pbPage) {
+        page.content = pbPage.content;
+        _.remove(pbPages, {name: name});
+      }
+    });
+    return Doc.sortPages(imagePages.concat(pbPages));
+  }
+
+  // type F: PB files and text file
+  if (hasRawText && hasPbs && (! hasImages)) {
     return pbPages;
+  }
+
+  // type G: PB files and text file
+  if (hasRawText && hasPbs && hasImages) {
+
+    imagePages.forEach(function(page) {
+      var name = page.name;
+      var pbPage = _.find(pbPages, {name: name});
+      if (pbPage) {
+        page.content = pbPage.content;
+        _.remove(pbPages, {name: name});
+      }
+    });
+    return Doc.sortPages(imagePages.concat(pbPages));
   }
 }
 
@@ -349,14 +383,13 @@ function warnInvalidImages(bambooName, rows, onProgress) {
   });
   var messages = [];
   rowsWithExtJpg.forEach(function(row) {
+
     if (! isValidImageFileType(row)) {
       var fileType = _.get(row, 'fileType.mime');
       messages.push({type: 'warning', message: 'Ignore image ' +
         row.pathData.base + ' with an invalid file type ' + fileType});
     }
-    else if (! imageFileWithBambooName(bambooName, row)) {
-      messages.push({type: 'warning', message: row.pathData.base + ' doesn\'t match page name format thus order is not guaranteed'});
-    }
+
   });
   if (messages.length > 0) {
     onProgress(messages);
