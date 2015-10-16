@@ -111,18 +111,61 @@ function createPagesByImageRows(imageRows) {
   }));
 }
 
-function createPagesByPbRow(pbRow) {
+function createPagesByPbContent(content) {
 
-  if (! pbRow) {
+  return new Promise(function(resolve, reject) {
+
+    var parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
+
+      if (err) {
+        return reject(error);
+      }
+
+      var pages = [];
+      var currentPage = null;
+
+      dom.forEach(function(node) {
+        if (isPbNode(node)) {
+          currentPage = Doc.createPage({
+            name: node.attribs.id,
+            content: ''
+          });
+          pages.push(currentPage);
+        }
+        if (isTextNode(node) && currentPage) {
+          currentPage.content += node.data;
+        }
+      });
+
+      resolve(pages);
+    }));
+    parser.parseComplete(content);
+  });
+}
+
+function isPbNode(node) {
+  return ('tag' === node.type) && ('pb' === node.name);
+}
+
+function isTextNode(node) {
+  return 'text' === node.type;
+}
+
+function createPagesByPbRows(pbRows) {
+
+  if (_.isEmpty(pbRows)) {
     return [];
   }
 
-  return Helper.readFile(pbRow.path)
-    .then(function(csvBuffer) {
-      return Helper.parseCsvBuffer(csvBuffer);
+  var paths = _.pluck(pbRows, 'path');
+
+  return Helper.readFiles(paths)
+    .then(function(contents) {
+      var promises = contents.map(createPagesByPbContent);
+      return Promise.all(promises);
     })
-    .then(function(csvData) {
-      return createPagesByCsvData(csvData);
+    .then(function(pages) {
+      return _.flatten(pages);
     });
 }
 
