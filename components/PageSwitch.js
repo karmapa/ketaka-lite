@@ -14,6 +14,14 @@ export default class PageSwitch extends React.Component {
     inputValue: this.props.pageNames[this.props.pageIndex]
   };
 
+  isFirst() {
+    return 0 === this.props.pageIndex;
+  }
+
+  isLast() {
+    return this.props.pageIndex === (this.props.pageNames.length - 1);
+  }
+
   hasPrevious() {
     return !! this.props.pageNames[this.props.pageIndex - 1];
   }
@@ -76,6 +84,14 @@ export default class PageSwitch extends React.Component {
     }
   }
 
+  toFirst() {
+    this.props.onInputChange(0);
+  }
+
+  toLast() {
+    this.props.onInputChange(this.props.pageNames.length - 1);
+  }
+
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   componentWillUpdate(nextProps) {
@@ -90,6 +106,9 @@ export default class PageSwitch extends React.Component {
   render() {
     return (
       <div className={this.props.className}>
+        <button className="button-first" disabled={::this.isFirst()} onClick={::this.toFirst}>
+          <i className="glyphicon glyphicon-backward"></i>
+        </button>
         <button className="button-arrow-left" disabled={! ::this.hasPrevious()} onClick={::this.previous}>
           <i className="glyphicon glyphicon-menu-left"></i>
         </button>
@@ -97,6 +116,9 @@ export default class PageSwitch extends React.Component {
             onChange={::this.onInputChange} onKeyDown={::this.onInputKeyDown} onBlur={::this.onInputBlur} />
         <button className="button-arrow-right" disabled={! ::this.hasNext()} onClick={::this.next}>
           <i className="glyphicon glyphicon-menu-right"></i>
+        </button>
+        <button className="button-last" disabled={::this.isLast()} onClick={::this.toLast}>
+          <i className="glyphicon glyphicon-forward"></i>
         </button>
       </div>
     );
