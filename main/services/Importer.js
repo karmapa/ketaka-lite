@@ -12,6 +12,8 @@ var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
 var REGEXP_PAGE = constants.REGEXP_PAGE;
 
+var htmlparser = require('htmlparser');
+
 function isDirectory(row) {
   return row.stats.isDirectory();
 }
@@ -25,16 +27,26 @@ function isSupportedType(row) {
   return stats.isFile() || stats.isDirectory();
 }
 
+function pluckDirPaths(rows) {
+  return _.chain(rows).remove(isDirectory)
+    .pluck('path')
+    .value();
+}
+
 function scanPaths(rows) {
 
-  var dirPaths = _.chain(rows).filter(isDirectory).pluck('path').value();
+  var dirPaths = pluckDirPaths(rows);
+
+  if (_.isEmpty(dirPaths)) {
+    return rows;
+  }
 
   return Helper.readDirs(dirPaths)
     .then(function(subpaths) {
       return Helper.getPathsType(_.flatten(subpaths, true));
     })
     .then(function(subrows) {
-      return rows.concat(subrows);
+      return scanPaths(rows.concat(subrows));
     });
 }
 
@@ -63,18 +75,12 @@ function createPagesByCsvData(csvData) {
   });
 }
 
-function findPbFile(rows, bambooName) {
-  return _.chain(rows)
-    .filter(isValidPbFile)
-    .find(pbRowWithBambooName.bind(null, bambooName))
-    .value();
+function findPbRows(rows) {
+  return rows.filter(isValidPbFile);
 }
 
-function findTextRow(rows, bambooName) {
-  return _.chain(rows)
-    .filter(isValidTextRow)
-    .find(textRowWithBambooName.bind(null, bambooName))
-    .value();
+function findTextRow(rows) {
+  return rows.filter(isValidTextRow);
 }
 
 function imageFileWithBambooName(bambooName, row) {
@@ -90,35 +96,79 @@ function textRowWithBambooName(bambooName, row) {
 }
 
 function filterImageRows(rows, bambooName) {
-  return _.chain(rows)
-    .filter(isValidImageFileType)
-    .value();
+  return rows.filter(isValidImageFileType);
 }
 
-function createPagesByImageRows(bambooName, imageRows) {
+function createPagesByImageRows(imageRows) {
   if (_.isEmpty(imageRows)) {
     return [];
   }
-  return _.map(imageRows, function(row) {
+  return Doc.sortPages(_.map(imageRows, function(row) {
     return Doc.createPage({
       name: Doc.getPageNameByImageFilename(row.pathData.name),
       imagePath: row.path
     });
+  }));
+}
+
+function createPagesByPbContent(content, pathData) {
+
+  return new Promise(function(resolve, reject) {
+
+    var parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
+
+      if (err) {
+        return reject(error);
+      }
+
+      var pages = [];
+      var currentPage = null;
+
+      dom.forEach(function(node) {
+        if (isPbNode(node)) {
+          currentPage = Doc.createPage({
+            name: node.attribs.id,
+            content: '',
+            pathData: pathData
+          });
+          pages.push(currentPage);
+        }
+        if (isTextNode(node) && currentPage) {
+          currentPage.content += node.data;
+        }
+      });
+      resolve(pages);
+    }));
+    parser.parseComplete(content);
   });
 }
 
-function createPagesByPbRow(pbRow) {
+function isPbNode(node) {
+  return ('tag' === node.type) && ('pb' === node.name);
+}
 
-  if (! pbRow) {
+function isTextNode(node) {
+  return 'text' === node.type;
+}
+
+function createPagesByPbRows(pbRows) {
+
+  if (_.isEmpty(pbRows)) {
     return [];
   }
 
-  return Helper.readFile(pbRow.path)
-    .then(function(csvBuffer) {
-      return Helper.parseCsvBuffer(csvBuffer);
+  var paths = _.pluck(pbRows, 'path');
+  var pathDataSets = _.pluck(pbRows, 'pathData');
+
+  return Helper.readFiles(paths)
+    .then(function(contents) {
+      var promises = contents.map(function(content, index) {
+        return createPagesByPbContent(content, pathDataSets[index]);
+      });
+      return Promise.all(promises);
     })
-    .then(function(csvData) {
-      return createPagesByCsvData(csvData);
+    .then(function(pages) {
+      return _.flatten(pages);
     });
 }
 
@@ -132,61 +182,167 @@ function createChunkByTextRow(textRow) {
     });
 }
 
-function mergePages(pbPages, imagePages) {
+function getDuplicatedPbPages(pbPages) {
+  var usedNames = [];
+  var references = [];
+  var duplicatedPbPages = [];
 
-  var pages = [].concat(pbPages);
+  pbPages.forEach(function(page) {
 
-  _.each(imagePages, function(page) {
-    var existedPbPage = _.find(pbPages, {name: page.name});
-    if (existedPbPage) {
-      existedPbPage.imagePath = page.imagePath;
+    var name = page.name;
+    var index = usedNames.indexOf(name);
+    var notFound = -1 === index;
+
+    if (notFound) {
+      usedNames.push(name);
     }
     else {
-      pages.push(page);
+      if (! _.find(references, {name: page.name})) {
+        references.push({
+          name: page.name,
+          base: page.pathData.base
+        });
+      }
+      duplicatedPbPages.push({
+        name: page.name,
+        base: page.pathData.base
+      });
     }
   });
 
-  return pages;
+  duplicatedPbPages = references.concat(duplicatedPbPages);
+  return Doc.sortPages(duplicatedPbPages);
 }
 
-function createDocByRows(bambooName, rows) {
+function warnDuplicatePbPages(onProgress, duplicatedPbPages) {
+  if (duplicatedPbPages.length > 0) {
+    var messages = duplicatedPbPages.map(function(page) {
+      return {
+        type: 'warning',
+        message: page.name + ' in ' + page.base + ' duplicated.'
+      };
+    });
+    onProgress(messages);
+    throw 'Import failed';
+  }
+}
+
+function mergePages(onProgress, textContent, pbPages, imagePages) {
+
+  imagePages = Doc.sortPages(imagePages);
+  pbPages = Doc.sortPages(pbPages);
+
+  var hasPbs = pbPages.length > 0;
+  var hasImages = imagePages.length > 0;
+  var hasRawText = _.isString(textContent);
+
+  warnDuplicatePbPages(onProgress, getDuplicatedPbPages(pbPages));
+
+  // https://github.com/karmapa/ketaka-lite/wiki/Package-Import-Rules
+  // type A: text file only
+  if (hasRawText && (! hasPbs) && (! hasImages)) {
+    return [Doc.createPage({
+      name: 'txt',
+      content: textContent
+    })];
+  }
+
+  // type B: image files only
+  if ((! hasRawText) && (! hasPbs) && hasImages) {
+    return imagePages;
+  }
+
+  // type C: raw text file and image files
+  if (hasRawText && (! hasPbs) && hasImages) {
+    _.first(imagePages).content = textContent;
+    return imagePages;
+  }
+
+  // type D: PB files only
+  if ((! hasRawText) && hasPbs && (! hasImages)) {
+    return pbPages;
+  }
+
+  // type E: PB files and images
+  if ((! hasRawText) && hasPbs && hasImages) {
+
+    imagePages.forEach(function(page) {
+      var name = page.name;
+      var pbPage = _.find(pbPages, {name: name});
+      if (pbPage) {
+        page.content = pbPage.content;
+        _.remove(pbPages, {name: name});
+      }
+    });
+    return Doc.sortPages(imagePages.concat(pbPages));
+  }
+
+  // type F: PB files and text file
+  if (hasRawText && hasPbs && (! hasImages)) {
+    return pbPages;
+  }
+
+  // type G: PB files and text file
+  if (hasRawText && hasPbs && hasImages) {
+
+    imagePages.forEach(function(page) {
+      var name = page.name;
+      var pbPage = _.find(pbPages, {name: name});
+      if (pbPage) {
+        page.content = pbPage.content;
+        _.remove(pbPages, {name: name});
+      }
+    });
+    return Doc.sortPages(imagePages.concat(pbPages));
+  }
+}
+
+function readTextRow(row) {
+  if (! row) {
+    return Promise.resolve(null);
+  }
+  return Helper.readFile(row.path)
+    .then(function(buffer) {
+      return buffer.toString();
+    });
+}
+
+function createDocByRows(bambooName, rows, onProgress) {
 
   var doc;
   var promises = [];
-  var pbRow = findPbFile(rows, bambooName);
-  var imageRows = filterImageRows(rows, bambooName);
-  var textRow = findTextRow(rows, bambooName);
 
-  promises.push(createPagesByPbRow(pbRow));
-  promises.push(createPagesByImageRows(bambooName, imageRows));
+  var textRow = _.first(findTextRow(rows, bambooName));
+  var pbRows = findPbRows(rows);
+  var imageRows = filterImageRows(rows, bambooName);
 
   return Doc.getDoc(bambooName)
     .then(function(data) {
 
-      if (data) {
-        doc = data;
-      }
-      else {
+      doc = data;
+
+      if (! doc) {
         doc = Doc.createDoc({name: bambooName});
-        doc.pages.push(Doc.createPage());
       }
+
+      promises.push(readTextRow(textRow).then(function(content) {
+        doc.chunk = content;
+        return content;
+      }));
+      promises.push(createPagesByPbRows(pbRows));
+      promises.push(createPagesByImageRows(imageRows));
 
       return Promise.all(promises);
     })
     .then(function(sets) {
-      return _.spread(mergePages)(sets);
+      return _.spread(mergePages.bind(null, onProgress))(sets);
     })
     .then(function(pages) {
 
-      if (pages.length > 0) {
-        doc.pages = Doc.sortPages(pages);
+      if (0 === pages.length) {
+        throw 'Import failed';
       }
-    })
-    .then(function() {
-      return createChunkByTextRow(textRow);
-    })
-    .then(function(chunk) {
-      doc.chunk = chunk;
+      doc.pages = pages;
       return doc;
     });
 }
@@ -227,14 +383,13 @@ function warnInvalidImages(bambooName, rows, onProgress) {
   });
   var messages = [];
   rowsWithExtJpg.forEach(function(row) {
+
     if (! isValidImageFileType(row)) {
       var fileType = _.get(row, 'fileType.mime');
       messages.push({type: 'warning', message: 'Ignore image ' +
         row.pathData.base + ' with an invalid file type ' + fileType});
     }
-    else if (! imageFileWithBambooName(bambooName, row)) {
-      messages.push({type: 'warning', message: row.pathData.base + ' doesn\'t match page name format thus order is not guaranteed'});
-    }
+
   });
   if (messages.length > 0) {
     onProgress(messages);
@@ -295,7 +450,7 @@ function handleImportPaths(paths, onProgress, override) {
 
   onProgress = onProgress || _.noop;
 
-  var bambooName, importedRows;
+  var bambooName;
 
   if (_.isEmpty(paths)) {
     return Promise.resolve([]);
@@ -323,29 +478,14 @@ function handleImportPaths(paths, onProgress, override) {
       return markFileType(rows);
     })
     .then(function(rows) {
-      onProgress({progress: 60, type: 'info', message: 'Step5: Find Bamboo Name'});
-      bambooName = getBambooName(rows);
-
-      if (! bambooName) {
-        onProgress({type: 'danger', message: 'Unable to find bamboo name'});
-        return Promise.reject('unable to find bamboo name');
-      }
-      onProgress({type: 'info', message: 'Found bamboo name: ' + bambooName});
-
-      warnInvalidImages(bambooName, rows, onProgress);
-
+      onProgress({progress: 60, type: 'info', message: 'Step5: Generate Bamboo Name'});
       importedRows = rows;
-
-      return Doc.getExistedDocNames();
+      return Doc.findUniqueUntitledName();
     })
-    .then(function(names) {
-
-      if (-1 !== names.indexOf(bambooName) && (true !== override)) {
-        return Promise.reject({type: 'bambooExisted', bambooName: bambooName, paths: paths});
-      }
-
+    .then(function(bambooName) {
       onProgress({progress: 70, type: 'info', message: 'Step6: Create Bamboo By Imported Rows'});
-      return createDocByRows(bambooName, importedRows);
+      warnInvalidImages(bambooName, importedRows, onProgress);
+      return createDocByRows(bambooName, importedRows, onProgress);
     })
     .then(function(doc) {
       onProgress({progress: 80, type: 'info', message: 'Step7: Copy Images'});
@@ -399,7 +539,7 @@ function isValidImageFileType(row) {
 
 function isValidPbFile(row) {
   var pathData = row.pathData;
-  return row.stats.isFile() && ('.csv' === pathData.ext);
+  return row.stats.isFile() && ('.xml' === pathData.ext);
 }
 
 function isValidTextRow(row) {

@@ -136,7 +136,7 @@ export default class Editor extends React.Component {
       onChange: ::this.onCodemirrorChange,
       options: {
         theme: settings.theme,
-        lineWrapping: false,
+        lineWrapping: true,
         lineNumbers: true,
         styleActiveLine: true
       },
