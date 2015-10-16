@@ -202,6 +202,11 @@ function mergePages(textContent, pbPages, imagePages) {
     imagePages[0].content = textContent;
     return imagePages;
   }
+
+  // type D: PB files only
+  if (_.isEmpty(textContent) && (pbPages.length > 0) && _.isEmpty(imagePages)) {
+    return pbPages;
+  }
 }
 
 function readTextRow(row) {
