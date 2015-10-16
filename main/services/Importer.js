@@ -99,7 +99,7 @@ function filterImageRows(rows, bambooName) {
   return rows.filter(isValidImageFileType);
 }
 
-function createPagesByImageRows(bambooName, imageRows) {
+function createPagesByImageRows(imageRows) {
   if (_.isEmpty(imageRows)) {
     return [];
   }
@@ -194,7 +194,7 @@ function createDocByRows(bambooName, rows) {
         return content;
       }));
       promises.push(createPagesByPbRow(pbRow));
-      promises.push(createPagesByImageRows(bambooName, imageRows));
+      promises.push(createPagesByImageRows(imageRows));
 
       return Promise.all(promises);
     })
