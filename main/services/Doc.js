@@ -85,13 +85,13 @@ function isDocNameExisted(name) {
 
 function findUniqueUntitledName() {
 
-  var name = 'Untitled';
+  var name = 'untitled';
 
   return getExistedDocNames()
     .then(function(existedNames) {
       var index = 0;
       while (-1 !== existedNames.indexOf(name)) {
-        name = 'Untitled' + (++index);
+        name = 'untitled' + (++index);
       }
       return name;
     });

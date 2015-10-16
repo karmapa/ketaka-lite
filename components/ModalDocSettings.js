@@ -123,7 +123,7 @@ export default class ModalDocSettings extends React.Component {
 
   onDocNameChange(e) {
     this.setState({
-      docName: e.target.value
+      docName: e.target.value.toLowerCase()
     });
   }
 
