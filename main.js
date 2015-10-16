@@ -64,3 +64,5 @@ ipc.on('open-bamboo', ipcHandlers.openBamboo);
 ipc.on('delete-doc', ipcHandlers.deleteDoc);
 
 ipc.on('export-data', ipcHandlers.exportData);
+
+ipc.on('add-pb-files', ipcHandlers.addPbFiles);
