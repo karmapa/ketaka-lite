@@ -20,7 +20,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
     filters: [
       {name: 'zip', extensions: ['zip']},
       {name: 'Images', extensions: ['jpg']},
-      {name: 'Text Files', extensions: ['csv', 'txt']}
+      {name: 'Text Files', extensions: ['xml', 'txt']}
     ]
   };
 
