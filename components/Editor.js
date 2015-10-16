@@ -26,6 +26,7 @@ export default class Editor extends React.Component {
     onReadonlyButtonClick: PropTypes.func,
     canShowPageDeleteButton: PropTypes.bool,
     onColorButtonClick: PropTypes.func,
+    onAddPbFileButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     setInputMethod: PropTypes.func,
     cancelSpellCheck: PropTypes.func,
@@ -108,7 +109,7 @@ export default class Editor extends React.Component {
       onSettingsButtonClick, onPageAddButtonClick, onApplyChunksButtonClick,
       onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
       canShowPageDeleteButton, onColorButtonClick, settings, setFontSize, setLineHeight,
-      setLetterSpacing} = this.props;
+      setLetterSpacing, onAddPbFileButtonClick} = this.props;
 
     let editorToolbarProps = {
       className: 'editor-toolbar',
@@ -121,6 +122,7 @@ export default class Editor extends React.Component {
       setLetterSpacing,
       onRedoButtonClick: ::this.onRedoButtonClick,
       onUndoButtonClick: ::this.onUndoButtonClick,
+      onAddPbFileButtonClick,
       onColorButtonClick,
       canShowPageDeleteButton,
       onReadonlyButtonClick,

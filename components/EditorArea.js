@@ -607,6 +607,17 @@ export default class EditorArea extends React.Component {
     this.props.toggleEditChunk(doc.uuid);
   }
 
+  onAddPbFileButtonClick() {
+    let self = this;
+    Api.send('add-pb-files', {doc: self.getDoc()})
+      .then(res => {
+        console.log('here', res.doc);
+        self.props.importDoc(res.doc);
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => self.refs.toast.error(res.message));
+  }
+
   renderEditorArea(doc, pageIndex) {
 
     let {editChunk} = doc;
@@ -657,6 +668,7 @@ export default class EditorArea extends React.Component {
       onCodemirrorChange: ::this.onCodemirrorChange,
       onSettingsButtonClick: ::this.onSettingsButtonClick,
       onPageAddButtonClick: ::this.onPageAddButtonClick,
+      onAddPbFileButtonClick: ::this.onAddPbFileButtonClick,
       onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
       onColorButtonClick: ::this.onColorButtonClick,
       onReadonlyButtonClick: toggleReadonly,

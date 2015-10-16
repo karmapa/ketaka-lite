@@ -24,6 +24,7 @@ export default class EditorToolbar extends React.Component {
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
+    onAddPbFileButtonClick: PropTypes.func,
     onLineHeightInputChange: PropTypes.func,
     setInputMethod: PropTypes.func,
     setLetterSpacing: PropTypes.func,
@@ -80,7 +81,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      onSpellCheckButtonClick, settings} = this.props;
+      onSpellCheckButtonClick, settings, onAddPbFileButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -151,6 +152,12 @@ export default class EditorToolbar extends React.Component {
           <OverlayTrigger placement='top' overlay={<Tooltip>Add New Page</Tooltip>}>
             <button className="button-page-add" onClick={onPageAddButtonClick}>
               <i className="glyphicon glyphicon-plus"></i>
+            </button>
+          </OverlayTrigger>
+
+          <OverlayTrigger placement='top' overlay={<Tooltip>Add Page Break Files</Tooltip>}>
+            <button className="button-add-pb-files" onClick={onAddPbFileButtonClick}>
+              <i className="glyphicon glyphicon-open-file"></i>
             </button>
           </OverlayTrigger>
 

@@ -554,6 +554,39 @@ function markPathData(rows) {
   });
 }
 
+function addPbFiles(doc, paths) {
+
+  return Helper.getPathsType(paths)
+    .then(function(rows) {
+      return scanPaths(rows);
+    })
+    .then(function(rows) {
+      return markPathData(rows);
+    })
+    .then(function(rows) {
+      var pbRows = findPbRows(rows);
+      return createPagesByPbRows(pbRows);
+    })
+    .then(function(pbPages) {
+
+      if (_.isEmpty(pbPages)) {
+        throw 'Could not find any PB files.';
+      }
+
+      doc.pages.forEach(function(page) {
+        var name = page.name;
+        var newPage = _.find(pbPages, {name: name});
+        if (newPage) {
+          page.content = newPage.content;
+          _.remove(pbPages, {name: name});
+        }
+      });
+      doc.pages = Doc.sortPages(doc.pages.concat(pbPages));
+      return doc;
+    });
+}
+
 module.exports = {
-  handleImportPaths: handleImportPaths
+  handleImportPaths: handleImportPaths,
+  addPbFiles: addPbFiles
 };

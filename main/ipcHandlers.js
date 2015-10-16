@@ -20,7 +20,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
     filters: [
       {name: 'zip', extensions: ['zip']},
       {name: 'Images', extensions: ['jpg']},
-      {name: 'Text Files', extensions: ['csv', 'txt']}
+      {name: 'Text Files', extensions: ['xml', 'txt']}
     ]
   };
 
@@ -49,7 +49,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
         if ('bambooExisted' === err.type) {
           return broadcast('confirm-bamboo-override', err);
         }
-        send({error: true, message: err});
+        send({error: true, message: err.toString()});
       });
 
     function onProgress(res) {
@@ -242,5 +242,32 @@ exports.exportData = ipcHandler(function(event, arg) {
     archive.pipe(output);
     archive.bulk([{expand: true, cwd: sourcePath, src: ['**'], dest: name}]);
     archive.finalize();
+  });
+});
+
+exports.addPbFiles = ipcHandler(function(event, arg) {
+
+  var doc = arg.doc;
+  var send = this.send;
+  var options = {
+    properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
+    filters: [
+      {name: 'zip', extensions: ['zip']},
+      {name: 'Text Files', extensions: ['xml', 'txt']}
+    ]
+  };
+
+  dialog.showOpenDialog(options, function(paths) {
+    if (_.isEmpty(paths)) {
+      return;
+    }
+    Importer.addPbFiles(doc, paths)
+      .then(function(doc) {
+        send({message: 'Page break files added successfully', doc: doc});
+      })
+      .catch(function(err) {
+        console.error('error', err);
+        send({error: true, message: err.toString()});
+      });
   });
 });
