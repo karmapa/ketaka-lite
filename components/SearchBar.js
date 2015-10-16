@@ -56,6 +56,9 @@ export default class SearchBar extends React.Component {
       self.focus();
     };
 
+    CodeMirror.commands.replaceAll = () => {
+    };
+
     document.addEventListener('keyup', e => {
 
       let keyCode = e.keyCode;
@@ -156,14 +159,23 @@ export default class SearchBar extends React.Component {
   }
 
   onWithInputKeyUp(e) {
+
     this.ime.keyup(e);
 
+    if (shiftKeyPressed(e)) {
+      this.shiftKeyPressed = false;
+    }
+
     if (enterKeyPressed(e)) {
-      this.replace(this.cm);
+      let replaceAll = this.shiftKeyHolding;
+      this.replace(this.cm, replaceAll);
     }
   }
 
   onWithInputKeyDown(e) {
+    if (shiftKeyPressed(e)) {
+      this.shiftKeyHolding = true;
+    }
     this.ime.keydown(e);
   }
 
