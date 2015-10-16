@@ -75,11 +75,8 @@ function createPagesByCsvData(csvData) {
   });
 }
 
-function findPbFile(rows, bambooName) {
-  return _.chain(rows)
-    .filter(isValidPbFile)
-    .find(pbRowWithBambooName.bind(null, bambooName))
-    .value();
+function findPbRows(rows) {
+  return rows.filter(isValidPbFile);
 }
 
 function findTextRow(rows) {
@@ -180,7 +177,7 @@ function createDocByRows(bambooName, rows) {
   var promises = [];
 
   var textRow = _.first(findTextRow(rows, bambooName));
-  var pbRow = findPbFile(rows, bambooName);
+  var pbRows = findPbRows(rows);
   var imageRows = filterImageRows(rows, bambooName);
 
   return Doc.getDoc(bambooName)
