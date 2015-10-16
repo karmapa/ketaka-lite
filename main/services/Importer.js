@@ -182,7 +182,7 @@ function createChunkByTextRow(textRow) {
     });
 }
 
-function checkDuplicatedPbPages(pbPages) {
+function getDuplicatedPbPages(pbPages) {
   var usedNames = [];
   var references = [];
   var duplicatedPbPages = [];
