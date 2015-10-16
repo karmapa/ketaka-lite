@@ -49,7 +49,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
         if ('bambooExisted' === err.type) {
           return broadcast('confirm-bamboo-override', err);
         }
-        send({error: true, message: err});
+        send({error: true, message: err.toString()});
       });
 
     function onProgress(res) {
