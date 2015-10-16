@@ -128,7 +128,7 @@ exports.addDoc = ipcHandler(function(event) {
     })
     .then(function() {
       var doc = Doc.createDoc({name: docName});
-      var page = Doc.createPage({name: 'Untitled'});
+      var page = Doc.createPage({name: 'untitled'});
       doc.pages.push(page);
       return Doc.writeDoc(doc);
     })
