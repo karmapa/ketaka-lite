@@ -774,7 +774,7 @@ export default class EditorArea extends React.Component {
   }
 
   render() {
-    let {docs, settings, inputMethod} = this.props;
+    let {docs, settings, inputMethod, writePageContent} = this.props;
     let classes = {
       [this.props.className]: true,
       'vertical': settings.direction
@@ -785,7 +785,9 @@ export default class EditorArea extends React.Component {
       nextPageHasMatched: ::this.nextPageHasMatched,
       prevPageHasMatched: ::this.prevPageHasMatched,
       toNextPage: ::this.toNextPage,
-      toPrevPage: ::this.toPrevPage
+      toPrevPage: ::this.toPrevPage,
+      doc: this.getDoc(),
+      writePageContent
     };
 
     return (
