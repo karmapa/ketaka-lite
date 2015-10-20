@@ -28,7 +28,8 @@ export default class SearchBar extends React.Component {
     opened: false,
     replaceKeyword: '',
     searchKeyword: '',
-    withKeyword: ''
+    withKeyword: '',
+    confirmMessage: ''
   }
 
   cm = null;
@@ -313,11 +314,12 @@ export default class SearchBar extends React.Component {
     cm.focus();
   }
 
-  openConfirmDialog(yes, no) {
+  openConfirmDialog(args) {
 
-    this.yes = yes;
-    this.no = no;
+    this.yes = args.yes;
+    this.no = args.no;
     this.setState({
+      confirmMessage: args.confirmMessage,
       mode: MODE_CONFIRM
     });
   }
@@ -347,6 +349,8 @@ export default class SearchBar extends React.Component {
       self.props.doc.pages.forEach((page, index) => {
         self.props.writePageContent(doc.uuid, index, page.content.replace(queryRegExp, text));
       });
+
+      self.close();
 
     } else {
 
@@ -382,10 +386,14 @@ export default class SearchBar extends React.Component {
         cm.setSelection(from, to);
         cm.scrollIntoView({from, to});
 
-        self.openConfirmDialog(() => {
-          cursor.replace(_.isString(query) ? text : text.replace(/\$(\d)/g, (_, i) => match[i]));
-          advance();
-        }, advance);
+        self.openConfirmDialog({
+          yes: () => {
+            cursor.replace(_.isString(query) ? text : text.replace(/\$(\d)/g, (_, i) => match[i]));
+            advance();
+          },
+          no: advance,
+          confirmMessage: 'Replace ?'
+        });
       };
 
       advance();
@@ -433,6 +441,24 @@ export default class SearchBar extends React.Component {
     );
   }
 
+  onReplaceButtonClick() {
+    this.replace(this.cm);
+  }
+
+  onReplaceAllButtonClick() {
+    let self = this;
+
+    self.openConfirmDialog({
+      yes: () => {
+        self.replace(self.cm, true);
+      },
+      no: () => {
+        self.close();
+      },
+      confirmMessage: 'Replace All ?'
+    });
+  }
+
   renderReplace() {
 
     let {opened, replaceKeyword, withKeyword} = this.state;
@@ -468,6 +494,8 @@ export default class SearchBar extends React.Component {
         <input {...replaceInputProps} />
         <span>With: </span>
         <input {...withInputProps} />
+        <button onClick={::this.onReplaceButtonClick}>Replace</button>
+        <button onClick={::this.onReplaceAllButtonClick}>Replace All</button>
       </div>
     );
   }
@@ -494,14 +522,16 @@ export default class SearchBar extends React.Component {
 
   renderConfirm() {
 
+    let {opened, confirmMessage} = this.state;
+
     let classnames = {
       'box-search': true,
-      'hidden': ! this.state.opened
+      'hidden': ! opened
     };
 
     return (
       <div className={classNames(classnames)} onBlur={::this.onConfirmBoxBlur}>
-        <span>Replace ? </span>
+        <span>{confirmMessage}</span>
         <button onClick={::this.yes}>Yes</button>
         <button onClick={::this.no}>No</button>
         <button onClick={::this.stop}>Stop</button>
