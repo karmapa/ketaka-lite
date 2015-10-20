@@ -18,7 +18,9 @@ export default class SearchBar extends React.Component {
     nextPageHasMatched: PropTypes.func.isRequired,
     prevPageHasMatched: PropTypes.func.isRequired,
     toNextPage: PropTypes.func.isRequired,
-    toPrevPage: PropTypes.func.isRequired
+    toPrevPage: PropTypes.func.isRequired,
+    doc: PropTypes.object.isRequired,
+    writePageContent: PropTypes.func.isRequired
   };
 
   state = {
@@ -338,17 +340,14 @@ export default class SearchBar extends React.Component {
     text = parseString(text);
 
     if (all) {
-      cm.operation(function() {
-        for (let cursor = getSearchCursor(cm, query); cursor.findNext();) {
-          if (! _.isString(query)) {
-            let match = cm.getRange(cursor.from(), cursor.to()).match(query);
-            cursor.replace(text.replace(/\$(\d)/g, (_, i) => match[i]));
-          }
-          else {
-            cursor.replace(text);
-          }
-        }
+
+      let queryRegExp = new RegExp(query, 'g');
+      let {doc, set} = this.props;
+
+      self.props.doc.pages.forEach((page, index) => {
+        self.props.writePageContent(doc.uuid, index, page.content.replace(queryRegExp, text));
       });
+
     } else {
 
       clearSearch(cm);
