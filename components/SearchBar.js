@@ -344,10 +344,10 @@ export default class SearchBar extends React.Component {
     if (all) {
 
       let queryRegExp = new RegExp(query, 'g');
-      let {doc, set} = this.props;
+      let {doc, writePageContent} = self.props;
 
       self.props.doc.pages.forEach((page, index) => {
-        self.props.writePageContent(doc.uuid, index, page.content.replace(queryRegExp, text));
+        writePageContent(doc.uuid, index, page.content.replace(queryRegExp, text));
       });
 
       self.close();
