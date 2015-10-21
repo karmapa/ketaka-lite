@@ -252,6 +252,11 @@ function sortPages(pages) {
   var invalidPages = _.filter(pages, function(page) {
     return ! REGEXP_PAGE.exec(page.name);
   });
+
+  invalidPages = invalidPages.sort(function(a, b) {
+    return a.name > b.name;
+  });
+
   return validPages.concat(invalidPages);
 }
 
