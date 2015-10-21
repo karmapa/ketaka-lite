@@ -27,7 +27,7 @@ export default class SearchBar extends React.Component {
     mode: MODE_SEARCH,
     opened: false,
     replaceKeyword: '',
-    searchKeyword: '',
+    findKeyword: '',
     withKeyword: '',
     confirmMessage: ''
   }
@@ -81,15 +81,15 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  onSearchInputChange(e) {
-    let searchKeyword = e.target.value;
+  onFindInputChange(e) {
+    let findKeyword = e.target.value;
     this.setState({
-      searchKeyword
+      findKeyword
     });
-    this.find(searchKeyword);
+    this.find(findKeyword);
   }
 
-  onSearchInputKeyUp(e) {
+  onFindInputKeyUp(e) {
     this.ime.keyup(e);
 
     // shift
@@ -107,7 +107,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onSearchInputKeyDown(e) {
+  onFindInputKeyDown(e) {
     this.ime.keydown(e);
 
     if (shiftKeyPressed(e)) {
@@ -115,14 +115,14 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onSearchInputKeyPress(ref, e) {
+  onFindInputKeyPress(ref, e) {
 
-    let searchInput = React.findDOMNode(this.refs[ref]);
-    let inputValue = this.ime.keypress(e, {element: searchInput});
+    let findInput = React.findDOMNode(this.refs[ref]);
+    let inputValue = this.ime.keypress(e, {element: findInput});
 
     if (_.isString(inputValue)) {
       this.setState({
-        searchKeyword: inputValue
+        findKeyword: inputValue
       });
       this.find(inputValue);
     }
@@ -194,7 +194,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  find(query = this.state.searchKeyword) {
+  find(query = this.state.findKeyword) {
     let {cm, cursor} = this;
     clearSearch(cm);
     clearSelection(cm);
@@ -277,9 +277,9 @@ export default class SearchBar extends React.Component {
     let {mode} = this.state;
 
     if (MODE_SEARCH === mode) {
-      let searchInput = React.findDOMNode(this.refs.searchInput);
-      if (searchInput) {
-        searchInput.focus();
+      let findInput = React.findDOMNode(this.refs.findInput);
+      if (findInput) {
+        findInput.focus();
       }
     }
     if (MODE_REPLACE === mode) {
@@ -413,21 +413,21 @@ export default class SearchBar extends React.Component {
       'hidden': ! this.state.opened
     };
 
-    let searchInputProps = {
-      className: 'search-input',
-      onChange: ::this.onSearchInputChange,
-      onKeyDown: ::this.onSearchInputKeyDown,
-      onKeyUp: ::this.onSearchInputKeyUp,
-      onKeyPress: this.onSearchInputKeyPress.bind(this, 'searchInput'),
-      value: this.state.searchKeyword,
-      ref: 'searchInput',
+    let findInputProps = {
+      className: 'find-input',
+      onChange: ::this.onFindInputChange,
+      onKeyDown: ::this.onFindInputKeyDown,
+      onKeyUp: ::this.onFindInputKeyUp,
+      onKeyPress: this.onFindInputKeyPress.bind(this, 'findInput'),
+      value: this.state.findKeyword,
+      ref: 'findInput',
       type: 'text'
     };
 
     return (
       <div className={classNames(classnames)} onBlur={::this.onSearchBoxBlur}>
         <span>Search: </span>
-        <input {...searchInputProps} />
+        <input {...findInputProps} />
         <button ref="buttonFindPrev" onClick={::this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
