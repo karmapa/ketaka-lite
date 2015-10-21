@@ -1,5 +1,13 @@
+.image-zoomer {
+  &:hover .image-zoomer-toolbar {
+    opacity: 1;
+  }
+}
+
 .image-zoomer-toolbar {
+  transition: $transition-global;
   display: inline-block;
+  opacity: 0;
   text-align: center;
   color: $color-border-toolbar;
   position: absolute;
