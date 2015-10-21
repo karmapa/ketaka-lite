@@ -15,7 +15,7 @@ export const EVENT_EXPORT_DATA = 'EVENT_EXPORT_DATA';
 
 export const INPUT_METHOD_SYSTEM = 'System Input';
 export const INPUT_METHOD_TIBETAN_EWTS = 'Tibetan EWTS';
-export const INPUT_METHOD_TIBETAN_SAMBHOTA = 'Tibetan Sambhota';
+export const INPUT_METHOD_TIBETAN_SAMBHOTA = 'Tibetan Sambhota1';
 export const INPUT_METHOD_TIBETAN_SAMBHOTA2 = 'Tibetan Sambhota2';
 
 export const MAP_INPUT_METHODS = {
