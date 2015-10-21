@@ -134,7 +134,7 @@ function createPagesByPbContent(content, pathData) {
           pages.push(currentPage);
         }
         if (isTextNode(node) && currentPage) {
-          currentPage.content += node.data;
+          currentPage.content += _.trimLeft(node.data);
         }
       });
       resolve(pages);
