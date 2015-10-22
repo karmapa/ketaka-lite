@@ -137,12 +137,6 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
-            <button className="button-settings" onClick={onSettingsButtonClick}>
-              <i className="glyphicon glyphicon-cog"></i>
-            </button>
-          </OverlayTrigger>
-
           <OverlayTrigger placement='top' overlay={<Tooltip>Apply Chunks</Tooltip>}>
             <button className="button-apply-chunks" onClick={onApplyChunksButtonClick}>
               <i className="glyphicon glyphicon-align-center"></i>
@@ -208,6 +202,14 @@ export default class EditorToolbar extends React.Component {
           <DropdownButton title={inputMethod} id='bg-nested-dropdown'>
             {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
           </DropdownButton>
+        </div>
+
+        <div className="section">
+          <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
+            <button className="button-settings" onClick={onSettingsButtonClick}>
+              <i className="glyphicon glyphicon-cog"></i>
+            </button>
+          </OverlayTrigger>
         </div>
 
       </div>
