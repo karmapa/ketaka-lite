@@ -5,6 +5,7 @@ import {EditorArea, Navigation} from '../components';
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {ContextMenu} from '../services';
 
 @connect(state => ({
   direction: state.direction,
@@ -22,6 +23,8 @@ export default class App extends React.Component {
     document.title = constants.APP_NAME;
     dispatch(AppActions.initSettings());
     this.setBodyClassName(settings.theme);
+
+    ContextMenu.init();
   }
 
   setBodyClassName(className) {
