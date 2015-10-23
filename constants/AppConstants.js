@@ -3,14 +3,12 @@ export const APP_NAME = 'KETAKA Lite';
 
 export const KEY_ENTER = 13;
 
-export const DIRECTION_HORIZONTAL = false;
-export const DIRECTION_VERTICAL = true;
+export const DIRECTION_HORIZONTAL = 1;
+export const DIRECTION_VERTICAL = 2;
 
 export const EVENT_SAVE = 'EVENT_SAVE';
 export const EVENT_IMPORT = 'EVENT_IMPORT';
 export const EVENT_OPEN_DOC = 'EVENT_OPEN_DOC';
-export const EVENT_ACTIVATE_TAB = 'EVENT_ACTIVATE_TAB';
-export const EVENT_CLOSE_DOC = 'EVENT_CLOSE_DOC';
 export const EVENT_EXPORT_DATA = 'EVENT_EXPORT_DATA';
 
 export const INPUT_METHOD_SYSTEM = 'System Input';

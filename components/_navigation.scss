@@ -18,18 +18,4 @@
     }
     @include no-outline();
   }
-  .btn-direction {
-    transition: $transition-global;
-    transform: rotate(90deg);
-
-    padding: 0.38em 1em;
-
-    &, &:active {
-      outline: 0;
-    }
-    font-size: 1.2em;
-  }
-  .btn-direction.vertical {
-    transform: rotate(0deg);
-  }
 }

@@ -7,7 +7,7 @@
   width: 100%;
   border: $border-global;
   background-color: #000;
-  height: calc(50vh - (#{$height-non-editor-area} / 2));
+  height: calc(50vh - (#{$height-editor-toolbar} / 2));
   img.image-zoomable {
     transition: $transition-global;
     margin: auto;
@@ -43,8 +43,7 @@
 .editor-area.vertical {
   .image-zoomer, .image-uploader {
     width: 50%;
-    height: 100%;
     display: inline-block;
-    height: calc(100vh - #{$height-non-editor-area - 1.8em});
+    height: calc(100vh - #{$height-editor-toolbar});
   }
 }

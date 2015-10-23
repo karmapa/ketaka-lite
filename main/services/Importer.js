@@ -406,7 +406,7 @@ function getJsonFileFromVinylFiles(files) {
   });
 }
 
-function handleZipPaths(paths, override) {
+function handleZipPaths(paths) {
 
   var zipPath = _.first(paths);
   var bambooName;
@@ -425,10 +425,6 @@ function handleZipPaths(paths, override) {
       return Doc.getExistedDocNames()
     })
     .then(function(names) {
-
-      if (-1 !== names.indexOf(bambooName) && (true !== override)) {
-        return Promise.reject({type: 'bambooExisted', bambooName: bambooName, paths: paths});
-      }
       return Helper.unzip(zipPath, PATH_APP_DOC);
     })
     .then(function(files) {
@@ -446,7 +442,7 @@ function handleZipPaths(paths, override) {
     });
 }
 
-function handleImportPaths(paths, onProgress, override) {
+function handleImportPaths(paths, onProgress) {
 
   onProgress = onProgress || _.noop;
 
@@ -457,7 +453,7 @@ function handleImportPaths(paths, onProgress, override) {
   }
 
   if (isZipUpload(paths)) {
-    return handleZipPaths(paths, override);
+    return handleZipPaths(paths);
   }
 
   return Helper.getPathsType(paths)

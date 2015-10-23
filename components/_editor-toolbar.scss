@@ -143,14 +143,6 @@ $height-editor-toolbar: 1.9em;
       left: initial;
       right: 0;
     }
-    @media (max-width: 1440px) {
-      .dropdown-toggle {
-        min-width: 2em;
-        span:not(.caret) {
-          display: none;
-        }
-      }
-    }
   }
 }
 
@@ -237,4 +229,12 @@ $height-editor-toolbar: 1.9em;
 
 .asbestos {
   background-color: #7f8c8d;
+}
+
+.btn-direction {
+  transition: $transition-global;
+  transform: rotate(90deg);
+  &.vertical {
+    transform: rotate(0deg);
+  }
 }
