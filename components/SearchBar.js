@@ -51,12 +51,14 @@ export default class SearchBar extends React.Component {
       self.openSearchBar();
       self.focus();
       self.saveCursor();
+      self.setCursorToStart();
       self.find();
     };
 
     CodeMirror.commands.replace = () => {
       self.openReplaceBar();
       self.focus();
+      self.setCursorToStart();
     };
 
     CodeMirror.commands.replaceAll = () => {};
@@ -160,6 +162,13 @@ export default class SearchBar extends React.Component {
     });
   }
 
+  setCursorToStart() {
+    let cm = this.cm;
+    let from = CodeMirror.Pos(cm.firstLine(), 0);
+    cm.setSelection(from, from);
+    this.cursor = from;
+  }
+
   onWithInputKeyUp(e) {
 
     this.ime.keyup(e);
@@ -170,6 +179,7 @@ export default class SearchBar extends React.Component {
 
     if (enterKeyPressed(e)) {
       let replaceAll = this.shiftKeyHolding;
+      this.setCursorToStart();
       this.replace(this.cm, replaceAll);
     }
   }
@@ -441,6 +451,7 @@ export default class SearchBar extends React.Component {
   }
 
   onReplaceButtonClick() {
+    this.setCursorToStart();
     this.replace(this.cm);
   }
 
