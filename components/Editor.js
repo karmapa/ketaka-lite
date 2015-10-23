@@ -22,6 +22,7 @@ export default class Editor extends React.Component {
     onSettingsButtonClick: PropTypes.func,
     onApplyChunksButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
+    onDirectionButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
     onReadonlyButtonClick: PropTypes.func,
     canShowPageDeleteButton: PropTypes.bool,
@@ -106,7 +107,7 @@ export default class Editor extends React.Component {
   render() {
 
     let {code, className, onInputChange, setInputMethod, pageNames, pageIndex,
-      onSettingsButtonClick, onPageAddButtonClick, onApplyChunksButtonClick,
+      onSettingsButtonClick, onPageAddButtonClick, onDirectionButtonClick, onApplyChunksButtonClick,
       onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
       canShowPageDeleteButton, onColorButtonClick, settings, setFontSize, setLineHeight,
       setLetterSpacing, onAddPbFileButtonClick} = this.props;
@@ -122,6 +123,7 @@ export default class Editor extends React.Component {
       setLetterSpacing,
       onRedoButtonClick: ::this.onRedoButtonClick,
       onUndoButtonClick: ::this.onUndoButtonClick,
+      onDirectionButtonClick,
       onAddPbFileButtonClick,
       onColorButtonClick,
       canShowPageDeleteButton,

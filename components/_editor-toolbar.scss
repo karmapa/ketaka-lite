@@ -238,3 +238,11 @@ $height-editor-toolbar: 1.9em;
 .asbestos {
   background-color: #7f8c8d;
 }
+
+.btn-direction {
+  transition: $transition-global;
+  transform: rotate(90deg);
+  &.vertical {
+    transform: rotate(0deg);
+  }
+}

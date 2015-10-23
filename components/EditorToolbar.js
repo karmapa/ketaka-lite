@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Input, DropdownButton, MenuItem, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
 import {INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
-  INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
+  INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2, DIRECTION_VERTICAL} from '../constants/AppConstants';
 import {PageSwitch} from '.';
 import classNames from 'classnames';
 
@@ -23,6 +23,7 @@ export default class EditorToolbar extends React.Component {
     onApplyChunksButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
+    onDirectionButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
     onAddPbFileButtonClick: PropTypes.func,
     onLineHeightInputChange: PropTypes.func,
@@ -81,7 +82,7 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      onSpellCheckButtonClick, settings, onAddPbFileButtonClick} = this.props;
+      onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -90,12 +91,20 @@ export default class EditorToolbar extends React.Component {
       pageIndex
     };
 
-    let {readonly, inputMethod, spellCheckOn} = settings;
+    let {readonly, inputMethod, spellCheckOn, direction} = settings;
 
     let classButtonReadonly = {
       'glyphicon': true,
       'glyphicon-eye-open': readonly,
       'glyphicon-pencil': ! readonly,
+    };
+
+    let directionButtonProps = {
+      className: classNames({
+        'btn-direction': true,
+        'vertical': DIRECTION_VERTICAL === direction
+      }),
+      onClick: onDirectionButtonClick
     };
 
     return (
@@ -208,6 +217,11 @@ export default class EditorToolbar extends React.Component {
           <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
             <button className="button-settings" onClick={onSettingsButtonClick}>
               <i className="glyphicon glyphicon-cog"></i>
+            </button>
+          </OverlayTrigger>
+          <OverlayTrigger placement='top' overlay={<Tooltip>Direction</Tooltip>}>
+            <button {...directionButtonProps}>
+              <i className="glyphicon glyphicon-pause"></i>
             </button>
           </OverlayTrigger>
         </div>

@@ -7,7 +7,6 @@ import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstant
 export default class ModalSettings extends React.Component {
 
   static PropTypes = {
-    cancel: PropTypes.func.isRequired,
     updateSettings: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired
   };
@@ -42,7 +41,7 @@ export default class ModalSettings extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {cancel, settings} = this.props;
+    let {settings} = this.props;
     let {direction, theme} = settings;
     let {show} = this.state;
 

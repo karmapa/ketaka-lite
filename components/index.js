@@ -3,7 +3,6 @@ export EditorArea from './EditorArea';
 export ImageZoomer from './ImageZoomer';
 export ImageUploader from './ImageUploader';
 export ImageZoomerToolbar from './ImageZoomerToolbar';
-export Navigation from './Navigation';
 export TabBox from './TabBox';
 export TabItem from './TabItem';
 export ModalConfirm from './ModalConfirm';

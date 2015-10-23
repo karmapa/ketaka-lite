@@ -6,7 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
   ModalImportStatus, ModalOpen} from '.';
-import {DocHelper, Helper} from '../services/';
+import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL} from '../constants/AppConstants';
 
@@ -38,6 +38,7 @@ export default class EditorArea extends React.Component {
     setFontSize: PropTypes.func.isRequired,
     setLineHeight: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
+    toggleDirection: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
     toggleSpellCheck: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
@@ -499,6 +500,11 @@ export default class EditorArea extends React.Component {
     });
   }
 
+  onDirectionButtonClick() {
+    console.log('toggle direction');
+    this.props.toggleDirection();
+  }
+
   onPageDeleteButtonClick() {
     this.refs.modalPageDeleteConfirm.open({
       title: 'Oops',
@@ -787,6 +793,7 @@ export default class EditorArea extends React.Component {
       onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
       onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
       canShowPageDeleteButton: doc.pages.length > 1,
+      onDirectionButtonClick: ::this.onDirectionButtonClick,
       settings,
       setInputMethod,
       setFontSize,
