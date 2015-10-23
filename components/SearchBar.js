@@ -50,7 +50,6 @@ export default class SearchBar extends React.Component {
     CodeMirror.commands.find = () => {
       self.openSearchBar();
       self.focus();
-      self.saveCursor();
       self.setCursorToStart();
       self.find();
     };
