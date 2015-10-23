@@ -214,14 +214,14 @@ export default class EditorToolbar extends React.Component {
         </div>
 
         <div className="section">
-          <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
-            <button className="button-settings" onClick={onSettingsButtonClick}>
-              <i className="glyphicon glyphicon-cog"></i>
-            </button>
-          </OverlayTrigger>
           <OverlayTrigger placement='top' overlay={<Tooltip>Direction</Tooltip>}>
             <button {...directionButtonProps}>
               <i className="glyphicon glyphicon-pause"></i>
+            </button>
+          </OverlayTrigger>
+          <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
+            <button className="button-settings" onClick={onSettingsButtonClick}>
+              <i className="glyphicon glyphicon-cog"></i>
             </button>
           </OverlayTrigger>
         </div>
