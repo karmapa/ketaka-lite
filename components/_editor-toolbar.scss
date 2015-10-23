@@ -143,14 +143,6 @@ $height-editor-toolbar: 1.9em;
       left: initial;
       right: 0;
     }
-    @media (max-width: 1440px) {
-      .dropdown-toggle {
-        min-width: 2em;
-        span:not(.caret) {
-          display: none;
-        }
-      }
-    }
   }
 }
 

@@ -5,7 +5,7 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen} from '.';
+  ModalImportStatus, ModalOpen, EditorToolbar} from '.';
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL} from '../constants/AppConstants';
@@ -120,6 +120,14 @@ export default class EditorArea extends React.Component {
     let searchBar = this.refs.searchBar;
     if (searchBar) {
       searchBar.cm = codemirror;
+    }
+    let previousDirection = _.get(previousProps, 'settings.direction');
+    let direction = _.get(this.props, 'settings.direction');
+    if (previousDirection !== direction) {
+      let editor = this.getEditor();
+      if (editor) {
+        editor.refresh();
+      }
     }
   }
 
@@ -500,11 +508,6 @@ export default class EditorArea extends React.Component {
     });
   }
 
-  onDirectionButtonClick() {
-    console.log('toggle direction');
-    this.props.toggleDirection();
-  }
-
   onPageDeleteButtonClick() {
     this.refs.modalPageDeleteConfirm.open({
       title: 'Oops',
@@ -773,33 +776,15 @@ export default class EditorArea extends React.Component {
 
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
-    let {setInputMethod, toggleReadonly, setFontSize, setLineHeight,
-      setLetterSpacing, settings} = this.props;
+    let {settings} = this.props;
 
     let editorProps = {
       className: classNames({'editor': true, 'hidden': editChunk}),
-      pageIndex,
-      onInputChange: ::this.onInputChange,
       code: page.content || '',
       ref: editorKey,
       key: editorKey,
       onCodemirrorChange: ::this.onCodemirrorChange,
-      onSettingsButtonClick: ::this.onSettingsButtonClick,
-      onPageAddButtonClick: ::this.onPageAddButtonClick,
-      onAddPbFileButtonClick: ::this.onAddPbFileButtonClick,
-      onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
-      onColorButtonClick: ::this.onColorButtonClick,
-      onReadonlyButtonClick: toggleReadonly,
-      onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
-      onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
-      canShowPageDeleteButton: doc.pages.length > 1,
-      onDirectionButtonClick: ::this.onDirectionButtonClick,
-      settings,
-      setInputMethod,
-      setFontSize,
-      setLineHeight,
-      setLetterSpacing,
-      pageNames: doc.pages.map(page => page.name)
+      settings
     };
 
     return (
@@ -855,8 +840,68 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  getEditor(doc = this.getDoc()) {
+    if (! doc) {
+      return null;
+    }
+    let editorKey = this.getEditorKey(doc.uuid);
+    return this.refs[editorKey];
+  }
+
+  onRedoButtonClick() {
+    let editor = this.getEditor();
+    if (editor) {
+      return editor.redo();
+    }
+  }
+
+  onUndoButtonClick() {
+    let editor = this.getEditor();
+    if (editor) {
+      return editor.undo();
+    }
+  }
+
+  renderEditorToolbar() {
+
+    if (! _.isEmpty(this.props.docs)) {
+
+      let doc = this.getDoc();
+      let {setFontSize, setInputMethod, setLetterSpacing, setLineHeight, settings,
+        toggleReadonly, toggleDirection} = this.props;
+
+      let editorToolbarProps = {
+        canShowPageDeleteButton: doc && (doc.pages.length > 1),
+        className: 'editor-toolbar',
+        onAddPbFileButtonClick: ::this.onAddPbFileButtonClick,
+        onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
+        onColorButtonClick: ::this.onColorButtonClick,
+        onDirectionButtonClick: toggleDirection,
+        onInputChange: ::this.onInputChange,
+        onPageAddButtonClick: ::this.onPageAddButtonClick,
+        onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
+        onReadonlyButtonClick: toggleReadonly,
+        onRedoButtonClick: ::this.onRedoButtonClick,
+        onSettingsButtonClick: ::this.onSettingsButtonClick,
+        onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
+        onUndoButtonClick: ::this.onUndoButtonClick,
+        pageIndex: doc ? doc.pageIndex : 0,
+        pageNames: doc ? doc.pages.map(page => page.name) : [],
+        setFontSize,
+        setInputMethod,
+        setLetterSpacing,
+        setLineHeight,
+        settings
+      };
+      return <EditorToolbar {...editorToolbarProps} />;
+    }
+  }
+
   render() {
+
+    let doc = this.getDoc();
     let {docs, settings, inputMethod, writePageContent, updateSettings} = this.props;
+
     let classes = {
       [this.props.className]: true,
       'vertical': DIRECTION_VERTICAL === settings.direction
@@ -875,6 +920,7 @@ export default class EditorArea extends React.Component {
     return (
       <div className={classNames(classes)}>
         <SearchBar ref="searchBar" {...searchBarProps} />
+        {this.renderEditorToolbar()}
         <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={::this.handleSelect} onClose={::this.handleClose}>
           {docs.map(::this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />

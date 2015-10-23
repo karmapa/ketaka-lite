@@ -4,7 +4,6 @@ require('codemirror/addon/search/searchcursor');
 
 import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
-import EditorToolbar from './EditorToolbar';
 import Ime from '../services/Ime';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {MAP_INPUT_METHODS} from '../constants/AppConstants';
@@ -15,26 +14,8 @@ export default class Editor extends React.Component {
   static PropTypes = {
     className: PropTypes.string,
     code: PropTypes.string,
-    pageIndex: PropTypes.number,
-    pageNames: PropTypes.array,
-    onInputChange: PropTypes.func,
     onCodemirrorChange: PropTypes.func,
-    onSettingsButtonClick: PropTypes.func,
-    onApplyChunksButtonClick: PropTypes.func,
-    onPageAddButtonClick: PropTypes.func,
-    onDirectionButtonClick: PropTypes.func,
-    onPageDeleteButtonClick: PropTypes.func,
-    onReadonlyButtonClick: PropTypes.func,
-    canShowPageDeleteButton: PropTypes.bool,
-    onColorButtonClick: PropTypes.func,
-    onAddPbFileButtonClick: PropTypes.func,
-    onSpellCheckButtonClick: PropTypes.func,
-    setInputMethod: PropTypes.func,
-    cancelSpellCheck: PropTypes.func,
-    settings: PropTypes.object,
-    setFontSize: PropTypes.func,
-    setLetterSpacing: PropTypes.func,
-    setLineHeight: PropTypes.func
+    settings: PropTypes.object
   };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -81,11 +62,11 @@ export default class Editor extends React.Component {
     }
   }
 
-  onUndoButtonClick() {
+  undo() {
     this.codemirror.execCommand('undo');
   }
 
-  onRedoButtonClick() {
+  redo() {
     this.codemirror.execCommand('redo');
   }
 
@@ -106,35 +87,7 @@ export default class Editor extends React.Component {
 
   render() {
 
-    let {code, className, onInputChange, setInputMethod, pageNames, pageIndex,
-      onSettingsButtonClick, onPageAddButtonClick, onDirectionButtonClick, onApplyChunksButtonClick,
-      onReadonlyButtonClick, onSpellCheckButtonClick, onPageDeleteButtonClick,
-      canShowPageDeleteButton, onColorButtonClick, settings, setFontSize, setLineHeight,
-      setLetterSpacing, onAddPbFileButtonClick} = this.props;
-
-    let editorToolbarProps = {
-      className: 'editor-toolbar',
-      pageNames,
-      pageIndex,
-      setInputMethod,
-      onInputChange,
-      setFontSize,
-      setLineHeight,
-      setLetterSpacing,
-      onRedoButtonClick: ::this.onRedoButtonClick,
-      onUndoButtonClick: ::this.onUndoButtonClick,
-      onDirectionButtonClick,
-      onAddPbFileButtonClick,
-      onColorButtonClick,
-      canShowPageDeleteButton,
-      onReadonlyButtonClick,
-      onSettingsButtonClick,
-      onPageAddButtonClick,
-      onPageDeleteButtonClick,
-      onSpellCheckButtonClick,
-      settings,
-      onApplyChunksButtonClick
-    };
+    let {code, className, settings} = this.props;
 
     let codemirrorProps = {
       onChange: ::this.onCodemirrorChange,
@@ -142,7 +95,8 @@ export default class Editor extends React.Component {
         theme: settings.theme,
         lineWrapping: true,
         lineNumbers: true,
-        styleActiveLine: true
+        styleActiveLine: true,
+        viewportMargin: Infinity
       },
       ref: 'codemirror',
       value: code
@@ -163,7 +117,6 @@ export default class Editor extends React.Component {
 
     return (
       <div className={className}>
-        <EditorToolbar {...editorToolbarProps} />
         <div className={classNames(classBoxReadonly)}>
           <div className={classNames(classReadonly)}>
             <Codemirror {...codemirrorProps} />

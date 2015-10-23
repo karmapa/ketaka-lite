@@ -3,7 +3,7 @@
   position: relative;
   padding: 1em;
   border: $border-global;
-  height: calc(50vh - (#{$height-non-editor-area - 3.7em} / 2));
+  height: calc(50vh - (#{$height-editor-toolbar} / 2));
   .button-groups {
     position: absolute;
     bottom: 0;

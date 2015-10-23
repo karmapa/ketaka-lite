@@ -127,7 +127,7 @@ export default class EditorToolbar extends React.Component {
           </OverlayTrigger>
 
           <OverlayTrigger ref="colorBoxOverlay" placement='top' trigger="click" overlay={<Popover>{this.renderColorBox()}</Popover>}>
-            <button className="button-color" onClick={onRedoButtonClick}>
+            <button className="button-color">
               <i className="glyphicon glyphicon-font"></i>
               <span className="underline"></span>
             </button>

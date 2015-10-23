@@ -1,4 +1,8 @@
 
+body {
+  overflow: hidden;
+}
+
 // set font-family to inital to override twitter bootstrap's font-family
 // DO NOT USE Helvetica Neue to display tibetain
 // chararacter (\u3897) will not display properly.
