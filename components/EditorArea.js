@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
-  ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar} from '.';
+  ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
+  ModalImportStatus, ModalOpen} from '.';
 import {DocHelper, Helper} from '../services/';
 
-import {MAP_COLORS, MAP_INPUT_METHODS} from '../constants/AppConstants';
+import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL} from '../constants/AppConstants';
 
 import ReactToastr from 'react-toastr';
 import Api from '../services/Api';
@@ -24,6 +25,7 @@ export default class EditorArea extends React.Component {
   static PropTypes = {
     settings: PropTypes.object.isRequired,
     addDoc: PropTypes.func.isRequired,
+    importDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
@@ -40,7 +42,8 @@ export default class EditorArea extends React.Component {
     toggleSpellCheck: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
-    writePageContent: PropTypes.func.isRequired
+    writePageContent: PropTypes.func.isRequired,
+    updateSettings: PropTypes.func.isRequired
   };
 
   keypressListener = null;
@@ -53,6 +56,15 @@ export default class EditorArea extends React.Component {
     this.state = {
       docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
+  }
+
+  submitSettings(settings) {
+    this.props.updateSettings(settings);
+    this.closeModalSettings();
+  }
+
+  closeModalSettings() {
+    this.refs.modalSettings.close();
   }
 
   handleSelect(key) {
@@ -230,21 +242,14 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  onActivateTab(doc) {
-    let index = _.findIndex(this.props.docs, {uuid: doc.uuid});
-    if (-1 !== index) {
-      this.activateTab(index);
-    }
-  }
-
-  onCloseDoc(name) {
+  closeDocByName(name) {
     let doc = _.find(this.props.docs, {name});
     if (doc) {
       this.closeDoc(doc.uuid);
     }
   }
 
-  onExportData(dropdownButton) {
+  exportData() {
 
     let self = this;
     let doc = self.getDoc();
@@ -256,7 +261,6 @@ export default class EditorArea extends React.Component {
 
     Api.send('export-data', {name: doc.name})
       .then(res => {
-        dropdownButton.setDropdownState(false);
         self.refs.toast.success(res.message);
       })
       .catch(res => self.refs.toast.error(res.message));
@@ -306,6 +310,8 @@ export default class EditorArea extends React.Component {
 
   componentDidMount() {
 
+    let self = this;
+
     let keypressListener = this.keypressListener;
     let inputMethods = _.values(MAP_INPUT_METHODS);
     let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
@@ -338,26 +344,67 @@ export default class EditorArea extends React.Component {
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
 
-    this.saveFunc = ::this.save;
-    this.onActivateTabFunc = ::this.onActivateTab;
-    this.onCloseDocFunc = ::this.onCloseDoc;
-    this.onExportDataFunc = ::this.onExportData;
+    Api.on('app-import', function() {
+      self.import();
+    });
 
-    DocHelper.onSave(this.saveFunc);
-    DocHelper.onActivateTab(this.onActivateTabFunc);
-    DocHelper.onCloseDoc(this.onCloseDocFunc);
+    Api.on('app-open', function() {
+      self.open();
+    });
 
-    DocHelper.onExportData(this.onExportDataFunc);
+    Api.on('app-save', function() {
+      self.save();
+    });
+
+    Api.on('app-settings', function() {
+      self.openSettingsModal();
+    });
+
+    Api.on('app-export', function() {
+      self.exportData();
+    });
+
+    Api.on('import-start', function() {
+      self.refs.modalImportStatus.open({
+        title: 'Import Status'
+      });
+    });
+
+    Api.on('import-progress', function(res) {
+      self.refs.modalImportStatus.addMessage(res);
+    });
+  }
+
+  import() {
+    let self = this;
+
+    Api.send('import-button-clicked')
+      .then(res => {
+        self.props.importDoc(res.doc);
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => {
+        self.refs.toast.error(res.message);
+      });
+  }
+
+  open() {
+    let self = this;
+
+    Api.send('open')
+      .then(res => {
+        self.refs.modalOpen.open({
+          names: res.names
+        });
+      });
+  }
+
+  openSettingsModal() {
+    this.refs.modalSettings.open();
   }
 
   componentWillUnmount() {
-
     this.keypressListener.distroy();
-
-    DocHelper.offSave(this.saveFunc);
-    DocHelper.offActivateTab(this.onActivateTabFunc);
-    DocHelper.offCloseDoc(this.onCloseDocFunc);
-    DocHelper.offExportData(this.onExportDataFunc);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -648,11 +695,39 @@ export default class EditorArea extends React.Component {
     let self = this;
     Api.send('add-pb-files', {doc: self.getDoc()})
       .then(res => {
-        console.log('here', res.doc);
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
       })
       .catch(res => self.refs.toast.error(res.message));
+  }
+
+  onBambooDeleteClick(name) {
+    let self = this;
+    self.closeDocByName(name);
+    Api.send('delete-doc', {name})
+      .then(res => self.refs.modalOpen.setNames(res.names));
+  }
+
+  onBambooClick(name) {
+    let self = this;
+    let openedDoc = _.find(this.props.docs, {name});
+    if (openedDoc) {
+
+      // activate this doc if its already opened
+      let index = _.findIndex(this.props.docs, {uuid: openedDoc.uuid});
+      if (-1 !== index) {
+        this.activateTab(index);
+      }
+
+      this.refs.modalOpen.close();
+    }
+    else {
+      Api.send('open-bamboo', {name})
+        .then(res => {
+          self.props.receiveDoc(res.doc);
+          self.refs.modalOpen.close();
+        });
+    }
   }
 
   renderEditorArea(doc, pageIndex) {
@@ -774,10 +849,10 @@ export default class EditorArea extends React.Component {
   }
 
   render() {
-    let {docs, settings, inputMethod, writePageContent} = this.props;
+    let {docs, settings, inputMethod, writePageContent, updateSettings} = this.props;
     let classes = {
       [this.props.className]: true,
-      'vertical': settings.direction
+      'vertical': DIRECTION_VERTICAL === settings.direction
     };
 
     let searchBarProps = {
@@ -802,6 +877,9 @@ export default class EditorArea extends React.Component {
           confirm={::this.deleteCurrentPage} cancelText="Cancel" cancel={::this.cancelDeletePage} />
         <ModalDocSettings ref="modalDocSettings" cancel={::this.closeModalDocSettings} confirm={::this.saveAndCloseModalDocSettings} />
         <ModalPageAdd ref="modalPageAdd" cancel={::this.closeModalPageAdd} confirm={::this.addPageAndCloseModal} />
+        <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} />
+        <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
+        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} onBambooDeleteClick={::this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

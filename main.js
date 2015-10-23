@@ -18,13 +18,14 @@ app.on('window-all-closed', function() {
 
 app.on('ready', function() {
 
+  var screen = require('screen');
+  var size = screen.getPrimaryDisplay().workAreaSize;
+
+  mainWindow = new BrowserWindow({width: size.width, height: size.height});
+
   Helper.mkdirp(PATH_APP_DOC)
     .then(function() {
 
-      var screen = require('screen');
-      var size = screen.getPrimaryDisplay().workAreaSize;
-
-      mainWindow = new BrowserWindow({width: size.width, height: size.height});
       mainWindow.loadUrl('file://' + __dirname + '/index.html');
 
       mainWindow.on('closed', function() {
@@ -36,9 +37,9 @@ app.on('ready', function() {
 app.once('ready', function() {
 
   if (Menu.getApplicationMenu()) {
-    return;
+ //   return;
   }
-  var template = MenuConfig.getTemplate();
+  var template = MenuConfig.getTemplate({mainWindow: mainWindow});
   var menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 });

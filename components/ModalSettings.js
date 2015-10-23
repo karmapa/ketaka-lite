@@ -2,20 +2,22 @@ import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
 
+import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstants';
+
 export default class ModalSettings extends React.Component {
 
   static PropTypes = {
     cancel: PropTypes.func.isRequired,
-    submit: PropTypes.func.isRequired
+    updateSettings: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired
   };
 
   state = {
     show: false
   };
 
-  open(args) {
+  open() {
     this.setState({
-      theme: args.theme,
       show: true
     });
   }
@@ -30,20 +32,19 @@ export default class ModalSettings extends React.Component {
   }
 
   onThemeChange(e) {
-    this.setState({
-      theme: e.target.value
-    });
+    this.props.updateSettings({theme: e.target.value});
   }
 
-  submit() {
-    this.props.submit({theme: this.state.theme});
+  onDirectionChange(e) {
+    this.props.updateSettings({direction: parseInt(e.target.value, 10)});
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {cancel} = this.props;
-    let {show, theme} = this.state;
+    let {cancel, settings} = this.props;
+    let {direction, theme} = settings;
+    let {show} = this.state;
 
     return (
       <Modal show={show} onHide={this.onModalHide}>
@@ -57,11 +58,14 @@ export default class ModalSettings extends React.Component {
               <Input type='radio' label='Default' onChange={::this.onThemeChange} checked={'default' === theme} value="default" />
               <Input type='radio' label='Zenburn' onChange={::this.onThemeChange} checked={'zenburn' === theme} value="zenburn" />
             </div>
+            <div className="direction">
+              <Input type='radio' label='Horizontal' onChange={::this.onDirectionChange} checked={DIRECTION_HORIZONTAL === direction} value={DIRECTION_HORIZONTAL} />
+              <Input type='radio' label='Vertical' onChange={::this.onDirectionChange} checked={DIRECTION_VERTICAL === direction} value={DIRECTION_VERTICAL} />
+            </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={cancel}>Cancel</Button>
-          <Button bsStyle="primary" onClick={::this.submit}>Submit</Button>
+          <Button onClick={::this.close}>Close</Button>
         </Modal.Footer>
       </Modal>
     );

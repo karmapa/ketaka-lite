@@ -11,8 +11,6 @@ var fs = require('fs');
 
 exports.importButtonClicked = ipcHandler(function(event, args) {
 
-  var overridePaths = args.overridePaths || [];
-
   var send = this.send;
   var broadcast = this.broadcast;
   var options = {
@@ -24,12 +22,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
     ]
   };
 
-  // force import, will override bamboo
-  if (overridePaths.length > 0) {
-    importPaths(overridePaths, true);
-  } else {
-    dialog.showOpenDialog(options, importPaths);
-  }
+  dialog.showOpenDialog(options, importPaths);
 
   function importPaths(paths, force) {
 
@@ -45,10 +38,6 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
         send({message: 'Imported successfully', doc: doc});
       })
       .catch(function(err) {
-
-        if ('bambooExisted' === err.type) {
-          return broadcast('confirm-bamboo-override', err);
-        }
         send({error: true, message: err.toString()});
       });
 

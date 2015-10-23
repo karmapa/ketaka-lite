@@ -1,7 +1,7 @@
 import * as AppActions from '../actions/AppActions';
 import * as DocActions from '../actions/DocActions';
 import * as constants from '../constants/AppConstants';
-import {EditorArea, Navigation} from '../components';
+import {EditorArea} from '../components';
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -39,16 +39,14 @@ export default class App extends React.Component {
   }
 
   render() {
-    const {settings, readonly, direction, docs, inputMethod, dispatch} = this.props;
+    const {dispatch} = this.props;
     const docActions = bindActionCreators(DocActions, dispatch);
     const appActions = bindActionCreators(AppActions, dispatch);
 
-    const navigationProps = {settings, direction, docs, ...docActions, ...appActions};
-    const editorAreaProps = {settings, readonly, docs, inputMethod, direction, ...docActions, ...appActions};
+    const editorAreaProps = {...this.props, ...docActions, ...appActions};
 
     return (
-      <div className="container-fluid">
-        <Navigation {...navigationProps} />
+      <div className="container-fluid root">
         <EditorArea className="editor-area" {...editorAreaProps} />
       </div>
     );

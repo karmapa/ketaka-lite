@@ -27,3 +27,7 @@ body, .CodeMirror {
 .readonly {
   pointer-events: none;
 }
+
+.container-fluid.root {
+  padding: 0;
+}

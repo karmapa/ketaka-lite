@@ -1,11 +1,13 @@
 import Store from '../services/Store';
+import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstants';
 
 export function toggleDirection() {
   return dispatch => {
 
     let settings = Store.get('settings') || {};
 
-    settings.direction = ! settings.direction;
+    settings.direction = (DIRECTION_HORIZONTAL === settings.direction) ? DIRECTION_VERTICAL : DIRECTION_HORIZONTAL;
+
     Store.set('settings', settings);
 
     dispatch(receiveSettings(settings));

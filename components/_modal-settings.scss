@@ -1,13 +1,11 @@
 .modal-settings {
-  .themes {
-    .form-group, .radio {
-      display: inline-block;
-    }
-    .form-group {
-      margin-right: 1em;
-    }
-    input[type="radio"] {
-      margin-top: 2px;
-    }
+  .form-group, .radio {
+    display: inline-block;
+  }
+  .form-group {
+    margin-right: 1em;
+  }
+  input[type="radio"] {
+    margin-top: 2px;
   }
 }

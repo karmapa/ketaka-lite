@@ -2,7 +2,9 @@ var Helper = require('./Helper');
 var app = require('app');
 var shell = require('shell');
 
-function getTemplate() {
+function getTemplate(args) {
+
+  var mainWindow = args.mainWindow;
 
   var submenu = [
     {
@@ -38,6 +40,41 @@ function getTemplate() {
   ];
 
   var template = [
+    {
+      label: 'App',
+      submenu: [
+        {
+          label: 'Import',
+          click: function() {
+            mainWindow.webContents.send('app-import');
+          }
+        },
+        {
+          label: 'Open',
+          click: function() {
+            mainWindow.webContents.send('app-open');
+          }
+        },
+        {
+          label: 'Save',
+          click: function() {
+            mainWindow.webContents.send('app-save');
+          }
+        },
+        {
+          label: 'Export',
+          click: function() {
+            mainWindow.webContents.send('app-export');
+          }
+        },
+        {
+          label: 'Settings',
+          click: function() {
+            mainWindow.webContents.send('app-settings');
+          }
+        },
+      ]
+    },
     {
       label: 'Edit',
       submenu: submenu
