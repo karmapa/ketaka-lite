@@ -58,6 +58,7 @@ export default class SearchBar extends React.Component {
       self.openReplaceBar();
       self.focus();
       self.setCursorToStart();
+      self.find(this.state.replaceKeyword);
     };
 
     CodeMirror.commands.replaceAll = () => {};
@@ -131,6 +132,7 @@ export default class SearchBar extends React.Component {
     this.setState({
       replaceKeyword
     });
+    this.find(replaceKeyword);
   }
 
   onReplaceInputKeyUp(e) {
@@ -150,6 +152,7 @@ export default class SearchBar extends React.Component {
       this.setState({
         replaceKeyword: inputValue
       });
+      this.find(inputValue);
     }
   }
 
@@ -355,8 +358,6 @@ export default class SearchBar extends React.Component {
       self.close();
 
     } else {
-
-      clearSearch(cm);
 
       let cursor = getSearchCursor(cm, query, cm.getCursor());
 
