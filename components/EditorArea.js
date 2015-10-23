@@ -899,7 +899,6 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let doc = this.getDoc();
     let {docs, settings, inputMethod, writePageContent, updateSettings} = this.props;
 
     let classes = {
