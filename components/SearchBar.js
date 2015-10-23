@@ -79,6 +79,9 @@ export default class SearchBar extends React.Component {
         clearSearch(this.cm);
         self.stop();
       }
+      if (shiftKeyPressed(e)) {
+        this.shiftKeyPressed = false;
+      }
     });
   }
 
@@ -92,11 +95,6 @@ export default class SearchBar extends React.Component {
 
   onFindInputKeyUp(e) {
     this.ime.keyup(e);
-
-    // shift
-    if (shiftKeyPressed(e)) {
-      this.shiftKeyHolding = false;
-    }
 
     if (enterKeyPressed(e) && (! this.shiftKeyHolding)) {
       React.findDOMNode(this.refs.buttonFindNext).click();
@@ -172,10 +170,6 @@ export default class SearchBar extends React.Component {
   onWithInputKeyUp(e) {
 
     this.ime.keyup(e);
-
-    if (shiftKeyPressed(e)) {
-      this.shiftKeyPressed = false;
-    }
 
     if (enterKeyPressed(e)) {
       let replaceAll = this.shiftKeyHolding;
