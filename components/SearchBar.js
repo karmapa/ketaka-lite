@@ -59,8 +59,7 @@ export default class SearchBar extends React.Component {
       self.focus();
     };
 
-    CodeMirror.commands.replaceAll = () => {
-    };
+    CodeMirror.commands.replaceAll = () => {};
 
     document.addEventListener('keyup', e => {
 
