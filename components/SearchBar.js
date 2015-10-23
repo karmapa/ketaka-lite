@@ -50,17 +50,18 @@ export default class SearchBar extends React.Component {
     CodeMirror.commands.find = () => {
       self.openSearchBar();
       self.focus();
-      self.saveCursor();
+      self.setCursorToStart();
       self.find();
     };
 
     CodeMirror.commands.replace = () => {
       self.openReplaceBar();
       self.focus();
+      self.setCursorToStart();
+      self.find(this.state.replaceKeyword);
     };
 
-    CodeMirror.commands.replaceAll = () => {
-    };
+    CodeMirror.commands.replaceAll = () => {};
 
     document.addEventListener('keyup', e => {
 
@@ -78,6 +79,9 @@ export default class SearchBar extends React.Component {
         clearSearch(this.cm);
         self.stop();
       }
+      if (shiftKeyPressed(e)) {
+        this.shiftKeyPressed = false;
+      }
     });
   }
 
@@ -91,11 +95,6 @@ export default class SearchBar extends React.Component {
 
   onFindInputKeyUp(e) {
     this.ime.keyup(e);
-
-    // shift
-    if (shiftKeyPressed(e)) {
-      this.shiftKeyHolding = false;
-    }
 
     if (enterKeyPressed(e) && (! this.shiftKeyHolding)) {
       React.findDOMNode(this.refs.buttonFindNext).click();
@@ -133,6 +132,7 @@ export default class SearchBar extends React.Component {
     this.setState({
       replaceKeyword
     });
+    this.find(replaceKeyword);
   }
 
   onReplaceInputKeyUp(e) {
@@ -152,6 +152,7 @@ export default class SearchBar extends React.Component {
       this.setState({
         replaceKeyword: inputValue
       });
+      this.find(inputValue);
     }
   }
 
@@ -161,16 +162,20 @@ export default class SearchBar extends React.Component {
     });
   }
 
+  setCursorToStart() {
+    let cm = this.cm;
+    let from = CodeMirror.Pos(cm.firstLine(), 0);
+    cm.setSelection(from, from);
+    this.cursor = from;
+  }
+
   onWithInputKeyUp(e) {
 
     this.ime.keyup(e);
 
-    if (shiftKeyPressed(e)) {
-      this.shiftKeyPressed = false;
-    }
-
     if (enterKeyPressed(e)) {
       let replaceAll = this.shiftKeyHolding;
+      this.setCursorToStart();
       this.replace(this.cm, replaceAll);
     }
   }
@@ -354,8 +359,6 @@ export default class SearchBar extends React.Component {
 
     } else {
 
-      clearSearch(cm);
-
       let cursor = getSearchCursor(cm, query, cm.getCursor());
 
       let advance = () => {
@@ -442,6 +445,7 @@ export default class SearchBar extends React.Component {
   }
 
   onReplaceButtonClick() {
+    this.setCursorToStart();
     this.replace(this.cm);
   }
 
