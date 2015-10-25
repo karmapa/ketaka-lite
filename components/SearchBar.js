@@ -96,6 +96,10 @@ export default class SearchBar extends React.Component {
   onFindInputKeyUp = e => {
     this.ime.keyup(e);
 
+    if (shiftKeyPressed(e)) {
+      this.shiftKeyHolding = false;
+    }
+
     if (enterKeyPressed(e) && (! this.shiftKeyHolding)) {
       React.findDOMNode(this.refs.buttonFindNext).click();
     }
