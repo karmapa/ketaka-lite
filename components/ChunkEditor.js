@@ -78,21 +78,21 @@ export default class ChunkEditor extends React.Component {
     }
   }
 
-  onKeyDown(e) {
+  onKeyDown = e => {
     this.ime.keydown(e);
   }
 
-  onKeyUp(e) {
+  onKeyUp = e => {
     this.ime.keyup(e);
   }
 
-  onInputStartsWithChange(e) {
+  onInputStartsWithChange = e => {
     this.setState({
       valueStartsWith: e.target.value
     });
   }
 
-  onInputEndsWithChange(e) {
+  onInputEndsWithChange = e => {
     this.setState({
       valueEndsWith: e.target.value
     });
@@ -169,7 +169,7 @@ export default class ChunkEditor extends React.Component {
     this.initState = true;
   }
 
-  apply() {
+  apply = () => {
     let {chunkIndex, chunks} = this.state;
     let chunk = chunks[chunkIndex];
     this.resetState();
@@ -177,7 +177,7 @@ export default class ChunkEditor extends React.Component {
     this.props.apply(chunk);
   }
 
-  openModalApplyConfirm() {
+  openModalApplyConfirm = () => {
     let {chunkIndex, chunks} = this.state;
     let chunk = chunks[chunkIndex];
 
@@ -192,11 +192,11 @@ export default class ChunkEditor extends React.Component {
     }
   }
 
-  cancelApplyChunk() {
+  cancelApplyChunk = () => {
     this.refs.modalApplyConfirm.close();
   }
 
-  cancel() {
+  cancel = () => {
     this.resetState();
     this.props.cancel();
   }
@@ -206,20 +206,20 @@ export default class ChunkEditor extends React.Component {
 
     let inputStartsWithProps = {
       className: 'form-control',
-      onChange: ::this.onInputStartsWithChange,
-      onKeyDown: ::this.onKeyDown,
+      onChange: this.onInputStartsWithChange,
+      onKeyDown: this.onKeyDown,
       onKeyPress: this.onKeyPress.bind(this, 'inputStartsWith'),
-      onKeyUp: ::this.onKeyUp,
+      onKeyUp: this.onKeyUp,
       placeholder: 'Starts with',
       value: valueStartsWith
     };
 
     let inputEndsWithProps = {
       className: 'form-control',
-      onChange: ::this.onInputEndsWithChange,
-      onKeyDown: ::this.onKeyDown,
+      onChange: this.onInputEndsWithChange,
+      onKeyDown: this.onKeyDown,
       onKeyPress: this.onKeyPress.bind(this, 'inputEndsWith'),
-      onKeyUp: ::this.onKeyUp,
+      onKeyUp: this.onKeyUp,
       placeholder: 'Ends with',
       value: valueEndsWith
     };
@@ -237,18 +237,18 @@ export default class ChunkEditor extends React.Component {
           </Row>
         </Input>
         <div className="chunks">
-          <ReactList key="chunks" itemRenderer={::this.renderChunk} length={chunks.length} type='simple' />
+          <ReactList key="chunks" itemRenderer={this.renderChunk} length={chunks.length} type='simple' />
         </div>
         <div className="button-groups">
-          <Button className="button-cancel" onClick={::this.cancel}>Cancel</Button>
-          <Button bsStyle="primary" disabled={! this.canApply()} onClick={::this.openModalApplyConfirm}>Apply</Button>
+          <Button className="button-cancel" onClick={this.cancel}>Cancel</Button>
+          <Button bsStyle="primary" disabled={! this.canApply()} onClick={this.openModalApplyConfirm}>Apply</Button>
         </div>
-        <ModalConfirm ref="modalApplyConfirm" confirmText="I know What I am doing" confirm={::this.apply} cancelText="Cancel" cancel={::this.cancelApplyChunk} />
+        <ModalConfirm ref="modalApplyConfirm" confirmText="I know What I am doing" confirm={this.apply} cancelText="Cancel" cancel={this.cancelApplyChunk} />
       </div>
     );
   }
 
-  onRadioChange(e) {
+  onRadioChange = e => {
     this.setState({
       chunkIndex: parseInt(e.target.value, 10)
     });
@@ -275,7 +275,7 @@ export default class ChunkEditor extends React.Component {
     return this.addColorTag(chunk, keywords);
   }
 
-  renderChunk(index, key) {
+  renderChunk = (index, key) => {
 
     let {valueStartsWith, valueEndsWith, chunks, chunkIndex} = this.state;
     let chunk = chunks[index];
@@ -288,7 +288,7 @@ export default class ChunkEditor extends React.Component {
     return (
       <div key={key} className={classNames(chunkClass)}>
         <label>
-          <input type="radio" onChange={::this.onRadioChange} name="chunk" value={index} checked={index === chunkIndex} />
+          <input type="radio" onChange={this.onRadioChange} name="chunk" value={index} checked={index === chunkIndex} />
           <span className="info-chars">( {chunk.length} characters )</span>
           <p dangerouslySetInnerHTML={{__html: this.decorateChunk(chunk, [valueStartsWith, valueEndsWith])}}></p>
         </label>

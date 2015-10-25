@@ -44,15 +44,15 @@ export default class EditorToolbar extends React.Component {
     this.refs.colorBoxOverlay.hide();
   }
 
-  onFontSizeInputChange(e) {
+  onFontSizeInputChange = e => {
     this.props.setFontSize(e.target.value);
   }
 
-  onLineHeightInputChange(e) {
+  onLineHeightInputChange = e => {
     this.props.setLineHeight(e.target.value);
   }
 
-  onLetterSpacingChange(e) {
+  onLetterSpacingChange = e => {
     this.props.setLetterSpacing(e.target.value);
   }
 
@@ -176,7 +176,7 @@ export default class EditorToolbar extends React.Component {
                 <i className="glyphicon glyphicon-text-height"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={::this.onFontSizeInputChange} value={settings.fontSize}>
+                     onChange={this.onFontSizeInputChange} value={settings.fontSize}>
                 {this.renderFontSizeOptions()}
               </Input>
             </div>
@@ -188,7 +188,7 @@ export default class EditorToolbar extends React.Component {
                 <i className="glyphicon glyphicon-sort-by-attributes"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={::this.onLineHeightInputChange} value={settings.lineHeight}>
+                     onChange={this.onLineHeightInputChange} value={settings.lineHeight}>
                 {this.renderLineHeightOptions()}
               </Input>
             </div>
@@ -200,7 +200,7 @@ export default class EditorToolbar extends React.Component {
                 <i className="glyphicon glyphicon-text-width"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={::this.onLetterSpacingChange} value={settings.letterSpacing}>
+                     onChange={this.onLetterSpacingChange} value={settings.letterSpacing}>
                 {this.renderLetterSpacingOptions()}
               </Input>
             </div>
