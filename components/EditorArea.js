@@ -895,6 +895,9 @@ export default class EditorArea extends React.Component {
       };
       return <EditorToolbar {...editorToolbarProps} />;
     }
+    else {
+      return false;
+    }
   }
 
   render() {
