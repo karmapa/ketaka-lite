@@ -95,8 +95,7 @@ export default class Editor extends React.Component {
         theme: settings.theme,
         lineWrapping: true,
         lineNumbers: true,
-        styleActiveLine: true,
-        viewportMargin: Infinity
+        styleActiveLine: true
       },
       ref: 'codemirror',
       value: code
