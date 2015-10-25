@@ -864,40 +864,38 @@ export default class EditorArea extends React.Component {
 
   renderEditorToolbar() {
 
-    if (! _.isEmpty(this.props.docs)) {
-
-      let doc = this.getDoc();
-      let {setFontSize, setInputMethod, setLetterSpacing, setLineHeight, settings,
-        toggleReadonly, toggleDirection} = this.props;
-
-      let editorToolbarProps = {
-        canShowPageDeleteButton: doc && (doc.pages.length > 1),
-        className: 'editor-toolbar',
-        onAddPbFileButtonClick: ::this.onAddPbFileButtonClick,
-        onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
-        onColorButtonClick: ::this.onColorButtonClick,
-        onDirectionButtonClick: toggleDirection,
-        onInputChange: ::this.onInputChange,
-        onPageAddButtonClick: ::this.onPageAddButtonClick,
-        onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
-        onReadonlyButtonClick: toggleReadonly,
-        onRedoButtonClick: ::this.onRedoButtonClick,
-        onSettingsButtonClick: ::this.onSettingsButtonClick,
-        onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
-        onUndoButtonClick: ::this.onUndoButtonClick,
-        pageIndex: doc ? doc.pageIndex : 0,
-        pageNames: doc ? doc.pages.map(page => page.name) : [],
-        setFontSize,
-        setInputMethod,
-        setLetterSpacing,
-        setLineHeight,
-        settings
-      };
-      return <EditorToolbar {...editorToolbarProps} />;
-    }
-    else {
+    if (_.isEmpty(this.props.docs)) {
       return false;
     }
+
+    let doc = this.getDoc();
+    let {setFontSize, setInputMethod, setLetterSpacing, setLineHeight, settings,
+      toggleReadonly, toggleDirection} = this.props;
+
+    let editorToolbarProps = {
+      canShowPageDeleteButton: doc && (doc.pages.length > 1),
+      className: 'editor-toolbar',
+      onAddPbFileButtonClick: ::this.onAddPbFileButtonClick,
+      onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
+      onColorButtonClick: ::this.onColorButtonClick,
+      onDirectionButtonClick: toggleDirection,
+      onInputChange: ::this.onInputChange,
+      onPageAddButtonClick: ::this.onPageAddButtonClick,
+      onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
+      onReadonlyButtonClick: toggleReadonly,
+      onRedoButtonClick: ::this.onRedoButtonClick,
+      onSettingsButtonClick: ::this.onSettingsButtonClick,
+      onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
+      onUndoButtonClick: ::this.onUndoButtonClick,
+      pageIndex: doc ? doc.pageIndex : 0,
+      pageNames: doc ? doc.pages.map(page => page.name) : [],
+      setFontSize,
+      setInputMethod,
+      setLetterSpacing,
+      setLineHeight,
+      settings
+    };
+    return <EditorToolbar {...editorToolbarProps} />;
   }
 
   render() {
