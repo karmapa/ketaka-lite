@@ -14,19 +14,19 @@ export default class PageSwitch extends React.Component {
     inputValue: this.props.pageNames[this.props.pageIndex]
   };
 
-  isFirst() {
+  isFirst = () => {
     return 0 === this.props.pageIndex;
   }
 
-  isLast() {
+  isLast= () => {
     return this.props.pageIndex === (this.props.pageNames.length - 1);
   }
 
-  hasPrevious() {
+  hasPrevious = () => {
     return !! this.props.pageNames[this.props.pageIndex - 1];
   }
 
-  hasNext() {
+  hasNext = () => {
     return !! this.props.pageNames[this.props.pageIndex + 1];
   }
 
@@ -36,7 +36,7 @@ export default class PageSwitch extends React.Component {
     });
   }
 
-  onInputChange(e) {
+  onInputChange = e => {
     this.setState({
       inputValue: e.target.value
     });
@@ -60,7 +60,7 @@ export default class PageSwitch extends React.Component {
     }
   }
 
-  onInputKeyDown(e) {
+  onInputKeyDown = e => {
     let keyCode = e.keyCode || e.which;
 
     if (KEY_ENTER === keyCode) {
@@ -68,27 +68,27 @@ export default class PageSwitch extends React.Component {
     }
   }
 
-  onInputBlur(e) {
+  onInputBlur = e => {
     this.checkInput(e.target.value);
   }
 
-  previous() {
+  previous = () => {
     if (this.hasPrevious()) {
       this.props.onInputChange(this.props.pageIndex - 1);
     }
   }
 
-  next() {
+  next = () => {
     if (this.hasNext()) {
       this.props.onInputChange(this.props.pageIndex + 1);
     }
   }
 
-  toFirst() {
+  toFirst = () => {
     this.props.onInputChange(0);
   }
 
-  toLast() {
+  toLast = () => {
     this.props.onInputChange(this.props.pageNames.length - 1);
   }
 
@@ -106,18 +106,18 @@ export default class PageSwitch extends React.Component {
   render() {
     return (
       <div className={this.props.className}>
-        <button className="button-first" disabled={::this.isFirst()} onClick={::this.toFirst}>
+        <button className="button-first" disabled={this.isFirst()} onClick={this.toFirst}>
           <i className="glyphicon glyphicon-backward"></i>
         </button>
-        <button className="button-arrow-left" disabled={! ::this.hasPrevious()} onClick={::this.previous}>
+        <button className="button-arrow-left" disabled={! this.hasPrevious()} onClick={this.previous}>
           <i className="glyphicon glyphicon-menu-left"></i>
         </button>
         <input className="input" type="text" value={this.state.inputValue}
-            onChange={::this.onInputChange} onKeyDown={::this.onInputKeyDown} onBlur={::this.onInputBlur} />
-        <button className="button-arrow-right" disabled={! ::this.hasNext()} onClick={::this.next}>
+            onChange={this.onInputChange} onKeyDown={this.onInputKeyDown} onBlur={this.onInputBlur} />
+        <button className="button-arrow-right" disabled={! this.hasNext()} onClick={this.next}>
           <i className="glyphicon glyphicon-menu-right"></i>
         </button>
-        <button className="button-last" disabled={::this.isLast()} onClick={::this.toLast}>
+        <button className="button-last" disabled={this.isLast()} onClick={this.toLast}>
           <i className="glyphicon glyphicon-forward"></i>
         </button>
       </div>
