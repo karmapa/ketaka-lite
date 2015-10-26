@@ -180,7 +180,7 @@ export default class SearchBar extends React.Component {
     if (enterKeyPressed(e)) {
       let replaceAll = this.shiftKeyHolding;
       this.setCursorToStart();
-      this.replace(this.cm, replaceAll);
+      this.replaceOne(this.cm, replaceAll);
     }
   }
 
@@ -333,7 +333,7 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  replace(cm, all) {
+  replaceOne(cm, all) {
 
     if (cm.getOption('readOnly')) {
       return;
@@ -450,7 +450,7 @@ export default class SearchBar extends React.Component {
 
   onReplaceButtonClick = () => {
     this.setCursorToStart();
-    this.replace(this.cm);
+    this.replaceOne(this.cm);
   }
 
   onReplaceAllButtonClick = () => {
@@ -458,7 +458,7 @@ export default class SearchBar extends React.Component {
 
     self.openConfirmDialog({
       yes: () => {
-        self.replace(self.cm, true);
+        self.replaceOne(self.cm, true);
       },
       no: () => {
         self.close();
