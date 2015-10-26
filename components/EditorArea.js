@@ -809,21 +809,37 @@ export default class EditorArea extends React.Component {
       }
     }
 
+    let {settings} = this.props;
+
+    let style;
+
+    if (DIRECTION_HORIZONTAL === settings.direction) {
+      style = {
+        height: this.getEditorHeight()
+      };
+    }
+    else {
+      style = {
+        width: this.getEditorWidth()
+      };
+    }
+
     let chunkEditorProps = {
+      style,
       className: classNames({'hidden': ! editChunk}),
       hidden: ! editChunk,
       startKeyword,
       chunk: doc.chunk,
-      inputMethod: this.props.settings.inputMethod,
+      inputMethod: settings.inputMethod,
       apply: ::this.applyChunk,
       cancel: ::this.closeChunkEditor
     };
 
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
-    let {settings} = this.props;
 
     let editorProps = {
+      style,
       className: classNames({'editor': true, 'hidden': editChunk}),
       code: page.content || '',
       ref: editorKey,
