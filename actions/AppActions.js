@@ -79,6 +79,23 @@ export function setLetterSpacing(letterSpacing) {
   };
 }
 
+export function setRatio(ratio, direction = DIRECTION_HORIZONTAL) {
+  return dispatch => {
+
+    let settings = Store.get('settings') || {};
+
+    if (DIRECTION_HORIZONTAL === direction) {
+      settings.nsRatio = ratio;
+    }
+    else {
+      settings.ewRatio = ratio;
+    }
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function toggleSpellCheck() {
 
   return dispatch => {
