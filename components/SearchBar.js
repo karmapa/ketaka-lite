@@ -507,6 +507,9 @@ export default class SearchBar extends React.Component {
         <input {...withInputProps} />
         <button onClick={this.onReplaceButtonClick}>Replace</button>
         <button onClick={this.onReplaceAllButtonClick}>Replace All</button>
+        <button className="button-close" onClick={this.close}>
+          <i className="glyphicon glyphicon-remove"></i>
+        </button>
       </div>
     );
   }
