@@ -4,4 +4,5 @@ webpack.config.js
 */index.js
 node_modules/
 main/
+main.js
 constants/SampleDoc.js
