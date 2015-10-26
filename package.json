@@ -48,7 +48,7 @@
     "babel-runtime": "5.8.20",
     "css-loader": "0.15.4",
     "electron-prebuilt": "0.33.6",
-    "eslint": "1.6.0",
+    "eslint": "1.1.0",
     "eslint-loader": "^1.0.0",
     "eslint-plugin-react": "3.2.2",
     "file-loader": "0.8.4",
