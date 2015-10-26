@@ -12,6 +12,7 @@ export ModalOpen from './ModalOpen';
 export ModalPageAdd from './ModalPageAdd';
 export ModalSettings from './ModalSettings';
 export PageSwitch from './PageSwitch';
+export Resizer from './Resizer';
 export SearchBar from './SearchBar';
 export TabBox from './TabBox';
 export TabItem from './TabItem';
