@@ -389,6 +389,10 @@ export default class EditorArea extends React.Component {
       self.refs.searchBar.find();
     });
 
+    Api.on('app-replace', () => {
+      self.refs.searchBar.replace();
+    });
+
     window.addEventListener('resize', this.handleResize);
   }
 
