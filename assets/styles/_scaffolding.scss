@@ -35,3 +35,7 @@ body, .CodeMirror {
 .container-fluid.root {
   padding: 0;
 }
+
+.editor-area {
+  @include user-select(none);
+}
