@@ -385,6 +385,14 @@ export default class EditorArea extends React.Component {
       self.refs.modalImportStatus.addMessage(res);
     });
 
+    Api.on('app-find', () => {
+      self.refs.searchBar.find();
+    });
+
+    Api.on('app-replace', () => {
+      self.refs.searchBar.replace();
+    });
+
     window.addEventListener('resize', this.handleResize);
   }
 

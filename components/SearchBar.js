@@ -42,24 +42,27 @@ export default class SearchBar extends React.Component {
     this.cursor = this.cm.getCursor();
   }
 
+  find = () => {
+    this.openSearchBar();
+    this.focus();
+    this.setCursorToStart();
+    this.findKeyword();
+  }
+
+  replace = () => {
+    this.openReplaceBar();
+    this.focus();
+    this.setCursorToStart();
+    this.findKeyword(this.state.replaceKeyword);
+  }
+
   componentDidMount() {
     let self = this;
     self.ime = Ime;
     self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
-    CodeMirror.commands.find = () => {
-      self.openSearchBar();
-      self.focus();
-      self.setCursorToStart();
-      self.find();
-    };
-
-    CodeMirror.commands.replace = () => {
-      self.openReplaceBar();
-      self.focus();
-      self.setCursorToStart();
-      self.find(this.state.replaceKeyword);
-    };
+    CodeMirror.commands.find = this.find;
+    CodeMirror.commands.replace = this.replace;
 
     CodeMirror.commands.replaceAll = () => {};
 
@@ -90,7 +93,7 @@ export default class SearchBar extends React.Component {
     this.setState({
       findKeyword
     });
-    this.find(findKeyword);
+    this.findKeyword(findKeyword);
   }
 
   onFindInputKeyUp = e => {
@@ -127,7 +130,7 @@ export default class SearchBar extends React.Component {
       this.setState({
         findKeyword: inputValue
       });
-      this.find(inputValue);
+      this.findKeyword(inputValue);
     }
   }
 
@@ -136,7 +139,7 @@ export default class SearchBar extends React.Component {
     this.setState({
       replaceKeyword
     });
-    this.find(replaceKeyword);
+    this.findKeyword(replaceKeyword);
   }
 
   onReplaceInputKeyUp = e => {
@@ -156,7 +159,7 @@ export default class SearchBar extends React.Component {
       this.setState({
         replaceKeyword: inputValue
       });
-      this.find(inputValue);
+      this.findKeyword(inputValue);
     }
   }
 
@@ -180,7 +183,7 @@ export default class SearchBar extends React.Component {
     if (enterKeyPressed(e)) {
       let replaceAll = this.shiftKeyHolding;
       this.setCursorToStart();
-      this.replace(this.cm, replaceAll);
+      this.replaceOne(this.cm, replaceAll);
     }
   }
 
@@ -203,7 +206,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  find(query = this.state.findKeyword) {
+  findKeyword(query = this.state.findKeyword) {
     let {cm, cursor} = this;
     clearSearch(cm);
     clearSelection(cm);
@@ -333,7 +336,7 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  replace(cm, all) {
+  replaceOne(cm, all) {
 
     if (cm.getOption('readOnly')) {
       return;
@@ -450,7 +453,7 @@ export default class SearchBar extends React.Component {
 
   onReplaceButtonClick = () => {
     this.setCursorToStart();
-    this.replace(this.cm);
+    this.replaceOne(this.cm);
   }
 
   onReplaceAllButtonClick = () => {
@@ -458,7 +461,7 @@ export default class SearchBar extends React.Component {
 
     self.openConfirmDialog({
       yes: () => {
-        self.replace(self.cm, true);
+        self.replaceOne(self.cm, true);
       },
       no: () => {
         self.close();
@@ -504,6 +507,9 @@ export default class SearchBar extends React.Component {
         <input {...withInputProps} />
         <button onClick={this.onReplaceButtonClick}>Replace</button>
         <button onClick={this.onReplaceAllButtonClick}>Replace All</button>
+        <button className="button-close" onClick={this.close}>
+          <i className="glyphicon glyphicon-remove"></i>
+        </button>
       </div>
     );
   }
