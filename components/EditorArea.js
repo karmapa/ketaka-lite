@@ -422,6 +422,7 @@ export default class EditorArea extends React.Component {
 
   componentWillUnmount() {
     this.keypressListener.distroy();
+    window.removeEventListener('resize', this.handleResize);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
