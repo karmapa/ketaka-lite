@@ -5,7 +5,7 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen, EditorToolbar} from '.';
+  ModalImportStatus, ModalOpen, EditorToolbar, Resizer} from '.';
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL} from '../constants/AppConstants';
