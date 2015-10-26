@@ -655,10 +655,22 @@ export default class EditorArea extends React.Component {
   }
 
   renderImageArea(key, src) {
-    if (src) {
-      return <ImageZoomer key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
+    let style;
+
+    if (DIRECTION_HORIZONTAL === this.props.settings.direction) {
+      style = {
+        height: this.getImageZoomerHeight()
+      };
     }
-    return <ImageUploader key={key} className="image-uploader" onUploadButtonClick={::this.onUploadButtonClick} />;
+    else {
+      style = {
+        width: this.getImageZoomerWidth()
+      };
+    }
+    if (src) {
+      return <ImageZoomer style={style} key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
+    }
+    return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={::this.onUploadButtonClick} />;
   }
 
   onApplyChunksButtonClick() {
