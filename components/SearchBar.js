@@ -412,7 +412,7 @@ export default class SearchBar extends React.Component {
 
   onSearchBoxBlur = e => {
     if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
-      this.close();
+   //   this.close();
     }
   }
 
