@@ -114,13 +114,13 @@ export default class EditorToolbar extends React.Component {
 
         <div className="section section-codemirror">
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Undo</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Undo</Tooltip>}>
             <button className="button-undo" onClick={onUndoButtonClick}>
               <i className="glyphicon glyphicon-repeat"></i>
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Redo</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Redo</Tooltip>}>
             <button className="button-redo" onClick={onRedoButtonClick}>
               <i className="glyphicon glyphicon-repeat"></i>
             </button>
@@ -133,32 +133,32 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Toggle Read Only</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Toggle Read Only</Tooltip>}>
             <button className="button-readonly" onClick={onReadonlyButtonClick}>
               <i className={classNames(classButtonReadonly)}></i>
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Spell Check</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Spell Check</Tooltip>}>
             <button className={classNames({'button-spell-check': true, 'on': spellCheckOn})}
               onClick={onSpellCheckButtonClick}>
               <i className="glyphicon glyphicon-ok"></i>
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Apply Chunks</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Apply Chunks</Tooltip>}>
             <button className="button-apply-chunks" onClick={onApplyChunksButtonClick}>
               <i className="glyphicon glyphicon-align-center"></i>
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Add New Page</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Add New Page</Tooltip>}>
             <button className="button-page-add" onClick={onPageAddButtonClick}>
               <i className="glyphicon glyphicon-plus"></i>
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Add Page Break Files</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Add Page Break Files</Tooltip>}>
             <button className="button-add-pb-files" onClick={onAddPbFileButtonClick}>
               <i className="glyphicon glyphicon-open-file"></i>
             </button>
@@ -170,7 +170,7 @@ export default class EditorToolbar extends React.Component {
 
         <div className="section">
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Font Size</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Font Size</Tooltip>}>
             <div className="box-font">
               <span>
                 <i className="glyphicon glyphicon-text-height"></i>
@@ -182,7 +182,7 @@ export default class EditorToolbar extends React.Component {
             </div>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Line Height</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Line Height</Tooltip>}>
             <div className="box-font">
               <span>
                 <i className="glyphicon glyphicon-sort-by-attributes"></i>
@@ -194,7 +194,7 @@ export default class EditorToolbar extends React.Component {
             </div>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='top' overlay={<Tooltip>Letter Spacing</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Letter Spacing</Tooltip>}>
             <div className="box-font">
               <span>
                 <i className="glyphicon glyphicon-text-width"></i>
@@ -214,12 +214,12 @@ export default class EditorToolbar extends React.Component {
         </div>
 
         <div className="section">
-          <OverlayTrigger placement='top' overlay={<Tooltip>Direction</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Direction</Tooltip>}>
             <button {...directionButtonProps}>
               <i className="glyphicon glyphicon-pause"></i>
             </button>
           </OverlayTrigger>
-          <OverlayTrigger placement='top' overlay={<Tooltip>Doc Settings</Tooltip>}>
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Doc Settings</Tooltip>}>
             <button className="button-settings" onClick={onSettingsButtonClick}>
               <i className="glyphicon glyphicon-cog"></i>
             </button>
@@ -252,7 +252,7 @@ export default class EditorToolbar extends React.Component {
     let {canShowPageDeleteButton, onPageDeleteButtonClick} = this.props;
     if (canShowPageDeleteButton) {
       return (
-        <OverlayTrigger placement='top' overlay={<Tooltip>Delete Current Page</Tooltip>}>
+        <OverlayTrigger placement='bottom' overlay={<Tooltip>Delete Current Page</Tooltip>}>
           <button className="button-page-delete" onClick={onPageDeleteButtonClick}>
             <i className="glyphicon glyphicon-trash"></i>
           </button>
