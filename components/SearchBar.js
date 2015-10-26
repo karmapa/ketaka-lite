@@ -85,7 +85,7 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  onFindInputChange(e) {
+  onFindInputChange = e => {
     let findKeyword = e.target.value;
     this.setState({
       findKeyword
@@ -93,8 +93,12 @@ export default class SearchBar extends React.Component {
     this.find(findKeyword);
   }
 
-  onFindInputKeyUp(e) {
+  onFindInputKeyUp = e => {
     this.ime.keyup(e);
+
+    if (shiftKeyPressed(e)) {
+      this.shiftKeyHolding = false;
+    }
 
     if (enterKeyPressed(e) && (! this.shiftKeyHolding)) {
       React.findDOMNode(this.refs.buttonFindNext).click();
@@ -106,7 +110,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onFindInputKeyDown(e) {
+  onFindInputKeyDown = e => {
     this.ime.keydown(e);
 
     if (shiftKeyPressed(e)) {
@@ -127,7 +131,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onReplaceInputChange(e) {
+  onReplaceInputChange = e => {
     let replaceKeyword = e.target.value;
     this.setState({
       replaceKeyword
@@ -135,11 +139,11 @@ export default class SearchBar extends React.Component {
     this.find(replaceKeyword);
   }
 
-  onReplaceInputKeyUp(e) {
+  onReplaceInputKeyUp = e => {
     this.ime.keyup(e);
   }
 
-  onReplaceInputKeyDown(e) {
+  onReplaceInputKeyDown = e => {
     this.ime.keydown(e);
   }
 
@@ -156,7 +160,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onWithInputChange(e) {
+  onWithInputChange = e => {
     this.setState({
       withKeyword: e.target.value
     });
@@ -169,7 +173,7 @@ export default class SearchBar extends React.Component {
     this.cursor = from;
   }
 
-  onWithInputKeyUp(e) {
+  onWithInputKeyUp = e => {
 
     this.ime.keyup(e);
 
@@ -180,7 +184,7 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onWithInputKeyDown(e) {
+  onWithInputKeyDown = e => {
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
@@ -206,7 +210,7 @@ export default class SearchBar extends React.Component {
     this.doSearch({cm, query, cursor});
   }
 
-  prev() {
+  prev = () => {
     this.doSearch({
       cm: this.cm,
       rev: true
@@ -214,7 +218,7 @@ export default class SearchBar extends React.Component {
     this.cursor = this.cm.getCursor();
   }
 
-  next() {
+  next = () => {
     this.doSearch({cm: this.cm});
     this.cursor = this.cm.getCursor();
   }
@@ -309,7 +313,7 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  close() {
+  close = () => {
     let {cm} = this;
     clearSearch(cm);
     clearSelection(cm);
@@ -403,13 +407,13 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onSearchBoxBlur(e) {
+  onSearchBoxBlur = e => {
     if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
       this.close();
     }
   }
 
-  renderSearch() {
+  renderSearch = () => {
 
     let classnames = {
       'box-search': true,
@@ -418,9 +422,9 @@ export default class SearchBar extends React.Component {
 
     let findInputProps = {
       className: 'find-input',
-      onChange: ::this.onFindInputChange,
-      onKeyDown: ::this.onFindInputKeyDown,
-      onKeyUp: ::this.onFindInputKeyUp,
+      onChange: this.onFindInputChange,
+      onKeyDown: this.onFindInputKeyDown,
+      onKeyUp: this.onFindInputKeyUp,
       onKeyPress: this.onFindInputKeyPress.bind(this, 'findInput'),
       value: this.state.findKeyword,
       ref: 'findInput',
@@ -428,28 +432,28 @@ export default class SearchBar extends React.Component {
     };
 
     return (
-      <div className={classNames(classnames)} onBlur={::this.onSearchBoxBlur}>
+      <div className={classNames(classnames)} onBlur={this.onSearchBoxBlur}>
         <span>Search: </span>
         <input {...findInputProps} />
-        <button ref="buttonFindPrev" onClick={::this.prev}>
+        <button ref="buttonFindPrev" onClick={this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
-        <button ref="buttonFindNext" onClick={::this.next}>
+        <button ref="buttonFindNext" onClick={this.next}>
           <i className="glyphicon glyphicon-chevron-down"></i>
         </button>
-        <button className="button-close" onClick={::this.close}>
+        <button className="button-close" onClick={this.close}>
           <i className="glyphicon glyphicon-remove"></i>
         </button>
       </div>
     );
   }
 
-  onReplaceButtonClick() {
+  onReplaceButtonClick = () => {
     this.setCursorToStart();
     this.replace(this.cm);
   }
 
-  onReplaceAllButtonClick() {
+  onReplaceAllButtonClick = () => {
     let self = this;
 
     self.openConfirmDialog({
@@ -463,7 +467,7 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  renderReplace() {
+  renderReplace = () => {
 
     let {opened, replaceKeyword, withKeyword} = this.state;
 
@@ -473,20 +477,20 @@ export default class SearchBar extends React.Component {
     };
 
     let replaceInputProps = {
-      onChange: ::this.onReplaceInputChange,
-      onKeyDown: ::this.onReplaceInputKeyDown,
+      onChange: this.onReplaceInputChange,
+      onKeyDown: this.onReplaceInputKeyDown,
       onKeyPress: this.onReplaceInputKeyPress.bind(this, 'replaceInput'),
-      onKeyUp: ::this.onReplaceInputKeyUp,
+      onKeyUp: this.onReplaceInputKeyUp,
       ref: 'replaceInput',
       type: 'text',
       value: replaceKeyword
     };
 
     let withInputProps = {
-      onChange: ::this.onWithInputChange,
-      onKeyDown: ::this.onWithInputKeyDown,
+      onChange: this.onWithInputChange,
+      onKeyDown: this.onWithInputKeyDown,
       onKeyPress: this.onWithInputKeyPress.bind(this, 'withInput'),
-      onKeyUp: ::this.onWithInputKeyUp,
+      onKeyUp: this.onWithInputKeyUp,
       ref: 'withInput',
       type: 'text',
       value: withKeyword
@@ -498,16 +502,16 @@ export default class SearchBar extends React.Component {
         <input {...replaceInputProps} />
         <span>With: </span>
         <input {...withInputProps} />
-        <button onClick={::this.onReplaceButtonClick}>Replace</button>
-        <button onClick={::this.onReplaceAllButtonClick}>Replace All</button>
+        <button onClick={this.onReplaceButtonClick}>Replace</button>
+        <button onClick={this.onReplaceAllButtonClick}>Replace All</button>
       </div>
     );
   }
 
-  yes() {
+  yes = () => {
   }
 
-  no() {
+  no = () => {
   }
 
   stop() {
@@ -518,13 +522,13 @@ export default class SearchBar extends React.Component {
     });
   }
 
-  onConfirmBoxBlur(e) {
+  onConfirmBoxBlur = e => {
     if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
       this.close();
     }
   }
 
-  renderConfirm() {
+  renderConfirm = () => {
 
     let {opened, confirmMessage} = this.state;
 
@@ -534,20 +538,20 @@ export default class SearchBar extends React.Component {
     };
 
     return (
-      <div className={classNames(classnames)} onBlur={::this.onConfirmBoxBlur}>
+      <div className={classNames(classnames)} onBlur={this.onConfirmBoxBlur}>
         <span>{confirmMessage}</span>
-        <button onClick={::this.yes}>Yes</button>
-        <button onClick={::this.no}>No</button>
-        <button onClick={::this.stop}>Stop</button>
+        <button onClick={this.yes}>Yes</button>
+        <button onClick={this.no}>No</button>
+        <button onClick={this.stop}>Stop</button>
       </div>
     );
   }
 
   render() {
     let map = {
-      [MODE_SEARCH]: ::this.renderSearch,
-      [MODE_REPLACE]: ::this.renderReplace,
-      [MODE_CONFIRM]: ::this.renderConfirm,
+      [MODE_SEARCH]: this.renderSearch,
+      [MODE_REPLACE]: this.renderReplace,
+      [MODE_CONFIRM]: this.renderConfirm,
     };
     let renderFunc = map[this.state.mode];
 

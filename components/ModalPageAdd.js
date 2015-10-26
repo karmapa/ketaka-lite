@@ -45,7 +45,7 @@ export default class ModalPageAdd extends React.Component {
     return this.pageNames.includes(pageName);
   }
 
-  isValidPageName() {
+  isValidPageName = () => {
     let {pageName} = this.state;
     if (_.isEmpty(pageName)) {
       return false;
@@ -56,7 +56,7 @@ export default class ModalPageAdd extends React.Component {
     return ! this.isPageNameExisted(pageName);
   }
 
-  pageNameHelp() {
+  pageNameHelp = () => {
     if (! this.state.dirty) {
       return '';
     }
@@ -70,21 +70,21 @@ export default class ModalPageAdd extends React.Component {
     return '';
   }
 
-  pageNameState() {
+  pageNameState = () => {
     if (! this.state.dirty) {
       return 'success';
     }
     return this.isValidPageName() ? 'success' : 'error';
   }
 
-  onPageNameChange(e) {
+  onPageNameChange = e => {
     this.setState({
       dirty: true,
       pageName: e.target.value
     });
   }
 
-  confirm() {
+  confirm = () => {
     if (this.isValidPageName()) {
       this.setState({
         loading: true
@@ -93,7 +93,7 @@ export default class ModalPageAdd extends React.Component {
     }
   }
 
-  onInputBlur() {
+  onInputBlur = () => {
     this.setState({
       dirty: true
     });
@@ -114,14 +114,14 @@ export default class ModalPageAdd extends React.Component {
         <Modal.Body>
 
           <Input type="text" value={pageName} placeholder='Enter text'
-                 onBlur={::this.onInputBlur}
-                 label="Page Name" help={::this.pageNameHelp()} bsStyle={::this.pageNameState()}
-                 hasFeedback ref='currentPageName' groupClassName='group-class' labelClassName='label-class' onChange={::this.onPageNameChange} />
+                 onBlur={this.onInputBlur}
+                 label="Page Name" help={this.pageNameHelp()} bsStyle={this.pageNameState()}
+                 hasFeedback ref='currentPageName' groupClassName='group-class' labelClassName='label-class' onChange={this.onPageNameChange} />
         </Modal.Body>
 
         <Modal.Footer>
           <Button onClick={cancel}>Cancel</Button>
-          <Button bsStyle="primary" onClick={::this.confirm} disabled={(! ::this.isValidPageName() || (loading))}>Add New Page</Button>
+          <Button bsStyle="primary" onClick={this.confirm} disabled={(! this.isValidPageName() || (loading))}>Add New Page</Button>
         </Modal.Footer>
       </Modal>
     );

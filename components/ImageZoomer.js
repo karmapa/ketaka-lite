@@ -51,7 +51,7 @@ export default class ImageZoomer extends React.Component {
 
   onResize = null;
 
-  handleMouseMove() {
+  handleMouseMove = () => {
 
     let mouse = this.mouse;
     let e = mouse.event;
@@ -77,7 +77,7 @@ export default class ImageZoomer extends React.Component {
     mouse.y = newY;
   }
 
-  onMouseDown(e) {
+  onMouseDown = e => {
     let mouse = this.mouse;
     mouse.event = e;
     // prevent image downloading in chrome
@@ -91,7 +91,7 @@ export default class ImageZoomer extends React.Component {
     });
   }
 
-  onMouseMove(e) {
+  onMouseMove = e => {
 
     let animator = this.animator;
     this.mouse.event = e;
@@ -101,7 +101,7 @@ export default class ImageZoomer extends React.Component {
         isDragging: true
       });
       if (! animator.isRunning()) {
-        animator.start(::this.handleMouseMove);
+        animator.start(this.handleMouseMove);
       }
     }
   }
@@ -116,7 +116,7 @@ export default class ImageZoomer extends React.Component {
     return ((this.image.height * ratio) > this.container.height);
   }
 
-  onMouseUp() {
+  onMouseUp = () => {
     this.animator.stop();
     this.setState({
       isHolding: false,
@@ -124,7 +124,7 @@ export default class ImageZoomer extends React.Component {
     });
   }
 
-  enlarge(e) {
+  enlarge = e => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     let newPercent = this.state.percent + this.props.deltaPercent;
@@ -136,7 +136,7 @@ export default class ImageZoomer extends React.Component {
     this.adjustTranslate(newPercent);
   }
 
-  shrink(e) {
+  shrink = e => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     let newPercent = this.state.percent - this.props.deltaPercent;
@@ -150,7 +150,7 @@ export default class ImageZoomer extends React.Component {
     }
   }
 
-  handleInputChange(e) {
+  handleInputChange = e => {
 
     let value = e.target.value;
     let parsedValue = parseFloat(value);
@@ -176,7 +176,7 @@ export default class ImageZoomer extends React.Component {
     }
   }
 
-  handleInputBlur() {
+  handleInputBlur = () => {
     this.setPercentToInputValue();
   }
 
@@ -186,7 +186,7 @@ export default class ImageZoomer extends React.Component {
     });
   }
 
-  onImageLoad() {
+  onImageLoad = () => {
     this.setOffsetSize();
   }
 
@@ -207,8 +207,8 @@ export default class ImageZoomer extends React.Component {
 
   componentDidMount() {
     let mouse = this.mouse;
-    mouse.onMouseMove = ::this.onMouseMove;
-    mouse.onMouseUp = ::this.onMouseUp;
+    mouse.onMouseMove = this.onMouseMove;
+    mouse.onMouseUp = this.onMouseUp;
 
     this.onResize = () => {
       this.setOffsetSize();
@@ -247,12 +247,12 @@ export default class ImageZoomer extends React.Component {
       'dragging': isDragging
     };
     return (
-      <div style={style} className={classNames(classes)} onMouseDown={::this.onMouseDown} ref="imageZoomer">
-        <img className="image-zoomable" onError={::this.onImageError} onLoad={::this.onImageLoad} ref="imageZoomable"
+      <div style={style} className={classNames(classes)} onMouseDown={this.onMouseDown} ref="imageZoomer">
+        <img className="image-zoomable" onError={this.onImageError} onLoad={this.onImageLoad} ref="imageZoomable"
              style={{transform: 'translate(' + translateX + 'px,' + translateY + 'px) scale(' + percent / 100 + ')'}}
              src={src} />
-        <ImageZoomerToolbar className="image-zoomer-toolbar" inputValue={this.state.inputValue} onInputChange={::this.handleInputChange}
-                            onInputBlur={::this.handleInputBlur} onAddButtonClick={::this.enlarge} onMinusButtonClick={::this.shrink} />
+        <ImageZoomerToolbar className="image-zoomer-toolbar" inputValue={this.state.inputValue} onInputChange={this.handleInputChange}
+                            onInputBlur={this.handleInputBlur} onAddButtonClick={this.enlarge} onMinusButtonClick={this.shrink} />
         <span className="filename">{Path.basename(src.replace(/\\/g, '/'))}</span>
       </div>
     );

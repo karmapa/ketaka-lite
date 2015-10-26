@@ -40,7 +40,7 @@ export default class Editor extends React.Component {
     codemirror.setSize(width, height);
   }
 
-  onCodemirrorChange(content) {
+  onCodemirrorChange = content => {
     this.props.onCodemirrorChange(this.codemirror, content);
   }
 
@@ -101,7 +101,7 @@ export default class Editor extends React.Component {
     let {code, className, settings} = this.props;
 
     let codemirrorProps = {
-      onChange: ::this.onCodemirrorChange,
+      onChange: this.onCodemirrorChange,
       options: {
         theme: settings.theme,
         lineWrapping: true,

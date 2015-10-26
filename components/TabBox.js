@@ -26,16 +26,16 @@ export default class TabBox extends React.Component {
     return (
       <div>
         <Nav {...props} activeKey={activeKey} onSelect={this.props.onSelect}>
-          {utils.ValidComponentChildren.map(this.props.children, ::this.renderTab, this)}
+          {utils.ValidComponentChildren.map(this.props.children, this.renderTab, this)}
         </Nav>
         <div id={id} className="tab-content">
-          {utils.ValidComponentChildren.map(this.props.children, ::this.renderPane)}
+          {utils.ValidComponentChildren.map(this.props.children, this.renderPane)}
         </div>
       </div>
     );
   }
 
-  renderTab(child) {
+  renderTab = child => {
     let {eventKey, className, tab, disabled, noCloseButton} = child.props;
     let {onClose} = this.props;
     let classes = {
@@ -52,7 +52,7 @@ export default class TabBox extends React.Component {
     );
   }
 
-  renderPane(child, index) {
+  renderPane = (child, index) => {
 
     let activeKey = this.props.activeKey;
     let active = (child.props.eventKey === activeKey);

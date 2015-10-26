@@ -70,7 +70,7 @@ export default class EditorArea extends React.Component {
     this.refs.modalSettings.close();
   }
 
-  handleSelect(key) {
+  handleSelect = key => {
     if (KEY_ADD_DOC === key) {
       return this.addDoc();
     }
@@ -90,7 +90,7 @@ export default class EditorArea extends React.Component {
     });
   }
 
-  addDoc() {
+  addDoc = () => {
     this.props.createDoc();
   }
 
@@ -168,13 +168,13 @@ export default class EditorArea extends React.Component {
     this.closeDoc(key);
   }
 
-  saveAndClose() {
+  saveAndClose = () => {
     this.save();
     this.closeDoc();
     this.refs.modalSaveConfirm.close();
   }
 
-  discard() {
+  discard = () => {
     this.closeDoc();
     this.refs.modalSaveConfirm.close();
   }
@@ -191,13 +191,13 @@ export default class EditorArea extends React.Component {
     return doc.changed;
   }
 
-  handleClose(props, e) {
+  handleClose = (props, e) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     this.closeTab(props.eventKey);
   }
 
-  rotateTabLeft() {
+  rotateTabLeft = () => {
     let docs = this.props.docs;
     if (docs.length < 2) {
       return;
@@ -207,7 +207,7 @@ export default class EditorArea extends React.Component {
     this.activateTab(nextIndex);
   }
 
-  rotateTabRight() {
+  rotateTabRight = () => {
     let docs = this.props.docs;
     if (docs.length < 2) {
       return;
@@ -226,7 +226,7 @@ export default class EditorArea extends React.Component {
       .findIndex(page => page.name === name);
   }
 
-  onInputChange(pageIndex) {
+  onInputChange = pageIndex => {
     let {spellCheckOn} = this.props.settings;
     if (spellCheckOn) {
       this.removeSpellCheckOverlay();
@@ -243,7 +243,7 @@ export default class EditorArea extends React.Component {
     return _.get(doc, 'pageIndex', 0);
   }
 
-  save() {
+  save = () => {
     let self = this;
     let doc = self.getDoc();
 
@@ -277,14 +277,14 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
-  cancel() {
+  cancel = () => {
     let searchBar = this.refs.searchBar;
     if (searchBar) {
       searchBar.close();
     }
   }
 
-  splitPage() {
+  splitPage = () => {
 
     let doc = this.getDoc();
     let cm = this.getCurrentCodemirror();
@@ -330,16 +330,16 @@ export default class EditorArea extends React.Component {
     keypressListener = new keypress.Listener();
     keypressListener = Helper.camelize(['simple_combo'], keypressListener);
 
-    keypressListener.simpleCombo('cmd j', ::this.addDoc);
+    keypressListener.simpleCombo('cmd j', this.addDoc);
     keypressListener.simpleCombo('cmd k', this.closeTab.bind(this, null));
-    keypressListener.simpleCombo('ctrl alt left', ::this.rotateTabLeft);
-    keypressListener.simpleCombo('ctrl alt right', ::this.rotateTabRight);
-    keypressListener.simpleCombo('ctrl s', ::this.save);
-    keypressListener.simpleCombo('cmd s', ::this.save);
+    keypressListener.simpleCombo('ctrl alt left', this.rotateTabLeft);
+    keypressListener.simpleCombo('ctrl alt right', this.rotateTabRight);
+    keypressListener.simpleCombo('ctrl s', this.save);
+    keypressListener.simpleCombo('cmd s', this.save);
 
-    keypressListener.simpleCombo('ctrl enter', ::this.splitPage);
+    keypressListener.simpleCombo('ctrl enter', this.splitPage);
 
-    keypressListener.simpleCombo('esc', ::this.cancel);
+    keypressListener.simpleCombo('esc', this.cancel);
 
     keypressListener.simpleCombo('alt space', () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
@@ -432,7 +432,7 @@ export default class EditorArea extends React.Component {
     return doc.pages[pageIndex];
   }
 
-  onCodemirrorChange(cm, content) {
+  onCodemirrorChange = (cm, content) => {
 
     let doc = this.getDoc();
     let {uuid, pageIndex} = doc;
@@ -447,7 +447,7 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  getTabName(doc) {
+  getTabName = doc => {
     let tabName = doc.name;
     if (this.docChanged(doc)) {
       return tabName + '*';
@@ -455,7 +455,7 @@ export default class EditorArea extends React.Component {
     return tabName;
   }
 
-  onUploadButtonClick() {
+  onUploadButtonClick = () => {
     let self = this;
     let doc = this.getDoc();
     let {uuid, pageIndex} = doc;
@@ -471,7 +471,7 @@ export default class EditorArea extends React.Component {
     return page.destImagePath;
   }
 
-  onSettingsButtonClick() {
+  onSettingsButtonClick = () => {
     let self = this;
 
     Api.send('find-doc-names')
@@ -487,11 +487,11 @@ export default class EditorArea extends React.Component {
       });
   }
 
-  closeModalDocSettings() {
+  closeModalDocSettings = () => {
     this.refs.modalDocSettings.close();
   }
 
-  saveAndCloseModalDocSettings(data) {
+  saveAndCloseModalDocSettings = data => {
     let self = this;
     let doc = this.getDoc();
     let page = doc.pages[doc.pageIndex];
@@ -511,13 +511,13 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
-  onPageAddButtonClick() {
+  onPageAddButtonClick = () => {
     this.refs.modalPageAdd.open({
       pageNames: _.get(this.getDoc(), 'pages', []).map(page => page.name)
     });
   }
 
-  onPageDeleteButtonClick() {
+  onPageDeleteButtonClick = () => {
     this.refs.modalPageDeleteConfirm.open({
       title: 'Oops',
       message: 'Are you sure to delete this page ?'
@@ -597,7 +597,7 @@ export default class EditorArea extends React.Component {
     };
   }
 
-  onColorButtonClick(color) {
+  onColorButtonClick = color => {
     let doc = this.getDoc();
     let codemirror = this.getCurrentCodemirror();
     let hexColor = MAP_COLORS[color];
@@ -614,7 +614,7 @@ export default class EditorArea extends React.Component {
     this.props.saveFontRecord(doc.uuid, doc.pageIndex, fontRecords);
   }
 
-  onSpellCheckButtonClick() {
+  onSpellCheckButtonClick = () => {
     this.checkSpelling();
   }
 
@@ -626,11 +626,11 @@ export default class EditorArea extends React.Component {
     return uuid + '.image-zoomer';
   }
 
-  closeModalPageAdd() {
+  closeModalPageAdd = () => {
     this.refs.modalPageAdd.close();
   }
 
-  addPageAndCloseModal(pageName) {
+  addPageAndCloseModal = pageName => {
     let doc = this.getDoc();
     this.props.addPage(doc.uuid, pageName);
     let pageIndex = _.findIndex(doc.pages, {name: pageName});
@@ -667,13 +667,14 @@ export default class EditorArea extends React.Component {
         width: this.getImageZoomerWidth()
       };
     }
+
     if (src) {
       return <ImageZoomer style={style} key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
     }
-    return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={::this.onUploadButtonClick} />;
+    return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={this.onUploadButtonClick} />;
   }
 
-  onApplyChunksButtonClick() {
+  onApplyChunksButtonClick = () => {
     let doc = this.getDoc();
     this.props.toggleEditChunk(doc.uuid);
   }
@@ -684,11 +685,11 @@ export default class EditorArea extends React.Component {
     return _.get(this.refs[editorKey], 'codemirror');
   }
 
-  cancelDeletePage() {
+  cancelDeletePage = () => {
     this.refs.modalPageDeleteConfirm.close();
   }
 
-  deleteCurrentPage() {
+  deleteCurrentPage = () => {
     let doc = this.getDoc();
     let currentPageIndex = doc.pageIndex;
 
@@ -704,7 +705,7 @@ export default class EditorArea extends React.Component {
     return doc.uuid === this.state.docKey;
   }
 
-  renderDoc(doc) {
+  renderDoc = doc => {
 
     let pageIndex = this.getPageIndex(doc);
     let page = doc.pages[pageIndex];
@@ -719,33 +720,33 @@ export default class EditorArea extends React.Component {
       let ratio = (DIRECTION_HORIZONTAL === direction) ? settings.nsRatio : settings.ewRatio;
 
       return (
-        <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key}>
+        <TabItem eventKey={key} tab={this.getTabName(doc)} key={key}>
 
           <Resizer direction={direction} ratio={ratio} setRatio={setRatio} />
 
-          {::this.renderImageArea(imageZoomerKey, src)}
-          {::this.renderEditorArea(doc, pageIndex)}
+          {this.renderImageArea(imageZoomerKey, src)}
+          {this.renderEditorArea(doc, pageIndex)}
         </TabItem>
       );
     }
     else {
-      return <TabItem eventKey={key} tab={::this.getTabName(doc)} key={key} />;
+      return <TabItem eventKey={key} tab={this.getTabName(doc)} key={key} />;
     }
 
   }
 
-  applyChunk(chunk) {
+  applyChunk = chunk => {
     this.closeChunkEditor();
     let codemirror = this.getCurrentCodemirror();
     codemirror.replaceRange(chunk, {line: Infinity});
   }
 
-  closeChunkEditor() {
+  closeChunkEditor = () => {
     let doc = this.getDoc();
     this.props.toggleEditChunk(doc.uuid);
   }
 
-  onAddPbFileButtonClick() {
+  onAddPbFileButtonClick = () => {
     let self = this;
     Api.send('add-pb-files', {doc: self.getDoc()})
       .then(res => {
@@ -755,14 +756,14 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
-  onBambooDeleteClick(name) {
+  onBambooDeleteClick = name => {
     let self = this;
     self.closeDocByName(name);
     Api.send('delete-doc', {name})
       .then(res => self.refs.modalOpen.setNames(res.names));
   }
 
-  onBambooClick(name) {
+  onBambooClick = name => {
     let self = this;
     let openedDoc = _.find(this.props.docs, {name});
     if (openedDoc) {
@@ -784,7 +785,7 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  renderEditorArea(doc, pageIndex) {
+  renderEditorArea = (doc, pageIndex) => {
 
     let {editChunk} = doc;
 
@@ -831,8 +832,8 @@ export default class EditorArea extends React.Component {
       startKeyword,
       chunk: doc.chunk,
       inputMethod: settings.inputMethod,
-      apply: ::this.applyChunk,
-      cancel: ::this.closeChunkEditor
+      apply: this.applyChunk,
+      cancel: this.closeChunkEditor
     };
 
     let key = doc.uuid;
@@ -844,7 +845,7 @@ export default class EditorArea extends React.Component {
       code: page.content || '',
       ref: editorKey,
       key: editorKey,
-      onCodemirrorChange: ::this.onCodemirrorChange,
+      onCodemirrorChange: this.onCodemirrorChange,
       settings
     };
 
@@ -856,7 +857,7 @@ export default class EditorArea extends React.Component {
     );
   }
 
-  prevPageHasMatched(keyword) {
+  prevPageHasMatched = keyword => {
     let doc = this.getDoc();
     let prevPage = doc.pages[doc.pageIndex - 1];
     if (prevPage) {
@@ -866,7 +867,7 @@ export default class EditorArea extends React.Component {
     return false;
   }
 
-  nextPageHasMatched(keyword) {
+  nextPageHasMatched = keyword => {
     let doc = this.getDoc();
     let nextPage = doc.pages[doc.pageIndex + 1];
     if (nextPage) {
@@ -876,7 +877,7 @@ export default class EditorArea extends React.Component {
     return false;
   }
 
-  toNextPage() {
+  toNextPage = () => {
     let doc = this.getDoc();
     let pageCount = _.get(doc, 'pages', []).length;
     let nextPageIndex = doc.pageIndex + 1;
@@ -889,7 +890,7 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  toPrevPage() {
+  toPrevPage = () => {
     let doc = this.getDoc();
     let prevPageIndex = doc.pageIndex - 1;
     if (prevPageIndex >= 0) {
@@ -909,14 +910,14 @@ export default class EditorArea extends React.Component {
     return this.refs[editorKey];
   }
 
-  onRedoButtonClick() {
+  onRedoButtonClick = () => {
     let editor = this.getEditor();
     if (editor) {
       return editor.redo();
     }
   }
 
-  onUndoButtonClick() {
+  onUndoButtonClick = () => {
     let editor = this.getEditor();
     if (editor) {
       return editor.undo();
@@ -936,18 +937,18 @@ export default class EditorArea extends React.Component {
     let editorToolbarProps = {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
       className: 'editor-toolbar',
-      onAddPbFileButtonClick: ::this.onAddPbFileButtonClick,
-      onApplyChunksButtonClick: ::this.onApplyChunksButtonClick,
-      onColorButtonClick: ::this.onColorButtonClick,
+      onAddPbFileButtonClick: this.onAddPbFileButtonClick,
+      onApplyChunksButtonClick: this.onApplyChunksButtonClick,
+      onColorButtonClick: this.onColorButtonClick,
       onDirectionButtonClick: toggleDirection,
-      onInputChange: ::this.onInputChange,
-      onPageAddButtonClick: ::this.onPageAddButtonClick,
-      onPageDeleteButtonClick: ::this.onPageDeleteButtonClick,
+      onInputChange: this.onInputChange,
+      onPageAddButtonClick: this.onPageAddButtonClick,
+      onPageDeleteButtonClick: this.onPageDeleteButtonClick,
       onReadonlyButtonClick: toggleReadonly,
-      onRedoButtonClick: ::this.onRedoButtonClick,
-      onSettingsButtonClick: ::this.onSettingsButtonClick,
-      onSpellCheckButtonClick: ::this.onSpellCheckButtonClick,
-      onUndoButtonClick: ::this.onUndoButtonClick,
+      onRedoButtonClick: this.onRedoButtonClick,
+      onSettingsButtonClick: this.onSettingsButtonClick,
+      onSpellCheckButtonClick: this.onSpellCheckButtonClick,
+      onUndoButtonClick: this.onUndoButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
       pageNames: doc ? doc.pages.map(page => page.name) : [],
       setFontSize,
@@ -970,10 +971,10 @@ export default class EditorArea extends React.Component {
 
     let searchBarProps = {
       inputMethod,
-      nextPageHasMatched: ::this.nextPageHasMatched,
-      prevPageHasMatched: ::this.prevPageHasMatched,
-      toNextPage: ::this.toNextPage,
-      toPrevPage: ::this.toPrevPage,
+      nextPageHasMatched: this.nextPageHasMatched,
+      prevPageHasMatched: this.prevPageHasMatched,
+      toNextPage: this.toNextPage,
+      toPrevPage: this.toPrevPage,
       doc: this.getDoc(),
       writePageContent
     };
@@ -982,18 +983,18 @@ export default class EditorArea extends React.Component {
       <div className={classNames(classes)}>
         <SearchBar ref="searchBar" {...searchBarProps} />
         {this.renderEditorToolbar()}
-        <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={::this.handleSelect} onClose={::this.handleClose}>
-          {docs.map(::this.renderDoc)}
+        <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={this.handleSelect} onClose={this.handleClose}>
+          {docs.map(this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
         </TabBox>
-        <ModalConfirm ref="modalSaveConfirm" confirmText="Save and close" confirm={::this.saveAndClose} cancelText="Discard" cancel={::this.discard} />
+        <ModalConfirm ref="modalSaveConfirm" confirmText="Save and close" confirm={this.saveAndClose} cancelText="Discard" cancel={this.discard} />
         <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
-          confirm={::this.deleteCurrentPage} cancelText="Cancel" cancel={::this.cancelDeletePage} />
-        <ModalDocSettings ref="modalDocSettings" cancel={::this.closeModalDocSettings} confirm={::this.saveAndCloseModalDocSettings} />
-        <ModalPageAdd ref="modalPageAdd" cancel={::this.closeModalPageAdd} confirm={::this.addPageAndCloseModal} />
+          confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
+        <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
+        <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
         <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} />
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
-        <ModalOpen ref="modalOpen" onBambooClick={::this.onBambooClick} onBambooDeleteClick={::this.onBambooDeleteClick} />
+        <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

@@ -56,7 +56,7 @@ export default class ModalDocSettings extends React.Component {
     return this.docNames.includes(docName);
   }
 
-  isValidDocName() {
+  isValidDocName = () => {
     let {docName} = this.state;
     let {originDocName} = this;
 
@@ -76,7 +76,7 @@ export default class ModalDocSettings extends React.Component {
     return this.pageNames.includes(pageName);
   }
 
-  isValidPageName() {
+  isValidPageName = () => {
     let {pageName} = this.state;
     if (_.isEmpty(pageName)) {
       return false;
@@ -98,7 +98,7 @@ export default class ModalDocSettings extends React.Component {
     return '';
   }
 
-  docNameHelp() {
+  docNameHelp = () => {
     let {docName} = this.state;
 
     if (_.isEmpty(docName)) {
@@ -113,27 +113,27 @@ export default class ModalDocSettings extends React.Component {
     return '';
   }
 
-  docNameState() {
+  docNameState = () => {
     return this.isValidDocName() ? 'success' : 'error';
   }
 
-  pageNameState() {
+  pageNameState = () => {
     return this.isValidPageName() ? 'success' : 'error';
   }
 
-  onDocNameChange(e) {
+  onDocNameChange = e => {
     this.setState({
       docName: e.target.value.toLowerCase()
     });
   }
 
-  onPageNameChange(e) {
+  onPageNameChange = e => {
     this.setState({
       pageName: e.target.value
     });
   }
 
-  confirm() {
+  confirm = () => {
     if (this.isValidDocName() && this.isValidPageName()) {
       this.setState({
         loading: true
@@ -157,17 +157,17 @@ export default class ModalDocSettings extends React.Component {
         <Modal.Body>
 
           <Input type="text" value={docName} placeholder="Enter text"
-                 label="Doc Name" help={::this.docNameHelp()} bsStyle={::this.docNameState()}
-                 hasFeedback ref="docName" groupClassName="group-class" labelClassName="label-class" onChange={::this.onDocNameChange} />
+                 label="Doc Name" help={this.docNameHelp()} bsStyle={this.docNameState()}
+                 hasFeedback ref="docName" groupClassName="group-class" labelClassName="label-class" onChange={this.onDocNameChange} />
 
           <Input type="text" value={pageName} placeholder='Enter text'
-                 label="Current Page Name" help={::this.pageNameHelp()} bsStyle={::this.pageNameState()}
-                 hasFeedback ref="currentPageName" groupClassName="group-class" labelClassName="label-class" onChange={::this.onPageNameChange} />
+                 label="Current Page Name" help={this.pageNameHelp()} bsStyle={this.pageNameState()}
+                 hasFeedback ref="currentPageName" groupClassName="group-class" labelClassName="label-class" onChange={this.onPageNameChange} />
         </Modal.Body>
 
         <Modal.Footer>
           <Button onClick={cancel}>Cancel</Button>
-          <Button bsStyle="primary" onClick={::this.confirm} disabled={(! ::this.isValidDocName()) || (! ::this.isValidPageName() || (loading))}>Save and close</Button>
+          <Button bsStyle="primary" onClick={this.confirm} disabled={(! this.isValidDocName()) || (! this.isValidPageName() || (loading))}>Save and close</Button>
         </Modal.Footer>
       </Modal>
     );

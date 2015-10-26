@@ -31,7 +31,7 @@ export default class ModalConfirm extends React.Component {
     });
   }
 
-  close() {
+  close = () => {
     this.setState({
       show: false,
       isEdit: false,
@@ -78,7 +78,7 @@ export default class ModalConfirm extends React.Component {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={::this.close}>Cancel</Button>
+          <Button onClick={this.close}>Cancel</Button>
         </Modal.Footer>
       </Modal>
     );

@@ -49,7 +49,7 @@ export default class ModalImportStatus extends React.Component {
     this.setState(state);
   }
 
-  close() {
+  close = () => {
     this.setState({
       show: false,
       showPrompt: false,
@@ -68,7 +68,7 @@ export default class ModalImportStatus extends React.Component {
     let {show, progress, messages, progressStyle} = this.state;
 
     return (
-      <Modal show={show} className={className} backdrop="static" onHide={::this.onModalHide}>
+      <Modal show={show} className={className} backdrop="static" onHide={this.onModalHide}>
         <Modal.Header>
           <Modal.Title>Import Status</Modal.Title>
         </Modal.Header>
@@ -87,13 +87,13 @@ export default class ModalImportStatus extends React.Component {
     if (this.state.showPrompt) {
       return (
         <div>
-          <Button onClick={::this.close}>Cancel</Button>
+          <Button onClick={this.close}>Cancel</Button>
           <Button bsStyle='warning' onClick={this.props.promptConfirm}>Override</Button>
         </div>
       );
     }
     else {
-      return <Button bsStyle='primary' onClick={::this.close}>OK</Button>;
+      return <Button bsStyle='primary' onClick={this.close}>OK</Button>;
     }
   }
 

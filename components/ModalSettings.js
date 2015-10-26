@@ -21,7 +21,7 @@ export default class ModalSettings extends React.Component {
     });
   }
 
-  close() {
+  close = () => {
     this.setState({
       show: false
     });
@@ -30,11 +30,11 @@ export default class ModalSettings extends React.Component {
   onModalHide() {
   }
 
-  onThemeChange(e) {
+  onThemeChange = e => {
     this.props.updateSettings({theme: e.target.value});
   }
 
-  onDirectionChange(e) {
+  onDirectionChange = e => {
     this.props.updateSettings({direction: parseInt(e.target.value, 10)});
   }
 
@@ -54,17 +54,17 @@ export default class ModalSettings extends React.Component {
           <div className="modal-settings">
             <label>Theme</label>
             <div className="themes">
-              <Input type='radio' label='Default' onChange={::this.onThemeChange} checked={'default' === theme} value="default" />
-              <Input type='radio' label='Zenburn' onChange={::this.onThemeChange} checked={'zenburn' === theme} value="zenburn" />
+              <Input type='radio' label='Default' onChange={this.onThemeChange} checked={'default' === theme} value="default" />
+              <Input type='radio' label='Zenburn' onChange={this.onThemeChange} checked={'zenburn' === theme} value="zenburn" />
             </div>
             <div className="direction">
-              <Input type='radio' label='Horizontal' onChange={::this.onDirectionChange} checked={DIRECTION_HORIZONTAL === direction} value={DIRECTION_HORIZONTAL} />
-              <Input type='radio' label='Vertical' onChange={::this.onDirectionChange} checked={DIRECTION_VERTICAL === direction} value={DIRECTION_VERTICAL} />
+              <Input type='radio' label='Horizontal' onChange={this.onDirectionChange} checked={DIRECTION_HORIZONTAL === direction} value={DIRECTION_HORIZONTAL} />
+              <Input type='radio' label='Vertical' onChange={this.onDirectionChange} checked={DIRECTION_VERTICAL === direction} value={DIRECTION_VERTICAL} />
             </div>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={::this.close}>Close</Button>
+          <Button onClick={this.close}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
