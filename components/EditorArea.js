@@ -8,7 +8,8 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalImportStatus, ModalOpen, EditorToolbar, Resizer} from '.';
 import {Helper} from '../services/';
 
-import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL} from '../constants/AppConstants';
+import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
+  NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE} from '../constants/AppConstants';
 
 import ReactToastr from 'react-toastr';
 import Api from '../services/Api';
