@@ -6,6 +6,8 @@ const settings = {
   letterSpacing: 1,
   lineHeight: 1,
   direction: false,
+  nsRatio: 0.5,
+  ewRatio: 0.5,
   inputMethod: consts.INPUT_METHOD_SYSTEM,
   spellCheckOn: false,
   readonly: false,

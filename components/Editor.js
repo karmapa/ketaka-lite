@@ -12,6 +12,7 @@ import classNames from 'classnames';
 export default class Editor extends React.Component {
 
   static PropTypes = {
+    style: PropTypes.prop,
     className: PropTypes.string,
     code: PropTypes.string,
     onCodemirrorChange: PropTypes.func,
@@ -34,6 +35,9 @@ export default class Editor extends React.Component {
     codemirror.on('keypress', this.imeKeypress);
     codemirror.on('keydown', this.imeKeydown);
     codemirror.on('keyup', this.imeKeyup);
+
+    let {width, height} = this.props.style;
+    codemirror.setSize(width, height);
   }
 
   onCodemirrorChange = content => {
@@ -59,6 +63,13 @@ export default class Editor extends React.Component {
     if (this.props.settings.theme !== nextProps.settings.theme) {
       // force codemirror to reload theme
       this.forceUpdate();
+    }
+
+    if (this.props.style.height !== nextProps.style.height) {
+      this.codemirror.setSize(window.innerWidth, nextProps.style.height);
+    }
+    if (this.props.style.width !== nextProps.style.width) {
+      this.codemirror.setSize(nextProps.style.width, window.innerHeight);
     }
   }
 

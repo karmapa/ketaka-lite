@@ -5,10 +5,11 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen, EditorToolbar} from '.';
+  ModalImportStatus, ModalOpen, EditorToolbar, Resizer} from '.';
 import {Helper} from '../services/';
 
-import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL} from '../constants/AppConstants';
+import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
+  NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE} from '../constants/AppConstants';
 
 import ReactToastr from 'react-toastr';
 import Api from '../services/Api';
@@ -42,6 +43,7 @@ export default class EditorArea extends React.Component {
     setPageIndex: PropTypes.func.isRequired,
     toggleSpellCheck: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
+    setRatio: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired,
     updateSettings: PropTypes.func.isRequired
@@ -382,7 +384,13 @@ export default class EditorArea extends React.Component {
     Api.on('import-progress', function(res) {
       self.refs.modalImportStatus.addMessage(res);
     });
+
+    window.addEventListener('resize', this.handleResize);
   }
+
+  handleResize = _.throttle(() => {
+    this.forceUpdate();
+  }, 300);
 
   import() {
     let self = this;
@@ -414,6 +422,7 @@ export default class EditorArea extends React.Component {
 
   componentWillUnmount() {
     this.keypressListener.distroy();
+    window.removeEventListener('resize', this.handleResize);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -629,11 +638,40 @@ export default class EditorArea extends React.Component {
     this.refs.modalPageAdd.close();
   }
 
-  renderImageArea = (key, src) => {
-    if (src) {
-      return <ImageZoomer key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
+  getImageZoomerHeight() {
+    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * this.props.settings.nsRatio;
+  }
+
+  getImageZoomerWidth() {
+    return (window.innerWidth - (RESIZER_SIZE / 2)) * this.props.settings.ewRatio;
+  }
+
+  getEditorHeight() {
+    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * (1 - this.props.settings.nsRatio);
+  }
+
+  getEditorWidth() {
+    return (window.innerWidth - (RESIZER_SIZE / 2)) * (1 - this.props.settings.ewRatio);
+  }
+
+  renderImageArea(key, src) {
+    let style;
+
+    if (DIRECTION_HORIZONTAL === this.props.settings.direction) {
+      style = {
+        height: this.getImageZoomerHeight()
+      };
     }
-    return <ImageUploader key={key} className="image-uploader" onUploadButtonClick={this.onUploadButtonClick} />;
+    else {
+      style = {
+        width: this.getImageZoomerWidth()
+      };
+    }
+
+    if (src) {
+      return <ImageZoomer style={style} key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
+    }
+    return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={this.onUploadButtonClick} />;
   }
 
   onApplyChunksButtonClick = () => {
@@ -676,8 +714,16 @@ export default class EditorArea extends React.Component {
     let imageZoomerKey = this.getImageZoomerKey(key);
 
     if (this.isCurrentDoc(doc)) {
+
+      let {settings, setRatio} = this.props;
+      let {direction} = settings;
+      let ratio = (DIRECTION_HORIZONTAL === direction) ? settings.nsRatio : settings.ewRatio;
+
       return (
         <TabItem eventKey={key} tab={this.getTabName(doc)} key={key}>
+
+          <Resizer direction={direction} ratio={ratio} setRatio={setRatio} />
+
           {this.renderImageArea(imageZoomerKey, src)}
           {this.renderEditorArea(doc, pageIndex)}
         </TabItem>
@@ -764,21 +810,37 @@ export default class EditorArea extends React.Component {
       }
     }
 
+    let {settings} = this.props;
+
+    let style;
+
+    if (DIRECTION_HORIZONTAL === settings.direction) {
+      style = {
+        height: this.getEditorHeight()
+      };
+    }
+    else {
+      style = {
+        width: this.getEditorWidth()
+      };
+    }
+
     let chunkEditorProps = {
+      style,
       className: classNames({'hidden': ! editChunk}),
       hidden: ! editChunk,
       startKeyword,
       chunk: doc.chunk,
-      inputMethod: this.props.settings.inputMethod,
+      inputMethod: settings.inputMethod,
       apply: this.applyChunk,
       cancel: this.closeChunkEditor
     };
 
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
-    let {settings} = this.props;
 
     let editorProps = {
+      style,
       className: classNames({'editor': true, 'hidden': editChunk}),
       code: page.content || '',
       ref: editorKey,

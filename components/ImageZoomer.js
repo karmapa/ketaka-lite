@@ -8,6 +8,7 @@ import Path from 'path';
 export default class ImageZoomer extends React.Component {
 
   static PropTypes = {
+    style: PropTypes.prop,
     direction: PropTypes.bool.isRequired,
     movingSpeed: PropTypes.number,
     pageName: PropTypes.string.isRequired,
@@ -238,7 +239,7 @@ export default class ImageZoomer extends React.Component {
   render() {
 
     let {translateX, translateY, percent, isDragging, isHolding} = this.state;
-    let {src} = this.props;
+    let {src, style} = this.props;
 
     let classes = {
       [this.props.className]: true,
@@ -246,7 +247,7 @@ export default class ImageZoomer extends React.Component {
       'dragging': isDragging
     };
     return (
-      <div className={classNames(classes)} onMouseDown={this.onMouseDown} ref="imageZoomer">
+      <div style={style} className={classNames(classes)} onMouseDown={this.onMouseDown} ref="imageZoomer">
         <img className="image-zoomable" onError={this.onImageError} onLoad={this.onImageLoad} ref="imageZoomable"
              style={{transform: 'translate(' + translateX + 'px,' + translateY + 'px) scale(' + percent / 100 + ')'}}
              src={src} />
