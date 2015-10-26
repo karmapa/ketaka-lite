@@ -42,6 +42,12 @@ function getTemplate(args) {
       click: function() {
         webContents.send('app-find');
       }
+    },
+    {
+      label: 'Replace',
+      click: function() {
+        webContents.send('app-replace');
+      }
     }
   ];
 
