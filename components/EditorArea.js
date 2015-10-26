@@ -384,7 +384,13 @@ export default class EditorArea extends React.Component {
     Api.on('import-progress', function(res) {
       self.refs.modalImportStatus.addMessage(res);
     });
+
+    window.addEventListener('resize', this.handleResize);
   }
+
+  handleResize = _.throttle(() => {
+    this.forceUpdate();
+  }, 300);
 
   import() {
     let self = this;
