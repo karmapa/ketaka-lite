@@ -294,15 +294,17 @@ div.CodeMirror-cursors {
   visibility: visible;
 }
 
-.CodeMirror-selected { background: #d9d9d9; }
-.CodeMirror-focused .CodeMirror-selected { background: #d7d4f0; }
+.CodeMirror-selected { background: rgba(183, 180, 255, 1); }
+.CodeMirror-focused .CodeMirror-selected { background: rgba(183, 180, 255, 1); }
 .CodeMirror-crosshair { cursor: crosshair; }
 .CodeMirror ::selection { background: #d7d4f0; }
 .CodeMirror ::-moz-selection { background: #d7d4f0; }
 
+.CodeMirror-selected {
+  background: rgba(182, 190, 255, 1);
+}
 .cm-searching {
-  background: #ffa;
-  background: rgba(255, 255, 0, .4);
+  background: rgba(60, 255, 133, 0.2);
 }
 
 /* IE7 hack to prevent it from returning funny offsetTops on the spans */

@@ -125,9 +125,13 @@ $bg-zenburn-error: #e74c3c;
     }
   }
 
+  .CodeMirror-focused .CodeMirror-selected {
+    background: rgba(114, 74, 255, 1);
+  }
+
   .CodeMirror {
     .CodeMirror-selected {
-      background: rgba(152, 135, 162, 0.41);
+      background: rgba(114, 74, 255, 1);
     }
     div.CodeMirror-cursor {
       border-left: 2px solid white;
