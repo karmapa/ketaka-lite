@@ -4,7 +4,7 @@ var shell = require('shell');
 
 function getTemplate(args) {
 
-  var mainWindow = args.mainWindow;
+  var webContents = args.mainWindow.webContents;
 
   var submenu = [
     {
@@ -46,31 +46,31 @@ function getTemplate(args) {
         {
           label: 'Import',
           click: function() {
-            mainWindow.webContents.send('app-import');
+            webContents.send('app-import');
           }
         },
         {
           label: 'Open',
           click: function() {
-            mainWindow.webContents.send('app-open');
+            webContents.send('app-open');
           }
         },
         {
           label: 'Save',
           click: function() {
-            mainWindow.webContents.send('app-save');
+            webContents.send('app-save');
           }
         },
         {
           label: 'Export',
           click: function() {
-            mainWindow.webContents.send('app-export');
+            webContents.send('app-export');
           }
         },
         {
           label: 'Settings',
           click: function() {
-            mainWindow.webContents.send('app-settings');
+            webContents.send('app-settings');
           }
         },
       ]
