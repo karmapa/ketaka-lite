@@ -49,18 +49,20 @@ export default class SearchBar extends React.Component {
     this.findKeyword();
   }
 
+  replace = () => {
+    this.openReplaceBar();
+    this.focus();
+    this.setCursorToStart();
+    this.findKeyword(this.state.replaceKeyword);
+  }
+
   componentDidMount() {
     let self = this;
     self.ime = Ime;
     self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
-    CodeMirror.commands.replace = () => {
-      self.openReplaceBar();
-      self.focus();
-      self.setCursorToStart();
-      self.findKeyword(this.state.replaceKeyword);
-    };
     CodeMirror.commands.find = this.find;
+    CodeMirror.commands.replace = this.replace;
 
     CodeMirror.commands.replaceAll = () => {};
 
