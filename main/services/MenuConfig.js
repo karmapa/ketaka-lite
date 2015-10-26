@@ -36,6 +36,12 @@ function getTemplate(args) {
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
       role: 'selectall'
+    },
+    {
+      label: 'Find',
+      click: function() {
+        webContents.send('app-find');
+      }
     }
   ];
 
