@@ -42,3 +42,4 @@ export const REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
 
 
 export const NON_EDITOR_AREA_HEIGHT = 60;
+export const RESIZER_SIZE = 15;
