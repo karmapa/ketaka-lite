@@ -42,17 +42,17 @@ export default class SearchBar extends React.Component {
     this.cursor = this.cm.getCursor();
   }
 
+  find = () => {
+    this.openSearchBar();
+    this.focus();
+    this.setCursorToStart();
+    this.findKeyword();
+  }
+
   componentDidMount() {
     let self = this;
     self.ime = Ime;
     self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
-
-    CodeMirror.commands.find = () => {
-      self.openSearchBar();
-      self.focus();
-      self.setCursorToStart();
-      self.findKeyword();
-    };
 
     CodeMirror.commands.replace = () => {
       self.openReplaceBar();
@@ -60,6 +60,7 @@ export default class SearchBar extends React.Component {
       self.setCursorToStart();
       self.findKeyword(this.state.replaceKeyword);
     };
+    CodeMirror.commands.find = this.find;
 
     CodeMirror.commands.replaceAll = () => {};
 
