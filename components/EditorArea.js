@@ -646,6 +646,10 @@ export default class EditorArea extends React.Component {
     return (window.innerWidth - (RESIZER_SIZE / 2)) * this.props.settings.ewRatio;
   }
 
+  getEditorHeight() {
+    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * (1 - this.props.settings.nsRatio);
+  }
+
   renderImageArea(key, src) {
     if (src) {
       return <ImageZoomer key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
