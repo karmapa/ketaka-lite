@@ -277,6 +277,23 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
+  exportFileWithPb() {
+
+    let self = this;
+    let doc = self.getDoc();
+
+    if (! doc) {
+      self.refs.toast.error('Open a bamboo then try export again');
+      return;
+    }
+
+    Api.send('export-file-with-pb', {name: doc.name})
+      .then(res => {
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => self.refs.toast.error(res.message));
+  }
+
   cancel = () => {
     let searchBar = this.refs.searchBar;
     if (searchBar) {
@@ -382,6 +399,10 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-export-zip', function() {
       self.exportZip();
+    });
+
+    Api.on('app-export-file-with-pb', function() {
+      self.exportFileWithPb();
     });
 
     Api.on('import-start', function() {

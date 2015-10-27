@@ -68,4 +68,6 @@ ipc.on('delete-doc', ipcHandlers.deleteDoc);
 
 ipc.on('export-zip', ipcHandlers.exportZip);
 
+ipc.on('export-file-with-pb', ipcHandlers.exportFileWithPb);
+
 ipc.on('add-pb-files', ipcHandlers.addPbFiles);

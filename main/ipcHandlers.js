@@ -256,7 +256,7 @@ exports.exportZip = ipcHandler(function(event, arg) {
     output.on('close', function() {
       console.log(archive.pointer() + ' total bytes');
       console.log('archiver has been finalized and the output file descriptor has closed.');
-      send({message: 'Bamboo ' + name + ' exported successfully'});
+      send({message: filename + ' exported successfully'});
     });
 
     archive.on('error', function(err) {
@@ -266,6 +266,43 @@ exports.exportZip = ipcHandler(function(event, arg) {
     archive.pipe(output);
     archive.bulk([{expand: true, cwd: sourcePath, src: ['**'], dest: name}]);
     archive.finalize();
+  });
+});
+
+exports.exportFileWithPb = ipcHandler(function(event, arg) {
+
+  var send = this.send;
+  var docName = arg.name;
+  var filename = docName + '.txt';
+  var options = {
+    title: 'Choose Export Path',
+    defaultPath: filename
+  };
+
+  dialog.showSaveDialog(options, function(savePath) {
+
+    if (! savePath) {
+      send({message: 'Export was canceled'});
+      return;
+    }
+
+    console.log('here', savePath);
+
+    Doc.getDoc(docName)
+      .then(function(doc) {
+        return Doc.genPbFileContent(doc);
+      })
+      .then(function(content) {
+        return Helper.writeFile(savePath, content);
+      })
+      .then(function() {
+        send({message: filename + ' exported successfully'});
+      })
+      .catch(function(err) {
+        console.error('error', err);
+        send({error: true, message: err.toString()});
+      });
+
   });
 });
 
