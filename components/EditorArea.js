@@ -37,6 +37,8 @@ export default class EditorArea extends React.Component {
     save: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setFontSize: PropTypes.func.isRequired,
+    setImageOnly: PropTypes.func.isRequired,
+    setTextOnly: PropTypes.func.isRequired,
     setLineHeight: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
     toggleDirection: PropTypes.func.isRequired,
@@ -690,20 +692,48 @@ export default class EditorArea extends React.Component {
     this.refs.modalPageAdd.close();
   }
 
-  getImageZoomerHeight() {
-    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * this.props.settings.nsRatio;
+  getImageZoomerHeight = () => {
+
+    let {nsRatio, showImageOnly, showTextOnly} = this.props.settings;
+    let deltaRatio = showImageOnly ? 1 : nsRatio;
+
+    if (showTextOnly) {
+      deltaRatio = 0;
+    }
+    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * deltaRatio;
   }
 
-  getImageZoomerWidth() {
-    return (window.innerWidth - (RESIZER_SIZE / 2)) * this.props.settings.ewRatio;
+  getImageZoomerWidth = () => {
+
+    let {ewRatio, showImageOnly, showTextOnly} = this.props.settings;
+    let deltaRatio = showImageOnly ? 1 : ewRatio;
+
+    if (showTextOnly) {
+      deltaRatio = 0;
+    }
+    return (window.innerWidth - (RESIZER_SIZE / 2)) * deltaRatio;
   }
 
   getEditorHeight() {
-    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * (1 - this.props.settings.nsRatio);
+
+    let {nsRatio, showTextOnly, showImageOnly} = this.props.settings;
+    let deltaRatio = showTextOnly ? 0 : nsRatio;
+
+    if (showImageOnly) {
+      deltaRatio = 1;
+    }
+    return (window.innerHeight - NON_EDITOR_AREA_HEIGHT - (RESIZER_SIZE / 2)) * (1 - deltaRatio);
   }
 
   getEditorWidth() {
-    return (window.innerWidth - (RESIZER_SIZE / 2)) * (1 - this.props.settings.ewRatio);
+
+    let {ewRatio, showTextOnly, showImageOnly} = this.props.settings;
+    let deltaRatio = showTextOnly ? 0 : ewRatio;
+
+    if (showImageOnly) {
+      deltaRatio = 1;
+    }
+    return (window.innerWidth - (RESIZER_SIZE / 2)) * (1 - deltaRatio);
   }
 
   renderImageArea(key, src) {
@@ -976,6 +1006,26 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  onImageOnlyButtonClick = e => {
+    let settings = this.props.settings;
+    let {showImageOnly, showTextOnly} = settings;
+
+    if (showTextOnly) {
+      this.props.setTextOnly(false);
+    }
+    this.props.setImageOnly(! showImageOnly);
+  }
+
+  onTextOnlyButtonClick = () => {
+    let settings = this.props.settings;
+    let {showImageOnly, showTextOnly} = settings;
+
+    if (showImageOnly) {
+      this.props.setImageOnly(false);
+    }
+    this.props.setTextOnly(! showTextOnly);
+  }
+
   renderEditorToolbar() {
 
     if (_.isEmpty(this.props.docs)) {
@@ -1001,6 +1051,8 @@ export default class EditorArea extends React.Component {
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
       onUndoButtonClick: this.onUndoButtonClick,
+      onImageOnlyButtonClick: this.onImageOnlyButtonClick,
+      onTextOnlyButtonClick: this.onTextOnlyButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
       pageNames: doc ? doc.pages.map(page => page.name) : [],
       setFontSize,

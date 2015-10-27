@@ -8,6 +8,8 @@ const settings = {
   direction: false,
   nsRatio: 0.5,
   ewRatio: 0.5,
+  showImageOnly: false,
+  showTextOnly: false,
   inputMethod: consts.INPUT_METHOD_SYSTEM,
   spellCheckOn: false,
   readonly: false,

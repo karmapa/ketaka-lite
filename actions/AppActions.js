@@ -24,6 +24,26 @@ export function setInputMethod(inputMethod) {
   };
 }
 
+export function setImageOnly(status) {
+  return dispatch => {
+    let settings = Store.get('settings') || {};
+
+    settings.showImageOnly = status;
+    Store.set('settings', settings);
+    dispatch(receiveSettings(settings));
+  };
+}
+
+export function setTextOnly(status) {
+  return dispatch => {
+    let settings = Store.get('settings') || {};
+
+    settings.showTextOnly = status;
+    Store.set('settings', settings);
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function toggleReadonly() {
   return dispatch => {
     let settings = Store.get('settings') || {};
