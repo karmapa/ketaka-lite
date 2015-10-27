@@ -27,6 +27,8 @@ export default class EditorToolbar extends React.Component {
     onPageDeleteButtonClick: PropTypes.func,
     onAddPbFileButtonClick: PropTypes.func,
     onLineHeightInputChange: PropTypes.func,
+    onImageOnlyButtonClick: PropTypes.func,
+    onTextOnlyButtonClick: PropTypes.func,
     setInputMethod: PropTypes.func,
     setLetterSpacing: PropTypes.func,
     setFontSize: PropTypes.func,
@@ -82,7 +84,8 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick} = this.props;
+      onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick,
+      onImageOnlyButtonClick, onTextOnlyButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -161,6 +164,18 @@ export default class EditorToolbar extends React.Component {
           <OverlayTrigger placement='bottom' overlay={<Tooltip>Add Page Break Files</Tooltip>}>
             <button className="button-add-pb-files" onClick={onAddPbFileButtonClick}>
               <i className="glyphicon glyphicon-open-file"></i>
+            </button>
+          </OverlayTrigger>
+
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Image Area Only</Tooltip>}>
+            <button className={classNames({on: settings.showImageOnly})} onClick={onImageOnlyButtonClick}>
+              <i className="glyphicon glyphicon-picture"></i>
+            </button>
+          </OverlayTrigger>
+
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Text Area Only</Tooltip>}>
+            <button className={classNames({on: settings.showTextOnly})} onClick={onTextOnlyButtonClick}>
+              <i className="glyphicon glyphicon-subscript"></i>
             </button>
           </OverlayTrigger>
 
