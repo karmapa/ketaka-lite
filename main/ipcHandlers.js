@@ -233,7 +233,7 @@ exports.deleteDoc = ipcHandler(function(event, res) {
     });
 });
 
-exports.exportData = ipcHandler(function(event, arg) {
+exports.exportZip = ipcHandler(function(event, arg) {
   var send = this.send;
   var name = arg.name;
   var filename = name + '.zip';

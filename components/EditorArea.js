@@ -260,7 +260,7 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  exportData() {
+  exportZip() {
 
     let self = this;
     let doc = self.getDoc();
@@ -270,7 +270,7 @@ export default class EditorArea extends React.Component {
       return;
     }
 
-    Api.send('export-data', {name: doc.name})
+    Api.send('export-zip', {name: doc.name})
       .then(res => {
         self.refs.toast.success(res.message);
       })
@@ -380,8 +380,8 @@ export default class EditorArea extends React.Component {
       self.openSettingsModal();
     });
 
-    Api.on('app-export', function() {
-      self.exportData();
+    Api.on('app-export-zip', function() {
+      self.exportZip();
     });
 
     Api.on('import-start', function() {
