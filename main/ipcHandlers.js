@@ -9,6 +9,42 @@ var ipcHandler = require('./decorators/ipcHandler');
 var archiver = require('archiver');
 var fs = require('fs');
 
+exports.importZip = ipcHandler(function(event, args) {
+
+  var send = this.send;
+  var broadcast = this.broadcast;
+  var options = {
+    properties: ['openFile'],
+    filters: [
+      {name: 'zip', extensions: ['zip']}
+    ]
+  };
+
+  dialog.showOpenDialog(options, importPaths);
+
+  function importPaths(paths, force) {
+
+    if (_.isEmpty(paths)) {
+      return;
+    }
+
+    broadcast('import-start');
+
+    Importer.handleImportZip(paths, onProgress)
+      .then(function(doc) {
+        broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
+        send({message: 'Imported successfully', doc: doc});
+      })
+      .catch(function(err) {
+        send({error: true, message: err.toString()});
+      });
+
+    function onProgress(res) {
+      broadcast('import-progress', res);
+    }
+  }
+});
+
 exports.importButtonClicked = ipcHandler(function(event, args) {
 
   var send = this.send;
@@ -16,7 +52,6 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
   var options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
-      {name: 'zip', extensions: ['zip']},
       {name: 'Images', extensions: ['jpg']},
       {name: 'Text Files', extensions: ['xml', 'txt']}
     ]
@@ -24,7 +59,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
 
   dialog.showOpenDialog(options, importPaths);
 
-  function importPaths(paths, force) {
+  function importPaths(paths) {
 
     if (_.isEmpty(paths)) {
       return;
