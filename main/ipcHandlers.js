@@ -269,6 +269,43 @@ exports.exportZip = ipcHandler(function(event, arg) {
   });
 });
 
+exports.exportFileWithPb = ipcHandler(function(event, arg) {
+
+  var send = this.send;
+  var docName = arg.name;
+  var filename = docName + '.txt';
+  var options = {
+    title: 'Choose Export Path',
+    defaultPath: filename
+  };
+
+  dialog.showSaveDialog(options, function(savePath) {
+
+    if (! savePath) {
+      send({message: 'Export was canceled'});
+      return;
+    }
+
+    console.log('here', savePath);
+
+    Doc.getDoc(docName)
+      .then(function(doc) {
+        return Doc.genPbFileContent(doc);
+      })
+      .then(function(content) {
+        return Helper.writeFile(savePath, content);
+      })
+      .then(function() {
+        send({message: filename + ' exported successfully'});
+      })
+      .catch(function(err) {
+        console.error('error', err);
+        send({error: true, message: err.toString()});
+      });
+
+  });
+});
+
 exports.addPbFiles = ipcHandler(function(event, arg) {
 
   var doc = arg.doc;
