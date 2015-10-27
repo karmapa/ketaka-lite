@@ -402,7 +402,7 @@ function isZipUpload(paths) {
 
 function getJsonFileFromVinylFiles(files) {
   return _.find(files, function(file) {
-    return file.path.match(/\/([a-zA-Z0-9]+\.json)$/);
+    return file.path.match(/([a-zA-Z0-9]+\.json)$/) && file.isBuffer();
   });
 }
 

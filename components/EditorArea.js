@@ -452,6 +452,7 @@ export default class EditorArea extends React.Component {
         self.refs.toast.success(res.message);
       })
       .catch(res => {
+        console.error(res.message);
         self.refs.toast.error(res.message);
       });
   }
