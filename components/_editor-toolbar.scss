@@ -25,7 +25,7 @@ $height-editor-toolbar: 1.9em;
     }
   }
 
-  .button-spell-check.on {
+  button.on {
     background: darken($bg-editor-toolbar, 30);
   }
 
