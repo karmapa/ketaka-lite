@@ -86,6 +86,12 @@ function getTemplate(args) {
           }
         },
         {
+          label: 'Export File With PB',
+          click: function() {
+            webContents.send('app-export-file-with-pb');
+          }
+        },
+        {
           label: 'Settings',
           click: function() {
             webContents.send('app-settings');
