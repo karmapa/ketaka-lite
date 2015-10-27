@@ -270,7 +270,7 @@ export default class EditorArea extends React.Component {
       return;
     }
 
-    Api.send('export-data', {name: doc.name})
+    Api.send('export-zip', {name: doc.name})
       .then(res => {
         self.refs.toast.success(res.message);
       })
