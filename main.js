@@ -48,6 +48,8 @@ ipc = bindEventName(ipc);
 
 ipc.on('import-button-clicked', ipcHandlers.importButtonClicked);
 
+ipc.on('import-zip', ipcHandlers.importZip);
+
 ipc.on('save', ipcHandlers.save);
 
 ipc.on('page-image-upload-button-clicked', ipcHandlers.pageImageUploadButtonClicked);

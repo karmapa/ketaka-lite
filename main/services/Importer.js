@@ -442,6 +442,15 @@ function handleZipPaths(paths) {
     });
 }
 
+function handleImportZip(paths) {
+
+  if (_.isEmpty(paths)) {
+    return Promise.resolve([]);
+  }
+
+  return handleZipPaths(paths);
+}
+
 function handleImportPaths(paths, onProgress) {
 
   onProgress = onProgress || _.noop;
@@ -450,10 +459,6 @@ function handleImportPaths(paths, onProgress) {
 
   if (_.isEmpty(paths)) {
     return Promise.resolve([]);
-  }
-
-  if (isZipUpload(paths)) {
-    return handleZipPaths(paths);
   }
 
   return Helper.getPathsType(paths)
@@ -584,5 +589,6 @@ function addPbFiles(doc, paths) {
 
 module.exports = {
   handleImportPaths: handleImportPaths,
+  handleImportZip: handleImportZip,
   addPbFiles: addPbFiles
 };

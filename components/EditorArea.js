@@ -364,6 +364,10 @@ export default class EditorArea extends React.Component {
       self.import();
     });
 
+    Api.on('app-import-zip', function() {
+      self.importZip();
+    });
+
     Api.on('app-open', function() {
       self.open();
     });
@@ -409,6 +413,19 @@ export default class EditorArea extends React.Component {
     let self = this;
 
     Api.send('import-button-clicked')
+      .then(res => {
+        self.props.importDoc(res.doc);
+        self.refs.toast.success(res.message);
+      })
+      .catch(res => {
+        self.refs.toast.error(res.message);
+      });
+  }
+
+  importZip() {
+    let self = this;
+
+    Api.send('import-zip')
       .then(res => {
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
