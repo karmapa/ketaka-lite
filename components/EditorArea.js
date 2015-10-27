@@ -301,6 +301,11 @@ export default class EditorArea extends React.Component {
     let pageIndex = doc.pageIndex;
     let pages = doc.pages;
 
+    // https://github.com/karmapa/ketaka-lite/issues/53
+    if (('\n' === secondPart[0]) && (secondPart.length > 1)) {
+      secondPart = secondPart.substring(1);
+    }
+
     if (pageIndex < (pages.length - 1)) {
 
       cm.setValue(firstPart);
