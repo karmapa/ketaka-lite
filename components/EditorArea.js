@@ -380,7 +380,7 @@ export default class EditorArea extends React.Component {
       self.openSettingsModal();
     });
 
-    Api.on('app-export', function() {
+    Api.on('app-export-zip', function() {
       self.exportZip();
     });
 
