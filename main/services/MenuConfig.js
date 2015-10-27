@@ -62,6 +62,12 @@ function getTemplate(args) {
           }
         },
         {
+          label: 'Import Zip',
+          click: function() {
+            webContents.send('app-import-zip');
+          }
+        },
+        {
           label: 'Open',
           click: function() {
             webContents.send('app-open');
