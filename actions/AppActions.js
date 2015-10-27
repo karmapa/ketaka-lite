@@ -34,6 +34,16 @@ export function setImageOnly(status) {
   };
 }
 
+export function setTextOnly(status) {
+  return dispatch => {
+    let settings = Store.get('settings') || {};
+
+    settings.showTextOnly = status;
+    Store.set('settings', settings);
+    dispatch(receiveSettings(settings));
+  };
+}
+
 export function toggleReadonly() {
   return dispatch => {
     let settings = Store.get('settings') || {};
