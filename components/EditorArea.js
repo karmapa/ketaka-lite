@@ -401,6 +401,10 @@ export default class EditorArea extends React.Component {
       self.exportZip();
     });
 
+    Api.on('app-export-file-with-pb', function() {
+      self.exportFileWithPb();
+    });
+
     Api.on('import-start', function() {
       self.refs.modalImportStatus.open({
         title: 'Import Status'
