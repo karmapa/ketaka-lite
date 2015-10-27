@@ -223,29 +223,18 @@ function sortPages(pages) {
     var bSecondNumber = parseInt(bRes[2], 10);
     var bChar = bRes[3];
 
-    if (aFirstNumber > bFirstNumber) {
-      return 1;
+    if (aFirstNumber !== bFirstNumber) {
+      return aFirstNumber - bFirstNumber;
     }
 
-    if (bFirstNumber < bFirstNumber) {
-      return -1;
+    if (aSecondNumber !== bSecondNumber) {
+      return aSecondNumber - bSecondNumber;
     }
 
-    if (aSecondNumber > bSecondNumber) {
-      return 1;
+    if (aChar !== bChar) {
+      return aChar.charCodeAt() - bChar.charCodeAt();
     }
 
-    if (aSecondNumber < bSecondNumber) {
-      return -1;
-    }
-
-    if (aChar > bChar) {
-      return 1;
-    }
-
-    if (aChar < bChar) {
-      return -1;
-    }
     return 0;
   });
 
