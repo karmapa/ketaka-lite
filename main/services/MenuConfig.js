@@ -82,7 +82,7 @@ function getTemplate(args) {
         {
           label: 'Export Zip',
           click: function() {
-            webContents.send('app-export');
+            webContents.send('app-export-zip');
           }
         },
         {
