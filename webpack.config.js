@@ -1,7 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 
-module.exports = {
+var config = {
   devtool: 'eval',
   entry: {
     javascript: [
@@ -60,3 +60,9 @@ module.exports = {
     ]
   }
 };
+
+if ('production' === process.env.NODE_ENV) {
+  config.entry.javascript = ['./index'];
+}
+
+module.exports = config;
