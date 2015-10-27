@@ -22,7 +22,7 @@ exports.importZip = ipcHandler(function(event, args) {
 
   dialog.showOpenDialog(options, importPaths);
 
-  function importPaths(paths, force) {
+  function importPaths(paths) {
 
     if (_.isEmpty(paths)) {
       return;
@@ -67,7 +67,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
 
     broadcast('import-start');
 
-    Importer.handleImportPaths(paths, onProgress, force)
+    Importer.handleImportPaths(paths, onProgress)
       .then(function(doc) {
         broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
         send({message: 'Imported successfully', doc: doc});
