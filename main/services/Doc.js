@@ -260,12 +260,19 @@ function sortPages(pages) {
   return validPages.concat(invalidPages);
 }
 
+function genPbFileContent(doc) {
+  return doc.pages.map(function(page) {
+    return '<pb id="' + page.name + '" />\n' + page.content + '\n';
+  }).join('');
+}
+
 module.exports = {
   createDoc: createDoc,
   createPage: createPage,
   changeDocSettings: changeDocSettings,
   findUniqueUntitledName: findUniqueUntitledName,
   getDoc: getDoc,
+  genPbFileContent: genPbFileContent,
   getImageFilenameByDoc: getImageFilenameByDoc,
   getPageNameByImageFilename: getPageNameByImageFilename,
   getExistedDocNames: getExistedDocNames,
