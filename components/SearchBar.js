@@ -520,7 +520,7 @@ export default class SearchBar extends React.Component {
   no = () => {
   }
 
-  stop() {
+  stop = () => {
     this.setState({
       mode: MODE_REPLACE,
       opened: false,
