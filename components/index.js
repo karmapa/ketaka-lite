@@ -1,4 +1,5 @@
 export ChunkEditor from './ChunkEditor';
+export ComboListenerInput from './ComboListenerInput';
 export Editor from './Editor';
 export EditorArea from './EditorArea';
 export EditorToolbar from './EditorToolbar';
