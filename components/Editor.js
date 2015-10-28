@@ -6,7 +6,8 @@ import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
 import Ime from '../services/Ime';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import {MAP_INPUT_METHODS} from '../constants/AppConstants';
+import {MAP_INPUT_METHODS, INPUT_METHOD_TIBETAN_SAMBHOTA,
+  INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 import classNames from 'classnames';
 
 export default class Editor extends React.Component {
@@ -19,7 +20,44 @@ export default class Editor extends React.Component {
     settings: PropTypes.object
   };
 
+  state = {
+    stacking: false
+  }
+
   shouldComponentUpdate = shouldPureComponentUpdate;
+
+  isVowels(e) {
+    let vowelsKeyCodes = [65, 69, 73, 79, 85];
+    return vowelsKeyCodes.includes(e.keyCode);
+  }
+
+  checkVowels = e => {
+    let inputMethods = [
+      INPUT_METHOD_TIBETAN_SAMBHOTA,
+      INPUT_METHOD_TIBETAN_SAMBHOTA2
+    ];
+    if (this.isVowels(e) && inputMethods.includes(this.props.settings.inputMethod)) {
+      this.setState({
+        stacking: false
+      });
+    }
+  }
+
+  isStackingKey = e => {
+    let inputMethod = this.props.settings.inputMethod;
+
+    if (INPUT_METHOD_TIBETAN_SAMBHOTA === inputMethod) {
+      // a
+      return 65 === e.keyCode;
+    }
+
+    if (INPUT_METHOD_TIBETAN_SAMBHOTA2 === inputMethod) {
+      // f
+      return 70 === e.keyCode;
+    }
+
+    return false;
+  };
 
   componentDidMount() {
 
@@ -29,7 +67,16 @@ export default class Editor extends React.Component {
     let {ime, codemirror} = this;
 
     this.imeKeypress = (cm, e) => ime.keypress(e, {cm});
-    this.imeKeydown = (cm, e) => ime.keydown(e, {cm});
+    this.imeKeydown = (cm, e) => {
+      ime.keydown(e, {cm});
+      if (this.isStackingKey(e)) {
+        this.setState({
+          stacking: ! this.state.stacking
+        });
+        return;
+      }
+      this.checkVowels(e);
+    };
     this.imeKeyup = (cm, e) => ime.keyup(e, {cm});
 
     codemirror.on('keypress', this.imeKeypress);
@@ -125,8 +172,13 @@ export default class Editor extends React.Component {
       ['ls' + settings.letterSpacing]: true
     };
 
+    let wrapperClasses = {
+      [className]: true,
+      'stacking': this.state.stacking
+    };
+
     return (
-      <div className={className}>
+      <div className={classNames(wrapperClasses)}>
         <div className={classNames(classBoxReadonly)}>
           <div className={classNames(classReadonly)}>
             <Codemirror {...codemirrorProps} />
