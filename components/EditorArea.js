@@ -1006,7 +1006,7 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  onImageOnlyButtonClick = e => {
+  onImageOnlyButtonClick = () => {
     let settings = this.props.settings;
     let {showImageOnly, showTextOnly} = settings;
 
