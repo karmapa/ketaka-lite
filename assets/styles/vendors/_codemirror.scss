@@ -43,7 +43,16 @@
 
 .CodeMirror div.CodeMirror-cursor {
   border-left: 1px solid black;
+  width: 0;
 }
+
+.stacking .CodeMirror div.CodeMirror-cursor {
+  border-top: 1px solid black !important;
+  border-left: 0;
+  width: 1em !important;
+  margin-left: -0.6em;
+}
+
 /* Shown when moving in bi-directional text */
 .CodeMirror div.CodeMirror-secondarycursor {
   border-left: 1px solid silver;
@@ -282,7 +291,6 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 .CodeMirror div.CodeMirror-cursor {
   position: absolute;
   border-right: none;
-  width: 0;
 }
 
 div.CodeMirror-cursors {
