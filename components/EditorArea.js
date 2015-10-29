@@ -426,6 +426,10 @@ export default class EditorArea extends React.Component {
     });
 
     window.addEventListener('resize', this.handleResize);
+
+    if (this.props.settings.spellCheckOn) {
+      this.addSpellCheckOverlay();
+    }
   }
 
   handleResize = _.throttle(() => {
