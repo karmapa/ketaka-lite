@@ -109,7 +109,7 @@ export default class Editor extends React.Component {
 
     if (this.props.settings.theme !== nextProps.settings.theme) {
       // force codemirror to reload theme
-      this.forceUpdate();
+      this.codemirror.setOption('theme', nextProps.settings.theme);
     }
 
     if (this.props.style.height !== nextProps.style.height) {

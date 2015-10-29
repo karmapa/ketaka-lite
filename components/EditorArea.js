@@ -426,6 +426,10 @@ export default class EditorArea extends React.Component {
     });
 
     window.addEventListener('resize', this.handleResize);
+
+    if (this.props.settings.spellCheckOn) {
+      this.addSpellCheckOverlay();
+    }
   }
 
   handleResize = _.throttle(() => {
@@ -499,7 +503,12 @@ export default class EditorArea extends React.Component {
     else {
       this.props.writePageContent(uuid, pageIndex, content);
     }
+    if (this.props.settings.spellCheckOn) {
+      this.lazyAddSpellCheckOverlay();
+    }
   }
+
+  lazyAddSpellCheckOverlay = _.throttle(this.addSpellCheckOverlay, 1000);
 
   getTabName = doc => {
     let tabName = doc.name;

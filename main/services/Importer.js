@@ -467,6 +467,10 @@ function handleImportPaths(paths, onProgress) {
       return scanPaths(rows);
     })
     .then(function(rows) {
+
+      if (_.isEmpty(rows)) {
+        throw 'Could not find any files.';
+      }
       onProgress({progress: 20, type: 'info', message: 'Step2: Mark Supported Rows'});
       return markSupportedRows(rows);
     })

@@ -129,12 +129,21 @@ $bg-zenburn-error: #e74c3c;
     background: rgba(114, 74, 255, 1);
   }
 
+  .stacking .CodeMirror div.CodeMirror-cursor {
+    border-top: 2px solid white !important;
+    border-left: 0;
+    width: 1em !important;
+    margin-left: -0.6em;
+  }
+
   .CodeMirror {
     .CodeMirror-selected {
       background: rgba(114, 74, 255, 1);
     }
+
     div.CodeMirror-cursor {
       border-left: 2px solid white;
+      width: 0;
     }
     background: none;
     color: $color-zenburn;
