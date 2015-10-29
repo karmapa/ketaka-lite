@@ -4,8 +4,19 @@
   }
   .form-group {
     margin-right: 1em;
+    margin-bottom: 0;
   }
   input[type="radio"] {
     margin-top: 2px;
+  }
+  .combo-text {
+    margin-right: 1em;
+  }
+  .combo-listener {
+    color: #555;
+    padding-left: 0.5em;
+  }
+  li {
+    margin: 0.7em 0;
   }
 }

@@ -1,14 +1,17 @@
 import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
+import {ComboListenerInput} from '.';
+import _ from 'lodash';
 
-import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstants';
+import {DEFAULT_SHORTCUTS} from '../constants/AppConstants';
 
 export default class ModalSettings extends React.Component {
 
   static PropTypes = {
+    settings: PropTypes.object.isRequired,
     updateSettings: PropTypes.func.isRequired,
-    settings: PropTypes.object.isRequired
+    close: PropTypes.func.isRequired
   };
 
   state = {
@@ -30,6 +33,10 @@ export default class ModalSettings extends React.Component {
   onModalHide() {
   }
 
+  resetShortcuts = () => {
+    this.props.updateSettings({shortcuts: DEFAULT_SHORTCUTS});
+  }
+
   onThemeChange = e => {
     this.props.updateSettings({theme: e.target.value});
   }
@@ -40,9 +47,26 @@ export default class ModalSettings extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
+  setShortcuts = shortcuts => {
+    this.props.updateSettings({
+      shortcuts: Object.assign({}, this.props.settings.shortcuts, shortcuts)
+    });
+  }
+
+  renderComboInputs = () => {
+    let self = this;
+    return _.map(self.props.settings.shortcuts, (shortcut, prop) => {
+      return (
+        <li key={prop}>
+          <span className="combo-text">{shortcut.text}</span>
+          <ComboListenerInput className="combo-listener" prop={prop} shortcut={shortcut} setShortcuts={self.setShortcuts} />
+        </li>
+      );
+    });
+  };
+
   render() {
-    let {settings} = this.props;
-    let {direction, theme} = settings;
+    let {theme} = this.props.settings;
     let {show} = this.state;
 
     return (
@@ -57,14 +81,17 @@ export default class ModalSettings extends React.Component {
               <Input type='radio' label='Default' onChange={this.onThemeChange} checked={'default' === theme} value="default" />
               <Input type='radio' label='Zenburn' onChange={this.onThemeChange} checked={'zenburn' === theme} value="zenburn" />
             </div>
-            <div className="direction">
-              <Input type='radio' label='Horizontal' onChange={this.onDirectionChange} checked={DIRECTION_HORIZONTAL === direction} value={DIRECTION_HORIZONTAL} />
-              <Input type='radio' label='Vertical' onChange={this.onDirectionChange} checked={DIRECTION_VERTICAL === direction} value={DIRECTION_VERTICAL} />
-            </div>
+            <label>Keyboard Shortcuts</label>
+            <ul>
+              {this.renderComboInputs()}
+              <li>
+                <Button onClick={this.resetShortcuts}>Reset Shortcuts to Default</Button>
+              </li>
+            </ul>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.close}>Close</Button>
+          <Button onClick={this.props.close}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
