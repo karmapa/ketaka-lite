@@ -2,14 +2,16 @@ import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
 import {ComboListenerInput} from '.';
+import _ from 'lodash';
 
-import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstants';
+import {DEFAULT_SHORTCUTS} from '../constants/AppConstants';
 
 export default class ModalSettings extends React.Component {
 
   static PropTypes = {
+    settings: PropTypes.object.isRequired,
     updateSettings: PropTypes.func.isRequired,
-    settings: PropTypes.object.isRequired
+    close: PropTypes.func.isRequired
   };
 
   state = {
@@ -31,6 +33,10 @@ export default class ModalSettings extends React.Component {
   onModalHide() {
   }
 
+  resetShortcuts = () => {
+    this.props.updateSettings({shortcuts: DEFAULT_SHORTCUTS});
+  }
+
   onThemeChange = e => {
     this.props.updateSettings({theme: e.target.value});
   }
@@ -41,9 +47,26 @@ export default class ModalSettings extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
+  setShortcuts = shortcuts => {
+    this.props.updateSettings({
+      shortcuts: Object.assign({}, this.props.settings.shortcuts, shortcuts)
+    });
+  }
+
+  renderComboInputs = () => {
+    let self = this;
+    return _.map(self.props.settings.shortcuts, (shortcut, prop) => {
+      return (
+        <li key={prop}>
+          <span className="combo-text">{shortcut.text}</span>
+          <ComboListenerInput className="combo-listener" prop={prop} shortcut={shortcut} setShortcuts={self.setShortcuts} />
+        </li>
+      );
+    });
+  };
+
   render() {
-    let {settings} = this.props;
-    let {direction, theme} = settings;
+    let {theme} = this.props.settings;
     let {show} = this.state;
 
     return (
@@ -58,77 +81,17 @@ export default class ModalSettings extends React.Component {
               <Input type='radio' label='Default' onChange={this.onThemeChange} checked={'default' === theme} value="default" />
               <Input type='radio' label='Zenburn' onChange={this.onThemeChange} checked={'zenburn' === theme} value="zenburn" />
             </div>
-            <div className="direction">
-              <Input type='radio' label='Horizontal' onChange={this.onDirectionChange} checked={DIRECTION_HORIZONTAL === direction} value={DIRECTION_HORIZONTAL} />
-              <Input type='radio' label='Vertical' onChange={this.onDirectionChange} checked={DIRECTION_VERTICAL === direction} value={DIRECTION_VERTICAL} />
-            </div>
             <label>Keyboard Shortcuts</label>
             <ul>
+              {this.renderComboInputs()}
               <li>
-                <span className="combo-text">Add a new tab</span>
-                <ComboListenerInput className="combo-listener" value="cmd + j" />
-              </li>
-              <li>
-                <span className="combo-text">Close current tab</span>
-                <ComboListenerInput className="combo-listener" value="cmd + k" />
-              </li>
-              <li>
-                <span className="combo-text">Switch to the previous tab</span>
-                <ComboListenerInput className="combo-listener" value="ctrl + alt + left" />
-              </li>
-              <li>
-                <span className="combo-text">Switch to the next tab</span>
-                <ComboListenerInput className="combo-listener" value="ctrl + alt + right" />
-              </li>
-              <li>
-                <span className="combo-text">Save the current bamboo</span>
-                <ComboListenerInput className="combo-listener" value="ctrl + s" />
-              </li>
-              <li>
-                <span className="combo-text">Switch input method</span>
-                <ComboListenerInput className="combo-listener" value="alt + space" />
-              </li>
-              <li>
-                <span className="combo-text">Find</span>
-                <ComboListenerInput className="combo-listener" value="ctrl + f" />
-              </li>
-              <li>
-                <span className="combo-text">Find Next</span>
-                <ComboListenerInput className="combo-listener" value="enter" />
-              </li>
-              <li>
-                <span className="combo-text">Find Previous</span>
-                <ComboListenerInput className="combo-listener" value="shift + enter" />
-              </li>
-              <li>
-                <span className="combo-text">Replace</span>
-                <ComboListenerInput className="combo-listener" value="shift + ctrl + f" />
-              </li>
-              <li>
-                <span className="combo-text">Confirm Replace</span>
-                <ComboListenerInput className="combo-listener" value="y" />
-              </li>
-              <li>
-                <span className="combo-text">Confirm Reject</span>
-                <ComboListenerInput className="combo-listener" value="n" />
-              </li>
-              <li>
-                <span className="combo-text">Stop</span>
-                <ComboListenerInput className="combo-listener" value="esc" />
-              </li>
-              <li>
-                <span className="combo-text">Replace All</span>
-                <ComboListenerInput className="combo-listener" value="shift + enter" />
-              </li>
-              <li>
-                <span className="combo-text">Split Page</span>
-                <ComboListenerInput className="combo-listener" value="ctrl + enter" />
+                <Button onClick={this.resetShortcuts}>Reset Shortcuts to Default</Button>
               </li>
             </ul>
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={this.close}>Close</Button>
+          <Button onClick={this.props.close}>Close</Button>
         </Modal.Footer>
       </Modal>
     );
