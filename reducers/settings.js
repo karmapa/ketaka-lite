@@ -10,6 +10,7 @@ const settings = {
   ewRatio: 0.5,
   showImageOnly: false,
   showTextOnly: false,
+  shortcuts: consts.DEFAULT_SHORTCUTS,
   inputMethod: consts.INPUT_METHOD_SYSTEM,
   spellCheckOn: false,
   readonly: false,
