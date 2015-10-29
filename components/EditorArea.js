@@ -343,11 +343,13 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  componentDidMount() {
+  bindKeyboardEvents = () => {
 
-    let self = this;
+    let {keypressListener} = this;
+    if (keypressListener) {
+      keypressListener.distroy();
+    }
 
-    let keypressListener = this.keypressListener;
     let inputMethods = _.values(MAP_INPUT_METHODS);
     let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
 
@@ -378,6 +380,13 @@ export default class EditorArea extends React.Component {
       let newMethod = inputMethods[index];
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
+  };
+
+  componentDidMount() {
+
+    let self = this;
+
+    this.bindKeyboardEvents();
 
     Api.on('app-import', function() {
       self.import();
