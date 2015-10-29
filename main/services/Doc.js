@@ -10,6 +10,7 @@ var _ = require('lodash');
 var uuid = require('node-uuid');
 var zpad = require('zpad');
 var mkdirp = require('mkdirp');
+var naturalSort = require('javascript-natural-sort');
 
 function createDoc(args) {
   return _.extend({
@@ -211,40 +212,17 @@ function sortPages(pages) {
     return REGEXP_PAGE.exec(page.name);
   });
 
-  validPages = validPages.sort(function(a, b) {
+  function compare(a, b) {
+    return naturalSort(a.name, b.name);
+  }
 
-    var aRes = REGEXP_PAGE.exec(a.name);
-    var aFirstNumber = parseInt(aRes[1], 10);
-    var aSecondNumber = parseInt(aRes[2], 10);
-    var aChar = aRes[3];
-
-    var bRes = REGEXP_PAGE.exec(b.name);
-    var bFirstNumber = parseInt(bRes[1], 10);
-    var bSecondNumber = parseInt(bRes[2], 10);
-    var bChar = bRes[3];
-
-    if (aFirstNumber !== bFirstNumber) {
-      return aFirstNumber - bFirstNumber;
-    }
-
-    if (aSecondNumber !== bSecondNumber) {
-      return aSecondNumber - bSecondNumber;
-    }
-
-    if (aChar !== bChar) {
-      return aChar.charCodeAt() - bChar.charCodeAt();
-    }
-
-    return 0;
-  });
+  validPages = validPages.sort(compare);
 
   var invalidPages = _.filter(pages, function(page) {
     return ! REGEXP_PAGE.exec(page.name);
   });
 
-  invalidPages = invalidPages.sort(function(a, b) {
-    return a.name > b.name;
-  });
+  invalidPages = invalidPages.sort(compare);
 
   return validPages.concat(invalidPages);
 }
