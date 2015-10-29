@@ -63,13 +63,9 @@ export default class EditorArea extends React.Component {
     };
   }
 
-  submitSettings(settings) {
-    this.props.updateSettings(settings);
-    this.closeModalSettings();
-  }
-
-  closeModalSettings() {
+  closeModalSettings = () => {
     this.refs.modalSettings.close();
+    this.bindKeyboardEvents();
   }
 
   handleSelect = key => {
@@ -345,29 +341,35 @@ export default class EditorArea extends React.Component {
 
   bindKeyboardEvents = () => {
 
-    let {keypressListener} = this;
-    if (keypressListener) {
-      keypressListener.distroy();
+    let self = this;
+
+    if (self.keypressListener) {
+      self.keypressListener.destroy();
     }
 
     let inputMethods = _.values(MAP_INPUT_METHODS);
     let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
 
-    keypressListener = new keypress.Listener();
-    keypressListener = Helper.camelize(['simple_combo'], keypressListener);
+    self.keypressListener = new keypress.Listener();
+    let keypressListener = Helper.camelize(['simple_combo'], self.keypressListener);
 
-    keypressListener.simpleCombo('cmd j', this.addDoc);
-    keypressListener.simpleCombo('cmd k', this.closeTab.bind(this, null));
-    keypressListener.simpleCombo('ctrl alt left', this.rotateTabLeft);
-    keypressListener.simpleCombo('ctrl alt right', this.rotateTabRight);
-    keypressListener.simpleCombo('ctrl s', this.save);
-    keypressListener.simpleCombo('cmd s', this.save);
+    let shortcuts = _.clone(this.props.settings.shortcuts);
 
-    keypressListener.simpleCombo('ctrl enter', this.splitPage);
+    // format shortcuts data
+    _.each(shortcuts, (shortcut, prop) => {
+      shortcuts[prop] = shortcut.value.split(' + ').join(' ');
+    });
 
-    keypressListener.simpleCombo('esc', this.cancel);
+    keypressListener.simpleCombo(shortcuts.addTab, this.addDoc);
+    keypressListener.simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
+    keypressListener.simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
+    keypressListener.simpleCombo(shortcuts.nextTab, this.rotateTabRight);
+    keypressListener.simpleCombo(shortcuts.save, this.save);
 
-    keypressListener.simpleCombo('alt space', () => {
+    keypressListener.simpleCombo(shortcuts.splitPage, this.splitPage);
+    keypressListener.simpleCombo(shortcuts.stop, this.cancel);
+
+    keypressListener.simpleCombo(shortcuts.switchInputMethod, () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
       if (-1 === index) {
@@ -380,6 +382,9 @@ export default class EditorArea extends React.Component {
       let newMethod = inputMethods[index];
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
+
+    keypressListener.simpleCombo(shortcuts.find, self.refs.searchBar.find);
+    keypressListener.simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
   };
 
   componentDidMount() {
@@ -406,6 +411,9 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-settings', function() {
       self.openSettingsModal();
+      if (self.keypressListener) {
+        self.keypressListener.destroy();
+      }
     });
 
     Api.on('app-export-zip', function() {
@@ -1114,7 +1122,7 @@ export default class EditorArea extends React.Component {
           confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
         <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
         <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
-        <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} />
+        <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
         <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
