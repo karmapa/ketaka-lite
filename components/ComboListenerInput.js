@@ -6,16 +6,10 @@ export default class ComboListenerInput extends React.Component {
 
   static PropTypes = {
     className: PropTypes.string,
-    value: PropTypes.string
+    shortcut: PropTypes.object.isRequired,
+    prop: PropTypes.string.isRequired,
+    setShortcuts: PropTypes.func.isRequired
   };
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      text: this.props.value
-    };
-  }
 
   keyCodes = [];
 
@@ -34,13 +28,16 @@ export default class ComboListenerInput extends React.Component {
 
   onKeyDown = e => {
 
-     e.stopPropagation();
-     e.preventDefault();
+    let {prop, setShortcuts, shortcut} = this.props;
+    let text = shortcut.text;
 
     if ('backspace' === keyCode(e.keyCode)) {
       this.keyCodes.length = 0;
-      this.setState({
-        text: ''
+      setShortcuts({
+        [prop]: {
+          text,
+          value: ''
+        }
       });
       return;
     }
@@ -49,8 +46,11 @@ export default class ComboListenerInput extends React.Component {
     if (! keyCodes.includes(e.keyCode)) {
       keyCodes.push(e.keyCode);
     }
-    this.setState({
-      text: this.keyCodesToText()
+    setShortcuts({
+     [prop]: {
+       text,
+       value: this.keyCodesToText()
+     }
     });
   }
 
@@ -58,12 +58,14 @@ export default class ComboListenerInput extends React.Component {
 
   render() {
 
+    let {className, shortcut} = this.props;
+
     let props = {
-      className: this.props.className,
+      className,
       onChange: this.onChange,
       onKeyDown: this.onKeyDown,
       type: 'text',
-      value: this.state.text
+      value: shortcut.value
     };
 
     return (
