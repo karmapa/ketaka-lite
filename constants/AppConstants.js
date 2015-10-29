@@ -43,3 +43,66 @@ export const REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
 
 export const NON_EDITOR_AREA_HEIGHT = 60;
 export const RESIZER_SIZE = 15;
+
+export const DEFAULT_SHORTCUTS = {
+  addTab: {
+    text: 'Add a new tab',
+    value: 'cmd + j'
+  },
+  closeTab: {
+    text: 'Close current tab',
+    value: 'cmd + k'
+  },
+  prevTab: {
+    text: 'Switch to previous tab',
+    value: 'ctrl + alt + left'
+  },
+  nextTab: {
+    text: 'Switch to next tab',
+    value: 'ctrl + alt + right'
+  },
+  save: {
+    text: 'Save current bamboo',
+    value: 'ctrl + s'
+  },
+  switchInputMethod: {
+    text: 'Switch input method',
+    value: 'alt + space'
+  },
+  find: {
+    text: 'Find',
+    value: 'ctrl + f'
+  },
+  findNext: {
+    text: 'Find Next',
+    value: 'enter'
+  },
+  findPrev: {
+    text: 'Find Previous',
+    value: 'shift + enter'
+  },
+  replace: {
+    text: 'Replace',
+    value: 'shift + ctrl + f'
+  },
+  confirmReplace: {
+    text: 'Confirm replace',
+    value: 'y'
+  },
+  confirmReject: {
+    text: 'Confirm reject',
+    value: 'n'
+  },
+  stop: {
+    text: 'Stop',
+    value: 'esc'
+  },
+  replaceAll: {
+    text: 'Replace all',
+    value: 'shift + enter'
+  },
+  splitPage: {
+    text: 'Split page',
+    value: 'ctrl + enter'
+  }
+};
