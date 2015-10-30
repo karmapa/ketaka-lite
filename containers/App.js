@@ -22,19 +22,22 @@ export default class App extends React.Component {
 
     document.title = constants.APP_NAME;
     dispatch(AppActions.initSettings());
-    this.setBodyClassName(settings.theme);
+    this.changeTheme(settings.theme);
 
     ContextMenu.init();
   }
 
-  setBodyClassName(className) {
-    document.body.className = className;
+  changeTheme(oldTheme, newTheme) {
+    let classList = document.body.classList;
+    classList.remove(oldTheme);
+    classList.add(newTheme);
   }
 
   componentWillReceiveProps(nextProps) {
+    let currentTheme = this.props.settings.theme;
     let nextTheme = nextProps.settings.theme;
-    if (this.props.settings.theme !== nextTheme) {
-      this.setBodyClassName(nextTheme);
+    if (currentTheme !== nextTheme) {
+      this.changeTheme(currentTheme, nextTheme);
     }
   }
 
