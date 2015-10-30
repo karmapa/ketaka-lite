@@ -620,6 +620,11 @@ export default class EditorArea extends React.Component {
 
   addSpellCheckOverlay() {
     let codemirror = this.getCurrentCodemirror();
+
+    if (! codemirror) {
+      return;
+    }
+
     let content = codemirror.getValue();
 
     let queries = checkSyllables(content)
@@ -628,6 +633,8 @@ export default class EditorArea extends React.Component {
     if (_.isEmpty(queries)) {
       return;
     }
+
+    this.removeSpellCheckOverlay();
 
     let overlay = this.searchOverlay(queries, true);
     codemirror.addOverlay(overlay);
