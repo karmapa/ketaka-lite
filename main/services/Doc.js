@@ -229,7 +229,7 @@ function sortPages(pages) {
 
 function genPbFileContent(doc) {
   return doc.pages.map(function(page) {
-    return '<pb id="' + page.name + '" />\n' + page.content + '\n';
+    return '<pb id="' + page.name + '"/>\n' + page.content + '\n';
   }).join('');
 }
 
