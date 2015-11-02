@@ -62,6 +62,7 @@ export default class SearchBar extends React.Component {
     self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
     CodeMirror.commands.find = () => {};
+    CodeMirror.commands.findNext = () => {};
     CodeMirror.commands.replace = () => {};
     CodeMirror.commands.replaceAll = () => {};
 
