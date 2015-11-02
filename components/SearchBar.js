@@ -63,6 +63,7 @@ export default class SearchBar extends React.Component {
 
     CodeMirror.commands.find = () => {};
     CodeMirror.commands.findNext = () => {};
+    CodeMirror.commands.findPrev = () => {};
     CodeMirror.commands.replace = () => {};
     CodeMirror.commands.replaceAll = () => {};
 
