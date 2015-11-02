@@ -450,6 +450,8 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo(shortcuts.splitPage, this.splitPage);
     keypressListener.simpleCombo(shortcuts.stop, this.cancel);
 
+    keypressListener.simpleCombo('ctrl g', this.nextWord);
+
     keypressListener.simpleCombo(shortcuts.switchInputMethod, () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
