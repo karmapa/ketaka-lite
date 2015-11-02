@@ -5,7 +5,7 @@ const settings = {
   fontSize: 1,
   letterSpacing: 1,
   lineHeight: 1,
-  direction: false,
+  direction: consts.DIRECTION_HORIZONTAL,
   nsRatio: 0.5,
   ewRatio: 0.5,
   showImageOnly: false,
