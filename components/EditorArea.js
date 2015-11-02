@@ -351,6 +351,16 @@ export default class EditorArea extends React.Component {
     return null;
   }
 
+  findPrevQuery = (res, index) => {
+    for (let i = res.length - 1; i >= 0; i--) {
+      let query = res[i];
+      if (index > query[0]) {
+        return query;
+      }
+    }
+    return null;
+  }
+
   bindKeyboardEvents = () => {
 
     let self = this;
