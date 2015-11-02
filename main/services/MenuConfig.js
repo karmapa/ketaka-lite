@@ -192,7 +192,7 @@ function getTemplate(args) {
       label: 'Electron',
       submenu: [
         {
-          label: 'About Electron',
+          label: 'About KETAKA Lite',
           role: 'about'
         },
         {
