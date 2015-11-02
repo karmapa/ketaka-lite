@@ -6,6 +6,11 @@ export function toggleDirection() {
 
     let settings = Store.get('settings') || {};
 
+    // init
+    if (undefined === settings.direction) {
+      settings.direction = DIRECTION_HORIZONTAL;
+    }
+
     settings.direction = (DIRECTION_HORIZONTAL === settings.direction) ? DIRECTION_VERTICAL : DIRECTION_HORIZONTAL;
 
     Store.set('settings', settings);
