@@ -390,6 +390,36 @@ export default class EditorArea extends React.Component {
     cm.setSelection(fromPos, toPos);
   };
 
+  prevWord = () => {
+
+    if (_.isEmpty(this.lastQueryRes)) {
+      return;
+    }
+
+    let cm = this.getCurrentCodemirror();
+
+    if (! cm) {
+      return;
+    }
+
+    let cursor = cm.getCursor();
+    let selection = cm.getSelection();
+    let index = cm.indexFromPos(cursor) - selection.length;
+    let query = this.findPrevQuery(this.lastQueryRes, index);
+
+    if (_.isNull(query)) {
+      return;
+    }
+
+    let from = query[0];
+    let to = from + query[1];
+
+    let fromPos = cm.posFromIndex(from);
+    let toPos = cm.posFromIndex(to);
+
+    cm.setSelection(fromPos, toPos);
+  };
+
   bindKeyboardEvents = () => {
 
     let self = this;
