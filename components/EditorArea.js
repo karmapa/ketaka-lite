@@ -341,6 +341,16 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  findNextQuery = (res, index) => {
+    for (let i = 0, len = res.length; i < len; i++) {
+      let query = res[i];
+      if (index < query[0]) {
+        return query;
+      }
+    }
+    return null;
+  }
+
   bindKeyboardEvents = () => {
 
     let self = this;
