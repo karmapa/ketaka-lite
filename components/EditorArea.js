@@ -53,6 +53,8 @@ export default class EditorArea extends React.Component {
 
   keypressListener = null;
 
+  lastQueryRes = [];
+
   constructor(props, context) {
     super(props, context);
 
@@ -627,8 +629,10 @@ export default class EditorArea extends React.Component {
 
     let content = codemirror.getValue();
 
-    let queries = checkSyllables(content)
-      .map(result => result[2]);
+    let res = checkSyllables(content);
+    let queries = res.map(result => result[2]);
+
+    this.lastQueryRes = res;
 
     if (_.isEmpty(queries)) {
       return;
