@@ -3,7 +3,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm,
+import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
   ModalImportStatus, ModalOpen, EditorToolbar, Resizer} from '.';
 import {Helper} from '../services/';
@@ -1059,6 +1059,10 @@ export default class EditorArea extends React.Component {
     this.props.setTextOnly(! showTextOnly);
   }
 
+  cancelModalSave = () => {
+    this.refs.modalSaveConfirm.close();
+  };
+
   renderEditorToolbar() {
 
     if (_.isEmpty(this.props.docs)) {
@@ -1124,7 +1128,7 @@ export default class EditorArea extends React.Component {
           {docs.map(this.renderDoc)}
           <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
         </TabBox>
-        <ModalConfirm ref="modalSaveConfirm" confirmText="Save and close" confirm={this.saveAndClose} cancelText="Discard" cancel={this.discard} />
+        <ModalSaveConfirm ref="modalSaveConfirm" confirm={this.saveAndClose} discard={this.discard} cancel={this.cancelModalSave} />
         <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
           confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
         <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
