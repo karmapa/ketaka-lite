@@ -69,8 +69,6 @@ export default class SearchBar extends React.Component {
 
     document.addEventListener('keyup', e => {
 
-      let keyCode = e.keyCode;
-
       if (shiftKeyPressed(e)) {
         this.shiftKeyPressed = false;
       }
