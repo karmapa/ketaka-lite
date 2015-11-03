@@ -696,10 +696,6 @@ function shiftKeyPressed(e) {
   return 16 === e.keyCode;
 }
 
-function escKeyPressed(e) {
-  return 27 === e.keyCode;
-}
-
 function clearSelection(cm) {
   let pos = cm.getCursor();
   cm.setSelection(pos, pos);
