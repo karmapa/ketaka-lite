@@ -719,6 +719,10 @@ export default class EditorArea extends React.Component {
       return;
     }
 
+    if (this.lastOverlay) {
+      this.removeSpellCheckOverlay();
+    }
+
     let content = codemirror.getValue();
 
     let res = checkSyllables(content);
@@ -729,8 +733,6 @@ export default class EditorArea extends React.Component {
     if (_.isEmpty(queries)) {
       return;
     }
-
-    this.removeSpellCheckOverlay();
 
     let overlay = this.searchOverlay(queries, true);
     codemirror.addOverlay(overlay);
