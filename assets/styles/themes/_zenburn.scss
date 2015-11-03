@@ -260,4 +260,8 @@ $bg-zenburn-error: #e74c3c;
       border: 1px solid transparent;
     }
   }
+
+  .popover.bottom > .arrow:after {
+    border-bottom-color: #303030;
+  }
 }
