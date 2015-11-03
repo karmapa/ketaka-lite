@@ -718,6 +718,7 @@ export default class EditorArea extends React.Component {
   }
 
   addSpellCheckOverlay() {
+    let self = this;
     let codemirror = this.getCurrentCodemirror();
 
     if (! codemirror) {
@@ -731,6 +732,12 @@ export default class EditorArea extends React.Component {
     let content = codemirror.getValue();
 
     let res = checkSyllables(content);
+    let {spellcheckExceptionList} = self.props.settings;
+
+    res = res.filter(row => {
+      return ! spellcheckExceptionList.includes(row[2]);
+    });
+
     let queries = res.map(result => result[2]);
 
     this.lastQueryRes = res;
