@@ -486,8 +486,6 @@ export default class EditorArea extends React.Component {
 
     let self = this;
 
-    self.refs.modalSpellCheckExceptionList.open();
-
     this.bindKeyboardEvents();
 
     Api.on('app-import', function() {
