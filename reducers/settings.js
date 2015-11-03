@@ -10,6 +10,7 @@ const settings = {
   ewRatio: 0.5,
   showImageOnly: false,
   showTextOnly: false,
+  spellcheckExceptionList: ['test', '123', 'ooo'],
   shortcuts: consts.DEFAULT_SHORTCUTS,
   inputMethod: consts.INPUT_METHOD_SYSTEM,
   spellCheckOn: false,
