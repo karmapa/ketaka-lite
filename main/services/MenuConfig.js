@@ -97,6 +97,12 @@ function getTemplate(args) {
             webContents.send('app-settings');
           }
         },
+        {
+          label: 'Spellcheck Exception List',
+          click: function() {
+            webContents.send('app-spellcheck-exception-list');
+          }
+        }
       ]
     },
     {

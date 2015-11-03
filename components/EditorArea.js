@@ -5,7 +5,7 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen, EditorToolbar, Resizer} from '.';
+  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, Resizer} from '.';
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -29,6 +29,7 @@ export default class EditorArea extends React.Component {
     importDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
+    addExceptionWord: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
@@ -536,6 +537,10 @@ export default class EditorArea extends React.Component {
       self.refs.searchBar.replace();
     });
 
+    Api.on('app-spellcheck-exception-list', () => {
+      self.refs.modalSpellCheckExceptionList.open();
+    });
+
     window.addEventListener('resize', this.handleResize);
 
     if (this.props.settings.spellCheckOn) {
@@ -713,6 +718,7 @@ export default class EditorArea extends React.Component {
   }
 
   addSpellCheckOverlay() {
+    let self = this;
     let codemirror = this.getCurrentCodemirror();
 
     if (! codemirror) {
@@ -726,6 +732,12 @@ export default class EditorArea extends React.Component {
     let content = codemirror.getValue();
 
     let res = checkSyllables(content);
+    let {spellcheckExceptionList} = self.props.settings;
+
+    res = res.filter(row => {
+      return ! spellcheckExceptionList.includes(row[2]);
+    });
+
     let queries = res.map(result => result[2]);
 
     this.lastQueryRes = res;
@@ -1201,7 +1213,7 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let {docs, settings, inputMethod, writePageContent, updateSettings} = this.props;
+    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord} = this.props;
 
     let classes = {
       [this.props.className]: true,
@@ -1234,6 +1246,7 @@ export default class EditorArea extends React.Component {
         <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
         <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
+        <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.spellcheckExceptionList} addExceptionWord={addExceptionWord} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

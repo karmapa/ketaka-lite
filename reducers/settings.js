@@ -10,6 +10,7 @@ const settings = {
   ewRatio: 0.5,
   showImageOnly: false,
   showTextOnly: false,
+  spellcheckExceptionList: [],
   shortcuts: consts.DEFAULT_SHORTCUTS,
   inputMethod: consts.INPUT_METHOD_SYSTEM,
   spellCheckOn: false,
@@ -18,6 +19,7 @@ const settings = {
 };
 
 const actionsMap = {
+  [types.ADD_EXCEPTION_WORD]: addExceptionWord,
   [types.RECEIVE_SETTINGS]: receiveSettings
 };
 
@@ -28,4 +30,10 @@ export default function(state = settings, action) {
 
 function receiveSettings(state, action) {
   return Object.assign({}, state, action.settings);
+}
+
+function addExceptionWord(state, action) {
+  let spellcheckExceptionList = state.spellcheckExceptionList;
+  spellcheckExceptionList.push(action.word);
+  return Object.assign({}, state, {spellcheckExceptionList});
 }

@@ -18,3 +18,4 @@ export Resizer from './Resizer';
 export SearchBar from './SearchBar';
 export TabBox from './TabBox';
 export TabItem from './TabItem';
+export ModalSpellCheckExceptionList from './ModalSpellCheckExceptionList';
