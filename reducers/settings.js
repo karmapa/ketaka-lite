@@ -19,6 +19,7 @@ const settings = {
 };
 
 const actionsMap = {
+  [types.ADD_EXCEPTION_WORD]: addExceptionWord,
   [types.RECEIVE_SETTINGS]: receiveSettings
 };
 
@@ -29,4 +30,10 @@ export default function(state = settings, action) {
 
 function receiveSettings(state, action) {
   return Object.assign({}, state, action.settings);
+}
+
+function addExceptionWord(state, action) {
+  let spellcheckExceptionList = state.spellcheckExceptionList;
+  spellcheckExceptionList.push(action.word);
+  return Object.assign({}, state, {spellcheckExceptionList});
 }
