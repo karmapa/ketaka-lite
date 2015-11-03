@@ -450,9 +450,6 @@ export default class EditorArea extends React.Component {
     keypressListener.simpleCombo(shortcuts.splitPage, this.splitPage);
     keypressListener.simpleCombo(shortcuts.stop, this.cancel);
 
-    keypressListener.simpleCombo('ctrl g', this.nextWord);
-    keypressListener.simpleCombo('alt g', this.prevWord);
-
     keypressListener.simpleCombo(shortcuts.switchInputMethod, () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
@@ -469,6 +466,9 @@ export default class EditorArea extends React.Component {
 
     keypressListener.simpleCombo(shortcuts.find, self.refs.searchBar.find);
     keypressListener.simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
+
+    keypressListener.simpleCombo(shortcuts.nextWord, this.nextWord);
+    keypressListener.simpleCombo(shortcuts.prevWord, this.prevWord);
   };
 
   componentDidMount() {

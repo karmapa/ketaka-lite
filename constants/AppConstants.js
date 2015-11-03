@@ -104,5 +104,13 @@ export const DEFAULT_SHORTCUTS = {
   splitPage: {
     text: 'Split page',
     value: 'ctrl + enter'
+  },
+  nextWord: {
+    text: 'Next word',
+    value: 'ctrl + g'
+  },
+  prevWord: {
+    text: 'Previous word',
+    value: 'alt + g'
   }
 };
