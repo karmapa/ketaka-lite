@@ -466,6 +466,7 @@ export default class EditorArea extends React.Component {
 
     keypressListener.simpleCombo(shortcuts.find, self.refs.searchBar.find);
     keypressListener.simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
+    keypressListener.simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
 
     keypressListener.simpleCombo(shortcuts.confirmReplace, () => {
       self.refs.searchBar.yes();
