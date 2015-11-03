@@ -84,6 +84,6 @@ export default class ModalSpellCheckExceptionList extends React.Component {
   renderWords() {
     return this.props.words.map(word => {
       return <span className="label label-info">{word}</span>;
-    })
+    });
   }
 }
