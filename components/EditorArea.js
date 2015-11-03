@@ -471,6 +471,10 @@ export default class EditorArea extends React.Component {
       self.refs.searchBar.yes();
     });
 
+    keypressListener.simpleCombo(shortcuts.confirmReject, () => {
+      self.refs.searchBar.no();
+    });
+
 
     keypressListener.simpleCombo(shortcuts.nextWord, this.nextWord);
     keypressListener.simpleCombo(shortcuts.prevWord, this.prevWord);

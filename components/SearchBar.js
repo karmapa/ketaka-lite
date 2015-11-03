@@ -70,10 +70,6 @@ export default class SearchBar extends React.Component {
     document.addEventListener('keyup', e => {
 
       let keyCode = e.keyCode;
-      // n
-      if (78 === keyCode) {
-        self.no();
-      }
       // esc
       if (escKeyPressed(e)) {
         clearSearch(this.cm);
