@@ -29,6 +29,7 @@ export default class EditorArea extends React.Component {
     importDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
+    addExceptionWord: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
