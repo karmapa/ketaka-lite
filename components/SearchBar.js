@@ -62,29 +62,24 @@ export default class SearchBar extends React.Component {
     self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
     CodeMirror.commands.find = () => {};
+    CodeMirror.commands.findNext = () => {};
+    CodeMirror.commands.findPrev = () => {};
     CodeMirror.commands.replace = () => {};
     CodeMirror.commands.replaceAll = () => {};
 
     document.addEventListener('keyup', e => {
 
       let keyCode = e.keyCode;
-      // y
-      if (89 === keyCode) {
-        self.yes();
-      }
-      // n
-      if (78 === keyCode) {
-        self.no();
-      }
-      // esc
-      if (escKeyPressed(e)) {
-        clearSearch(this.cm);
-        self.stop();
-      }
+
       if (shiftKeyPressed(e)) {
         this.shiftKeyPressed = false;
       }
     });
+  }
+
+  escape = () => {
+    clearSearch(this.cm);
+    this.stop();
   }
 
   onFindInputChange = e => {
@@ -568,6 +563,10 @@ export default class SearchBar extends React.Component {
 }
 
 function clearSearch(cm) {
+
+  if (! cm) {
+    return;
+  }
 
   cm.operation(function() {
 

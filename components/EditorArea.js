@@ -53,6 +53,8 @@ export default class EditorArea extends React.Component {
 
   keypressListener = null;
 
+  lastQueryRes = [];
+
   constructor(props, context) {
     super(props, context);
 
@@ -339,6 +341,85 @@ export default class EditorArea extends React.Component {
     }
   }
 
+  findNextQuery = (res, index) => {
+    for (let i = 0, len = res.length; i < len; i++) {
+      let query = res[i];
+      if (index < query[0]) {
+        return query;
+      }
+    }
+    return null;
+  }
+
+  findPrevQuery = (res, index) => {
+    for (let i = res.length - 1; i >= 0; i--) {
+      let query = res[i];
+      if (index > query[0]) {
+        return query;
+      }
+    }
+    return null;
+  }
+
+  nextWord = () => {
+
+    if (_.isEmpty(this.lastQueryRes)) {
+      return;
+    }
+
+    let cm = this.getCurrentCodemirror();
+
+    if (! cm) {
+      return;
+    }
+
+    let cursor = cm.getCursor();
+    let index = cm.indexFromPos(cursor);
+    let query = this.findNextQuery(this.lastQueryRes, index);
+
+    if (_.isNull(query)) {
+      return;
+    }
+
+    let from = query[0];
+    let to = from + query[1];
+
+    let fromPos = cm.posFromIndex(from);
+    let toPos = cm.posFromIndex(to);
+
+    cm.setSelection(fromPos, toPos);
+  };
+
+  prevWord = () => {
+
+    if (_.isEmpty(this.lastQueryRes)) {
+      return;
+    }
+
+    let cm = this.getCurrentCodemirror();
+
+    if (! cm) {
+      return;
+    }
+
+    let cursor = cm.getCursor();
+    let selection = cm.getSelection();
+    let index = cm.indexFromPos(cursor) - selection.length;
+    let query = this.findPrevQuery(this.lastQueryRes, index);
+
+    if (_.isNull(query)) {
+      return;
+    }
+
+    let from = query[0];
+    let to = from + query[1];
+
+    let fromPos = cm.posFromIndex(from);
+    let toPos = cm.posFromIndex(to);
+
+    cm.setSelection(fromPos, toPos);
+  };
+
   bindKeyboardEvents = () => {
 
     let self = this;
@@ -385,6 +466,19 @@ export default class EditorArea extends React.Component {
 
     keypressListener.simpleCombo(shortcuts.find, self.refs.searchBar.find);
     keypressListener.simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
+    keypressListener.simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
+
+    keypressListener.simpleCombo(shortcuts.confirmReplace, () => {
+      self.refs.searchBar.yes();
+    });
+
+    keypressListener.simpleCombo(shortcuts.confirmReject, () => {
+      self.refs.searchBar.no();
+    });
+
+
+    keypressListener.simpleCombo(shortcuts.nextWord, this.nextWord);
+    keypressListener.simpleCombo(shortcuts.prevWord, this.prevWord);
   };
 
   componentDidMount() {
@@ -625,16 +719,20 @@ export default class EditorArea extends React.Component {
       return;
     }
 
+    if (this.lastOverlay) {
+      this.removeSpellCheckOverlay();
+    }
+
     let content = codemirror.getValue();
 
-    let queries = checkSyllables(content)
-      .map(result => result[2]);
+    let res = checkSyllables(content);
+    let queries = res.map(result => result[2]);
+
+    this.lastQueryRes = res;
 
     if (_.isEmpty(queries)) {
       return;
     }
-
-    this.removeSpellCheckOverlay();
 
     let overlay = this.searchOverlay(queries, true);
     codemirror.addOverlay(overlay);
