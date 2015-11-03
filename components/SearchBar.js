@@ -564,6 +564,10 @@ export default class SearchBar extends React.Component {
 
 function clearSearch(cm) {
 
+  if (! cm) {
+    return;
+  }
+
   cm.operation(function() {
 
     let state = getSearchState(cm);
