@@ -1,3 +1,8 @@
+<a name="0.1.33"></a>
+
+## New Features
+- [\#37](https://github.com/karmapa/ketaka-lite/issues/37)
+
 <a name="0.1.32"></a>
 
 ## New Features

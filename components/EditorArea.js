@@ -5,7 +5,7 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen, EditorToolbar, Resizer} from '.';
+  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, Resizer} from '.';
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -29,6 +29,7 @@ export default class EditorArea extends React.Component {
     importDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
+    addExceptionWord: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
@@ -432,7 +433,7 @@ export default class EditorArea extends React.Component {
     let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
 
     self.keypressListener = new keypress.Listener();
-    let keypressListener = Helper.camelize(['simple_combo'], self.keypressListener);
+    let keypressListener = Helper.camelize(['register_combo'], self.keypressListener);
 
     let shortcuts = _.clone(this.props.settings.shortcuts);
 
@@ -441,16 +442,25 @@ export default class EditorArea extends React.Component {
       shortcuts[prop] = shortcut.value.split(' + ').join(' ');
     });
 
-    keypressListener.simpleCombo(shortcuts.addTab, this.addDoc);
-    keypressListener.simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
-    keypressListener.simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
-    keypressListener.simpleCombo(shortcuts.nextTab, this.rotateTabRight);
-    keypressListener.simpleCombo(shortcuts.save, this.save);
+    let simpleCombo = (keys, cb) => {
+      return keypressListener.registerCombo({
+        keys,
+        'on_keyup': cb,
+        'prevent_default': false,
+        'is_unordered': true
+      });
+    };
 
-    keypressListener.simpleCombo(shortcuts.splitPage, this.splitPage);
-    keypressListener.simpleCombo(shortcuts.stop, this.cancel);
+    simpleCombo(shortcuts.addTab, this.addDoc);
+    simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
+    simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
+    simpleCombo(shortcuts.nextTab, this.rotateTabRight);
+    simpleCombo(shortcuts.save, this.save);
 
-    keypressListener.simpleCombo(shortcuts.switchInputMethod, () => {
+    simpleCombo(shortcuts.splitPage, this.splitPage);
+    simpleCombo(shortcuts.stop, this.cancel);
+
+    simpleCombo(shortcuts.switchInputMethod, () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
       if (-1 === index) {
@@ -464,21 +474,20 @@ export default class EditorArea extends React.Component {
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
 
-    keypressListener.simpleCombo(shortcuts.find, self.refs.searchBar.find);
-    keypressListener.simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
-    keypressListener.simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
+    simpleCombo(shortcuts.find, self.refs.searchBar.find);
+    simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
+    simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
 
-    keypressListener.simpleCombo(shortcuts.confirmReplace, () => {
+    simpleCombo(shortcuts.confirmReplace, () => {
       self.refs.searchBar.yes();
     });
 
-    keypressListener.simpleCombo(shortcuts.confirmReject, () => {
+    simpleCombo(shortcuts.confirmReject, () => {
       self.refs.searchBar.no();
     });
 
-
-    keypressListener.simpleCombo(shortcuts.nextWord, this.nextWord);
-    keypressListener.simpleCombo(shortcuts.prevWord, this.prevWord);
+    simpleCombo(shortcuts.nextWord, this.nextWord);
+    simpleCombo(shortcuts.prevWord, this.prevWord);
   };
 
   componentDidMount() {
@@ -534,6 +543,10 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-replace', () => {
       self.refs.searchBar.replace();
+    });
+
+    Api.on('app-spellcheck-exception-list', () => {
+      self.refs.modalSpellCheckExceptionList.open();
     });
 
     window.addEventListener('resize', this.handleResize);
@@ -713,6 +726,7 @@ export default class EditorArea extends React.Component {
   }
 
   addSpellCheckOverlay() {
+    let self = this;
     let codemirror = this.getCurrentCodemirror();
 
     if (! codemirror) {
@@ -726,6 +740,12 @@ export default class EditorArea extends React.Component {
     let content = codemirror.getValue();
 
     let res = checkSyllables(content);
+    let {spellcheckExceptionList} = self.props.settings;
+
+    res = res.filter(row => {
+      return ! spellcheckExceptionList.includes(row[2]);
+    });
+
     let queries = res.map(result => result[2]);
 
     this.lastQueryRes = res;
@@ -1070,37 +1090,32 @@ export default class EditorArea extends React.Component {
     );
   }
 
-  prevPageHasMatched = keyword => {
+  findPrevIndexByKeyword = keyword => {
     let doc = this.getDoc();
-    let prevPage = doc.pages[doc.pageIndex - 1];
-    if (prevPage) {
-      let content = _.get(prevPage, 'content', '');
-      return content.includes(keyword);
+    let page;
+    let pageIndex = doc.pageIndex;
+
+    while (page = doc.pages[--pageIndex]) {
+      let content = _.get(page, 'content', '');
+      if (content.includes(keyword)) {
+        return pageIndex;
+      }
     }
-    return false;
+    return null;
   }
 
-  nextPageHasMatched = keyword => {
+  findNextIndexByKeyword = keyword => {
     let doc = this.getDoc();
-    let nextPage = doc.pages[doc.pageIndex + 1];
-    if (nextPage) {
-      let content = _.get(nextPage, 'content', '');
-      return content.includes(keyword);
-    }
-    return false;
-  }
+    let page;
+    let pageIndex = doc.pageIndex;
 
-  toNextPage = () => {
-    let doc = this.getDoc();
-    let pageCount = _.get(doc, 'pages', []).length;
-    let nextPageIndex = doc.pageIndex + 1;
-    if (nextPageIndex < pageCount) {
-      this.props.setPageIndex(doc.uuid, nextPageIndex);
-      return true;
+    while (page = doc.pages[++pageIndex]) {
+      let content = _.get(page, 'content', '');
+      if (content.includes(keyword)) {
+        return pageIndex;
+      }
     }
-    else {
-      return false;
-    }
+    return null;
   }
 
   toPrevPage = () => {
@@ -1201,7 +1216,8 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let {docs, settings, inputMethod, writePageContent, updateSettings} = this.props;
+    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord,
+      setPageIndex} = this.props;
 
     let classes = {
       [this.props.className]: true,
@@ -1210,9 +1226,9 @@ export default class EditorArea extends React.Component {
 
     let searchBarProps = {
       inputMethod,
-      nextPageHasMatched: this.nextPageHasMatched,
-      prevPageHasMatched: this.prevPageHasMatched,
-      toNextPage: this.toNextPage,
+      findNextIndexByKeyword: this.findNextIndexByKeyword,
+      findPrevIndexByKeyword: this.findPrevIndexByKeyword,
+      setPageIndex,
       toPrevPage: this.toPrevPage,
       doc: this.getDoc(),
       writePageContent
@@ -1234,6 +1250,7 @@ export default class EditorArea extends React.Component {
         <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
         <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
         <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
+        <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.spellcheckExceptionList} addExceptionWord={addExceptionWord} />
         <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
       </div>
     );

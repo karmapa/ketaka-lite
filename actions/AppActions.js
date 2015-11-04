@@ -164,3 +164,11 @@ export function initSettings() {
   };
 }
 
+export const ADD_EXCEPTION_WORD = 'ADD_EXCEPTION_WORD';
+
+export function addExceptionWord(word) {
+  return {
+    type: ADD_EXCEPTION_WORD,
+    word
+  };
+}
