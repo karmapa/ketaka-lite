@@ -1,0 +1,15 @@
+@media print {
+  body {
+    padding: 2em;
+  }
+  .popover, .tooltip {
+    opacity: 0 !important;
+  }
+}
+
+.print-area {
+  background: white;
+  color: black;
+  height: 100vh;
+  padding: 1em;
+}

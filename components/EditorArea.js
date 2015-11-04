@@ -5,7 +5,8 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, Resizer} from '.';
+  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
+  Resizer, PrintArea} from '.';
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -62,6 +63,7 @@ export default class EditorArea extends React.Component {
     let {docs} = this.props;
 
     this.state = {
+      print: false,
       docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
   }
@@ -554,6 +556,21 @@ export default class EditorArea extends React.Component {
     if (this.props.settings.spellCheckOn) {
       this.addSpellCheckOverlay();
     }
+
+    if (window.matchMedia) {
+      let mediaQueryList = window.matchMedia('print');
+      mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+          // before print
+        } else {
+          // after print
+          self.setState({
+            print: false
+          });
+        }
+      });
+    }
+
   }
 
   handleResize = _.throttle(() => {
@@ -1059,6 +1076,7 @@ export default class EditorArea extends React.Component {
     }
 
     let chunkEditorProps = {
+      doc,
       style,
       className: classNames({'hidden': ! editChunk}),
       hidden: ! editChunk,
@@ -1176,6 +1194,12 @@ export default class EditorArea extends React.Component {
     this.refs.modalSaveConfirm.close();
   };
 
+  onPrintButtonClick = () => {
+    this.setState({
+      print: true
+    });
+  };
+
   renderEditorToolbar() {
 
     if (_.isEmpty(this.props.docs)) {
@@ -1200,6 +1224,7 @@ export default class EditorArea extends React.Component {
       onRedoButtonClick: this.onRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
+      onPrintButtonClick: this.onPrintButtonClick,
       onUndoButtonClick: this.onUndoButtonClick,
       onImageOnlyButtonClick: this.onImageOnlyButtonClick,
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
@@ -1216,8 +1241,9 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord,
-      setPageIndex} = this.props;
+    let {print} = this.state;
+    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord, setPageIndex} = this.props;
+    let doc = this.getDoc();
 
     let classes = {
       [this.props.className]: true,
@@ -1230,29 +1256,38 @@ export default class EditorArea extends React.Component {
       findPrevIndexByKeyword: this.findPrevIndexByKeyword,
       setPageIndex,
       toPrevPage: this.toPrevPage,
-      doc: this.getDoc(),
+      doc,
       writePageContent
     };
 
-    return (
-      <div className={classNames(classes)}>
-        <SearchBar ref="searchBar" {...searchBarProps} />
-        {this.renderEditorToolbar()}
-        <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={this.handleSelect} onClose={this.handleClose}>
-          {docs.map(this.renderDoc)}
-          <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
-        </TabBox>
-        <ModalSaveConfirm ref="modalSaveConfirm" confirm={this.saveAndClose} discard={this.discard} cancel={this.cancelModalSave} />
-        <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
-          confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
-        <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
-        <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
-        <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
-        <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
-        <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
-        <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.spellcheckExceptionList} addExceptionWord={addExceptionWord} />
-        <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
-      </div>
-    );
+    if (print) {
+      return (
+        <div className={classNames(classes)}>
+          <PrintArea doc={doc} />
+        </div>
+      );
+    }
+    else {
+      return (
+        <div className={classNames(classes)}>
+          <SearchBar ref="searchBar" {...searchBarProps} />
+          {this.renderEditorToolbar()}
+          <TabBox className="tab-box" activeKey={this.state.docKey} onSelect={this.handleSelect} onClose={this.handleClose}>
+            {docs.map(this.renderDoc)}
+            <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
+          </TabBox>
+          <ModalSaveConfirm ref="modalSaveConfirm" confirm={this.saveAndClose} discard={this.discard} cancel={this.cancelModalSave} />
+          <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
+            confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
+          <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
+          <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
+          <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
+          <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
+          <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
+          <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.spellcheckExceptionList} addExceptionWord={addExceptionWord} />
+          <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
+        </div>
+      );
+    }
   }
 }
