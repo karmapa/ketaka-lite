@@ -15,9 +15,9 @@ export default class SearchBar extends React.Component {
 
   static PropTypes = {
     inputMethod: PropTypes.string.isRequired,
-    nextPageHasMatched: PropTypes.func.isRequired,
-    prevPageHasMatched: PropTypes.func.isRequired,
-    toNextPage: PropTypes.func.isRequired,
+    findNextIndexByKeyword: PropTypes.func.isRequired,
+    findPrevIndexByKeyword: PropTypes.func.isRequired,
+    setPageIndex: PropTypes.func.isRequired,
     toPrevPage: PropTypes.func.isRequired,
     doc: PropTypes.object.isRequired,
     writePageContent: PropTypes.func.isRequired
@@ -241,7 +241,7 @@ export default class SearchBar extends React.Component {
 
   findNext(cm, rev) {
 
-    let self = this;
+    let {findPrevIndexByKeyword, findNextIndexByKeyword, doc, setPageIndex} = this.props;
 
     cm.operation(function() {
       let state = getSearchState(cm);
@@ -250,17 +250,21 @@ export default class SearchBar extends React.Component {
       if (! cursor.find(rev)) {
 
         if (rev) {
-          if (! self.props.prevPageHasMatched(state.query)) {
+          let prevPageIndex = findPrevIndexByKeyword(state.query);
+
+          if (_.isNull(prevPageIndex)) {
             return;
           }
-          self.props.toPrevPage();
+          setPageIndex(doc.uuid, prevPageIndex);
           cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
         }
         else {
-          if (! self.props.nextPageHasMatched(state.query)) {
+          let nextPageIndex = findNextIndexByKeyword(state.query);
+
+          if (_.isNull(nextPageIndex)) {
             return;
           }
-          self.props.toNextPage();
+          setPageIndex(doc.uuid, nextPageIndex);
           cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
         }
 
@@ -337,6 +341,7 @@ export default class SearchBar extends React.Component {
     let self = this;
     let query = self.state.replaceKeyword;
     let text = self.state.withKeyword;
+    let {doc, writePageContent, findNextIndexByKeyword} = self.props;
 
     if (! query) {
       return;
@@ -348,7 +353,6 @@ export default class SearchBar extends React.Component {
     if (all) {
 
       let queryRegExp = new RegExp(query, 'g');
-      let {doc, writePageContent} = self.props;
 
       self.props.doc.pages.forEach((page, index) => {
         writePageContent(doc.uuid, index, page.content.replace(queryRegExp, text));
@@ -366,8 +370,12 @@ export default class SearchBar extends React.Component {
 
         if (! match) {
 
-          if (self.props.nextPageHasMatched(query)) {
-            self.props.toNextPage();
+          let nextPageIndex = findNextIndexByKeyword(query);
+
+          if (! _.isNull(nextPageIndex)) {
+
+            self.props.setPageIndex(doc.uuid, nextPageIndex);
+
             cursor = getSearchCursor(cm, query);
             setTimeout(() => {
               match = cursor.findNext();

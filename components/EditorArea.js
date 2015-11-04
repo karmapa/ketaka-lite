@@ -1082,37 +1082,32 @@ export default class EditorArea extends React.Component {
     );
   }
 
-  prevPageHasMatched = keyword => {
+  findPrevIndexByKeyword = keyword => {
     let doc = this.getDoc();
-    let prevPage = doc.pages[doc.pageIndex - 1];
-    if (prevPage) {
-      let content = _.get(prevPage, 'content', '');
-      return content.includes(keyword);
+    let page;
+    let pageIndex = doc.pageIndex;
+
+    while (page = doc.pages[--pageIndex]) {
+      let content = _.get(page, 'content', '');
+      if (content.includes(keyword)) {
+        return pageIndex;
+      }
     }
-    return false;
+    return null;
   }
 
-  nextPageHasMatched = keyword => {
+  findNextIndexByKeyword = keyword => {
     let doc = this.getDoc();
-    let nextPage = doc.pages[doc.pageIndex + 1];
-    if (nextPage) {
-      let content = _.get(nextPage, 'content', '');
-      return content.includes(keyword);
-    }
-    return false;
-  }
+    let page;
+    let pageIndex = doc.pageIndex;
 
-  toNextPage = () => {
-    let doc = this.getDoc();
-    let pageCount = _.get(doc, 'pages', []).length;
-    let nextPageIndex = doc.pageIndex + 1;
-    if (nextPageIndex < pageCount) {
-      this.props.setPageIndex(doc.uuid, nextPageIndex);
-      return true;
+    while (page = doc.pages[++pageIndex]) {
+      let content = _.get(page, 'content', '');
+      if (content.includes(keyword)) {
+        return pageIndex;
+      }
     }
-    else {
-      return false;
-    }
+    return null;
   }
 
   toPrevPage = () => {
@@ -1213,7 +1208,8 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord} = this.props;
+    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord,
+      setPageIndex} = this.props;
 
     let classes = {
       [this.props.className]: true,
@@ -1222,9 +1218,9 @@ export default class EditorArea extends React.Component {
 
     let searchBarProps = {
       inputMethod,
-      nextPageHasMatched: this.nextPageHasMatched,
-      prevPageHasMatched: this.prevPageHasMatched,
-      toNextPage: this.toNextPage,
+      findNextIndexByKeyword: this.findNextIndexByKeyword,
+      findPrevIndexByKeyword: this.findPrevIndexByKeyword,
+      setPageIndex,
       toPrevPage: this.toPrevPage,
       doc: this.getDoc(),
       writePageContent
