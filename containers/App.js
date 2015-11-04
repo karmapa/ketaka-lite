@@ -24,14 +24,16 @@ export default class App extends React.Component {
     document.title = constants.APP_NAME;
     dispatch(AppActions.initSettings());
 
-    if (_.isString(settings.theme)) {
-      this.changeTheme(settings.theme);
-    }
+    this.changeTheme(settings.theme);
 
     ContextMenu.init();
   }
 
   changeTheme(oldTheme, newTheme) {
+
+    if (! _.isString(newTheme)) {
+      return;
+    }
     let classList = document.body.classList;
     classList.remove(oldTheme);
     classList.add(newTheme);
@@ -40,7 +42,7 @@ export default class App extends React.Component {
   componentWillReceiveProps(nextProps) {
     let currentTheme = this.props.settings.theme;
     let nextTheme = nextProps.settings.theme;
-    if ((currentTheme !== nextTheme) && _.isString(nextTheme)) {
+    if (currentTheme !== nextTheme) {
       this.changeTheme(currentTheme, nextTheme);
     }
   }
