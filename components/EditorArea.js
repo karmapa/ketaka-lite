@@ -433,7 +433,7 @@ export default class EditorArea extends React.Component {
     let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
 
     self.keypressListener = new keypress.Listener();
-    let keypressListener = Helper.camelize(['simple_combo'], self.keypressListener);
+    let keypressListener = Helper.camelize(['register_combo'], self.keypressListener);
 
     let shortcuts = _.clone(this.props.settings.shortcuts);
 
@@ -442,16 +442,25 @@ export default class EditorArea extends React.Component {
       shortcuts[prop] = shortcut.value.split(' + ').join(' ');
     });
 
-    keypressListener.simpleCombo(shortcuts.addTab, this.addDoc);
-    keypressListener.simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
-    keypressListener.simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
-    keypressListener.simpleCombo(shortcuts.nextTab, this.rotateTabRight);
-    keypressListener.simpleCombo(shortcuts.save, this.save);
+    let simpleCombo = (keys, cb) => {
+      return keypressListener.registerCombo({
+        keys,
+        'on_keyup': cb,
+        'prevent_default': false,
+        'is_unordered': true
+      });
+    };
 
-    keypressListener.simpleCombo(shortcuts.splitPage, this.splitPage);
-    keypressListener.simpleCombo(shortcuts.stop, this.cancel);
+    simpleCombo(shortcuts.addTab, this.addDoc);
+    simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
+    simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
+    simpleCombo(shortcuts.nextTab, this.rotateTabRight);
+    simpleCombo(shortcuts.save, this.save);
 
-    keypressListener.simpleCombo(shortcuts.switchInputMethod, () => {
+    simpleCombo(shortcuts.splitPage, this.splitPage);
+    simpleCombo(shortcuts.stop, this.cancel);
+
+    simpleCombo(shortcuts.switchInputMethod, () => {
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
       if (-1 === index) {
@@ -465,21 +474,20 @@ export default class EditorArea extends React.Component {
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
 
-    keypressListener.simpleCombo(shortcuts.find, self.refs.searchBar.find);
-    keypressListener.simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
-    keypressListener.simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
+    simpleCombo(shortcuts.find, self.refs.searchBar.find);
+    simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
+    simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
 
-    keypressListener.simpleCombo(shortcuts.confirmReplace, () => {
+    simpleCombo(shortcuts.confirmReplace, () => {
       self.refs.searchBar.yes();
     });
 
-    keypressListener.simpleCombo(shortcuts.confirmReject, () => {
+    simpleCombo(shortcuts.confirmReject, () => {
       self.refs.searchBar.no();
     });
 
-
-    keypressListener.simpleCombo(shortcuts.nextWord, this.nextWord);
-    keypressListener.simpleCombo(shortcuts.prevWord, this.prevWord);
+    simpleCombo(shortcuts.nextWord, this.nextWord);
+    simpleCombo(shortcuts.prevWord, this.prevWord);
   };
 
   componentDidMount() {
