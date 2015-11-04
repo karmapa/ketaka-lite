@@ -23,6 +23,7 @@ export default class EditorToolbar extends React.Component {
     onApplyChunksButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
+    onPrintButtonClick: PropTypes.func,
     onDirectionButtonClick: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
     onAddPbFileButtonClick: PropTypes.func,
@@ -85,7 +86,7 @@ export default class EditorToolbar extends React.Component {
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick,
-      onImageOnlyButtonClick, onTextOnlyButtonClick} = this.props;
+      onImageOnlyButtonClick, onTextOnlyButtonClick, onPrintButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -158,6 +159,12 @@ export default class EditorToolbar extends React.Component {
           <OverlayTrigger placement='bottom' overlay={<Tooltip>Add New Page</Tooltip>}>
             <button className="button-page-add" onClick={onPageAddButtonClick}>
               <i className="glyphicon glyphicon-plus"></i>
+            </button>
+          </OverlayTrigger>
+
+          <OverlayTrigger placement='bottom' overlay={<Tooltip>Print</Tooltip>}>
+            <button onClick={onPrintButtonClick}>
+              <i className="glyphicon glyphicon-print"></i>
             </button>
           </OverlayTrigger>
 

@@ -5,7 +5,8 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
-  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, Resizer} from '.';
+  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
+  Resizer, PrintArea} from '.';
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -62,6 +63,7 @@ export default class EditorArea extends React.Component {
     let {docs} = this.props;
 
     this.state = {
+      print: false,
       docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
   }
@@ -554,6 +556,21 @@ export default class EditorArea extends React.Component {
     if (this.props.settings.spellCheckOn) {
       this.addSpellCheckOverlay();
     }
+
+    if (window.matchMedia) {
+      let mediaQueryList = window.matchMedia('print');
+      mediaQueryList.addListener(function(mql) {
+        if (mql.matches) {
+          // before print
+        } else {
+          // after print
+          self.setState({
+            print: false
+          });
+        }
+      });
+    }
+
   }
 
   handleResize = _.throttle(() => {
@@ -1176,6 +1193,13 @@ export default class EditorArea extends React.Component {
     this.refs.modalSaveConfirm.close();
   };
 
+  onPrintButtonClick = () => {
+    let doc = this.getDoc();
+    let str = doc.pages.map(page => page.content).join('');
+    React.findDOMNode(this.refs['print-area']).innerText = str;
+    console.log('here', str.length);
+  };
+
   renderEditorToolbar() {
 
     if (_.isEmpty(this.props.docs)) {
@@ -1200,6 +1224,7 @@ export default class EditorArea extends React.Component {
       onRedoButtonClick: this.onRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
+      onPrintButtonClick: this.onPrintButtonClick,
       onUndoButtonClick: this.onUndoButtonClick,
       onImageOnlyButtonClick: this.onImageOnlyButtonClick,
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
@@ -1216,8 +1241,9 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord,
-      setPageIndex} = this.props;
+    let {print} = this.state;
+    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord} = this.props;
+    let doc = this.getDoc();
 
     let classes = {
       [this.props.className]: true,
@@ -1230,7 +1256,7 @@ export default class EditorArea extends React.Component {
       findPrevIndexByKeyword: this.findPrevIndexByKeyword,
       setPageIndex,
       toPrevPage: this.toPrevPage,
-      doc: this.getDoc(),
+      doc,
       writePageContent
     };
 
