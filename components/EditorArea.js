@@ -908,17 +908,14 @@ export default class EditorArea extends React.Component {
   }
 
   renderImageArea(key, src) {
-    let style;
+
+    let style = {};
 
     if (DIRECTION_HORIZONTAL === this.props.settings.direction) {
-      style = {
-        height: this.getImageZoomerHeight()
-      };
+      style.height = this.getImageZoomerHeight();
     }
     else {
-      style = {
-        width: this.getImageZoomerWidth()
-      };
+      style.width = this.getImageZoomerWidth();
     }
 
     if (src) {
