@@ -314,6 +314,9 @@ div.CodeMirror-cursors {
 .cm-searching {
   background: rgba(60, 255, 133, 0.2);
 }
+.cm-typo {
+  background: rgba(255, 141, 52, 0.58);
+}
 
 /* IE7 hack to prevent it from returning funny offsetTops on the spans */
 .CodeMirror span { *vertical-align: text-bottom; }

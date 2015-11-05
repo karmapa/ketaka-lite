@@ -775,7 +775,7 @@ export default class EditorArea extends React.Component {
     }
 
     let overlay = this.searchOverlay(queries, true);
-    codemirror.addOverlay(overlay);
+    codemirror.addOverlay(overlay, {className: 'spellcheck'});
 
     this.lastOverlay = overlay;
   }
@@ -810,7 +810,7 @@ export default class EditorArea extends React.Component {
 
         if (match && match.index === stream.pos) {
           stream.pos += match[0].length;
-          return 'searching';
+          return 'typo';
         }
         else if (match) {
           stream.pos = match.index;
