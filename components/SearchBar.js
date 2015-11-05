@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import _ from 'lodash';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
+import {ImeInput} from '.';
 import {MAP_INPUT_METHODS} from '../constants/AppConstants';
 import classNames from 'classnames';
 
@@ -89,7 +90,6 @@ export default class SearchBar extends React.Component {
   }
 
   onFindInputKeyUp = e => {
-    this.ime.keyup(e);
 
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = false;
@@ -106,24 +106,17 @@ export default class SearchBar extends React.Component {
   }
 
   onFindInputKeyDown = e => {
-    this.ime.keydown(e);
-
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
   }
 
-  onFindInputKeyPress(ref, e) {
-
-    let findInput = React.findDOMNode(this.refs[ref]);
-    let inputValue = this.ime.keypress(e, {element: findInput});
-
-    if (_.isString(inputValue)) {
-      this.setState({
-        findKeyword: inputValue
-      });
-      this.findKeyword(inputValue);
-    }
+  onFindInputKeyPress = inputValue => {
+    console.log('here', inputValue);
+    this.setState({
+      findKeyword: inputValue
+    });
+    this.findKeyword(inputValue);
   }
 
   onReplaceInputChange = e => {
@@ -411,8 +404,8 @@ export default class SearchBar extends React.Component {
   }
 
   onSearchBoxBlur = e => {
-    if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
-   //   this.close();
+    if (! ['BUTTON', 'INPUT'].includes(_.get(e, 'relatedTarget.tagName'))) {
+      this.close();
     }
   }
 
@@ -428,7 +421,7 @@ export default class SearchBar extends React.Component {
       onChange: this.onFindInputChange,
       onKeyDown: this.onFindInputKeyDown,
       onKeyUp: this.onFindInputKeyUp,
-      onKeyPress: this.onFindInputKeyPress.bind(this, 'findInput'),
+      onKeyPress: this.onFindInputKeyPress,
       value: this.state.findKeyword,
       ref: 'findInput',
       type: 'text'
@@ -437,7 +430,7 @@ export default class SearchBar extends React.Component {
     return (
       <div className={classNames(classnames)} onBlur={this.onSearchBoxBlur}>
         <span>Search: </span>
-        <input {...findInputProps} />
+        <ImeInput {...findInputProps} />
         <button ref="buttonFindPrev" onClick={this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
