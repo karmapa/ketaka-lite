@@ -5,7 +5,7 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
-  ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
+  ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings,
   ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
   Resizer, PrintArea} from '.';
 import {Helper} from '../services/';
@@ -988,17 +988,6 @@ export default class EditorArea extends React.Component {
 
   }
 
-  applyChunk = chunk => {
-    this.closeChunkEditor();
-    let codemirror = this.getCurrentCodemirror();
-    codemirror.replaceRange(chunk, {line: Infinity});
-  }
-
-  closeChunkEditor = () => {
-    let doc = this.getDoc();
-    this.props.toggleEditChunk(doc.uuid);
-  }
-
   onAddPbFileButtonClick = () => {
     let self = this;
     Api.send('add-pb-files', {doc: self.getDoc()})
@@ -1043,25 +1032,6 @@ export default class EditorArea extends React.Component {
     let {editChunk} = doc;
 
     let page = doc.pages[pageIndex];
-    let startKeyword = '';
-    let pageContent = page.content || '';
-
-    // find start keyword
-    if ((pageIndex > 0) && _.isEmpty(pageContent)) {
-      let previousPage = doc.pages[pageIndex - 1];
-      let previousPageContent = previousPage.content || '';
-      let previousPageLength = previousPageContent.length;
-
-      if ((previousPageLength > 60) && doc.chunk) {
-        let search = previousPageContent.substring(previousPageLength - 61);
-        let index = doc.chunk.indexOf(search);
-        let start = index + search.length;
-        let end = start + 30;
-        if ((-1 !== index) && (end < doc.chunk.length)) {
-          startKeyword = doc.chunk.substring(start, end);
-        }
-      }
-    }
 
     let {settings} = this.props;
 
@@ -1078,18 +1048,6 @@ export default class EditorArea extends React.Component {
       };
     }
 
-    let chunkEditorProps = {
-      doc,
-      style,
-      className: classNames({'hidden': ! editChunk}),
-      hidden: ! editChunk,
-      startKeyword,
-      chunk: doc.chunk,
-      inputMethod: settings.inputMethod,
-      apply: this.applyChunk,
-      cancel: this.closeChunkEditor
-    };
-
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);
 
@@ -1104,10 +1062,7 @@ export default class EditorArea extends React.Component {
     };
 
     return (
-      <span>
-        <ChunkEditor {...chunkEditorProps} />
-        <Editor {...editorProps} />
-      </span>
+      <Editor {...editorProps} />
     );
   }
 

@@ -19,7 +19,6 @@ export default class EditorToolbar extends React.Component {
     onReadonlyButtonClick: PropTypes.func,
     onColorButtonClick: PropTypes.func,
     onSettingsButtonClick: PropTypes.func,
-    onApplyChunksButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     onPrintButtonClick: PropTypes.func,
@@ -83,7 +82,7 @@ export default class EditorToolbar extends React.Component {
   render() {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
-      onSettingsButtonClick, onApplyChunksButtonClick, onPageAddButtonClick, pageNames, pageIndex,
+      onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick,
       onImageOnlyButtonClick, onTextOnlyButtonClick, onPrintButtonClick} = this.props;
 
@@ -146,12 +145,6 @@ export default class EditorToolbar extends React.Component {
             <button className={classNames({'button-spell-check': true, 'on': spellCheckOn})}
               onClick={onSpellCheckButtonClick}>
               <i className="glyphicon glyphicon-ok"></i>
-            </button>
-          </OverlayTrigger>
-
-          <OverlayTrigger placement='bottom' overlay={<Tooltip>Apply Chunks</Tooltip>}>
-            <button className="button-apply-chunks" onClick={onApplyChunksButtonClick}>
-              <i className="glyphicon glyphicon-align-center"></i>
             </button>
           </OverlayTrigger>
 
