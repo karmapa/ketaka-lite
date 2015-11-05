@@ -1,28 +1,32 @@
 $height-editor-toolbar: 1.9em;
 
+@mixin editor-toolbar-button() {
+  height: $height-editor-toolbar;
+  width: 2em;
+  color: $color-editor-toolbar;
+  margin: 0;
+  transition: $transition-global;
+  border: $border-editor-toolbar;
+  background: $bg-editor-toolbar;
+  &:hover {
+    background: darken($bg-editor-toolbar, 4);
+  }
+  &:focus {
+    border: $border-editor-toolbar-ex;
+  }
+  &:disabled {
+    background-color: $bg-editor-toolbar;
+    color: lighten($color-editor-toolbar, 80);
+    cursor: not-allowed;
+  }
+}
+
 .editor-toolbar {
 
   line-height: 0.9;
 
   button {
-    height: $height-editor-toolbar;
-    width: 2em;
-    color: $color-editor-toolbar;
-    margin: 0;
-    transition: $transition-global;
-    border: $border-editor-toolbar;
-    background: $bg-editor-toolbar;
-    &:hover {
-      background: darken($bg-editor-toolbar, 4);
-    }
-    &:focus {
-      border: $border-editor-toolbar-ex;
-    }
-    &:disabled {
-      background-color: $bg-editor-toolbar;
-      color: lighten($color-editor-toolbar, 80);
-      cursor: not-allowed;
-    }
+    @include editor-toolbar-button();
   }
 
   button.on {
@@ -104,30 +108,6 @@ $height-editor-toolbar: 1.9em;
       i {
         font-size: 0.8em;
       }
-    }
-  }
-
-  .language-section {
-    float: right;
-    .dropdown-toggle {
-      height: 100%;
-      border-radius: 0;
-      padding: 0;
-      padding: 0.2em;
-      min-width: 12em;
-    }
-    .btn-group {
-      vertical-align: bottom
-    }
-    .dropdown-menu > li > a {
-      position: relative;
-      padding-left: 0.8em;
-      padding-right: 0.8em;
-    }
-    i {
-      margin-right: 0.7em;
-      width: 0.8em;
-      display: inline-block;
     }
   }
 
@@ -236,5 +216,36 @@ $height-editor-toolbar: 1.9em;
   transform: rotate(90deg);
   &.vertical {
     transform: rotate(0deg);
+  }
+}
+
+.language-section {
+
+  button {
+    @include editor-toolbar-button();
+  }
+
+  position: absolute;
+  right: 0;
+  top: 0;
+  .dropdown-toggle {
+    height: 100%;
+    border-radius: 0;
+    padding: 0;
+    padding: 0.2em;
+    min-width: 12em;
+  }
+  .btn-group {
+    vertical-align: bottom
+  }
+  .dropdown-menu > li > a {
+    position: relative;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+  }
+  i {
+    margin-right: 0.7em;
+    width: 0.8em;
+    display: inline-block;
   }
 }

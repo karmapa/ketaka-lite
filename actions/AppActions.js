@@ -164,11 +164,17 @@ export function initSettings() {
   };
 }
 
-export const ADD_EXCEPTION_WORD = 'ADD_EXCEPTION_WORD';
+export const ADD_EXCEPTION_WORD = 'SET_EXCEPTION_WORDS';
 
-export function addExceptionWord(word) {
-  return {
-    type: ADD_EXCEPTION_WORD,
-    word
+export function setExceptionWords(words) {
+  return dispatch => {
+
+    console.log('words', words);
+
+    let settings = Store.get('settings') || {};
+    settings.exceptionWords = words;
+    Store.set('settings', settings);
+
+    dispatch(receiveSettings(settings));
   };
 }

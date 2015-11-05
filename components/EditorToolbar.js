@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import {Input, DropdownButton, MenuItem, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
-import {INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
-  INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2, DIRECTION_VERTICAL} from '../constants/AppConstants';
+import {Input, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
+import {DIRECTION_VERTICAL} from '../constants/AppConstants';
 import {PageSwitch} from '.';
 import classNames from 'classnames';
 
@@ -95,7 +94,7 @@ export default class EditorToolbar extends React.Component {
       pageIndex
     };
 
-    let {readonly, inputMethod, spellCheckOn, direction} = settings;
+    let {readonly, spellCheckOn, direction} = settings;
 
     let classButtonReadonly = {
       'glyphicon': true,
@@ -229,12 +228,6 @@ export default class EditorToolbar extends React.Component {
           </OverlayTrigger>
         </div>
 
-        <div className="section language-section">
-          <DropdownButton title={inputMethod} id='bg-nested-dropdown'>
-            {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
-          </DropdownButton>
-        </div>
-
         <div className="section">
           <OverlayTrigger placement='bottom' overlay={<Tooltip>Direction</Tooltip>}>
             <button {...directionButtonProps}>
@@ -281,15 +274,6 @@ export default class EditorToolbar extends React.Component {
         </OverlayTrigger>
       );
     }
-  }
-
-  renderMenuItem(currentMethod, methods) {
-    let {setInputMethod} = this.props;
-    return methods.map((method, index) => {
-      return (
-        <MenuItem eventKey={index} key={index} onSelect={setInputMethod.bind(this, method)}>{this.renderCheckMark(currentMethod === method)}{method}</MenuItem>
-      );
-    });
   }
 
   renderCheckMark(render) {

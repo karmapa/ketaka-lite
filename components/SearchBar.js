@@ -703,6 +703,9 @@ function shiftKeyPressed(e) {
 }
 
 function clearSelection(cm) {
+  if (! cm) {
+    return;
+  }
   let pos = cm.getCursor();
   cm.setSelection(pos, pos);
 }

@@ -21,6 +21,14 @@ $bg-zenburn-error: #e74c3c;
 
   background-color: $bg-zenburn;
 
+  .dropdown-toggle, .open > .dropdown-toggle {
+    color: $color-zenburn;
+    &:hover, &:focus {
+      background-color: lighten($bg-zenburn, 10);
+      color: lighten($color-zenburn, 10);
+    }
+  }
+
   .navigation.navbar {
 
     border-color: $border-color-zenburn;
@@ -28,14 +36,6 @@ $bg-zenburn-error: #e74c3c;
     .btn-direction {
       color: $color-zenburn;
       &:hover {
-        color: lighten($color-zenburn, 10);
-      }
-    }
-
-    .dropdown-toggle {
-      color: $color-zenburn;
-      &:hover, &:focus {
-        background-color: lighten($bg-zenburn, 10);
         color: lighten($color-zenburn, 10);
       }
     }

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
+import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, ChunkEditor, SearchBar, ModalSettings,
   ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
@@ -10,7 +11,8 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
 import {Helper} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
-  NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE} from '../constants/AppConstants';
+  NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
+  INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 
 import ReactToastr from 'react-toastr';
 import Api from '../services/Api';
@@ -30,7 +32,7 @@ export default class EditorArea extends React.Component {
     importDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
-    addExceptionWord: PropTypes.func.isRequired,
+    setExceptionWords: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
@@ -463,6 +465,7 @@ export default class EditorArea extends React.Component {
     simpleCombo(shortcuts.stop, this.cancel);
 
     simpleCombo(shortcuts.switchInputMethod, () => {
+
       let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
       if (-1 === index) {
@@ -757,10 +760,10 @@ export default class EditorArea extends React.Component {
     let content = codemirror.getValue();
 
     let res = checkSyllables(content);
-    let {spellcheckExceptionList} = self.props.settings;
+    let {exceptionWords} = self.props.settings;
 
     res = res.filter(row => {
-      return ! spellcheckExceptionList.includes(row[2]);
+      return ! exceptionWords.includes(row[2]);
     });
 
     let queries = res.map(result => result[2]);
@@ -1242,7 +1245,7 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, inputMethod, writePageContent, updateSettings, addExceptionWord, setPageIndex} = this.props;
+    let {docs, settings, inputMethod, writePageContent, updateSettings, setExceptionWords, setPageIndex} = this.props;
     let doc = this.getDoc();
 
     let classes = {
@@ -1268,6 +1271,7 @@ export default class EditorArea extends React.Component {
       );
     }
     else {
+
       return (
         <div className={classNames(classes)}>
           <SearchBar ref="searchBar" {...searchBarProps} />
@@ -1284,10 +1288,31 @@ export default class EditorArea extends React.Component {
           <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
           <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
-          <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.spellcheckExceptionList} addExceptionWord={addExceptionWord} />
+          <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.exceptionWords}
+            setExceptionWords={setExceptionWords} settings={settings} />
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
+
+          <div className="section language-section">
+            <DropdownButton title={settings.inputMethod}>
+              {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
+            </DropdownButton>
+          </div>
         </div>
       );
     }
   }
+
+  renderCheckMark(render) {
+    return render ? <i className="glyphicon glyphicon-ok"></i> : <i className="empty"></i>;
+  }
+
+  renderMenuItem(currentMethod, methods) {
+    let {setInputMethod} = this.props;
+    return methods.map((method, index) => {
+      return (
+        <MenuItem eventKey={index} key={index} onSelect={setInputMethod.bind(this, method)}>{this.renderCheckMark(currentMethod === method)}{method}</MenuItem>
+      );
+    });
+  }
+
 }

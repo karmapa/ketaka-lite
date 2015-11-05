@@ -1,16 +1,21 @@
+import {Ime} from '../services';
 import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
+import {MAP_INPUT_METHODS} from '../constants/AppConstants';
+import _ from 'lodash';
 
 export default class ModalSpellCheckExceptionList extends React.Component {
 
   static PropTypes = {
     words: PropTypes.array.isRequired,
-    addExceptionWord: PropTypes.func.isRequired
+    setExceptionWords: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired
   };
 
   state = {
-    show: false
+    show: false,
+    textareaValue: ''
   };
 
   open = () => {
@@ -25,28 +30,74 @@ export default class ModalSpellCheckExceptionList extends React.Component {
     });
   }
 
+  save = () => {
+    this.props.setExceptionWords(this.state.textareaValue.split(','));
+    this.close();
+  };
+
   onModalHide() {
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  onInputChange = e => {
+  componentDidMount() {
+    this.ime = Ime;
+    this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.settings.inputMethod]);
     this.setState({
-      inputValue: e.target.value
+      textareaValue: nextProps.words.join(',')
+    });
+  }
+
+  onKeydown = e => {
+    this.ime.keydown(e);
+  };
+
+  onKeyUp = e => {
+    this.ime.keyup(e);
+  }
+
+  onKeyPress = e => {
+    let textarea = React.findDOMNode(this.refs.textarea);
+    let textareaValue = this.ime.keypress(e, {element: textarea});
+
+    if (_.isString(textareaValue)) {
+      this.setState({
+        textareaValue
+      });
+    }
+  }
+
+  onChange = e => {
+    this.setState({
+      textareaValue: e.target.value
     });
   }
 
   onFormSubmit = e => {
     e.preventDefault();
-    this.props.addExceptionWord(this.state.inputValue);
+    this.props.addExceptionWord(this.state.textareaValue);
     this.setState({
-      inputValue: ''
+      textareaValue: ''
     });
   }
 
   render() {
 
-    let {show, inputValue} = this.state;
+    let {show, textareaValue} = this.state;
+    let textareaProps = {
+      ref: 'textarea',
+      className: 'form-control',
+      type: 'text',
+      onChange: this.onChange,
+      onKeydown: this.onKeydown,
+      onKeyUp: this.onKeyUp,
+      onKeyPress: this.onKeyPress,
+      value: textareaValue
+    };
 
     return (
       <Modal show={show} onHide={this.onModalHide}>
@@ -59,31 +110,16 @@ export default class ModalSpellCheckExceptionList extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div className="modal-exception-list">
-            <div>
-              <form name="exceptionForm" onSubmit={this.onFormSubmit}>
-                <div className="input-group">
-                  <input className="form-control" type="text" onChange={this.onInputChange} value={inputValue} />
-                  <span className="input-group-btn">
-                    <button className="btn btn-default" type="submit">Add Exception</button>
-                  </span>
-                </div>
-              </form>
-            </div>
-            <div>
-              {this.renderWords()}
-            </div>
+            <form name="exceptionForm" onSubmit={this.onFormSubmit}>
+              <textarea {...textareaProps} />
+            </form>
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.close}>Close</Button>
+          <Button onClick={this.save}>Save</Button>
         </Modal.Footer>
       </Modal>
     );
-  }
-
-  renderWords() {
-    return this.props.words.map(word => {
-      return <span className="label label-info">{word}</span>;
-    });
   }
 }
