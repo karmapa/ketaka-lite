@@ -8,7 +8,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings,
   ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
   Resizer, PrintArea} from '.';
-import {Helper} from '../services/';
+import {Helper, Ime} from '../services/';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
   NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
@@ -34,7 +34,6 @@ export default class EditorArea extends React.Component {
     deletePage: PropTypes.func.isRequired,
     docs: PropTypes.array.isRequired,
     importDoc: PropTypes.func.isRequired,
-    inputMethod: PropTypes.string.isRequired,
     save: PropTypes.func.isRequired,
     setExceptionWords: PropTypes.func.isRequired,
     setFontSize: PropTypes.func.isRequired,
@@ -498,6 +497,8 @@ export default class EditorArea extends React.Component {
   componentDidMount() {
 
     let self = this;
+
+    Ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
     this.bindKeyboardEvents();
 
@@ -1197,7 +1198,8 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, inputMethod, writePageContent, updateSettings, setExceptionWords, setPageIndex} = this.props;
+    let {docs, settings, writePageContent, updateSettings, setExceptionWords, setPageIndex} = this.props;
+    let inputMethod = settings.inputMethod;
     let doc = this.getDoc();
 
     let classes = {
@@ -1245,7 +1247,7 @@ export default class EditorArea extends React.Component {
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
 
           <div className="section language-section">
-            <DropdownButton title={settings.inputMethod}>
+            <DropdownButton title={inputMethod}>
               {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
             </DropdownButton>
           </div>

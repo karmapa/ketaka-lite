@@ -1,7 +1,6 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
-import {MAP_INPUT_METHODS} from '../constants/AppConstants';
 import _ from 'lodash';
 
 export default class SearchBar extends React.Component {
@@ -27,27 +26,22 @@ export default class SearchBar extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  componentDidMount() {
-    this.ime = Ime;
-    this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
-  }
-
   onChange = e => {
     this.props.onChange(e);
   }
 
   onKeyDown = e => {
-    this.ime.keydown(e);
+    Ime.keydown(e);
     this.props.onKeyDown(e);
   }
 
   onKeyUp = e => {
-    this.ime.keyup(e);
+    Ime.keyup(e);
     this.props.onKeyUp(e);
   }
 
   onKeyPress = e => {
-    let value = this.ime.keypress(e, {element: this.input});
+    let value = Ime.keypress(e, {element: this.input});
     if (_.isString(value)) {
       this.props.onKeyPress(value);
     }
