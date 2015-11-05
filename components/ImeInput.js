@@ -3,7 +3,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
 import _ from 'lodash';
 
-export default class SearchBar extends React.Component {
+export default class ImeInput extends React.Component {
 
   static PropTypes = {
     inputMethod: PropTypes.string.isRequired,
