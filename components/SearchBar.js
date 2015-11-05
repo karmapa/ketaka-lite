@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
 import _ from 'lodash';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import {Ime} from '../services';
-import {MAP_INPUT_METHODS} from '../constants/AppConstants';
+import {ImeInput} from '.';
 import classNames from 'classnames';
 
 import CodeMirror from 'codemirror';
@@ -57,9 +56,6 @@ export default class SearchBar extends React.Component {
   }
 
   componentDidMount() {
-    let self = this;
-    self.ime = Ime;
-    self.ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
     CodeMirror.commands.find = () => {};
     CodeMirror.commands.findNext = () => {};
@@ -89,7 +85,6 @@ export default class SearchBar extends React.Component {
   }
 
   onFindInputKeyUp = e => {
-    this.ime.keyup(e);
 
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = false;
@@ -106,24 +101,17 @@ export default class SearchBar extends React.Component {
   }
 
   onFindInputKeyDown = e => {
-    this.ime.keydown(e);
-
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
   }
 
-  onFindInputKeyPress(ref, e) {
-
-    let findInput = React.findDOMNode(this.refs[ref]);
-    let inputValue = this.ime.keypress(e, {element: findInput});
-
-    if (_.isString(inputValue)) {
-      this.setState({
-        findKeyword: inputValue
-      });
-      this.findKeyword(inputValue);
-    }
+  onFindInputKeyPress = inputValue => {
+    console.log('here', inputValue);
+    this.setState({
+      findKeyword: inputValue
+    });
+    this.findKeyword(inputValue);
   }
 
   onReplaceInputChange = e => {
@@ -134,25 +122,11 @@ export default class SearchBar extends React.Component {
     this.findKeyword(replaceKeyword);
   }
 
-  onReplaceInputKeyUp = e => {
-    this.ime.keyup(e);
-  }
-
-  onReplaceInputKeyDown = e => {
-    this.ime.keydown(e);
-  }
-
-  onReplaceInputKeyPress(ref, e) {
-
-    let replaceInput = React.findDOMNode(this.refs[ref]);
-    let inputValue = this.ime.keypress(e, {element: replaceInput});
-
-    if (_.isString(inputValue)) {
-      this.setState({
-        replaceKeyword: inputValue
-      });
-      this.findKeyword(inputValue);
-    }
+  onReplaceInputKeyPress = inputValue => {
+    this.setState({
+      replaceKeyword: inputValue
+    });
+    this.findKeyword(inputValue);
   }
 
   onWithInputChange = e => {
@@ -170,8 +144,6 @@ export default class SearchBar extends React.Component {
 
   onWithInputKeyUp = e => {
 
-    this.ime.keyup(e);
-
     if (enterKeyPressed(e)) {
       let replaceAll = this.shiftKeyHolding;
       this.setCursorToStart();
@@ -183,19 +155,12 @@ export default class SearchBar extends React.Component {
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
-    this.ime.keydown(e);
   }
 
-  onWithInputKeyPress(ref, e) {
-
-    let withInput = React.findDOMNode(this.refs[ref]);
-    let inputValue = this.ime.keypress(e, {element: withInput});
-
-    if (_.isString(inputValue)) {
-      this.setState({
-        withKeyword: inputValue
-      });
-    }
+  onWithInputKeyPress = inputValue => {
+    this.setState({
+      withKeyword: inputValue
+    });
   }
 
   findKeyword(query = this.state.findKeyword) {
@@ -411,8 +376,8 @@ export default class SearchBar extends React.Component {
   }
 
   onSearchBoxBlur = e => {
-    if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
-   //   this.close();
+    if (! ['BUTTON', 'INPUT'].includes(_.get(e, 'relatedTarget.tagName'))) {
+      this.close();
     }
   }
 
@@ -428,7 +393,7 @@ export default class SearchBar extends React.Component {
       onChange: this.onFindInputChange,
       onKeyDown: this.onFindInputKeyDown,
       onKeyUp: this.onFindInputKeyUp,
-      onKeyPress: this.onFindInputKeyPress.bind(this, 'findInput'),
+      onKeyPress: this.onFindInputKeyPress,
       value: this.state.findKeyword,
       ref: 'findInput',
       type: 'text'
@@ -437,7 +402,7 @@ export default class SearchBar extends React.Component {
     return (
       <div className={classNames(classnames)} onBlur={this.onSearchBoxBlur}>
         <span>Search: </span>
-        <input {...findInputProps} />
+        <ImeInput {...findInputProps} />
         <button ref="buttonFindPrev" onClick={this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
@@ -473,6 +438,7 @@ export default class SearchBar extends React.Component {
   renderReplace = () => {
 
     let {opened, replaceKeyword, withKeyword} = this.state;
+    let {inputMethod} = this.props;
 
     let classnames = {
       'box-search': true,
@@ -480,31 +446,29 @@ export default class SearchBar extends React.Component {
     };
 
     let replaceInputProps = {
+      inputMethod,
       onChange: this.onReplaceInputChange,
-      onKeyDown: this.onReplaceInputKeyDown,
-      onKeyPress: this.onReplaceInputKeyPress.bind(this, 'replaceInput'),
-      onKeyUp: this.onReplaceInputKeyUp,
+      onKeyPress: this.onReplaceInputKeyPress,
       ref: 'replaceInput',
-      type: 'text',
       value: replaceKeyword
     };
 
     let withInputProps = {
+      inputMethod,
       onChange: this.onWithInputChange,
       onKeyDown: this.onWithInputKeyDown,
-      onKeyPress: this.onWithInputKeyPress.bind(this, 'withInput'),
+      onKeyPress: this.onWithInputKeyPress,
       onKeyUp: this.onWithInputKeyUp,
       ref: 'withInput',
-      type: 'text',
       value: withKeyword
     };
 
     return (
       <div className={classNames(classnames)}>
         <span>Replace: </span>
-        <input {...replaceInputProps} />
+        <ImeInput {...replaceInputProps} />
         <span>With: </span>
-        <input {...withInputProps} />
+        <ImeInput {...withInputProps} />
         <button onClick={this.onReplaceButtonClick}>Replace</button>
         <button onClick={this.onReplaceAllButtonClick}>Replace All</button>
         <button className="button-close" onClick={this.close}>

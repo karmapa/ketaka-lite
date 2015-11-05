@@ -1,8 +1,7 @@
-import {Ime} from '../services';
 import React, { PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
-import {MAP_INPUT_METHODS} from '../constants/AppConstants';
+import {ImeTextarea} from '../components';
 import _ from 'lodash';
 
 export default class ModalSpellCheckExceptionList extends React.Component {
@@ -12,6 +11,14 @@ export default class ModalSpellCheckExceptionList extends React.Component {
     setExceptionWords: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (! _.isEqual(this.props.words, nextProps.words)) {
+      this.setState({
+        textareaValue: nextProps.words.join(',')
+      });
+    }
+  }
 
   state = {
     show: false,
@@ -40,35 +47,10 @@ export default class ModalSpellCheckExceptionList extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  componentDidMount() {
-    this.ime = Ime;
-    this.ime.setInputMethod(MAP_INPUT_METHODS[this.props.inputMethod]);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.settings.inputMethod]);
+  onKeyPress = textareaValue => {
     this.setState({
-      textareaValue: nextProps.words.join(',')
+      textareaValue
     });
-  }
-
-  onKeydown = e => {
-    this.ime.keydown(e);
-  };
-
-  onKeyUp = e => {
-    this.ime.keyup(e);
-  }
-
-  onKeyPress = e => {
-    let textarea = React.findDOMNode(this.refs.textarea);
-    let textareaValue = this.ime.keypress(e, {element: textarea});
-
-    if (_.isString(textareaValue)) {
-      this.setState({
-        textareaValue
-      });
-    }
   }
 
   onChange = e => {
@@ -89,12 +71,9 @@ export default class ModalSpellCheckExceptionList extends React.Component {
 
     let {show, textareaValue} = this.state;
     let textareaProps = {
-      ref: 'textarea',
       className: 'form-control',
       type: 'text',
       onChange: this.onChange,
-      onKeydown: this.onKeydown,
-      onKeyUp: this.onKeyUp,
       onKeyPress: this.onKeyPress,
       value: textareaValue
     };
@@ -111,7 +90,7 @@ export default class ModalSpellCheckExceptionList extends React.Component {
         <Modal.Body>
           <div className="modal-exception-list">
             <form name="exceptionForm" onSubmit={this.onFormSubmit}>
-              <textarea {...textareaProps} />
+              <ImeTextarea {...textareaProps} />
             </form>
           </div>
         </Modal.Body>
