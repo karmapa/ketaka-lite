@@ -244,35 +244,35 @@ export default class SearchBar extends React.Component {
     let {findPrevIndexByKeyword, findNextIndexByKeyword, doc, setPageIndex} = this.props;
 
     cm.operation(function() {
-      let state = getSearchState(cm);
-      let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
-
-      if (! cursor.find(rev)) {
-
-        if (rev) {
-          let prevPageIndex = findPrevIndexByKeyword(state.query);
-
-          if (_.isNull(prevPageIndex)) {
-            return;
-          }
-          setPageIndex(doc.uuid, prevPageIndex);
-          cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
-        }
-        else {
-          let nextPageIndex = findNextIndexByKeyword(state.query);
-
-          if (_.isNull(nextPageIndex)) {
-            return;
-          }
-          setPageIndex(doc.uuid, nextPageIndex);
-          cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
-        }
+      setTimeout(() => {
+        let state = getSearchState(cm);
+        let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
 
         if (! cursor.find(rev)) {
-          return;
+
+          if (rev) {
+            let prevPageIndex = findPrevIndexByKeyword(state.query);
+
+            if (_.isNull(prevPageIndex)) {
+              return;
+            }
+            setPageIndex(doc.uuid, prevPageIndex);
+            cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
+          }
+          else {
+            let nextPageIndex = findNextIndexByKeyword(state.query);
+
+            if (_.isNull(nextPageIndex)) {
+              return;
+            }
+            setPageIndex(doc.uuid, nextPageIndex);
+            cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
+          }
+
+          if (! cursor.find(rev)) {
+            return;
+          }
         }
-      }
-      setTimeout(() => {
         cm.setSelection(cursor.from(), cursor.to());
         cm.scrollIntoView({from: cursor.from(), to: cursor.to()}, 20);
         state.posFrom = cursor.from();
