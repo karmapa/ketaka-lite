@@ -27,32 +27,32 @@ const KEY_ADD_DOC = 'KEY_ADD_DOC';
 export default class EditorArea extends React.Component {
 
   static PropTypes = {
-    settings: PropTypes.object.isRequired,
     addDoc: PropTypes.func.isRequired,
-    importDoc: PropTypes.func.isRequired,
-    createDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
-    setExceptionWords: PropTypes.func.isRequired,
-    deletePage: PropTypes.func.isRequired,
-    updatePageImagePath: PropTypes.func.isRequired,
     closeDoc: PropTypes.func.isRequired,
+    createDoc: PropTypes.func.isRequired,
+    deletePage: PropTypes.func.isRequired,
     docs: PropTypes.array.isRequired,
+    importDoc: PropTypes.func.isRequired,
     inputMethod: PropTypes.string.isRequired,
     save: PropTypes.func.isRequired,
-    setInputMethod: PropTypes.func.isRequired,
+    setExceptionWords: PropTypes.func.isRequired,
     setFontSize: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
-    setTextOnly: PropTypes.func.isRequired,
-    setLineHeight: PropTypes.func.isRequired,
+    setInputMethod: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
-    toggleDirection: PropTypes.func.isRequired,
+    setLineHeight: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
-    toggleSpellCheck: PropTypes.func.isRequired,
-    setSpellCheck: PropTypes.func.isRequired,
     setRatio: PropTypes.func.isRequired,
+    setSpellCheck: PropTypes.func.isRequired,
+    setTextOnly: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired,
+    toggleDirection: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
-    writePageContent: PropTypes.func.isRequired,
-    updateSettings: PropTypes.func.isRequired
+    toggleSpellCheck: PropTypes.func.isRequired,
+    updatePageImagePath: PropTypes.func.isRequired,
+    updateSettings: PropTypes.func.isRequired,
+    writePageContent: PropTypes.func.isRequired
   };
 
   keypressListener = null;
