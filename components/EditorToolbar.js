@@ -79,12 +79,17 @@ export default class EditorToolbar extends React.Component {
     );
   }
 
+  onPrintButtonClick = () => {
+    this.refs.printOverlay.hide();
+    this.props.onPrintButtonClick();
+  }
+
   render() {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick,
-      onImageOnlyButtonClick, onTextOnlyButtonClick, onPrintButtonClick} = this.props;
+      onImageOnlyButtonClick, onTextOnlyButtonClick} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -154,8 +159,8 @@ export default class EditorToolbar extends React.Component {
             </button>
           </OverlayTrigger>
 
-          <OverlayTrigger placement='bottom' overlay={<Tooltip>Print</Tooltip>}>
-            <button onClick={onPrintButtonClick}>
+          <OverlayTrigger placement='bottom' ref="printOverlay" overlay={<Tooltip>Print</Tooltip>}>
+            <button onClick={this.onPrintButtonClick}>
               <i className="glyphicon glyphicon-print"></i>
             </button>
           </OverlayTrigger>

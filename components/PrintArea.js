@@ -9,7 +9,10 @@ export default class PrintArea extends React.Component {
   };
 
   componentDidMount() {
-    window.print();
+    // wait for tooltip to disappear
+    setTimeout(() => {
+      window.print();
+    }, 2000);
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
