@@ -99,6 +99,11 @@ export default class EditorArea extends React.Component {
   }
 
   markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
+
+    if (! codemirror) {
+      return;
+    }
+
     let fontRecords = _.get(page, 'config.fontRecords', []);
     fontRecords.forEach(record => {
       let {from, to, css} = record;
@@ -112,7 +117,9 @@ export default class EditorArea extends React.Component {
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
     }
-    if (previousState.docKey !== this.state.docKey) {
+
+    // doc changed and codemirror exists
+    if (((previousState.docKey !== this.state.docKey) || (previousProps.docs.length !== docs.length)) && codemirror) {
       codemirror.refresh();
       this.markFontColor(codemirror);
     }
@@ -1017,6 +1024,7 @@ export default class EditorArea extends React.Component {
       this.refs.modalOpen.close();
     }
     else {
+
       Api.send('open-bamboo', {name})
         .then(res => {
           self.props.receiveDoc(res.doc);
