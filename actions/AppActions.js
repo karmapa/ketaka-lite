@@ -169,8 +169,6 @@ export const ADD_EXCEPTION_WORD = 'SET_EXCEPTION_WORDS';
 export function setExceptionWords(words) {
   return dispatch => {
 
-    console.log('words', words);
-
     let settings = Store.get('settings') || {};
     settings.exceptionWords = words;
     Store.set('settings', settings);
