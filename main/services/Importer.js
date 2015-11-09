@@ -11,6 +11,7 @@ var PATH_APP_CACHE = constants.PATH_APP_CACHE;
 var PATH_APP_DOC = constants.PATH_APP_DOC;
 var REGEXP_IMAGE = constants.REGEXP_IMAGE;
 var REGEXP_PAGE = constants.REGEXP_PAGE;
+var getNonContinuousPageNames = require('./getNonContinuousPageNames');
 
 var htmlparser = require('htmlparser');
 
@@ -377,6 +378,19 @@ function copyImages(doc) {
     });
 };
 
+function warnNonContinuousPageNames(names, onProgress) {
+
+  var messages = _.map(getNonContinuousPageNames(names) || [], function(name) {
+    return {
+      type: 'warning',
+      message: name + ' might be missing.'
+    };
+  })
+  if (messages.length > 0) {
+    onProgress(messages);
+  }
+}
+
 function warnInvalidImages(bambooName, rows, onProgress) {
   var rowsWithExtJpg = rows.filter(function(row) {
     return '.jpg' === row.pathData.ext;
@@ -497,6 +511,14 @@ function handleImportPaths(paths, onProgress) {
       return copyImages(doc);
     })
     .then(function(doc) {
+
+      var pageNames = doc.pages.map(function(page) {
+        return page.name;
+      })
+      .filter(function(name) {
+        return name.match(/^(\d+).(\d+)([abcd])$/);
+      });
+      warnNonContinuousPageNames(pageNames, onProgress);
       onProgress({progress: 95, type: 'info', message: 'Step8: Write Bamboo'});
       return Doc.writeDoc(doc);
     });
