@@ -3,7 +3,7 @@ var _ = require('lodash');
 var compare = require('javascript-natural-sort');
 var REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
 
-function checkNonContinuousPageNames(names) {
+function getNonContinuousPageNames(names) {
   var groups = toGroups(names);
   var missingNames = [];
   missingNames.push(getMissingNamesBySecondNum(groups));
@@ -132,4 +132,4 @@ function toObject(name) {
   }
 }
 
-module.exports = checkNonContinuousPageNames;
+module.exports = getNonContinuousPageNames;
