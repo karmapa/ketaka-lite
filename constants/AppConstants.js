@@ -12,9 +12,9 @@ export const EVENT_OPEN_DOC = 'EVENT_OPEN_DOC';
 export const EVENT_EXPORT_DATA = 'EVENT_EXPORT_DATA';
 
 export const INPUT_METHOD_SYSTEM = 'System Input';
-export const INPUT_METHOD_TIBETAN_EWTS = 'Tibetan EWTS';
+export const INPUT_METHOD_TIBETAN_EWTS = 'EWTS';
 export const INPUT_METHOD_TIBETAN_SAMBHOTA = 'Lijiang';
-export const INPUT_METHOD_TIBETAN_SAMBHOTA2 = 'Tibetan Sambhota2';
+export const INPUT_METHOD_TIBETAN_SAMBHOTA2 = 'Sambhota2';
 
 export const MAP_INPUT_METHODS = {
   [INPUT_METHOD_SYSTEM]: '',
