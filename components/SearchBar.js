@@ -107,7 +107,6 @@ export default class SearchBar extends React.Component {
   }
 
   onFindInputKeyPress = inputValue => {
-    console.log('here', inputValue);
     this.setState({
       findKeyword: inputValue
     });
