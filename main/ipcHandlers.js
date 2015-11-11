@@ -332,3 +332,10 @@ exports.addPbFiles = ipcHandler(function(event, arg) {
       });
   });
 });
+
+exports.getAppData = ipcHandler(function(event, arg) {
+  var send = this.send;
+  send({
+    docPath: PATH_APP_DOC
+  });
+});
