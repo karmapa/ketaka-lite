@@ -19,6 +19,8 @@ import Api from '../services/Api';
 
 import {checkSyllables} from 'check-tibetan';
 
+let Path = window.require('path');
+
 let {ToastContainer} = ReactToastr;
 let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
 
@@ -54,6 +56,7 @@ export default class EditorArea extends React.Component {
     writePageContent: PropTypes.func.isRequired
   };
 
+  docPath = '';
   keypressListener = null;
 
   lastQueryRes = [];
@@ -67,6 +70,14 @@ export default class EditorArea extends React.Component {
       print: false,
       docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
+  }
+
+  componentWillMount() {
+    let self = this;
+    Api.send('get-app-data')
+     .then(res => {
+      self.docPath = res.docPath;
+    });
   }
 
   closeModalSettings = () => {
@@ -682,8 +693,12 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
-  getImageSrc(page) {
-    return page.destImagePath;
+  getImageSrc = (page, doc) => {
+    let src = _.get(page, 'pathData.base', '');
+    if (src) {
+      src = Path.resolve(this.docPath, doc.name, 'images', src);
+    }
+    return src;
   }
 
   onSettingsButtonClick = () => {
@@ -967,7 +982,7 @@ export default class EditorArea extends React.Component {
 
     let pageIndex = this.getPageIndex(doc);
     let page = doc.pages[pageIndex];
-    let src = this.getImageSrc(page);
+    let src = this.getImageSrc(page, doc);
     let key = doc.uuid;
     let imageZoomerKey = this.getImageZoomerKey(key);
 
