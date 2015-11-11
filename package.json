@@ -24,7 +24,6 @@
     "lodash": "^3.10.0",
     "mkdirp": "^0.5.1",
     "node-uuid": "^1.4.3",
-    "path": "^0.12.7",
     "react": "0.13.3",
     "react-bootstrap": "0.23.7",
     "react-codemirror": "git+https://git@github.com:kmsheng/react-codemirror.git#fix-performance-hit",
