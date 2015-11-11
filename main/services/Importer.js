@@ -356,6 +356,7 @@ function copyImages(doc) {
     if (page.imagePath.length > 0) {
       var pathData = Path.parse(page.imagePath);
       page.destImagePath = Path.resolve(folderPath, pathData.base);
+      page.pathData = pathData;
     }
     return page;
   });
