@@ -6,8 +6,13 @@ body {
 // set font-family to inital to override twitter bootstrap's font-family
 // DO NOT USE Helvetica Neue to display tibetain
 // chararacter (\u3897) will not display properly.
-body, .CodeMirror {
+body {
   font-family: initial;
+}
+
+// http://bodyig.tibetangeeks.com/info/web/tibetan_unicode_on_web_pages.html
+.CodeMirror {
+  font-family: "Microsoft Himalaya", "TCRC Youtso Unicode", "Tibetan Machine Uni","Tib-US Unicode", Kokonor, Arial;
 }
 
 // disable default outline
