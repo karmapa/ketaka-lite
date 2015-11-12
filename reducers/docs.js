@@ -330,7 +330,7 @@ function updatePageImagePath(state, action) {
     return state;
   }
 
-  page.destImagePath = action.destImagePath;
+  page.pathData = action.pathData;
 
   return [
     ...state.slice(0, index),

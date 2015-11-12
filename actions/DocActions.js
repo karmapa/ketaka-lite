@@ -131,12 +131,12 @@ export function deletePage(uuid, pageIndex) {
 
 export const UPDATE_PAGE_IMAGE_PATH = 'UPDATE_PAGE_IMAGE_PATH';
 
-export function updatePageImagePath(uuid, pageIndex, destImagePath) {
+export function updatePageImagePath(uuid, pageIndex, pathData) {
   return {
     type: UPDATE_PAGE_IMAGE_PATH,
     uuid,
     pageIndex,
-    destImagePath
+    pathData
   };
 }
 

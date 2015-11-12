@@ -113,10 +113,10 @@ exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
     }
 
     var source = _.first(paths);
-    var pathData = Path.basename(source);
     var page = doc.pages[doc.pageIndex];
     var filename = _.get(page, 'name') ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
     var dest = Path.resolve(PATH_APP_DOC, doc.name, 'images', filename);
+    var pathData = Path.parse(dest);
     var fileType = Helper.getFileType(source);
 
     if ('image/jpeg' === fileType.mime) {
@@ -128,7 +128,7 @@ exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
           return Helper.copyFile(source, dest);
         })
         .then(function() {
-          send({message: 'Image uploaded successfully', destImagePath: dest});
+          send({message: 'Image uploaded successfully', pathData: pathData});
         })
         .catch(function(err) {
           send({error: true, message: err});

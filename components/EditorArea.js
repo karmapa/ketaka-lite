@@ -687,7 +687,7 @@ export default class EditorArea extends React.Component {
     let {uuid, pageIndex} = doc;
     Api.send('page-image-upload-button-clicked', doc)
       .then(res => {
-        self.props.updatePageImagePath(uuid, pageIndex, res.destImagePath);
+        self.props.updatePageImagePath(uuid, pageIndex, res.pathData);
         self.refs.toast.success(res.message);
       })
       .catch(res => self.refs.toast.error(res.message));
