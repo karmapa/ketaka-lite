@@ -36,12 +36,14 @@ export default class TabBox extends React.Component {
   }
 
   renderTab = child => {
+
     let {eventKey, className, tab, disabled, noCloseButton} = child.props;
     let {onClose} = this.props;
     let classes = {
       'close': true,
       'hidden': noCloseButton
     };
+
     return (
       <NavItem linkId={tabId(this.props, child)} ref={'tab' + eventKey}
          aria-controls={panelId(this.props, child)} eventKey={eventKey}
