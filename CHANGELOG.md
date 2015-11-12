@@ -1,3 +1,8 @@
+<a name="0.1.45"></a>
+
+## Bug Fixes
+- [\#84](https://github.com/karmapa/ketaka-lite/issues/84)
+
 <a name="0.1.35"></a>
 
 ## New Features
