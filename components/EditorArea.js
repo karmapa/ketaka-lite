@@ -357,6 +357,7 @@ export default class EditorArea extends React.Component {
       let nextPageContent = secondPart + nextPage.content;
 
       this.props.writePageContent(doc.uuid, nextPageIndex, nextPageContent);
+      this.props.setPageIndex(this.state.docKey, nextPageIndex);
     }
     else {
       this.refs.toast.error('You are on the last page');
