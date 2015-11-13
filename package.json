@@ -36,6 +36,7 @@
     "event-stream": "^3.3.1",
     "eventemitter3": "^1.1.1",
     "file-type": "^2.10.2",
+    "fs-extra": "0.26.2",
     "htmlparser": "^1.7.7",
     "humps": "^0.6.0",
     "javascript-natural-sort": "0.7.1",
