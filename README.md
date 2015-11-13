@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/karmapa/ketaka-lite.svg?branch=master)](https://travis-ci.org/karmapa/ketaka-lite)
 # KETAKA Lite
  A standalone application that enables file format conversion and file import and has a built-in simple editor allowing users edit their imported data.
  
