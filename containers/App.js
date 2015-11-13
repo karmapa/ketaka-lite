@@ -6,7 +6,6 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ContextMenu} from '../services';
-import _ from 'lodash';
 
 @connect(state => ({
   direction: state.direction,
@@ -24,26 +23,35 @@ export default class App extends React.Component {
     document.title = constants.APP_NAME;
     dispatch(AppActions.initSettings());
 
-    this.changeTheme(settings.theme);
+    this.changeTheme({newTheme: settings.theme});
 
     ContextMenu.init();
   }
 
-  changeTheme(oldTheme, newTheme) {
+  changeTheme(args) {
 
-    if (! _.isString(newTheme)) {
-      return;
-    }
+    let {oldTheme, newTheme} = args;
+
     let classList = document.body.classList;
-    classList.remove(oldTheme);
-    classList.add(newTheme);
+
+    if (oldTheme) {
+      classList.remove(oldTheme);
+    }
+    if (newTheme) {
+      classList.add(newTheme);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
+
     let currentTheme = this.props.settings.theme;
     let nextTheme = nextProps.settings.theme;
+
     if (currentTheme !== nextTheme) {
-      this.changeTheme(currentTheme, nextTheme);
+      this.changeTheme({
+        oldTheme: currentTheme,
+        newTheme: nextTheme
+      });
     }
   }
 
