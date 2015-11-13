@@ -129,7 +129,7 @@ function addPage(state, action) {
   let newPage = {
     name: action.pageName,
     content: '',
-    destImagePath: '',
+    pathData: {},
     config: {}
   };
 

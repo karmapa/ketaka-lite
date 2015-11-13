@@ -28,7 +28,6 @@ function createPage(args) {
     name: '',
     content: '',
     imagePath: '',
-    destImagePath: '',
     pathData: {},
     config: {}
   }, args);

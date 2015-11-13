@@ -694,11 +694,14 @@ export default class EditorArea extends React.Component {
   }
 
   getImageSrc = (page, doc) => {
-    let src = _.get(page, 'pathData.base', '');
-    if (src) {
-      src = Path.resolve(this.docPath, doc.name, 'images', src);
+    let src = _.get(page, 'pathData.base');
+    if (! src) {
+      return '';
     }
-    return src;
+    if (! src.match(/\.jpg$/)) {
+      return '';
+    }
+    return Path.resolve(this.docPath, doc.name, 'images', src);
   }
 
   onSettingsButtonClick = () => {

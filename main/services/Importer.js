@@ -354,9 +354,7 @@ function copyImages(doc) {
 
   doc.pages = doc.pages.map(function(page) {
     if (page.imagePath.length > 0) {
-      var pathData = Path.parse(page.imagePath);
-      page.destImagePath = Path.resolve(folderPath, pathData.base);
-      page.pathData = pathData;
+      page.pathData = Path.parse(page.imagePath);
     }
     return page;
   });
@@ -366,7 +364,7 @@ function copyImages(doc) {
   }).map(function(page) {
     return {
       source: page.imagePath,
-      dest: page.destImagePath
+      dest: Path.resolve(folderPath, page.pathData.base)
     };
   });
 
