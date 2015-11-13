@@ -10,6 +10,7 @@ export ModalDocSettings from './ModalDocSettings';
 export ModalImportStatus from './ModalImportStatus';
 export ModalOpen from './ModalOpen';
 export ModalPageAdd from './ModalPageAdd';
+export ModalSaveAs from './ModalSaveAs';
 export ModalSaveConfirm from './ModalSaveConfirm';
 export ModalSettings from './ModalSettings';
 export ModalSpellCheckExceptionList from './ModalSpellCheckExceptionList';

@@ -2,7 +2,7 @@ var BufferHelper = require('bufferhelper');
 var Path = require('path');
 var csv = require('csv');
 var fileType = require('file-type');
-var fs = require('fs');
+var fs = require('fs-extra');
 var Decompress = require('decompress');
 var mkdirp = require('mkdirp');
 var readChunk = require('read-chunk');
@@ -15,6 +15,14 @@ function isDarwin() {
 
 function chunkString(str, length) {
   return str.match(new RegExp('[\\S\\s]{1,' + length + '}', 'g'));
+}
+
+function copy(source, dest) {
+  return new Promise(function(resolve, reject) {
+    fs.copy(source, dest, function(err) {
+      return err ? reject(err) : resolve();
+    });
+  });
 }
 
 function copyFile(source, dest) {
@@ -116,8 +124,8 @@ function writeFile(path, content) {
       .on('finish', function() {
         resolve();
       })
-      .on('error', function() {
-        reject('writeFile failed');
+      .on('error', function(err) {
+        reject('writeFile failed' + err.toString());
       });
 
     writeStream.write(content);
@@ -226,6 +234,7 @@ function unzip(path, dest) {
 
 module.exports = {
   chunkString: chunkString,
+  copy: copy,
   copyFile: copyFile,
   copyFiles: copyFiles,
   getFileType: getFileType,

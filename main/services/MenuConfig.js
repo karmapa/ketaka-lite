@@ -80,6 +80,12 @@ function getTemplate(args) {
           }
         },
         {
+          label: 'Save As',
+          click: function() {
+            webContents.send('app-save-as');
+          }
+        },
+        {
           label: 'Export Zip',
           click: function() {
             webContents.send('app-export-zip');

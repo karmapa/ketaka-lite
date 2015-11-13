@@ -52,6 +52,8 @@ ipc.on('import-zip', ipcHandlers.importZip);
 
 ipc.on('save', ipcHandlers.save);
 
+ipc.on('save-as', ipcHandlers.saveAs);
+
 ipc.on('page-image-upload-button-clicked', ipcHandlers.pageImageUploadButtonClicked);
 
 ipc.on('add-doc', ipcHandlers.addDoc);

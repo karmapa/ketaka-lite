@@ -96,6 +96,33 @@ exports.save = ipcHandler(function(event, doc) {
     });
 });
 
+exports.saveAs = ipcHandler(function(event, args) {
+
+  var newDocName = args.newDocName;
+  var oldDoc = args.doc;
+  var send = this.send;
+
+  var newDoc = _.cloneDeep(oldDoc);
+  newDoc.name = newDocName;
+
+  var oldImageFolderPath = Path.resolve(PATH_APP_DOC, oldDoc.name, 'images');
+  var newImageFolderPath = Path.resolve(PATH_APP_DOC, newDoc.name, 'images');
+
+  Helper.mkdirp(newImageFolderPath)
+    .then(function() {
+      return Helper.copy(oldImageFolderPath, newImageFolderPath);
+    })
+    .then(function() {
+      return Doc.writeDoc(newDoc);
+    })
+    .then(function() {
+      send({message: 'Saved successfully', doc: newDoc});
+    })
+    .catch(function(error) {
+      send({error: true, message: error});
+    });
+});
+
 exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
   var send = this.send;
