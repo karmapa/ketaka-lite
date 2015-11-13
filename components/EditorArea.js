@@ -5,7 +5,7 @@ import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
-  ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings,
+  ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
   ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
   Resizer, PrintArea} from '.';
 import {Helper, Ime} from '../services/';
@@ -275,7 +275,20 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  closeDocByName(name) {
+  saveAs = newDocName => {
+
+    let self = this;
+    let doc = self.getDoc();
+    Api.send('save-as', {doc, newDocName})
+      .then(res => {
+        self.refs.modalSaveAs.close();
+        self.closeDocByName(doc.name);
+        self.props.receiveDoc(res.doc);
+      })
+      .catch(res => self.refs.toast.error(res.message));
+  }
+
+  closeDocByName = name => {
     let doc = _.find(this.props.docs, {name});
     if (doc) {
       this.closeDoc(doc.uuid);
@@ -535,6 +548,22 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-save', function() {
       self.save();
+    });
+
+    Api.on('app-save-as', function() {
+
+      let doc = self.getDoc();
+
+      if (doc) {
+
+        Api.send('find-doc-names')
+          .then(res => {
+            self.refs.modalSaveAs.open({
+              docName: doc.name,
+              docNames: res.docNames
+            });
+          });
+      }
     });
 
     Api.on('app-settings', function() {
@@ -1269,6 +1298,7 @@ export default class EditorArea extends React.Component {
           <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
           <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
+          <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />
           <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.exceptionWords}
             setExceptionWords={setExceptionWords} settings={settings} />
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
