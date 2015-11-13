@@ -518,6 +518,7 @@ function handleImportPaths(paths, onProgress) {
         return name.match(/^(\d+).(\d+)([abcd])$/);
       });
       warnNonContinuousPageNames(pageNames, onProgress);
+
       onProgress({progress: 95, type: 'info', message: 'Step8: Write Bamboo'});
       return Doc.writeDoc(doc);
     });
