@@ -126,7 +126,7 @@ export default class ModalSaveAs extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.cancel}>Cancel</Button>
-          <Button onClick={this.saveAs}>SaveAs</Button>
+          <Button onClick={this.saveAs} disabled={(! this.isValidDocName())}>SaveAs</Button>
         </Modal.Footer>
       </Modal>
     );
