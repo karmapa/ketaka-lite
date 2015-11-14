@@ -1,3 +1,14 @@
+<a name="0.1.46"></a>
+
+## New Features
+- [\#93](https://github.com/karmapa/ketaka-lite/issues/93)
+
+## Bug Fixes
+- [\#94](https://github.com/karmapa/ketaka-lite/issues/94)
+- [\#88](https://github.com/karmapa/ketaka-lite/issues/88)
+- [\#87](https://github.com/karmapa/ketaka-lite/issues/87)
+- [\#70](https://github.com/karmapa/ketaka-lite/issues/70)
+
 <a name="0.1.45"></a>
 
 ## Bug Fixes
