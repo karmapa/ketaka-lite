@@ -1,5 +1,7 @@
 <a name="0.1.46"></a>
 
+# 0.1.46
+
 ## New Features
 - [\#93](https://github.com/karmapa/ketaka-lite/issues/93)
 
@@ -11,20 +13,28 @@
 
 <a name="0.1.45"></a>
 
+# 0.1.45
+
 ## Bug Fixes
 - [\#84](https://github.com/karmapa/ketaka-lite/issues/84)
 
 <a name="0.1.35"></a>
+
+# 0.1.35
 
 ## New Features
 - [\#42](https://github.com/karmapa/ketaka-lite/issues/42)
 
 <a name="0.1.33"></a>
 
+# 0.1.33
+
 ## New Features
 - [\#37](https://github.com/karmapa/ketaka-lite/issues/37)
 
 <a name="0.1.32"></a>
+
+# 0.1.32
 
 ## New Features
 - [\#36](https://github.com/karmapa/ketaka-lite/issues/36)
