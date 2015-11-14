@@ -1,14 +1,10 @@
 .resizer {
   position: absolute;
-  height: 1.1em;
-  width: 100%;
   border: 1px solid transparent;
   z-index: 4;
   cursor: ns-resize;
 }
 
 .resizer.vertical {
-  width: 1.1em;
-  height: 100%;
   cursor: ew-resize;
 }

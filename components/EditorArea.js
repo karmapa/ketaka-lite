@@ -943,8 +943,12 @@ export default class EditorArea extends React.Component {
 
   getEditorHeight() {
 
-    let {nsRatio, showTextOnly, showImageOnly} = this.props.settings;
+    let {nsRatio, showTextOnly, showImageOnly, direction} = this.props.settings;
     let deltaRatio = showTextOnly ? 0 : nsRatio;
+
+    if (DIRECTION_VERTICAL === direction) {
+      return window.innerHeight - NON_EDITOR_AREA_HEIGHT - 7;
+    }
 
     if (showImageOnly) {
       deltaRatio = 1;
@@ -954,7 +958,12 @@ export default class EditorArea extends React.Component {
 
   getEditorWidth() {
 
-    let {ewRatio, showTextOnly, showImageOnly} = this.props.settings;
+    let {ewRatio, showTextOnly, showImageOnly, direction} = this.props.settings;
+
+    if (DIRECTION_HORIZONTAL === direction) {
+      return window.innerWidth;
+    }
+
     let deltaRatio = showTextOnly ? 0 : ewRatio;
 
     if (showImageOnly) {
@@ -1089,18 +1098,10 @@ export default class EditorArea extends React.Component {
 
     let {settings} = this.props;
 
-    let style;
-
-    if (DIRECTION_HORIZONTAL === settings.direction) {
-      style = {
-        height: this.getEditorHeight()
-      };
-    }
-    else {
-      style = {
-        width: this.getEditorWidth()
-      };
-    }
+    let style = {
+      width: this.getEditorWidth(),
+      height: this.getEditorHeight()
+    };
 
     let key = doc.uuid;
     let editorKey = this.getEditorKey(key);

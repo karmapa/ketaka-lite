@@ -113,10 +113,10 @@ export default class Editor extends React.Component {
     }
 
     if (this.props.style.height !== nextProps.style.height) {
-      this.codemirror.setSize(window.innerWidth, nextProps.style.height);
+      this.codemirror.setSize(nextProps.style.width, nextProps.style.height);
     }
     if (this.props.style.width !== nextProps.style.width) {
-      this.codemirror.setSize(nextProps.style.width, window.innerHeight);
+      this.codemirror.setSize(nextProps.style.width, nextProps.style.height);
     }
   }
 
