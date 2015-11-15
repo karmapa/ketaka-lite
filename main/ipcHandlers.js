@@ -52,7 +52,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
   var options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
-      {name: 'Images', extensions: ['jpg']},
+      {name: 'Images', extensions: ['bmp', 'gif', 'jpg', 'png']},
       {name: 'Text Files', extensions: ['xml', 'txt']}
     ]
   };

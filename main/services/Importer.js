@@ -561,7 +561,7 @@ function getBambooName(rows) {
 
 function isValidImageFileType(row) {
   var pathData = _.get(row, 'pathData', {});
-  return row.stats.isFile() && ('.jpg' === pathData.ext) && ('image/jpeg' === _.get(row, 'fileType.mime'));
+  return row.stats.isFile() && (-1 !== ['.bmp', '.gif', '.jpg', '.png'].indexOf(pathData.ext));
 }
 
 function isValidPbFile(row) {
