@@ -3,7 +3,7 @@
 # 0.1.46
 
 ## New Features
-- [\#93](https://github.com/karmapa/ketaka-lite/issues/93)
+- [\#93 Add "save as" to application menu](https://github.com/karmapa/ketaka-lite/issues/93)
 
 ## Bug Fixes
 - [\#94](https://github.com/karmapa/ketaka-lite/issues/94)
