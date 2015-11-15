@@ -1318,11 +1318,18 @@ export default class EditorArea extends React.Component {
     return render ? <i className="glyphicon glyphicon-ok"></i> : <i className="empty"></i>;
   }
 
+  onMenuItemSelect = method => {
+    this.props.setInputMethod(method);
+    let cm = this.getCurrentCodemirror();
+    if (cm) {
+      cm.focus();
+    }
+  }
+
   renderMenuItem(currentMethod, methods) {
-    let {setInputMethod} = this.props;
     return methods.map((method, index) => {
       return (
-        <MenuItem eventKey={index} key={index} onSelect={setInputMethod.bind(this, method)}>{this.renderCheckMark(currentMethod === method)}{method}</MenuItem>
+        <MenuItem eventKey={index} key={index} onSelect={this.onMenuItemSelect.bind(this, method)}>{this.renderCheckMark(currentMethod === method)}{method}</MenuItem>
       );
     });
   }
