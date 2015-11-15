@@ -638,7 +638,29 @@ export default class EditorArea extends React.Component {
         self.refs.toast.success(res.message);
       })
       .catch(res => {
-        self.refs.toast.error(res.message);
+
+        if ('fileCountWarning' === res.type) {
+          self.refs.modalImportStatus.showPrompt({
+            progressStyle: 'warning',
+            promptMessage: 'You are importing a large folder. Are you sure to import?',
+            confirm: () => {
+
+              self.refs.modalImportStatus.hidePrompt();
+
+              Api.send('import-button-clicked', {force: true, paths: res.paths})
+                .then(res => {
+                  self.props.importDoc(res.doc);
+                  self.refs.toast.success(res.message);
+                })
+                .catch(res => {
+                  self.refs.toast.error(res.message);
+                });
+            }
+          });
+        }
+        else {
+          self.refs.toast.error(res.message);
+        }
       });
   }
 

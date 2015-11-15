@@ -47,6 +47,8 @@ exports.importZip = ipcHandler(function(event, args) {
 
 exports.importButtonClicked = ipcHandler(function(event, args) {
 
+  args = args || {};
+
   var send = this.send;
   var broadcast = this.broadcast;
   var options = {
@@ -57,7 +59,12 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
     ]
   };
 
-  dialog.showOpenDialog(options, importPaths);
+  if (args.paths) {
+    importPaths(args.paths);
+  }
+  else {
+    dialog.showOpenDialog(options, importPaths);
+  }
 
   function importPaths(paths) {
 
@@ -67,12 +74,20 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
 
     broadcast('import-start');
 
-    Importer.handleImportPaths(paths, onProgress)
+    Importer.handleImportPaths(paths, onProgress, args.force)
       .then(function(doc) {
         broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
         send({message: 'Imported successfully', doc: doc});
       })
       .catch(function(err) {
+        if ('fileCountWarning' === err.type) {
+          send({
+            error: true,
+            type: 'fileCountWarning',
+            fileCount: err.fileCount,
+            paths: paths
+          });
+        }
         send({error: true, message: err.toString()});
       });
 

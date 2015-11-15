@@ -464,8 +464,9 @@ function handleImportZip(paths) {
   return handleZipPaths(paths);
 }
 
-function handleImportPaths(paths, onProgress) {
+function handleImportPaths(paths, onProgress, force) {
 
+  force = force || false;
   onProgress = onProgress || _.noop;
 
   var bambooName;
@@ -488,6 +489,15 @@ function handleImportPaths(paths, onProgress) {
       return markSupportedRows(rows);
     })
     .then(function(rows) {
+
+      var fileCount = rows.filter(function(row) {
+        return row.stats.isFile();
+      }).length;
+
+      if ((fileCount > 800) && (! force)) {
+        throw {type: 'fileCountWarning', fileCount: fileCount};
+      }
+
       onProgress({progress: 30, type: 'info', message: 'Step3: Mark Path Data'});
       return markPathData(rows);
     })

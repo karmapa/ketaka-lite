@@ -5,10 +5,6 @@ import _ from 'lodash';
 
 export default class ModalImportStatus extends React.Component {
 
-  static PropTypes = {
-    promptConfirm: PropTypes.func.isRequired
-  };
-
   state = {
     show: false,
     showPrompt: false,
@@ -20,6 +16,9 @@ export default class ModalImportStatus extends React.Component {
   onModalHide() {
   }
 
+  confirm() {
+  }
+
   open(args) {
     this.setState(_.extend({
       show: true
@@ -27,10 +26,18 @@ export default class ModalImportStatus extends React.Component {
   }
 
   showPrompt(args) {
+    this.confirm = args.confirm || () => {};
     this.setState({
       showPrompt: true,
       progressStyle: 'warning',
       promptMessage: args.promptMessage
+    });
+  }
+
+  hidePrompt() {
+    this.setState({
+      progressStyle: 'info',
+      showPrompt: false
     });
   }
 
@@ -88,7 +95,7 @@ export default class ModalImportStatus extends React.Component {
       return (
         <div>
           <Button onClick={this.close}>Cancel</Button>
-          <Button bsStyle='warning' onClick={this.props.promptConfirm}>Override</Button>
+          <Button bsStyle='warning' onClick={this.confirm}>Proceed</Button>
         </div>
       );
     }
