@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Alert, Button, Modal, ProgressBar} from 'react-bootstrap';
 import _ from 'lodash';

@@ -11,7 +11,8 @@
   span {
     color: #888;
   }
-  .find-input {
+  .find-input, .replace-input {
+    padding-right: 6em;
     width: 17em;
   }
   button {
@@ -32,5 +33,20 @@
   }
   span {
     padding: 0 0.4em;
+  }
+
+  .wrapper {
+    display: inline-block;
+    position: relative;
+    .message {
+      span {
+        padding: 0;
+      }
+      color: rgba(136, 136, 136, 0.9);
+      line-height: 1.8em;
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+    }
   }
 }

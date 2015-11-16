@@ -85,6 +85,29 @@ export default class EditorArea extends React.Component {
     this.bindKeyboardEvents();
   }
 
+  findMatchCountByKeyword = (keyword, index) => {
+    let doc = this.getDoc();
+    let pages = doc.pages;
+    let page = pages[doc.pageIndex];
+    let content = page.content.substring(index);
+
+    keyword = keyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+    let regexp = new RegExp(keyword, 'g');
+    let match = content.match(regexp);
+    let count = match ? match.length : 0;
+
+    let nextPage;
+    let pageIndex = doc.pageIndex;
+
+    while (nextPage = pages[++pageIndex]) {
+      let content = nextPage.content;
+      let match = content.match(regexp);
+      count += match ? match.length : 0;
+    }
+
+    return count;
+  }
+
   handleSelect = key => {
     if (KEY_ADD_DOC === key) {
       return this.addDoc();
@@ -1290,6 +1313,7 @@ export default class EditorArea extends React.Component {
       inputMethod,
       findNextIndexByKeyword: this.findNextIndexByKeyword,
       findPrevIndexByKeyword: this.findPrevIndexByKeyword,
+      findMatchCountByKeyword: this.findMatchCountByKeyword,
       setPageIndex,
       toPrevPage: this.toPrevPage,
       doc,
