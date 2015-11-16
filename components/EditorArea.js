@@ -764,6 +764,9 @@ export default class EditorArea extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   getCurrentPage(doc = this.getDoc()) {
+    if (! doc) {
+      return null;
+    }
     let pageIndex = this.getPageIndex(doc);
     return doc.pages[pageIndex];
   }
