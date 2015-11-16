@@ -292,13 +292,18 @@ export default class SearchBar extends React.Component {
   }
 
   close = () => {
+
     let {cm} = this;
-    clearSearch(cm);
-    clearSelection(cm);
+
     this.setState({
       opened: false
     });
-    cm.focus();
+
+    if (cm) {
+      clearSearch(cm);
+      clearSelection(cm);
+      cm.focus();
+    }
   }
 
   openConfirmDialog(args) {
