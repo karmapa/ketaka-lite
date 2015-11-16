@@ -564,9 +564,18 @@ export default class EditorArea extends React.Component {
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
 
-    simpleCombo(shortcuts.find, self.refs.searchBar.find);
-    simpleCombo(shortcuts.replace, self.refs.searchBar.replace);
-    simpleCombo(shortcuts.stop, self.refs.searchBar.escape);
+    let runWithPage = (fn) => {
+      return () => {
+        let page = self.getCurrentPage();
+        if (page) {
+          fn();
+        }
+      };
+    };
+
+    simpleCombo(shortcuts.find, runWithPage(self.refs.searchBar.find));
+    simpleCombo(shortcuts.replace, runWithPage(self.refs.searchBar.replace));
+    simpleCombo(shortcuts.stop, runWithPage(self.refs.searchBar.escape));
 
     simpleCombo(shortcuts.confirmReplace, () => {
       self.refs.searchBar.yes();
