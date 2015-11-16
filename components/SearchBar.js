@@ -16,10 +16,11 @@ export default class SearchBar extends React.Component {
     inputMethod: PropTypes.string.isRequired,
     findNextIndexByKeyword: PropTypes.func.isRequired,
     findPrevIndexByKeyword: PropTypes.func.isRequired,
+    findMatchCountByKeyword: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
     toPrevPage: PropTypes.func.isRequired,
     doc: PropTypes.object.isRequired,
-    writePageContent: PropTypes.func.isRequired
+    replacePageContent: PropTypes.func.isRequired
   };
 
   state = {
@@ -28,7 +29,8 @@ export default class SearchBar extends React.Component {
     replaceKeyword: '',
     findKeyword: '',
     withKeyword: '',
-    confirmMessage: ''
+    confirmMessage: '',
+    matchCount: 0
   }
 
   cm = null;
@@ -45,8 +47,21 @@ export default class SearchBar extends React.Component {
     this.openSearchBar();
     this.focus();
     this.setCursor();
+    this.findMatchCount(this.state.findKeyword);
     this.findKeyword();
   }
+
+  findMatchCount = keyword => {
+    if (_.isEmpty(keyword)) {
+      this.setState({matchCount: 0});
+      return;
+    }
+    if (this.cm) {
+      let index = this.cm.indexFromPos(this.cursor);
+      let matchCount = this.props.findMatchCountByKeyword(keyword, index);
+      this.setState({matchCount});
+    }
+  };
 
   setCursor = () => {
     if (this.cm) {
@@ -58,7 +73,9 @@ export default class SearchBar extends React.Component {
     this.openReplaceBar();
     this.replaceCursor = this.cm.getCursor();
     this.focus();
-    this.findKeyword(this.state.replaceKeyword);
+    let {replaceKeyword} = this.state;
+    this.findMatchCount(replaceKeyword);
+    this.findKeyword(replaceKeyword);
   }
 
   componentDidMount() {
@@ -87,6 +104,7 @@ export default class SearchBar extends React.Component {
     this.setState({
       findKeyword
     });
+    this.findMatchCount(findKeyword);
     this.findKeyword(findKeyword);
   }
 
@@ -112,11 +130,10 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onFindInputKeyPress = inputValue => {
-    this.setState({
-      findKeyword: inputValue
-    });
-    this.findKeyword(inputValue);
+  onFindInputKeyPress = findKeyword => {
+    this.setState({findKeyword});
+    this.findMatchCount(findKeyword);
+    this.findKeyword(findKeyword);
   }
 
   onReplaceInputChange = e => {
@@ -124,14 +141,14 @@ export default class SearchBar extends React.Component {
     this.setState({
       replaceKeyword
     });
+    this.findMatchCount(replaceKeyword);
     this.findKeyword(replaceKeyword);
   }
 
-  onReplaceInputKeyPress = inputValue => {
-    this.setState({
-      replaceKeyword: inputValue
-    });
-    this.findKeyword(inputValue);
+  onReplaceInputKeyPress = replaceKeyword => {
+    this.setState({replaceKeyword});
+    this.findMatchCount(replaceKeyword);
+    this.findKeyword(replaceKeyword);
   }
 
   onWithInputChange = e => {
@@ -303,7 +320,7 @@ export default class SearchBar extends React.Component {
     let self = this;
     let query = self.state.replaceKeyword;
     let text = self.state.withKeyword;
-    let {doc, writePageContent, findNextIndexByKeyword} = self.props;
+    let {doc, replacePageContent, findNextIndexByKeyword} = self.props;
 
     if (! query) {
       return;
@@ -314,13 +331,8 @@ export default class SearchBar extends React.Component {
 
     if (all) {
 
-      query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-
-      let queryRegExp = new RegExp(query, 'g');
-
-      self.props.doc.pages.forEach((page, index) => {
-        writePageContent(doc.uuid, index, page.content.replace(queryRegExp, text));
-      });
+      let index = this.cm.indexFromPos(this.cursor);
+      replacePageContent(query, text, index);
 
       self.close();
 
@@ -383,7 +395,7 @@ export default class SearchBar extends React.Component {
 
   onSearchBoxBlur = e => {
     if (! ['BUTTON', 'INPUT'].includes(_.get(e, 'relatedTarget.tagName'))) {
-      this.close();
+     // this.close();
     }
   }
 
@@ -408,7 +420,10 @@ export default class SearchBar extends React.Component {
     return (
       <div className={classNames(classnames)} onBlur={this.onSearchBoxBlur}>
         <span>Search: </span>
-        <ImeInput {...findInputProps} />
+        <div className="wrapper">
+          <ImeInput {...findInputProps} />
+          <span className="message">{this.state.matchCount} found</span>
+        </div>
         <button ref="buttonFindPrev" onClick={this.prev}>
           <i className="glyphicon glyphicon-chevron-up"></i>
         </button>
@@ -451,6 +466,7 @@ export default class SearchBar extends React.Component {
     };
 
     let replaceInputProps = {
+      className: 'replace-input',
       inputMethod,
       onChange: this.onReplaceInputChange,
       onKeyPress: this.onReplaceInputKeyPress,
@@ -471,7 +487,10 @@ export default class SearchBar extends React.Component {
     return (
       <div className={classNames(classnames)}>
         <span>Replace: </span>
-        <ImeInput {...replaceInputProps} />
+        <div className="wrapper">
+          <ImeInput {...replaceInputProps} />
+          <span className="message">{this.state.matchCount} found</span>
+        </div>
         <span>With: </span>
         <ImeInput {...withInputProps} />
         <button onClick={this.onReplaceButtonClick}>Replace</button>
