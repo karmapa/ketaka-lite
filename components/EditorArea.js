@@ -420,6 +420,37 @@ export default class EditorArea extends React.Component {
     return null;
   }
 
+  replacePageContent = (query, text, index) => {
+
+    query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+
+    let regexp = new RegExp(query, 'g');
+    let {writePageContent} = this.props;
+    let doc = this.getDoc();
+    let pages = doc.pages;
+    let currentPageContent = pages[doc.pageIndex].content;
+    let firstPart = currentPageContent.substring(0, index);
+    let secondPart = currentPageContent.substring(index);
+    let replaceCount = 0;
+    let replaceFunc = () => {
+      ++replaceCount;
+      return text;
+    };
+
+    secondPart = secondPart.replace(regexp, replaceFunc);
+
+    writePageContent(doc.uuid, doc.pageIndex, firstPart + secondPart);
+
+    let page;
+    let pageIndex = doc.pageIndex;
+    while (page = pages[++pageIndex]) {
+      let content = page.content.replace(regexp, replaceFunc);
+      writePageContent(doc.uuid, pageIndex, content);
+    }
+    this.refs.toast.success(replaceCount + ' keywords have been replaced.');
+    return replaceCount;
+  }
+
   nextWord = () => {
 
     if (_.isEmpty(this.lastQueryRes)) {
@@ -1300,7 +1331,7 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, writePageContent, updateSettings, setExceptionWords, setPageIndex} = this.props;
+    let {docs, settings, updateSettings, setExceptionWords, setPageIndex} = this.props;
     let inputMethod = settings.inputMethod;
     let doc = this.getDoc();
 
@@ -1317,7 +1348,7 @@ export default class EditorArea extends React.Component {
       setPageIndex,
       toPrevPage: this.toPrevPage,
       doc,
-      writePageContent
+      replacePageContent: this.replacePageContent
     };
 
     if (print) {
