@@ -314,6 +314,8 @@ export default class SearchBar extends React.Component {
 
     if (all) {
 
+      query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+
       let queryRegExp = new RegExp(query, 'g');
 
       self.props.doc.pages.forEach((page, index) => {
