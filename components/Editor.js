@@ -153,7 +153,13 @@ export default class Editor extends React.Component {
         theme: settings.theme,
         lineWrapping: true,
         lineNumbers: true,
-        styleActiveLine: true
+        styleActiveLine: true,
+        extraKeys: {
+          Tab: cm => {
+            // indent with 2 spaces
+            cm.replaceSelection('  ');
+          }
+        }
       },
       ref: 'codemirror',
       value: code
