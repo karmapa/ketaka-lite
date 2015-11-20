@@ -3,8 +3,12 @@
   border: 1px solid transparent;
   z-index: 4;
   cursor: ns-resize;
+  height: 1.1em;
+  width: 100%;
 }
 
 .resizer.vertical {
   cursor: ew-resize;
+  width: 1.1em;
+  height: 100%;
 }
