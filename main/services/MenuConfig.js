@@ -35,7 +35,7 @@ function getTemplate(args) {
     {
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
-      role: 'selectAll'
+      role: 'selectall'
     },
     {
       label: 'Find',
