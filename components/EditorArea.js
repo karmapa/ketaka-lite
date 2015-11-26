@@ -510,6 +510,16 @@ export default class EditorArea extends React.Component {
     cm.setSelection(fromPos, toPos);
   };
 
+  runWithPage = (fn) => {
+    let self = this;
+    return () => {
+      let page = self.getCurrentPage();
+      if (page) {
+        fn();
+      }
+    };
+  };
+
   bindKeyboardEvents = () => {
 
     let self = this;
@@ -564,18 +574,9 @@ export default class EditorArea extends React.Component {
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
 
-    let runWithPage = (fn) => {
-      return () => {
-        let page = self.getCurrentPage();
-        if (page) {
-          fn();
-        }
-      };
-    };
-
-    simpleCombo(shortcuts.find, runWithPage(self.refs.searchBar.find));
-    simpleCombo(shortcuts.replace, runWithPage(self.refs.searchBar.replace));
-    simpleCombo(shortcuts.stop, runWithPage(self.refs.searchBar.escape));
+    simpleCombo(shortcuts.find, self.runWithPage(self.refs.searchBar.find));
+    simpleCombo(shortcuts.replace, self.runWithPage(self.refs.searchBar.replace));
+    simpleCombo(shortcuts.stop, self.runWithPage(self.refs.searchBar.escape));
 
     simpleCombo(shortcuts.confirmReplace, () => {
       self.refs.searchBar.yes();
@@ -658,9 +659,7 @@ export default class EditorArea extends React.Component {
       self.refs.searchBar.find();
     });
 
-    Api.on('app-replace', () => {
-      self.refs.searchBar.replace();
-    });
+    Api.on('app-replace', self.runWithPage(self.refs.searchBar.replace));
 
     Api.on('app-spellcheck-exception-list', () => {
       self.refs.modalSpellCheckExceptionList.open();
