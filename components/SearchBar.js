@@ -73,6 +73,7 @@ export default class SearchBar extends React.Component {
     this.openReplaceBar();
     this.replaceCursor = this.cm.getCursor();
     this.focus();
+    this.setCursor();
     let {replaceKeyword} = this.state;
     this.findMatchCount(replaceKeyword);
     this.findKeyword(replaceKeyword);
