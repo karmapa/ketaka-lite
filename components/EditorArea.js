@@ -692,12 +692,20 @@ export default class EditorArea extends React.Component {
     this.forceUpdate();
   }, 300);
 
+  initHistory = () => {
+    let cm = this.getCurrentCodemirror();
+    if (cm) {
+      cm.clearHistory();
+    }
+  }
+
   import() {
     let self = this;
 
     Api.send('import-button-clicked')
       .then(res => {
         self.props.importDoc(res.doc);
+        self.initHistory();
         self.refs.toast.success(res.message);
       })
       .catch(res => {
@@ -713,6 +721,7 @@ export default class EditorArea extends React.Component {
               Api.send('import-button-clicked', {force: true, paths: res.paths})
                 .then(res => {
                   self.props.importDoc(res.doc);
+                  self.initHistory();
                   self.refs.toast.success(res.message);
                 })
                 .catch(res => {
