@@ -420,7 +420,7 @@ export default class EditorArea extends React.Component {
     return null;
   }
 
-  replacePageContent = (query, text, index) => {
+  replacePageContent = (query, text) => {
 
     query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
@@ -428,27 +428,48 @@ export default class EditorArea extends React.Component {
     let {writePageContent} = this.props;
     let doc = this.getDoc();
     let pages = doc.pages;
-    let currentPageContent = pages[doc.pageIndex].content;
-    let firstPart = currentPageContent.substring(0, index);
-    let secondPart = currentPageContent.substring(index);
     let replaceCount = 0;
     let replaceFunc = () => {
       ++replaceCount;
       return text;
     };
 
-    secondPart = secondPart.replace(regexp, replaceFunc);
-
-    writePageContent(doc.uuid, doc.pageIndex, firstPart + secondPart);
-
     let page;
     let pageIndex = doc.pageIndex;
-    while (page = pages[++pageIndex]) {
+    while (page = pages[pageIndex]) {
       let content = page.content.replace(regexp, replaceFunc);
       writePageContent(doc.uuid, pageIndex, content);
+      pageIndex++;
     }
     this.refs.toast.success(replaceCount + ' keywords have been replaced.');
     return replaceCount;
+  }
+
+  getMatchIndexByQuery = (query, index) => {
+
+    query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+
+    let page = this.getCurrentPage();
+    let content = page.content.substring(0, index);
+    return (content.match(new RegExp(query, 'g')) || []).length;
+  }
+
+  getIndexByMatchIndex = (query, index) => {
+    query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+
+    let content = _.get(this.getCurrentPage(), 'content', '');
+
+    let match;
+    let re = new RegExp(query, 'g');
+    let count = 0;
+
+    while (match = re.exec(content)) {
+      count++;
+      if (count === index) {
+        return match.index + query.length;
+      }
+    }
+    return null;
   }
 
   nextWord = () => {
@@ -1368,7 +1389,9 @@ export default class EditorArea extends React.Component {
       setPageIndex,
       toPrevPage: this.toPrevPage,
       doc,
-      replacePageContent: this.replacePageContent
+      replacePageContent: this.replacePageContent,
+      getMatchIndexByQuery: this.getMatchIndexByQuery,
+      getIndexByMatchIndex: this.getIndexByMatchIndex
     };
 
     if (print) {

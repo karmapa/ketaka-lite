@@ -20,7 +20,9 @@ export default class SearchBar extends React.Component {
     setPageIndex: PropTypes.func.isRequired,
     toPrevPage: PropTypes.func.isRequired,
     doc: PropTypes.object.isRequired,
-    replacePageContent: PropTypes.func.isRequired
+    replacePageContent: PropTypes.func.isRequired,
+    getMatchIndexByQuery: PropTypes.func.isRequired,
+    getIndexByMatchIndex: PropTypes.func.isRequired
   };
 
   state = {
@@ -326,7 +328,7 @@ export default class SearchBar extends React.Component {
     let self = this;
     let query = self.state.replaceKeyword;
     let text = self.state.withKeyword;
-    let {doc, replacePageContent, findNextIndexByKeyword} = self.props;
+    let {doc, replacePageContent, findNextIndexByKeyword, getMatchIndexByQuery, getIndexByMatchIndex} = self.props;
 
     if (! query) {
       return;
@@ -337,10 +339,21 @@ export default class SearchBar extends React.Component {
 
     if (all) {
 
-      let index = this.cm.indexFromPos(this.cursor);
-      replacePageContent(query, text, index);
+      let self = this;
+      let index = this.cm.indexFromPos(this.cm.getCursor());
+      let matchIndex = getMatchIndexByQuery(query, index);
+
+      replacePageContent(query, text);
 
       self.close();
+
+      if (matchIndex > 0) {
+        setTimeout(() => {
+          let newIndex = getIndexByMatchIndex(text, matchIndex);
+          let pos = this.cm.posFromIndex(newIndex);
+          self.cm.setCursor(pos);
+        });
+      }
 
     } else {
 
