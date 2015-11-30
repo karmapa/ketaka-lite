@@ -1,5 +1,4 @@
 language: node_js
 before_script:
-  rm -rf ~/.node-gyp
 node_js:
   - "5.0.0"
