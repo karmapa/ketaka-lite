@@ -70,6 +70,7 @@
     "babel-jest": "5.3.0",
     "babel-loader": "5.3.2",
     "babel-runtime": "5.8.20",
+    "concurrently": "^1.0.0",
     "css-loader": "0.15.4",
     "electron-prebuilt": "0.33.6",
     "eslint": "1.1.0",
@@ -91,11 +92,9 @@
     "webpack-dev-server": "1.10.1"
   },
   "scripts": {
-    "electron": "electron .",
-    "electron-dev": "NODE_ENV=development electron .",
     "lint": "eslint *.js",
     "build": "./scripts/build.sh",
-    "dev": "node server.js",
+    "dev": "NODE_ENV=development concurrent --kill-others \"node server.js\" \"electron .\"",
     "test": "ava main/services/*.test.js"
   },
   "author": "",
