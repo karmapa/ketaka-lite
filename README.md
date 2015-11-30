@@ -13,7 +13,6 @@
 npm install electron-prebuilt -g
 npm install
 npm run dev
-npm run electron-dev
 ```
 
 ## Packaging
