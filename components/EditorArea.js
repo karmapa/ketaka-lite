@@ -9,6 +9,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
   ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
   Resizer, PrintArea} from '.';
 import {Helper, Ime} from '../services/';
+import CodeMirror from 'codemirror';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
   NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
@@ -678,6 +679,13 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-find', () => {
       self.refs.searchBar.find();
+    });
+
+    Api.on('select-all', () => {
+      let cm = self.getCurrentCodemirror();
+      if (cm && cm.hasFocus()) {
+        CodeMirror.commands.selectAll(cm);
+      }
     });
 
     Api.on('app-replace', self.runWithPage(self.refs.searchBar.replace));
