@@ -170,9 +170,7 @@ export default class Resizer extends React.Component {
     let {direction} = this.props;
     let classes = {
       'resizer': true,
-      'vertical': DIRECTION_VERTICAL === direction,
-      'width': (DIRECTION_VERTICAL === direction) ? '1.1em' : window.innerWidth,
-      'height:': (DIRECTION_HORIZONTAL === direction) ? '1.1em' : window.innerHeight - NON_EDITOR_AREA_HEIGHT
+      'vertical': DIRECTION_VERTICAL === direction
     };
 
     return (
