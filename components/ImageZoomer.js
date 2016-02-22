@@ -1,6 +1,7 @@
 import Animator from '../services/Animator';
 import ImageZoomerToolbar from './ImageZoomerToolbar';
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import Path from 'path';
@@ -195,8 +196,8 @@ export default class ImageZoomer extends React.Component {
   }
 
   setOffsetSize() {
-    let domContainer = React.findDOMNode(this.refs.imageZoomer);
-    let domImage = React.findDOMNode(this.refs.imageZoomable);
+    let domContainer = ReactDOM.findDOMNode(this.refs.imageZoomer);
+    let domImage = ReactDOM.findDOMNode(this.refs.imageZoomable);
     let {container, image} = this;
 
     container.width = domContainer.offsetWidth;

@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {ImeInput} from '.';
@@ -118,12 +119,12 @@ export default class SearchBar extends React.Component {
     }
 
     if (enterKeyPressed(e) && (! this.shiftKeyHolding)) {
-      React.findDOMNode(this.refs.buttonFindNext).click();
+      ReactDOM.findDOMNode(this.refs.buttonFindNext).click();
     }
 
     // enter
     if (enterKeyPressed(e) && this.shiftKeyHolding) {
-      React.findDOMNode(this.refs.buttonFindPrev).click();
+      ReactDOM.findDOMNode(this.refs.buttonFindPrev).click();
     }
   }
 
@@ -267,13 +268,13 @@ export default class SearchBar extends React.Component {
     let {mode} = this.state;
 
     if (MODE_SEARCH === mode) {
-      let findInput = React.findDOMNode(this.refs.findInput);
+      let findInput = ReactDOM.findDOMNode(this.refs.findInput);
       if (findInput) {
         findInput.focus();
       }
     }
     if (MODE_REPLACE === mode) {
-      let replaceInput = React.findDOMNode(this.refs.replaceInput);
+      let replaceInput = ReactDOM.findDOMNode(this.refs.replaceInput);
       if (replaceInput) {
         replaceInput.focus();
       }

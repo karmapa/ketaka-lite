@@ -1,6 +1,7 @@
 
 import _ from 'lodash';
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import Animator from '../services/Animator';
 import {NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, DIRECTION_VERTICAL,
@@ -132,7 +133,7 @@ export default class Resizer extends React.Component {
   };
 
   componentDidMount() {
-    this.resizer = React.findDOMNode(this.refs.resizer);
+    this.resizer = ReactDOM.findDOMNode(this.refs.resizer);
     this.resizer.addEventListener('mousedown', this.onMouseDown);
     document.addEventListener('mousemove', this.onMouseMove);
     document.addEventListener('mouseup', this.onMouseUp);

@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import ReactDOM from 'react-dom';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
 import _ from 'lodash';
@@ -60,7 +61,7 @@ export default class ImeInput extends React.Component {
       onKeyPress: this.onKeyPress,
       onKeyUp: this.onKeyUp,
       ref: ref => {
-        this.input = React.findDOMNode(ref);
+        this.input = ReactDOM.findDOMNode(ref);
       },
       type: 'text',
       value: this.props.value
