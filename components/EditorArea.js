@@ -1436,7 +1436,7 @@ export default class EditorArea extends React.Component {
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
 
           <div className="section language-section">
-            <DropdownButton title={inputMethod}>
+            <DropdownButton id="dropdown" title={inputMethod}>
               {this.renderMenuItem(inputMethod, [INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS, INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2])}
             </DropdownButton>
           </div>
