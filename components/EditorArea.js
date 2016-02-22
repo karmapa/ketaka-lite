@@ -1110,11 +1110,6 @@ export default class EditorArea extends React.Component {
     return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={this.onUploadButtonClick} />;
   }
 
-  onApplyChunksButtonClick = () => {
-    let doc = this.getDoc();
-    this.props.toggleEditChunk(doc.uuid);
-  }
-
   getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
@@ -1342,7 +1337,6 @@ export default class EditorArea extends React.Component {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
       className: 'editor-toolbar',
       onAddPbFileButtonClick: this.onAddPbFileButtonClick,
-      onApplyChunksButtonClick: this.onApplyChunksButtonClick,
       onColorButtonClick: this.onColorButtonClick,
       onDirectionButtonClick: toggleDirection,
       onInputChange: this.onInputChange,
