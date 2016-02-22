@@ -1151,14 +1151,10 @@ export default class EditorArea extends React.Component {
 
     if (this.isCurrentDoc(doc)) {
 
-      let {settings} = this.props;
-      let {direction} = settings;
-      let ratio = (DIRECTION_HORIZONTAL === direction) ? settings.nsRatio : settings.ewRatio;
-
       return (
         <TabItem eventKey={key} tab={this.getTabName(doc)} key={key}>
 
-          <Resizer direction={direction} ratio={ratio} />
+          <Resizer />
 
           {this.renderImageArea(imageZoomerKey, src)}
           {this.renderEditorArea(doc, pageIndex)}

@@ -16,12 +16,16 @@ const BOUNDARY_MIN = 0.005;
 const BOUNDARY_MAX = 0.995;
 
 @connect(state => ({
+  direction: state.settings.direction,
+  nsRatio: state.settings.nsRatio,
+  ewRatio: state.settings.ewRatio
 }), {setRatio})
 export default class Resizer extends React.Component {
 
   static PropTypes = {
     direction: PropTypes.number.isRequired,
-    ratio: PropTypes.number.isRequired,
+    nsRatio: PropTypes.number.isRequired,
+    ewRatio: PropTypes.number.isRequired,
     setRatio: PropTypes.func.isRequired
   };
 
@@ -37,6 +41,11 @@ export default class Resizer extends React.Component {
   animator = new Animator();
 
   shouldComponentUpdate = shouldPureComponentUpdate;
+
+  getRatio = () => {
+    let {direction, nsRatio, ewRatio} = this.props;
+    return (DIRECTION_HORIZONTAL === direction) ? nsRatio : ewRatio;
+  };
 
   isMouseInit() {
     return (null === this.mouse.x) || (null === this.mouse.y);
@@ -77,7 +86,8 @@ export default class Resizer extends React.Component {
   handleMouseMove = () => {
 
     let {mouse, event} = this;
-    let {ratio, setRatio, direction} = this.props;
+    let {setRatio, direction} = this.props;
+    let ratio = this.getRatio();
 
     let x = event.clientX;
     let y = event.clientY;
@@ -157,14 +167,15 @@ export default class Resizer extends React.Component {
     let top, left;
     let {direction} = this.props;
     let halfResizerSize = RESIZER_SIZE / 2;
+    let ratio = this.getRatio();
 
     if (DIRECTION_HORIZONTAL === direction) {
-      top = NON_EDITOR_AREA_HEIGHT + ((window.innerHeight - NON_EDITOR_AREA_HEIGHT) * this.props.ratio) - halfResizerSize;
+      top = NON_EDITOR_AREA_HEIGHT + ((window.innerHeight - NON_EDITOR_AREA_HEIGHT) * ratio) - halfResizerSize;
       left = 0;
     }
     else {
       top = NON_EDITOR_AREA_HEIGHT;
-      left = (window.innerWidth * this.props.ratio) - halfResizerSize - 5;
+      left = (window.innerWidth * ratio) - halfResizerSize - 5;
     }
     return {top, left};
   }
