@@ -1161,10 +1161,7 @@ export default class EditorArea extends React.Component {
         </TabItem>
       );
     }
-    else {
-      return <TabItem eventKey={key} tab={this.getTabName(doc)} key={key} />;
-    }
-
+    return <TabItem eventKey={key} tab={this.getTabName(doc)} key={key} />;
   }
 
   onAddPbFileButtonClick = () => {
