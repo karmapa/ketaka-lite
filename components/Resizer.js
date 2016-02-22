@@ -36,7 +36,7 @@ export default class Resizer extends React.Component {
     x: null,
     y: null,
     isDragging: false
-  }
+  };
 
   animator = new Animator();
 
@@ -117,7 +117,7 @@ export default class Resizer extends React.Component {
     }
     mouse.x = x;
     mouse.y = y;
-  }
+  };
 
   onMouseDown = e => {
     this.event = e;
