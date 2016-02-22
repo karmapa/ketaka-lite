@@ -462,15 +462,16 @@ export default class EditorArea extends React.Component {
 
     let content = _.get(this.getCurrentPage(), 'content', '');
 
-    let match;
     let re = new RegExp(query, 'g');
+    let match = re.exec(content);
     let count = 0;
 
-    while (match = re.exec(content)) {
+    while (match) {
       count++;
       if (count === index) {
         return match.index + query.length;
       }
+      match = re.exec(content);
     }
     return null;
   }
