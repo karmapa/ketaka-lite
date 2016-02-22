@@ -97,13 +97,14 @@ export default class EditorArea extends React.Component {
     let match = content.match(regexp);
     let count = match ? match.length : 0;
 
-    let nextPage;
     let pageIndex = doc.pageIndex;
+    let nextPage = pages[++pageIndex];
 
-    while (nextPage = pages[++pageIndex]) {
+    while (nextPage) {
       let content = nextPage.content;
       let match = content.match(regexp);
       count += match ? match.length : 0;
+      nextPage = pages[++pageIndex]
     }
 
     return count;
@@ -435,12 +436,13 @@ export default class EditorArea extends React.Component {
       return text;
     };
 
-    let page;
     let pageIndex = doc.pageIndex;
-    while (page = pages[pageIndex]) {
+    let page = pages[pageIndex];
+
+    while (page) {
       let content = page.content.replace(regexp, replaceFunc);
       writePageContent(doc.uuid, pageIndex, content);
-      pageIndex++;
+      page = pages[++pageIndex];
     }
     this.refs.toast.success(replaceCount + ' keywords have been replaced.');
     return replaceCount;
@@ -1248,28 +1250,30 @@ export default class EditorArea extends React.Component {
 
   findPrevIndexByKeyword = keyword => {
     let doc = this.getDoc();
-    let page;
     let pageIndex = doc.pageIndex;
+    let page = doc.pages[--pageIndex];
 
-    while (page = doc.pages[--pageIndex]) {
+    while (page) {
       let content = _.get(page, 'content', '');
       if (content.includes(keyword)) {
         return pageIndex;
       }
+      page = doc.pages[--pageIndex];
     }
     return null;
   }
 
   findNextIndexByKeyword = keyword => {
     let doc = this.getDoc();
-    let page;
     let pageIndex = doc.pageIndex;
+    let page = doc.pages[++pageIndex];
 
-    while (page = doc.pages[++pageIndex]) {
+    while (page) {
       let content = _.get(page, 'content', '');
       if (content.includes(keyword)) {
         return pageIndex;
       }
+      page = doc.pages[++pageIndex];
     }
     return null;
   }
