@@ -40,7 +40,6 @@ export default class EditorArea extends React.Component {
     setExceptionWords: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
-    setLetterSpacing: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
     setRatio: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
@@ -1346,7 +1345,7 @@ export default class EditorArea extends React.Component {
     }
 
     let doc = this.getDoc();
-    let {setInputMethod, setLetterSpacing, toggleReadonly, toggleDirection} = this.props;
+    let {setInputMethod, toggleReadonly, toggleDirection} = this.props;
 
     let editorToolbarProps = {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
@@ -1368,8 +1367,7 @@ export default class EditorArea extends React.Component {
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
       pageNames: doc ? doc.pages.map(page => page.name) : [],
-      setInputMethod,
-      setLetterSpacing
+      setInputMethod
     };
     return <EditorToolbar {...editorToolbarProps} />;
   }
