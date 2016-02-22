@@ -6,11 +6,11 @@ import {PageSwitch} from '.';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {setFontSize, setLineHeight, setLetterSpacing} from '../actions/AppActions';
+import {setFontSize, setLineHeight, setLetterSpacing, toggleDirection} from '../actions/AppActions';
 
 @connect(state => ({
   settings: state.settings
-}), {setFontSize, setLineHeight, setLetterSpacing})
+}), {setFontSize, setLineHeight, setLetterSpacing, toggleDirection})
 export default class EditorToolbar extends React.Component {
 
   static PropTypes = {
@@ -28,7 +28,7 @@ export default class EditorToolbar extends React.Component {
     onSpellCheckButtonClick: PropTypes.func,
     onPageAddButtonClick: PropTypes.func,
     onPrintButtonClick: PropTypes.func,
-    onDirectionButtonClick: PropTypes.func,
+    toggleDirection: PropTypes.func,
     onPageDeleteButtonClick: PropTypes.func,
     onAddPbFileButtonClick: PropTypes.func,
     onLineHeightInputChange: PropTypes.func,
@@ -94,8 +94,8 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
       onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      onSpellCheckButtonClick, settings, onAddPbFileButtonClick, onDirectionButtonClick,
-      onImageOnlyButtonClick, onTextOnlyButtonClick} = this.props;
+      onSpellCheckButtonClick, settings, onAddPbFileButtonClick,
+      onImageOnlyButtonClick, onTextOnlyButtonClick, toggleDirection} = this.props;
 
     let pageSwitchProps = {
       className: 'section section-doc',
@@ -117,7 +117,7 @@ export default class EditorToolbar extends React.Component {
         'btn-direction': true,
         'vertical': DIRECTION_VERTICAL === direction
       }),
-      onClick: onDirectionButtonClick
+      onClick: toggleDirection
     };
 
     return (

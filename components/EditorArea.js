@@ -1331,14 +1331,13 @@ export default class EditorArea extends React.Component {
     }
 
     let doc = this.getDoc();
-    let {setInputMethod, toggleReadonly, toggleDirection} = this.props;
+    let {setInputMethod, toggleReadonly} = this.props;
 
     let editorToolbarProps = {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
       className: 'editor-toolbar',
       onAddPbFileButtonClick: this.onAddPbFileButtonClick,
       onColorButtonClick: this.onColorButtonClick,
-      onDirectionButtonClick: toggleDirection,
       onInputChange: this.onInputChange,
       onPageAddButtonClick: this.onPageAddButtonClick,
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
