@@ -19,8 +19,7 @@ import {ToastContainer, ToastMessage} from 'react-toastr';
 import Api from '../services/Api';
 
 import {checkSyllables} from 'check-tibetan';
-
-let Path = window.require('path');
+import Path from 'path';
 
 let ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
