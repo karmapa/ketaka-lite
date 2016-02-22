@@ -95,12 +95,12 @@ export default class ModalImportStatus extends React.Component {
       return (
         <div>
           <Button onClick={this.close}>Cancel</Button>
-          <Button bsStyle='warning' onClick={this.confirm}>Proceed</Button>
+          <Button bsStyle="warning" onClick={this.confirm}>Proceed</Button>
         </div>
       );
     }
     else {
-      return <Button bsStyle='primary' onClick={this.close}>OK</Button>;
+      return <Button bsStyle="primary" onClick={this.close}>OK</Button>;
     }
   }
 

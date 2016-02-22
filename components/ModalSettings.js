@@ -78,8 +78,8 @@ export default class ModalSettings extends React.Component {
           <div className="modal-settings">
             <label>Theme</label>
             <div className="themes">
-              <Input type="radio" label="Default" onChange={this.onThemeChange} checked={"default" === theme} value="default" />
-              <Input type="radio" label="Zenburn" onChange={this.onThemeChange} checked={"zenburn" === theme} value="zenburn" />
+              <Input type="radio" label="Default" onChange={this.onThemeChange} checked={'default' === theme} value="default" />
+              <Input type="radio" label="Zenburn" onChange={this.onThemeChange} checked={'zenburn' === theme} value="zenburn" />
             </div>
             <label>Keyboard Shortcuts</label>
             <ul>

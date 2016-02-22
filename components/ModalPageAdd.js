@@ -113,10 +113,10 @@ export default class ModalPageAdd extends React.Component {
 
         <Modal.Body>
 
-          <Input type="text" value={pageName} placeholder='Enter text'
+          <Input type="text" value={pageName} placeholder="Enter text"
                  onBlur={this.onInputBlur}
                  label="Page Name" help={this.pageNameHelp()} bsStyle={this.pageNameState()}
-                 hasFeedback ref='currentPageName' groupClassName='group-class' labelClassName='label-class' onChange={this.onPageNameChange} />
+                 hasFeedback ref="currentPageName" groupClassName="group-class" labelClassName="label-class" onChange={this.onPageNameChange} />
         </Modal.Body>
 
         <Modal.Footer>

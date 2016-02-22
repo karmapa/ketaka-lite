@@ -160,7 +160,7 @@ export default class ModalDocSettings extends React.Component {
                  label="Doc Name" help={this.docNameHelp()} bsStyle={this.docNameState()}
                  hasFeedback ref="docName" groupClassName="group-class" labelClassName="label-class" onChange={this.onDocNameChange} />
 
-          <Input type="text" value={pageName} placeholder='Enter text'
+          <Input type="text" value={pageName} placeholder="Enter text"
                  label="Current Page Name" help={this.pageNameHelp()} bsStyle={this.pageNameState()}
                  hasFeedback ref="currentPageName" groupClassName="group-class" labelClassName="label-class" onChange={this.onPageNameChange} />
         </Modal.Body>
