@@ -40,7 +40,6 @@ export default class EditorArea extends React.Component {
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
-    setRatio: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
     setTextOnly: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
@@ -1152,14 +1151,14 @@ export default class EditorArea extends React.Component {
 
     if (this.isCurrentDoc(doc)) {
 
-      let {settings, setRatio} = this.props;
+      let {settings} = this.props;
       let {direction} = settings;
       let ratio = (DIRECTION_HORIZONTAL === direction) ? settings.nsRatio : settings.ewRatio;
 
       return (
         <TabItem eventKey={key} tab={this.getTabName(doc)} key={key}>
 
-          <Resizer direction={direction} ratio={ratio} setRatio={setRatio} />
+          <Resizer direction={direction} ratio={ratio} />
 
           {this.renderImageArea(imageZoomerKey, src)}
           {this.renderEditorArea(doc, pageIndex)}

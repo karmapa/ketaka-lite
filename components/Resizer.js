@@ -6,12 +6,17 @@ import Animator from '../services/Animator';
 import {NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, DIRECTION_VERTICAL,
   DIRECTION_HORIZONTAL} from '../constants/AppConstants';
 import classNames from 'classnames';
+import {connect} from 'react-redux';
+
+import {setRatio} from '../actions/AppActions';
 
 const DELTA_NS = 0.002;
 const DELTA_EW = 0.0008;
 const BOUNDARY_MIN = 0.005;
 const BOUNDARY_MAX = 0.995;
 
+@connect(state => ({
+}), {setRatio})
 export default class Resizer extends React.Component {
 
   static PropTypes = {
