@@ -238,7 +238,6 @@ export default class EditorArea extends React.Component {
   }
 
   handleClose = (props, e) => {
-    e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     this.closeTab(props.eventKey);
   }
