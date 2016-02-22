@@ -646,7 +646,7 @@ function parseQuery(query) {
     try {
       query = new RegExp((-1 === isRE[1], isRE[2].indexOf('i')) ? '' : 'i');
     }
-    catch(e) {
+    catch (e) {
      // Not a regular expression after all, do a string search
     }
   }
