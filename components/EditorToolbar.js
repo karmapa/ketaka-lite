@@ -4,7 +4,13 @@ import {Input, OverlayTrigger, Tooltip, Popover} from 'react-bootstrap';
 import {DIRECTION_VERTICAL} from '../constants/AppConstants';
 import {PageSwitch} from '.';
 import classNames from 'classnames';
+import {connect} from 'react-redux';
 
+import {setFontSize} from '../actions/AppActions';
+
+@connect(state => ({
+  settings: state.settings
+}), {setFontSize})
 export default class EditorToolbar extends React.Component {
 
   static PropTypes = {

@@ -38,7 +38,6 @@ export default class EditorArea extends React.Component {
     importDoc: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
     setExceptionWords: PropTypes.func.isRequired,
-    setFontSize: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setLetterSpacing: PropTypes.func.isRequired,
@@ -1348,7 +1347,7 @@ export default class EditorArea extends React.Component {
     }
 
     let doc = this.getDoc();
-    let {setFontSize, setInputMethod, setLetterSpacing, setLineHeight, settings,
+    let {setInputMethod, setLetterSpacing, setLineHeight,
       toggleReadonly, toggleDirection} = this.props;
 
     let editorToolbarProps = {
@@ -1371,11 +1370,9 @@ export default class EditorArea extends React.Component {
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
       pageNames: doc ? doc.pages.map(page => page.name) : [],
-      setFontSize,
       setInputMethod,
       setLetterSpacing,
-      setLineHeight,
-      settings
+      setLineHeight
     };
     return <EditorToolbar {...editorToolbarProps} />;
   }
