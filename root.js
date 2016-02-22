@@ -22,18 +22,12 @@ export default class Root extends React.Component {
 
     return (
       <Provider store={store}>
-        {renderRoutes.bind(null, history)}
+        <Router history={history}>
+          <Route path="/" component={App} />
+          <Route path="about" component={About} />
+          <Redirect from="*" to="/" />
+        </Router>
       </Provider>
     );
   }
-}
-
-function renderRoutes(history) {
-  return (
-    <Router history={history}>
-      <Route path="/" component={App} />
-      <Route path="about" component={About} />
-      <Redirect from="*" to="/" />
-    </Router>
-  );
 }
