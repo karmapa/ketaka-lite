@@ -13,6 +13,10 @@
     "node": true
   },
 
+  "plugins": [
+    "react"
+  ],
+
   "rules": {
     "yoda": [2, "always", {"onlyEquality": true}],
     "camelcase": 2,
@@ -58,8 +62,5 @@
     "no-warning-comments": [1, {
       "terms": ["todo", "fixme"], "location": "anywhere"
     }]
-  },
-  "plugins": [
-    "react"
-  ]
+  }
 }
