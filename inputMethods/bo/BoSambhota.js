@@ -16,7 +16,6 @@ function normalOrSub(normal, sub, alwaysStacked, isOneChar) {
   switch (stackingState) {
     case 0:
       return normal;
-      break;
     case 1:
       if (! isOneChar) {
         changeStackingState(2);
@@ -32,7 +31,7 @@ function normalOrSub(normal, sub, alwaysStacked, isOneChar) {
         return sub;
       }
       changeStackingState(0);
-      return normal;;
+      return normal;
   }
 }
 
