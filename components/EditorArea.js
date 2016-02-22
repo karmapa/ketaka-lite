@@ -15,15 +15,14 @@ import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
   NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
   INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 
-import ReactToastr from 'react-toastr';
+import {ToastContainer, ToastMessage} from 'react-toastr';
 import Api from '../services/Api';
 
 import {checkSyllables} from 'check-tibetan';
 
 let Path = window.require('path');
 
-let {ToastContainer} = ReactToastr;
-let ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
+let ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
