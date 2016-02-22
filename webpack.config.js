@@ -27,7 +27,8 @@ var config = {
     preLoaders: [
       {
         test: /\.js$/,
-        loader: 'eslint-loader'
+        loader: 'eslint-loader',
+        configFile: '.eslintrc'
       }
     ],
     loaders: [
