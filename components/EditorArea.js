@@ -104,7 +104,7 @@ export default class EditorArea extends React.Component {
       let content = nextPage.content;
       let match = content.match(regexp);
       count += match ? match.length : 0;
-      nextPage = pages[++pageIndex]
+      nextPage = pages[++pageIndex];
     }
 
     return count;
