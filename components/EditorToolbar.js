@@ -6,11 +6,11 @@ import {PageSwitch} from '.';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {setFontSize} from '../actions/AppActions';
+import {setFontSize, setLineHeight} from '../actions/AppActions';
 
 @connect(state => ({
   settings: state.settings
-}), {setFontSize})
+}), {setFontSize, setLineHeight})
 export default class EditorToolbar extends React.Component {
 
   static PropTypes = {
