@@ -21,20 +21,6 @@ export default class TabBox extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  render() {
-    let {id, activeKey, ...props} = this.props;
-    return (
-      <div>
-        <Nav {...props} activeKey={activeKey} onSelect={this.props.onSelect}>
-          {utils.ValidComponentChildren.map(this.props.children, this.renderTab, this)}
-        </Nav>
-        <div id={id} className="tab-content">
-          {utils.ValidComponentChildren.map(this.props.children, this.renderPane)}
-        </div>
-      </div>
-    );
-  }
-
   renderTab = child => {
 
     let {eventKey, className, tab, disabled, noCloseButton} = child.props;
@@ -66,4 +52,18 @@ export default class TabBox extends React.Component {
       key: child.key ? child.key : index
     });
   };
+
+  render() {
+    let {id, activeKey, ...props} = this.props;
+    return (
+      <div>
+        <Nav {...props} activeKey={activeKey} onSelect={this.props.onSelect}>
+          {utils.ValidComponentChildren.map(this.props.children, this.renderTab, this)}
+        </Nav>
+        <div id={id} className="tab-content">
+          {utils.ValidComponentChildren.map(this.props.children, this.renderPane)}
+        </div>
+      </div>
+    );
+  }
 }
