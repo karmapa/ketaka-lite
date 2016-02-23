@@ -22,7 +22,7 @@ export default class Editor extends React.Component {
 
   state = {
     stacking: false
-  }
+  };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
@@ -41,7 +41,7 @@ export default class Editor extends React.Component {
         stacking: false
       });
     }
-  }
+  };
 
   isStackingKey = e => {
     let inputMethod = this.props.settings.inputMethod;
@@ -89,7 +89,7 @@ export default class Editor extends React.Component {
 
   onCodemirrorChange = content => {
     this.props.onCodemirrorChange(this.codemirror, content);
-  }
+  };
 
   refresh() {
     if (this.codemirror) {
