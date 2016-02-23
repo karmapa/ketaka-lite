@@ -15,7 +15,10 @@ export default class ImageZoomerToolbar extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {inputValue, onArrowLeftButtonClick, onArrowRightButtonClick, onInputBlur, onInputChange, onInputKeyDown} = this.props;
+
+    let {inputValue, onArrowLeftButtonClick, onArrowRightButtonClick, onInputBlur,
+      onInputChange, onInputKeyDown} = this.props;
+
     return (
       <div className="section-doc">
         <button className="button-arrow-left" onClick={onArrowLeftButtonClick}>
