@@ -3,9 +3,6 @@ import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Nav, NavItem, utils} from 'react-bootstrap';
 
-let panelId = (props, child) => child.props.id ? child.props.id : props.id && (props.id + '___panel___' + child.props.eventKey);
-let tabId = (props, child) => child.props.id ? child.props.id + '___tab' : props.id && (props.id + '___tab___' + child.props.eventKey);
-
 export default class TabBox extends React.Component {
 
   static PropTypes = {
@@ -21,6 +18,24 @@ export default class TabBox extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
+  getPanelId(props, child) {
+    if (child.props.id) {
+      return child.props.id + '___panel';
+    }
+    if (props.id) {
+      return props.id + '___panel___' + child.props.eventKey;
+    }
+  }
+
+  getTabId(props, child) {
+    if (child.props.id) {
+      return child.props.id + '___tab';
+    }
+    if (props.id) {
+     return props.id + '___tab___' + child.props.eventKey;
+    }
+  }
+
   renderTab = child => {
 
     let {eventKey, className, tab, disabled, noCloseButton} = child.props;
@@ -31,8 +46,8 @@ export default class TabBox extends React.Component {
     };
 
     return (
-      <NavItem linkId={tabId(this.props, child)} ref={'tab' + eventKey}
-         aria-controls={panelId(this.props, child)} eventKey={eventKey}
+      <NavItem linkId={this.getTabId(this.props, child)} ref={'tab' + eventKey}
+         aria-controls={this.getPanelId(this.props, child)} eventKey={eventKey}
          className={className} disabled={disabled}>
         {tab}
         <span className={classNames(classes)} onClick={onClose.bind(null, child.props)}>&times;</span>
@@ -47,8 +62,8 @@ export default class TabBox extends React.Component {
 
     return cloneElement(child, {
       active,
-      id: panelId(this.props, child),
-      'aria-labelledby': tabId(this.props, child),
+      id: this.getPanelId(this.props, child),
+      'aria-labelledby': this.getTabId(this.props, child),
       key: child.key ? child.key : index
     });
   };
