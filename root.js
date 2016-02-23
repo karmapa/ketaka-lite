@@ -5,7 +5,6 @@ import {createStore, applyMiddleware, combineReducers} from 'redux';
 import thunk from 'redux-thunk';
 import * as reducers from './reducers';
 import App from './containers/App';
-import About from './containers/About';
 
 const reducer = combineReducers(reducers);
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
@@ -24,7 +23,6 @@ export default class Root extends React.Component {
       <Provider store={store}>
         <Router history={history}>
           <Route path="/" component={App} />
-          <Route path="about" component={About} />
           <Redirect from="*" to="/" />
         </Router>
       </Provider>
