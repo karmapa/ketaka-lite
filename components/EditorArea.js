@@ -78,7 +78,7 @@ export default class EditorArea extends React.Component {
   closeModalSettings = () => {
     this.refs.modalSettings.close();
     this.bindKeyboardEvents();
-  }
+  };
 
   findMatchCountByKeyword = (keyword, index) => {
     let doc = this.getDoc();
@@ -102,7 +102,7 @@ export default class EditorArea extends React.Component {
     }
 
     return count;
-  }
+  };
 
   handleSelect = key => {
     if (KEY_ADD_DOC === key) {
@@ -113,7 +113,7 @@ export default class EditorArea extends React.Component {
         docKey: key
       });
     }
-  }
+  };
 
   activateTab(index) {
     let activeDoc = this.props.docs[index];
@@ -126,7 +126,7 @@ export default class EditorArea extends React.Component {
 
   addDoc = () => {
     this.props.createDoc();
-  }
+  };
 
   markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
 
@@ -213,12 +213,12 @@ export default class EditorArea extends React.Component {
     this.save();
     this.closeDoc();
     this.refs.modalSaveConfirm.close();
-  }
+  };
 
   discard = () => {
     this.closeDoc();
     this.refs.modalSaveConfirm.close();
-  }
+  };
 
   closeDoc(key) {
     if (! key) {
@@ -235,7 +235,7 @@ export default class EditorArea extends React.Component {
   handleClose = (props, e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.closeTab(props.eventKey);
-  }
+  };
 
   rotateTabLeft = () => {
     let docs = this.props.docs;
@@ -245,7 +245,7 @@ export default class EditorArea extends React.Component {
     let index = this.getDocIndexByUuid(this.state.docKey);
     let nextIndex = (index - 1) < 0 ? docs.length - 1 : index - 1;
     this.activateTab(nextIndex);
-  }
+  };
 
   rotateTabRight = () => {
     let docs = this.props.docs;
@@ -255,7 +255,7 @@ export default class EditorArea extends React.Component {
     let index = this.getDocIndexByUuid(this.state.docKey);
     let nextIndex = (index + 1) > docs.length - 1 ? 0 : index + 1;
     this.activateTab(nextIndex);
-  }
+  };
 
   getDoc(key = this.state.docKey, props = this.props) {
     return props.docs.find(doc => doc.uuid === key);
@@ -273,7 +273,7 @@ export default class EditorArea extends React.Component {
       this.addSpellCheckOverlay();
     }
     this.props.setPageIndex(this.state.docKey, pageIndex);
-  }
+  };
 
   getPageInputValue(page = this.getCurrentPage()) {
     return _.get(page, 'name', '');
@@ -291,7 +291,7 @@ export default class EditorArea extends React.Component {
       Api.send('save', doc)
         .then(() => self.props.save(self.state.docKey));
     }
-  }
+  };
 
   saveAs = newDocName => {
 
@@ -304,14 +304,14 @@ export default class EditorArea extends React.Component {
         self.props.receiveDoc(res.doc);
       })
       .catch(res => self.refs.toast.error(res.message));
-  }
+  };
 
   closeDocByName = name => {
     let doc = _.find(this.props.docs, {name});
     if (doc) {
       this.closeDoc(doc.uuid);
     }
-  }
+  };
 
   exportZip() {
 
@@ -352,7 +352,7 @@ export default class EditorArea extends React.Component {
     if (searchBar) {
       searchBar.close();
     }
-  }
+  };
 
   splitPage = () => {
 
@@ -1431,7 +1431,7 @@ export default class EditorArea extends React.Component {
     if (cm) {
       cm.focus();
     }
-  }
+  };
 
   renderMenuItem(currentMethod, methods) {
     return methods.map((method, index) => {
