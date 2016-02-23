@@ -22,9 +22,9 @@ export default class ComboListenerInput extends React.Component {
   keyCodesToText = () => {
     return this.keyCodes.map(this.getKeyNameByKeyCode)
       .join(' + ');
-  }
+  };
 
-  onChange = () => {}
+  onChange = () => {};
 
   onKeyDown = e => {
 
@@ -52,9 +52,9 @@ export default class ComboListenerInput extends React.Component {
        value: this.keyCodesToText()
      }
     });
-  }
+  };
 
-  shouldComponentUpdate = shouldPureComponentUpdate
+  shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
 
