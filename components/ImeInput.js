@@ -34,19 +34,19 @@ export default class ImeInput extends React.Component {
   onKeyDown = e => {
     Ime.keydown(e);
     this.props.onKeyDown(e);
-  }
+  };
 
   onKeyUp = e => {
     Ime.keyup(e);
     this.props.onKeyUp(e);
-  }
+  };
 
   onKeyPress = e => {
     let value = Ime.keypress(e, {element: this.input});
     if (_.isString(value)) {
       this.props.onKeyPress(value);
     }
-  }
+  };
 
   focus() {
     this.input.focus();
