@@ -24,14 +24,12 @@ export default class App extends React.Component {
     dispatch(AppActions.initSettings());
 
     this.changeTheme({newTheme: settings.theme});
-
     ContextMenu.init();
   }
 
   changeTheme(args) {
 
     let {oldTheme, newTheme} = args;
-
     let classList = document.body.classList;
 
     if (oldTheme) {
