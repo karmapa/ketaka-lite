@@ -52,7 +52,7 @@ export default class TabBox extends React.Component {
         <span className={classNames(classes)} onClick={onClose.bind(null, child.props)}>&times;</span>
       </NavItem>
     );
-  }
+  };
 
   renderPane = (child, index) => {
 
@@ -65,5 +65,5 @@ export default class TabBox extends React.Component {
       'aria-labelledby': tabId(this.props, child),
       key: child.key ? child.key : index
     });
-  }
+  };
 }
