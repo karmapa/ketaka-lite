@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
-import _ from 'lodash';
 
 export default class ImeInput extends React.Component {
 
