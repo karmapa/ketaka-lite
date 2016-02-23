@@ -70,6 +70,7 @@
     "babel-eslint": "5.0.0",
     "babel-jest": "5.3.0",
     "babel-loader": "5.3.2",
+    "babel-polyfill": "6.5.0",
     "babel-runtime": "5.8.20",
     "concurrently": "1.0.0",
     "css-loader": "0.15.4",
