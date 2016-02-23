@@ -26,7 +26,7 @@ export default class ModalImportStatus extends React.Component {
   }
 
   showPrompt(args) {
-    this.confirm = args.confirm || () => {};
+    this.confirm = args.confirm || (() => {});
     this.setState({
       showPrompt: true,
       progressStyle: 'warning',

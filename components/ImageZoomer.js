@@ -213,7 +213,7 @@ export default class ImageZoomer extends React.Component {
     this.onResize = () => {
       this.setOffsetSize();
       this.adjustTranslate();
-    }.bind(this);
+    };
 
     window.addEventListener('mousemove', mouse.onMouseMove);
     window.addEventListener('mouseup', mouse.onMouseUp);
