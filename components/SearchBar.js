@@ -34,7 +34,7 @@ export default class SearchBar extends React.Component {
     withKeyword: '',
     confirmMessage: '',
     matchCount: 0
-  }
+  };
 
   cm = null;
   cursor = null;
@@ -52,7 +52,7 @@ export default class SearchBar extends React.Component {
     this.setCursor();
     this.findMatchCount(this.state.findKeyword);
     this.findKeyword();
-  }
+  };
 
   findMatchCount = keyword => {
     if (_.isEmpty(keyword)) {
@@ -70,7 +70,7 @@ export default class SearchBar extends React.Component {
     if (this.cm) {
       this.cursor = this.cm.getCursor();
     }
-  }
+  };
 
   replace = () => {
     this.openReplaceBar();
@@ -80,7 +80,7 @@ export default class SearchBar extends React.Component {
     let {replaceKeyword} = this.state;
     this.findMatchCount(replaceKeyword);
     this.findKeyword(replaceKeyword);
-  }
+  };
 
   componentDidMount() {
 
@@ -101,7 +101,7 @@ export default class SearchBar extends React.Component {
   escape = () => {
     clearSearch(this.cm);
     this.stop();
-  }
+  };
 
   onFindInputChange = e => {
     let findKeyword = e.target.value;
@@ -110,7 +110,7 @@ export default class SearchBar extends React.Component {
     });
     this.findMatchCount(findKeyword);
     this.findKeyword(findKeyword);
-  }
+  };
 
   onFindInputKeyUp = e => {
 
@@ -126,19 +126,19 @@ export default class SearchBar extends React.Component {
     if (enterKeyPressed(e) && this.shiftKeyHolding) {
       ReactDOM.findDOMNode(this.refs.buttonFindPrev).click();
     }
-  }
+  };
 
   onFindInputKeyDown = e => {
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
-  }
+  };
 
   onFindInputKeyPress = findKeyword => {
     this.setState({findKeyword});
     this.findMatchCount(findKeyword);
     this.findKeyword(findKeyword);
-  }
+  };
 
   onReplaceInputChange = e => {
     let replaceKeyword = e.target.value;
@@ -147,19 +147,19 @@ export default class SearchBar extends React.Component {
     });
     this.findMatchCount(replaceKeyword);
     this.findKeyword(replaceKeyword);
-  }
+  };
 
   onReplaceInputKeyPress = replaceKeyword => {
     this.setState({replaceKeyword});
     this.findMatchCount(replaceKeyword);
     this.findKeyword(replaceKeyword);
-  }
+  };
 
   onWithInputChange = e => {
     this.setState({
       withKeyword: e.target.value
     });
-  }
+  };
 
   onWithInputKeyUp = e => {
 
@@ -167,19 +167,19 @@ export default class SearchBar extends React.Component {
       let replaceAll = this.shiftKeyHolding;
       this.replaceOne(this.cm, replaceAll);
     }
-  }
+  };
 
   onWithInputKeyDown = e => {
     if (shiftKeyPressed(e)) {
       this.shiftKeyHolding = true;
     }
-  }
+  };
 
   onWithInputKeyPress = inputValue => {
     this.setState({
       withKeyword: inputValue
     });
-  }
+  };
 
   findKeyword(query = this.state.findKeyword) {
     let {cm, cursor} = this;
@@ -194,12 +194,12 @@ export default class SearchBar extends React.Component {
       rev: true
     });
     this.cursor = this.cm.getCursor();
-  }
+  };
 
   next = () => {
     this.doSearch({cm: this.cm});
     this.cursor = this.cm.getCursor();
-  }
+  };
 
   doSearch(args = {}) {
 
@@ -308,7 +308,7 @@ export default class SearchBar extends React.Component {
       clearSelection(cm);
       cm.focus();
     }
-  }
+  };
 
   openConfirmDialog(args) {
 
@@ -417,7 +417,7 @@ export default class SearchBar extends React.Component {
     if (! ['BUTTON', 'INPUT'].includes(_.get(e, 'relatedTarget.tagName'))) {
      // this.close();
     }
-  }
+  };
 
   renderSearch = () => {
 
@@ -455,11 +455,11 @@ export default class SearchBar extends React.Component {
         </button>
       </div>
     );
-  }
+  };
 
   onReplaceButtonClick = () => {
     this.replaceOne(this.cm);
-  }
+  };
 
   onReplaceAllButtonClick = () => {
     let self = this;
@@ -473,7 +473,7 @@ export default class SearchBar extends React.Component {
       },
       confirmMessage: 'Replace All ?'
     });
-  }
+  };
 
   renderReplace = () => {
 
@@ -520,13 +520,11 @@ export default class SearchBar extends React.Component {
         </button>
       </div>
     );
-  }
+  };
 
-  yes = () => {
-  }
+  yes = () => {};
 
-  no = () => {
-  }
+  no = () => {};
 
   stop = () => {
     this.setState({
@@ -534,13 +532,13 @@ export default class SearchBar extends React.Component {
       opened: false,
       withKeyword: ''
     });
-  }
+  };
 
   onConfirmBoxBlur = e => {
     if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
       this.close();
     }
-  }
+  };
 
   renderConfirm = () => {
 
@@ -559,7 +557,7 @@ export default class SearchBar extends React.Component {
         <button onClick={this.stop}>Stop</button>
       </div>
     );
-  }
+  };
 
   render() {
     let map = {
