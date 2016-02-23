@@ -27,9 +27,7 @@ export default class ImeInput extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  onChange = e => {
-    this.props.onChange(e);
-  }
+  onChange = e => this.props.onChange(e);
 
   onKeyDown = e => {
     Ime.keydown(e);
