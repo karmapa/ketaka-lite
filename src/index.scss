@@ -1,16 +1,16 @@
 
 // variables and mixins
-@import 'assets/styles/variables';
-@import 'assets/styles/mixins';
+@import './../assets/styles/variables';
+@import './../assets/styles/mixins';
 
 // vendors
-@import url("node_modules/animate.css/animate.css");
-@import url("node_modules/codemirror/theme/zenburn.css");
-@import url("node_modules/codemirror/addon/dialog/dialog.css");
+@import url("./../node_modules/animate.css/animate.css");
+@import url("./../node_modules/codemirror/theme/zenburn.css");
+@import url("./../node_modules/codemirror/addon/dialog/dialog.css");
 
-@import 'node_modules/toastr/toastr';
-@import 'node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
-@import './assets/styles/vendors/codemirror';
+@import './../node_modules/toastr/toastr';
+@import './../node_modules/bootstrap-sass/assets/stylesheets/bootstrap';
+@import './../assets/styles/vendors/codemirror';
 
 // core css
 @import 'assets/styles/scaffolding';
@@ -33,4 +33,4 @@
 @import 'components/resizer';
 
 // themes
-@import 'assets/styles/themes/zenburn';
+@import './../assets/styles/themes/zenburn';

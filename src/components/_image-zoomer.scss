@@ -1,7 +1,7 @@
 
 .image-zoomer {
   vertical-align: top;
-  cursor: url(assets/images/openhand.cur), auto;
+  cursor: url(../assets/images/openhand.cur), auto;
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -34,7 +34,7 @@
 }
 
 .image-zoomer.holding {
-  cursor: url(assets/images/closehand.cur), auto;
+  cursor: url(../assets/images/closehand.cur), auto;
   img.image-zoomable {
     transition: none;
   }
