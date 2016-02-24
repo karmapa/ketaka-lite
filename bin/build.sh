@@ -6,7 +6,7 @@ cd $ROOT_DIR
 mkdir -p dist
 NODE_ENV=production webpack
 sed -i '' -e 's/http:\/\/localhost:3000\///g' dist/index.html
-cp -r *.ico *.icns package.json main.js main dist/
+cp -r assets/images/*.ico assets/images/*.icns package.json main.js main dist/
 
 cd dist
 npm install --verbose --production
