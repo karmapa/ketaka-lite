@@ -43,7 +43,6 @@ export default class EditorArea extends React.Component {
     setSpellCheck: PropTypes.func.isRequired,
     setTextOnly: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
-    toggleDirection: PropTypes.func.isRequired,
     toggleReadonly: PropTypes.func.isRequired,
     toggleSpellCheck: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
