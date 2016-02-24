@@ -29,6 +29,7 @@ const KEY_ADD_DOC = 'KEY_ADD_DOC';
 import {setInputMethod} from '../modules/app';
 
 @connect(state => ({
+  direction: state.direction,
   docs: state.docs,
   inputMethod: state.inputMethod,
   settings: state.settings

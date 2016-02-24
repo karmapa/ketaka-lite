@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import {ContextMenu} from '../services';
 
 @connect(state => ({
-  direction: state.direction
+  settings: state.settings
 }))
 export default class App extends React.Component {
 
