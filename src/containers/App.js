@@ -9,7 +9,6 @@ import {ContextMenu} from '../services';
 
 @connect(state => ({
   direction: state.direction,
-  docs: state.docs,
   settings: state.settings
 }))
 export default class App extends React.Component {
