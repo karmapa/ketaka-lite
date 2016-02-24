@@ -119,7 +119,6 @@ export default class EditorArea extends React.Component {
     let activeDoc = this.props.docs[index];
 
     this.setState({
-      pageInputValue: activeDoc.pages[activeDoc.pageIndex].name,
       docKey: activeDoc ? activeDoc.uuid : null
     });
   }
