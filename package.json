@@ -72,7 +72,7 @@
   },
   "scripts": {
     "lint": "eslint *.js",
-    "build": "./scripts/build.sh",
+    "build": "./bin/build.sh",
     "dev": "NODE_ENV=development concurrent --kill-others \"node server.js\" \"electron .\"",
     "test": "ava main/services/*.test.js"
   },
