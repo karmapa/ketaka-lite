@@ -36,7 +36,6 @@ export default class EditorArea extends React.Component {
     docs: PropTypes.array.isRequired,
     importDoc: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
-    setExceptionWords: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
@@ -684,7 +683,7 @@ export default class EditorArea extends React.Component {
     Api.on('app-replace', self.runWithPage(self.refs.searchBar.replace));
 
     Api.on('app-spellcheck-exception-list', () => {
-      self.refs.modalSpellCheckExceptionList.open();
+      self.getSpellCheckExceptionListModal().open();
     });
 
     window.addEventListener('resize', this.handleResize);
@@ -783,6 +782,8 @@ export default class EditorArea extends React.Component {
   }
 
   getSettingsModal = () => this.refs.modalSettings.getWrappedInstance();
+
+  getSpellCheckExceptionListModal = () => this.refs.modalSpellCheckExceptionList.getWrappedInstance();
 
   openSettingsModal() {
     this.getSettingsModal().open();
@@ -1355,7 +1356,7 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, setExceptionWords, setPageIndex} = this.props;
+    let {docs, settings, setPageIndex} = this.props;
     let inputMethod = settings.inputMethod;
     let doc = this.getDoc();
 
@@ -1404,7 +1405,7 @@ export default class EditorArea extends React.Component {
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
           <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />
           <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.exceptionWords}
-            setExceptionWords={setExceptionWords} settings={settings} />
+            settings={settings} />
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
 
           <div className="section language-section">

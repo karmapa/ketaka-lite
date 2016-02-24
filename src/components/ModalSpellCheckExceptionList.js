@@ -3,7 +3,10 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
 import {ImeTextarea} from '../components';
 import _ from 'lodash';
+import {connect} from 'react-redux';
+import {setExceptionWords} from '../modules/app';
 
+@connect(state => ({}), {setExceptionWords}, null, {withRef: true})
 export default class ModalSpellCheckExceptionList extends React.Component {
 
   static PropTypes = {
