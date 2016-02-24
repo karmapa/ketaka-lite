@@ -6,11 +6,13 @@ import {PageSwitch} from '.';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {setFontSize, setLineHeight, setLetterSpacing, toggleDirection} from '../actions/AppActions';
+import {setFontSize, setLineHeight, setLetterSpacing, toggleDirection,
+  toggleReadonly} from '../modules/app';
 
 @connect(state => ({
   settings: state.settings
-}), {setFontSize, setLineHeight, setLetterSpacing, toggleDirection})
+}), {setFontSize, setLineHeight, setLetterSpacing, toggleDirection,
+  toggleReadonly})
 export default class EditorToolbar extends React.Component {
 
   static PropTypes = {
@@ -22,7 +24,7 @@ export default class EditorToolbar extends React.Component {
     onRedoButtonClick: PropTypes.func,
     canShowPageDeleteButton: PropTypes.bool,
     onUndoButtonClick: PropTypes.func,
-    onReadonlyButtonClick: PropTypes.func,
+    toggleReadonly: PropTypes.func,
     onColorButtonClick: PropTypes.func,
     onSettingsButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
@@ -92,7 +94,7 @@ export default class EditorToolbar extends React.Component {
 
   render() {
 
-    let {onInputChange, onRedoButtonClick, onUndoButtonClick, onReadonlyButtonClick,
+    let {onInputChange, onRedoButtonClick, onUndoButtonClick, toggleReadonly,
       onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       onSpellCheckButtonClick, settings, onAddPbFileButtonClick,
       onImageOnlyButtonClick, onTextOnlyButtonClick, toggleDirection} = this.props;
@@ -147,7 +149,7 @@ export default class EditorToolbar extends React.Component {
           </OverlayTrigger>
 
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-readonly">Toggle Read Only</Tooltip>}>
-            <button className="button-readonly" onClick={onReadonlyButtonClick}>
+            <button className="button-readonly" onClick={toggleReadonly}>
               <i className={classNames(classButtonReadonly)}></i>
             </button>
           </OverlayTrigger>

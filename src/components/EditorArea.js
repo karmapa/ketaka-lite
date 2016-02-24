@@ -1339,7 +1339,6 @@ export default class EditorArea extends React.Component {
       onInputChange: this.onInputChange,
       onPageAddButtonClick: this.onPageAddButtonClick,
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
-      onReadonlyButtonClick: toggleReadonly,
       onRedoButtonClick: this.onRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
