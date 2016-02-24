@@ -20,11 +20,16 @@ import Api from '../services/Api';
 
 import {checkSyllables} from 'check-tibetan';
 import Path from 'path';
+import {connect} from 'react-redux';
 
 let ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
+import {setInputMethod} from '../modules/app';
+
+@connect(state => ({
+}), {setInputMethod})
 export default class EditorArea extends React.Component {
 
   static PropTypes = {
@@ -35,6 +40,7 @@ export default class EditorArea extends React.Component {
     deletePage: PropTypes.func.isRequired,
     docs: PropTypes.array.isRequired,
     importDoc: PropTypes.func.isRequired,
+    inputMethod: PropTypes.string.isRequired,
     save: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
