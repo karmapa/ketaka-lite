@@ -46,7 +46,6 @@ export default class EditorArea extends React.Component {
     toggleReadonly: PropTypes.func.isRequired,
     toggleSpellCheck: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
-    updateSettings: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
   };
 
@@ -75,7 +74,7 @@ export default class EditorArea extends React.Component {
   }
 
   closeModalSettings = () => {
-    this.refs.modalSettings.close();
+    this.getSettingsModal().close();
     this.bindKeyboardEvents();
   };
 
@@ -783,8 +782,10 @@ export default class EditorArea extends React.Component {
       });
   }
 
+  getSettingsModal = () => this.refs.modalSettings.getWrappedInstance();
+
   openSettingsModal() {
-    this.refs.modalSettings.open();
+    this.getSettingsModal().open();
   }
 
   componentWillUnmount() {
@@ -1354,7 +1355,7 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, updateSettings, setExceptionWords, setPageIndex} = this.props;
+    let {docs, settings, setExceptionWords, setPageIndex} = this.props;
     let inputMethod = settings.inputMethod;
     let doc = this.getDoc();
 
@@ -1398,7 +1399,7 @@ export default class EditorArea extends React.Component {
             confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
           <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
-          <ModalSettings ref="modalSettings" settings={settings} updateSettings={updateSettings} close={this.closeModalSettings} />
+          <ModalSettings ref="modalSettings" settings={settings} close={this.closeModalSettings} />
           <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
           <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />
