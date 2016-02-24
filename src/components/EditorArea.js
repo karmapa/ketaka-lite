@@ -1329,7 +1329,6 @@ export default class EditorArea extends React.Component {
     }
 
     let doc = this.getDoc();
-    let {setInputMethod, toggleReadonly} = this.props;
 
     let editorToolbarProps = {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
@@ -1347,8 +1346,7 @@ export default class EditorArea extends React.Component {
       onImageOnlyButtonClick: this.onImageOnlyButtonClick,
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
-      pageNames: doc ? doc.pages.map(page => page.name) : [],
-      setInputMethod
+      pageNames: doc ? doc.pages.map(page => page.name) : []
     };
     return <EditorToolbar {...editorToolbarProps} />;
   }
