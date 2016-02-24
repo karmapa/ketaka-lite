@@ -16,19 +16,19 @@ export default class PageSwitch extends React.Component {
 
   isFirst = () => {
     return 0 === this.props.pageIndex;
-  }
+  };
 
   isLast= () => {
     return this.props.pageIndex === (this.props.pageNames.length - 1);
-  }
+  };
 
   hasPrevious = () => {
     return !! this.props.pageNames[this.props.pageIndex - 1];
-  }
+  };
 
   hasNext = () => {
     return !! this.props.pageNames[this.props.pageIndex + 1];
-  }
+  };
 
   componentWillReceiveProps(nextProps) {
     this.setState({
@@ -40,7 +40,7 @@ export default class PageSwitch extends React.Component {
     this.setState({
       inputValue: e.target.value
     });
-  }
+  };
 
   hasInputName(name) {
     return this.props.pageNames.includes(name);
@@ -66,31 +66,31 @@ export default class PageSwitch extends React.Component {
     if (KEY_ENTER === keyCode) {
       this.checkInput(e.target.value);
     }
-  }
+  };
 
   onInputBlur = e => {
     this.checkInput(e.target.value);
-  }
+  };
 
   previous = () => {
     if (this.hasPrevious()) {
       this.props.onInputChange(this.props.pageIndex - 1);
     }
-  }
+  };
 
   next = () => {
     if (this.hasNext()) {
       this.props.onInputChange(this.props.pageIndex + 1);
     }
-  }
+  };
 
   toFirst = () => {
     this.props.onInputChange(0);
-  }
+  };
 
   toLast = () => {
     this.props.onInputChange(this.props.pageNames.length - 1);
-  }
+  };
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
