@@ -1403,8 +1403,7 @@ export default class EditorArea extends React.Component {
           <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
           <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />
-          <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" words={settings.exceptionWords}
-            settings={settings} />
+          <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" />
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
 
           <div className="section language-section">
