@@ -14,6 +14,23 @@ export default class PageSwitch extends React.Component {
     inputValue: this.props.pageNames[this.props.pageIndex]
   };
 
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
+  componentWillUpdate(nextProps) {
+    let {pageIndex, pageNames} = this.props;
+    if ((pageIndex !== nextProps.pageIndex) || (pageNames.length !== nextProps.pageNames.length)) {
+      this.setState({
+        inputValue: nextProps.pageNames[nextProps.pageIndex]
+      });
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      inputValue: nextProps.pageNames[nextProps.pageIndex]
+    });
+  }
+
   isFirst = () => {
     return 0 === this.props.pageIndex;
   };
@@ -29,12 +46,6 @@ export default class PageSwitch extends React.Component {
   hasNext = () => {
     return !! this.props.pageNames[this.props.pageIndex + 1];
   };
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      inputValue: nextProps.pageNames[nextProps.pageIndex]
-    });
-  }
 
   onInputChange = e => {
     this.setState({
@@ -91,17 +102,6 @@ export default class PageSwitch extends React.Component {
   toLast = () => {
     this.props.onInputChange(this.props.pageNames.length - 1);
   };
-
-  shouldComponentUpdate = shouldPureComponentUpdate;
-
-  componentWillUpdate(nextProps) {
-    let {pageIndex, pageNames} = this.props;
-    if ((pageIndex !== nextProps.pageIndex) || (pageNames.length !== nextProps.pageNames.length)) {
-      this.setState({
-        inputValue: nextProps.pageNames[nextProps.pageIndex]
-      });
-    }
-  }
 
   render() {
     return (
