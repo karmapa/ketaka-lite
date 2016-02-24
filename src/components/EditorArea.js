@@ -1400,7 +1400,7 @@ export default class EditorArea extends React.Component {
             confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
           <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
-          <ModalSettings ref="modalSettings" settings={settings} close={this.closeModalSettings} />
+          <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
           <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
           <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />

@@ -8,7 +8,9 @@ import {DEFAULT_SHORTCUTS} from '../constants/AppConstants';
 import {connect} from 'react-redux';
 import {updateSettings} from '../modules/app';
 
-@connect(state => ({}), {updateSettings}, null, {withRef: true})
+@connect(state => ({
+  settings: state.settings
+}), {updateSettings}, null, {withRef: true})
 export default class ModalSettings extends React.Component {
 
   static PropTypes = {
