@@ -10,7 +10,6 @@ import {ContextMenu} from '../services';
 @connect(state => ({
   direction: state.direction,
   docs: state.docs,
-  inputMethod: state.inputMethod,
   readonly: state.readonly,
   settings: state.settings
 }))
