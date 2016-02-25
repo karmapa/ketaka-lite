@@ -9,12 +9,14 @@ import {connect} from 'react-redux';
 import {updateSettings} from '../modules/app';
 
 @connect(state => ({
-  settings: state.app
+  theme: state.app.theme,
+  shortcuts: state.app.shortcuts
 }), {updateSettings}, null, {withRef: true})
 export default class ModalSettings extends React.Component {
 
   static PropTypes = {
-    settings: PropTypes.object.isRequired,
+    theme: PropTypes.string.isRequired,
+    shortcuts: PropTypes.object.isRequired,
     updateSettings: PropTypes.func.isRequired,
     close: PropTypes.func.isRequired
   };
@@ -54,13 +56,13 @@ export default class ModalSettings extends React.Component {
 
   setShortcuts = shortcuts => {
     this.props.updateSettings({
-      shortcuts: Object.assign({}, this.props.settings.shortcuts, shortcuts)
+      shortcuts: Object.assign({}, this.props.shortcuts, shortcuts)
     });
   }
 
   renderComboInputs = () => {
     let self = this;
-    return _.map(self.props.settings.shortcuts, (shortcut, prop) => {
+    return _.map(self.props.shortcuts, (shortcut, prop) => {
       return (
         <li key={prop}>
           <span className="combo-text">{shortcut.text}</span>
@@ -71,7 +73,7 @@ export default class ModalSettings extends React.Component {
   };
 
   render() {
-    let {theme} = this.props.settings;
+    let {theme} = this.props;
     let {show} = this.state;
 
     return (
