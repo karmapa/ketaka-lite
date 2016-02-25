@@ -21,6 +21,7 @@ export default class Editor extends React.Component {
     className: PropTypes.string,
     code: PropTypes.string,
     onCodemirrorChange: PropTypes.func,
+    theme: PropTypes.string.isRequired,
     settings: PropTypes.object
   };
 
