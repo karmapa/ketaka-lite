@@ -9,7 +9,11 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {MAP_INPUT_METHODS, INPUT_METHOD_TIBETAN_SAMBHOTA,
   INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 import classNames from 'classnames';
+import {connect} from 'react-redux';
 
+@connect(state => ({
+  theme: state.app.theme
+}))
 export default class Editor extends React.Component {
 
   static PropTypes = {
@@ -105,11 +109,12 @@ export default class Editor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
     this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.settings.inputMethod]);
 
-    if (this.props.settings.theme !== nextProps.settings.theme) {
+    if (this.props.theme !== nextProps.theme) {
       // force codemirror to reload theme
-      this.codemirror.setOption('theme', nextProps.settings.theme);
+      this.codemirror.setOption('theme', nextProps.theme);
     }
 
     if (this.props.style.height !== nextProps.style.height) {
@@ -145,12 +150,12 @@ export default class Editor extends React.Component {
 
   render() {
 
-    let {code, className, settings} = this.props;
+    let {code, className, theme, settings} = this.props;
 
     let codemirrorProps = {
       onChange: this.onCodemirrorChange,
       options: {
-        theme: settings.theme,
+        theme: theme,
         lineWrapping: true,
         lineNumbers: true,
         styleActiveLine: true,
