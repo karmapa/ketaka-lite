@@ -28,7 +28,7 @@ const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 import {setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
 import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
-  save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
+  receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 
 @connect(state => ({
   direction: state.direction,
@@ -36,7 +36,7 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   inputMethod: state.inputMethod,
   settings: state.settings
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
-  save, setPageIndex, updatePageImagePath, writePageContent,
+  save, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
   setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck})
 export default class EditorArea extends React.Component {
 
@@ -49,6 +49,7 @@ export default class EditorArea extends React.Component {
     docs: PropTypes.array.isRequired,
     importDoc: PropTypes.func.isRequired,
     inputMethod: PropTypes.string.isRequired,
+    receiveDoc: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
