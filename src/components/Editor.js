@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
   lineHeight: state.app.lineHeight,
   letterSpacing: state.app.letterSpacing,
   inputMethod: state.app.inputMethod,
+  readonly: state.app.readonly,
   theme: state.app.theme
 }))
 export default class Editor extends React.Component {
@@ -24,13 +25,13 @@ export default class Editor extends React.Component {
     fontSize: PropTypes.number.isRequired,
     lineHeight: PropTypes.number.isRequired,
     letterSpacing: PropTypes.number.isRequired,
+    readonly: PropTypes.bool.isRequired,
     style: PropTypes.prop,
     className: PropTypes.string,
     code: PropTypes.string,
     onCodemirrorChange: PropTypes.func,
     theme: PropTypes.string.isRequired,
-    inputMethod: PropTypes.string.isRequired,
-    settings: PropTypes.object
+    inputMethod: PropTypes.string.isRequired
   };
 
   state = {
@@ -157,7 +158,7 @@ export default class Editor extends React.Component {
 
   render() {
 
-    let {code, className, fontSize, lineHeight, letterSpacing, theme, settings} = this.props;
+    let {code, className, fontSize, lineHeight, letterSpacing, readonly, theme} = this.props;
 
     let codemirrorProps = {
       onChange: this.onCodemirrorChange,
@@ -176,8 +177,6 @@ export default class Editor extends React.Component {
       ref: 'codemirror',
       value: code
     };
-
-    let {readonly} = settings;
 
     let classBoxReadonly = {
       'box-readonly': readonly
