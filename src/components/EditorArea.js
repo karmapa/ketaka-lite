@@ -1128,7 +1128,7 @@ export default class EditorArea extends React.Component {
     }
 
     if (src) {
-      return <ImageZoomer style={style} key={key} className="image-zoomer" direction={this.props.settings.direction} src={src} />;
+      return <ImageZoomer style={style} key={key} className="image-zoomer" direction={this.props.direction} src={src} />;
     }
     return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={this.onUploadButtonClick} />;
   }
