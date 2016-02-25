@@ -34,6 +34,7 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   direction: state.app.direction,
   docs: state.doc,
   inputMethod: state.app.inputMethod,
+  spellCheckOn: state.app.spellCheckOn,
   settings: state.app
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
@@ -276,8 +277,7 @@ export default class EditorArea extends React.Component {
   }
 
   onInputChange = pageIndex => {
-    let {spellCheckOn} = this.props.settings;
-    if (spellCheckOn) {
+    if (this.props.spellCheckOn) {
       this.removeSpellCheckOverlay();
       this.addSpellCheckOverlay();
     }
@@ -701,7 +701,7 @@ export default class EditorArea extends React.Component {
 
     window.addEventListener('resize', this.handleResize);
 
-    if (this.props.settings.spellCheckOn) {
+    if (this.props.spellCheckOn) {
       this.addSpellCheckOverlay();
     }
 
@@ -830,7 +830,7 @@ export default class EditorArea extends React.Component {
     else {
       this.props.writePageContent(uuid, pageIndex, content);
     }
-    if (this.props.settings.spellCheckOn) {
+    if (this.props.spellCheckOn) {
       this.lazyAddSpellCheckOverlay();
     }
   }
@@ -972,8 +972,7 @@ export default class EditorArea extends React.Component {
 
   checkSpelling() {
 
-    let {settings, toggleSpellCheck} = this.props;
-    let {spellCheckOn} = settings;
+    let {spellCheckOn, toggleSpellCheck} = this.props;
 
     if (spellCheckOn) {
       this.removeSpellCheckOverlay();
