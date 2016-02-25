@@ -34,6 +34,10 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   direction: state.app.direction,
   docs: state.doc,
   inputMethod: state.app.inputMethod,
+  nsRatio: state.app.nsRatio,
+  ewRatio: state.app.ewRatio,
+  showImageOnly: state.app.showImageOnly,
+  showTextOnly: state.app.showTextOnly,
   spellCheckOn: state.app.spellCheckOn,
   settings: state.app
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
@@ -51,6 +55,10 @@ export default class EditorArea extends React.Component {
     importDoc: PropTypes.func.isRequired,
     inputMethod: PropTypes.string.isRequired,
     receiveDoc: PropTypes.func.isRequired,
+    nsRatio: PropTypes.number.isRequired,
+    ewRatio: PropTypes.number.isRequired,
+    showImageOnly: PropTypes.bool.isRequired,
+    showTextOnly: PropTypes.bool.isRequired,
     save: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
@@ -1054,7 +1062,7 @@ export default class EditorArea extends React.Component {
 
   getImageZoomerHeight = () => {
 
-    let {nsRatio, showImageOnly, showTextOnly} = this.props.settings;
+    let {nsRatio, showImageOnly, showTextOnly} = this.props;
     let deltaRatio = showImageOnly ? 1 : nsRatio;
 
     if (showTextOnly) {
@@ -1065,7 +1073,7 @@ export default class EditorArea extends React.Component {
 
   getImageZoomerWidth = () => {
 
-    let {ewRatio, showImageOnly, showTextOnly} = this.props.settings;
+    let {ewRatio, showImageOnly, showTextOnly} = this.props;
     let deltaRatio = showImageOnly ? 1 : ewRatio;
 
     if (showTextOnly) {
@@ -1076,8 +1084,7 @@ export default class EditorArea extends React.Component {
 
   getEditorHeight() {
 
-    let {direction} = this.props;
-    let {nsRatio, showTextOnly, showImageOnly} = this.props.settings;
+    let {direction, nsRatio, showTextOnly, showImageOnly} = this.props;
     let deltaRatio = showTextOnly ? 0 : nsRatio;
 
     if (DIRECTION_VERTICAL === direction) {
@@ -1093,7 +1100,7 @@ export default class EditorArea extends React.Component {
   getEditorWidth() {
 
     let {direction} = this.props;
-    let {ewRatio, showTextOnly, showImageOnly} = this.props.settings;
+    let {ewRatio, showTextOnly, showImageOnly} = this.props;
 
     if (DIRECTION_HORIZONTAL === direction) {
       return window.innerWidth;
@@ -1309,8 +1316,7 @@ export default class EditorArea extends React.Component {
   }
 
   onImageOnlyButtonClick = () => {
-    let settings = this.props.settings;
-    let {showImageOnly, showTextOnly} = settings;
+    let {showImageOnly, showTextOnly} = this.props;
 
     if (showTextOnly) {
       this.props.setTextOnly(false);
@@ -1319,8 +1325,7 @@ export default class EditorArea extends React.Component {
   }
 
   onTextOnlyButtonClick = () => {
-    let settings = this.props.settings;
-    let {showImageOnly, showTextOnly} = settings;
+    let {showImageOnly, showTextOnly} = this.props;
 
     if (showImageOnly) {
       this.props.setImageOnly(false);
