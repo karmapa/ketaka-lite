@@ -9,7 +9,7 @@ import {connect} from 'react-redux';
 import {updateSettings} from '../modules/app';
 
 @connect(state => ({
-  settings: state.settings
+  settings: state.app
 }), {updateSettings}, null, {withRef: true})
 export default class ModalSettings extends React.Component {
 

@@ -7,8 +7,8 @@ import {connect} from 'react-redux';
 import {setExceptionWords} from '../modules/app';
 
 @connect(state => ({
-  settings: state.settings,
-  words: state.settings.exceptionWords
+  settings: state.app,
+  words: state.app.exceptionWords
 }), {setExceptionWords}, null, {withRef: true})
 export default class ModalSpellCheckExceptionList extends React.Component {
 

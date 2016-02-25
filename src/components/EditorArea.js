@@ -31,10 +31,10 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 
 @connect(state => ({
-  direction: state.direction,
-  docs: state.docs,
-  inputMethod: state.inputMethod,
-  settings: state.settings
+  direction: state.app.direction,
+  docs: state.doc,
+  inputMethod: state.app.inputMethod,
+  settings: state.app
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
   setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck})
