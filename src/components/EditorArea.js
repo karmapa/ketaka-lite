@@ -41,7 +41,6 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   showTextOnly: state.app.showTextOnly,
   spellCheckOn: state.app.spellCheckOn,
   shortcuts: state.app.shortcuts,
-  settings: state.app
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
   setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck})
@@ -68,7 +67,6 @@ export default class EditorArea extends React.Component {
     setPageIndex: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
     setTextOnly: PropTypes.func.isRequired,
-    settings: PropTypes.object.isRequired,
     shortcuts: PropTypes.object.isRequired,
     toggleSpellCheck: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
@@ -1226,10 +1224,7 @@ export default class EditorArea extends React.Component {
   renderEditorArea = (doc, pageIndex) => {
 
     let {editChunk} = doc;
-
     let page = doc.pages[pageIndex];
-
-    let {settings} = this.props;
 
     let style = {
       width: this.getEditorWidth(),
@@ -1245,8 +1240,7 @@ export default class EditorArea extends React.Component {
       code: page.content || '',
       ref: editorKey,
       key: editorKey,
-      onCodemirrorChange: this.onCodemirrorChange,
-      settings
+      onCodemirrorChange: this.onCodemirrorChange
     };
 
     return (
