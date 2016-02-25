@@ -19,61 +19,246 @@ const UPDATE_PAGE_IMAGE_PATH = 'UPDATE_PAGE_IMAGE_PATH';
 const WRITE_PAGE_CONTENT = 'WRITE_PAGE_CONTENT';
 
 const actionsMap = {
-  [ADD_PAGE]: addPage,
-  [CLOSE_DOC]: closeDoc,
-  [DELETE_PAGE]: deletePage,
-  [EXPORT_DATA]: exportData,
-  [IMPORT_DATA]: importData,
-  [IMPORT_DOC]: importDoc,
-  [RECEIVE_DOC]: receiveDoc,
-  [SAVE]: save,
-  [SAVE_FONT_RECORD]: saveFontRecord,
-  [SET_PAGE_INDEX]: setPageIndex,
-  [TO_NEXT_PAGE]: toNextPage,
-  [TO_PREVIOUS_PAGE]: toPreviousPage,
-  [UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath,
-  [WRITE_PAGE_CONTENT]: writePageContent
+
+  [ADD_PAGE]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+
+    if (! doc) {
+      return state;
+    }
+
+    let insertIndex = findPageInsertIndex(doc.pages, action.pageName);
+
+    let newPage = {
+      name: action.pageName,
+      content: '',
+      pathData: {},
+      config: {}
+    };
+
+    doc.pages.splice(insertIndex, 0, newPage);
+    doc.changed = true;
+
+    return [
+      ...state.slice(0, index),
+      Object.assign({}, doc),
+      ...state.slice(index + 1)
+    ];
+  },
+
+  [CLOSE_DOC]: (state, action) => {
+    return state.filter(doc => {
+      return doc.uuid !== action.uuid;
+    });
+  },
+
+  [DELETE_PAGE]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    let {pageIndex} = action;
+
+    if (! doc) {
+      return state;
+    }
+
+    let page = doc.pages[pageIndex];
+
+    if (! page) {
+      return state;
+    }
+
+    doc.pages.splice(pageIndex, 1);
+
+    return [
+      ...state.slice(0, index),
+      Object.assign({}, doc, {pages: doc.pages}),
+      ...state.slice(index + 1)
+    ];
+  },
+
+  [EXPORT_DATA]: (state, action) => state,
+
+  [IMPORT_DATA]: (state, action) => state,
+
+  [IMPORT_DOC]: (state, action) => {
+
+    let {doc, index} = findDocDataByName(state, action.doc.name);
+
+    // override existed doc
+    if (doc) {
+      action.doc.uuid = doc.uuid;
+      return [
+        ...state.slice(0, index),
+        Object.assign({}, action.doc),
+        ...state.slice(index + 1)
+      ];
+    } else {
+      return [...state, action.doc];
+    }
+  },
+
+  [RECEIVE_DOC]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.doc.uuid);
+
+    // override existed doc
+    if (doc) {
+      return [
+        ...state.slice(0, index),
+        Object.assign({}, action.doc),
+        ...state.slice(index + 1)
+      ];
+    }
+    console.log('here inside', [...state, action.doc]);
+    return [...state, action.doc];
+  },
+
+  [SAVE]: (state, action) => {
+
+    let {index, doc} = findDocDataByUuid(state, action.uuid);
+
+    if (! doc) {
+      return state;
+    }
+    return [
+      ...state.slice(0, index),
+      Object.assign({}, state[index], {changed: false}),
+      ...state.slice(index + 1)
+    ];
+  },
+
+  [SAVE_FONT_RECORD]: (state, action) => {
+
+    let doc = state.find(doc => doc.uuid === action.uuid);
+
+    if (! doc) {
+      return state;
+    }
+
+    let page = doc.pages[action.pageIndex];
+
+    if (! page) {
+      return state;
+    }
+
+    if (! _.isArray(page.config.fontRecords)) {
+      page.config.fontRecords = [];
+    }
+
+    page.config.fontRecords = page.config.fontRecords.concat(action.fontRecords);
+
+    return Object.assign([], state);
+  },
+
+  [SET_PAGE_INDEX]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    let pageIndex = action.pageIndex;
+
+    if (! doc) {
+      return state;
+    }
+
+    if (undefined !== doc.pages[pageIndex]) {
+      return [
+        ...state.slice(0, index),
+        Object.assign({}, state[index], {pageIndex}),
+        ...state.slice(index + 1)
+      ];
+    }
+    return state;
+  },
+
+  [TO_NEXT_PAGE]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+
+    if (! doc) {
+      return state;
+    }
+
+    let nextPageIndex = doc.pageIndex + 1;
+
+    if (nextPageIndex < doc.pages.length) {
+      return [
+        ...state.slice(0, index),
+        Object.assign({}, state[index], {pageIndex: nextPageIndex}),
+        ...state.slice(index + 1)
+      ];
+    }
+    return state;
+  },
+
+  [TO_PREVIOUS_PAGE]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+
+    if (! doc) {
+      return state;
+    }
+
+    let previousPageIndex = doc.pageIndex - 1;
+
+    if (previousPageIndex >= 0) {
+      return [
+        ...state.slice(0, index),
+        Object.assign({}, state[index], {pageIndex: previousPageIndex}),
+        ...state.slice(index + 1)
+      ];
+    }
+    return state;
+  },
+
+  [UPDATE_PAGE_IMAGE_PATH]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    let {pageIndex} = action;
+
+    if (! doc) {
+      return state;
+    }
+
+    let page = doc.pages[pageIndex];
+
+    if (! page) {
+      return state;
+    }
+
+    page.pathData = action.pathData;
+
+    return [
+      ...state.slice(0, index),
+      Object.assign({}, doc, {changed: true, pages: doc.pages}),
+      ...state.slice(index + 1)
+    ];
+  },
+
+  [WRITE_PAGE_CONTENT]: (state, action) => {
+
+    let {doc, index} = findDocDataByUuid(state, action.uuid);
+
+    if (! doc) {
+      return state;
+    }
+
+    let page = doc.pages[action.pageIndex];
+
+    if (! page) {
+      return state;
+    }
+    page.content = action.content;
+    return [
+      ...state.slice(0, index),
+      Object.assign({}, state[index], {changed: true, pages: doc.pages}),
+      ...state.slice(index + 1)
+    ];
+  }
 };
 
 export default function reducer(state = [], action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
-}
-
-function importData(state) {
-  return state;
-}
-
-function save(state, action) {
-  let {index, doc} = findDocDataByUuid(state, action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-  return [
-    ...state.slice(0, index),
-    Object.assign({}, state[index], {changed: false}),
-    ...state.slice(index + 1)
-  ];
-}
-
-function exportData(state) {
-  return state;
-}
-
-function receiveDoc(state, action) {
-  let {doc, index} = findDocDataByUuid(state, action.doc.uuid);
-
-  // override existed doc
-  if (doc) {
-    return [
-      ...state.slice(0, index),
-      Object.assign({}, action.doc),
-      ...state.slice(index + 1)
-    ];
-  } else {
-    return [...state, action.doc];
-  }
 }
 
 function findPageInsertIndex(pages, pageName) {
@@ -112,78 +297,6 @@ function findPageInsertIndex(pages, pageName) {
 
 }
 
-function addPage(state, action) {
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-
-  let insertIndex = findPageInsertIndex(doc.pages, action.pageName);
-
-  let newPage = {
-    name: action.pageName,
-    content: '',
-    pathData: {},
-    config: {}
-  };
-
-  doc.pages.splice(insertIndex, 0, newPage);
-  doc.changed = true;
-
-  return [
-    ...state.slice(0, index),
-    Object.assign({}, doc),
-    ...state.slice(index + 1)
-  ];
-}
-
-function deletePage(state, action) {
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-  let {pageIndex} = action;
-
-  if (! doc) {
-    return state;
-  }
-
-  let page = doc.pages[pageIndex];
-
-  if (! page) {
-    return state;
-  }
-
-  doc.pages.splice(pageIndex, 1);
-
-  return [
-    ...state.slice(0, index),
-    Object.assign({}, doc, {pages: doc.pages}),
-    ...state.slice(index + 1)
-  ];
-}
-
-function importDoc(state, action) {
-
-  let {doc, index} = findDocDataByName(state, action.doc.name);
-
-  // override existed doc
-  if (doc) {
-    action.doc.uuid = doc.uuid;
-    return [
-      ...state.slice(0, index),
-      Object.assign({}, action.doc),
-      ...state.slice(index + 1)
-    ];
-  } else {
-    return [...state, action.doc];
-  }
-}
-
-function closeDoc(state, action) {
-  return state.filter(doc => {
-    return doc.uuid !== action.uuid;
-  });
-}
-
 function findDocDataByUuid(docs, uuid) {
   return findDocDataByProp(docs, 'uuid', uuid);
 }
@@ -205,133 +318,6 @@ function findDocDataByProp(docs, prop, value) {
     index: foundIndex,
     doc: foundDoc
   };
-}
-
-function toNextPage(state, action) {
-
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-
-  let nextPageIndex = doc.pageIndex + 1;
-
-  if (nextPageIndex < doc.pages.length) {
-    return [
-      ...state.slice(0, index),
-      Object.assign({}, state[index], {pageIndex: nextPageIndex}),
-      ...state.slice(index + 1)
-    ];
-  }
-  return state;
-}
-
-function toPreviousPage(state, action) {
-
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-
-  let previousPageIndex = doc.pageIndex - 1;
-
-  if (previousPageIndex >= 0) {
-    return [
-      ...state.slice(0, index),
-      Object.assign({}, state[index], {pageIndex: previousPageIndex}),
-      ...state.slice(index + 1)
-    ];
-  }
-  return state;
-}
-
-function setPageIndex(state, action) {
-
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-  let pageIndex = action.pageIndex;
-
-  if (! doc) {
-    return state;
-  }
-
-  if (undefined !== doc.pages[pageIndex]) {
-    return [
-      ...state.slice(0, index),
-      Object.assign({}, state[index], {pageIndex}),
-      ...state.slice(index + 1)
-    ];
-  }
-  return state;
-}
-
-function writePageContent(state, action) {
-
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-
-  let page = doc.pages[action.pageIndex];
-
-  if (! page) {
-    return state;
-  }
-  page.content = action.content;
-  return [
-    ...state.slice(0, index),
-    Object.assign({}, state[index], {changed: true, pages: doc.pages}),
-    ...state.slice(index + 1)
-  ];
-}
-
-function saveFontRecord(state, action) {
-
-  let doc = state.find(doc => doc.uuid === action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-
-  let page = doc.pages[action.pageIndex];
-
-  if (! page) {
-    return state;
-  }
-
-  if (! _.isArray(page.config.fontRecords)) {
-    page.config.fontRecords = [];
-  }
-
-  page.config.fontRecords = page.config.fontRecords.concat(action.fontRecords);
-
-  return Object.assign([], state);
-}
-
-function updatePageImagePath(state, action) {
-
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-  let {pageIndex} = action;
-
-  if (! doc) {
-    return state;
-  }
-
-  let page = doc.pages[pageIndex];
-
-  if (! page) {
-    return state;
-  }
-
-  page.pathData = action.pathData;
-
-  return [
-    ...state.slice(0, index),
-    Object.assign({}, doc, {changed: true, pages: doc.pages}),
-    ...state.slice(index + 1)
-  ];
 }
 
 export function importData() {
