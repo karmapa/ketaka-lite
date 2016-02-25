@@ -13,7 +13,6 @@ const RECEIVE_DOC = 'RECEIVE_DOC';
 const SAVE = 'SAVE';
 const SAVE_FONT_RECORD = 'SAVE_FONT_RECORD';
 const SET_PAGE_INDEX = 'SET_PAGE_INDEX';
-const TOGGLE_EDIT_CHUNK = 'TOGGLE_EDIT_CHUNK';
 const TO_NEXT_PAGE = 'TO_NEXT_PAGE';
 const TO_PREVIOUS_PAGE = 'TO_PREVIOUS_PAGE';
 const UPDATE_PAGE_IMAGE_PATH = 'UPDATE_PAGE_IMAGE_PATH';
@@ -30,7 +29,6 @@ const actionsMap = {
   [SAVE]: save,
   [SAVE_FONT_RECORD]: saveFontRecord,
   [SET_PAGE_INDEX]: setPageIndex,
-  [TOGGLE_EDIT_CHUNK]: toggleEditChunk,
   [TO_NEXT_PAGE]: toNextPage,
   [TO_PREVIOUS_PAGE]: toPreviousPage,
   [UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath,
@@ -55,20 +53,6 @@ function save(state, action) {
   return [
     ...state.slice(0, index),
     Object.assign({}, state[index], {changed: false}),
-    ...state.slice(index + 1)
-  ];
-}
-
-function toggleEditChunk(state, action) {
-  let {doc, index} = findDocDataByUuid(state, action.uuid);
-
-  if (! doc) {
-    return state;
-  }
-
-  return [
-    ...state.slice(0, index),
-    Object.assign({}, doc, {editChunk: ! doc.editChunk}),
     ...state.slice(index + 1)
   ];
 }
@@ -459,12 +443,5 @@ export function updatePageImagePath(uuid, pageIndex, pathData) {
     uuid,
     pageIndex,
     pathData
-  };
-}
-
-export function toggleEditChunk(uuid) {
-  return {
-    type: TOGGLE_EDIT_CHUNK,
-    uuid
   };
 }
