@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import {connect} from 'react-redux';
 
 @connect(state => ({
+  inputMethod: state.app.inputMethod,
   theme: state.app.theme
 }))
 export default class Editor extends React.Component {
@@ -22,6 +23,7 @@ export default class Editor extends React.Component {
     code: PropTypes.string,
     onCodemirrorChange: PropTypes.func,
     theme: PropTypes.string.isRequired,
+    inputMethod: PropTypes.string.isRequired,
     settings: PropTypes.object
   };
 
@@ -41,7 +43,7 @@ export default class Editor extends React.Component {
       INPUT_METHOD_TIBETAN_SAMBHOTA,
       INPUT_METHOD_TIBETAN_SAMBHOTA2
     ];
-    if (this.isVowels(e) && inputMethods.includes(this.props.settings.inputMethod)) {
+    if (this.isVowels(e) && inputMethods.includes(this.props.inputMethod)) {
       this.setState({
         stacking: false
       });
@@ -49,7 +51,7 @@ export default class Editor extends React.Component {
   };
 
   isStackingKey = e => {
-    let inputMethod = this.props.settings.inputMethod;
+    let inputMethod = this.props.inputMethod;
 
     if (INPUT_METHOD_TIBETAN_SAMBHOTA === inputMethod) {
       // a
@@ -111,7 +113,7 @@ export default class Editor extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.settings.inputMethod]);
+    this.ime.setInputMethod(MAP_INPUT_METHODS[nextProps.inputMethod]);
 
     if (this.props.theme !== nextProps.theme) {
       // force codemirror to reload theme
