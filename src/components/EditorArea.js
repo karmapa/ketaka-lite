@@ -36,6 +36,7 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   inputMethod: state.app.inputMethod,
   nsRatio: state.app.nsRatio,
   ewRatio: state.app.ewRatio,
+  exceptionWords: state.app.exceptionWords,
   showImageOnly: state.app.showImageOnly,
   showTextOnly: state.app.showTextOnly,
   spellCheckOn: state.app.spellCheckOn,
@@ -58,6 +59,7 @@ export default class EditorArea extends React.Component {
     receiveDoc: PropTypes.func.isRequired,
     nsRatio: PropTypes.number.isRequired,
     ewRatio: PropTypes.number.isRequired,
+    exceptionWords: PropTypes.array.isRequired,
     showImageOnly: PropTypes.bool.isRequired,
     showTextOnly: PropTypes.bool.isRequired,
     save: PropTypes.func.isRequired,
@@ -946,7 +948,6 @@ export default class EditorArea extends React.Component {
   }
 
   addSpellCheckOverlay() {
-    let self = this;
     let codemirror = this.getCurrentCodemirror();
 
     if (! codemirror) {
@@ -960,7 +961,7 @@ export default class EditorArea extends React.Component {
     let content = codemirror.getValue();
 
     let res = checkSyllables(content);
-    let {exceptionWords} = self.props.settings;
+    let {exceptionWords} = this.props;
 
     res = res.filter(row => {
       return ! exceptionWords.includes(row[2]);
