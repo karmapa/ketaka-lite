@@ -24,16 +24,14 @@ const settings = {
 };
 
 const actionsMap = {
-  [RECEIVE_SETTINGS]: receiveSettings
+  [RECEIVE_SETTINGS]: (state, action) => {
+    return Object.assign({}, state, action.settings);
+  }
 };
 
 export default function reducer(state = settings, action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
-}
-
-function receiveSettings(state, action) {
-  return Object.assign({}, state, action.settings);
 }
 
 export function toggleDirection() {
