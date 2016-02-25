@@ -12,8 +12,8 @@ import {setExceptionWords} from '../modules/app';
 export default class ModalSpellCheckExceptionList extends React.Component {
 
   static PropTypes = {
-    words: PropTypes.array.isRequired,
     setExceptionWords: PropTypes.func.isRequired,
+    words: PropTypes.array.isRequired
   };
 
   componentWillReceiveProps(nextProps) {
