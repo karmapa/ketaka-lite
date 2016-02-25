@@ -10,7 +10,7 @@ import {setFontSize, setInputMethod, setLineHeight, setLetterSpacing,
   toggleDirection, toggleReadonly} from '../modules/app';
 
 @connect(state => ({
-  settings: state.settings
+  settings: state.app
 }), {setFontSize, setLineHeight, setLetterSpacing, toggleDirection,
   toggleReadonly, setInputMethod})
 export default class EditorToolbar extends React.Component {

@@ -16,9 +16,9 @@ const BOUNDARY_MIN = 0.005;
 const BOUNDARY_MAX = 0.995;
 
 @connect(state => ({
-  direction: state.settings.direction,
-  nsRatio: state.settings.nsRatio,
-  ewRatio: state.settings.ewRatio
+  direction: state.app.direction,
+  nsRatio: state.app.nsRatio,
+  ewRatio: state.app.ewRatio
 }), {setRatio})
 export default class Resizer extends React.Component {
 
