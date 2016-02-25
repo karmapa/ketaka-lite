@@ -27,14 +27,16 @@ let ToastMessageFactory = React.createFactory(ToastMessage.animation);
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 import {setInputMethod} from '../modules/app';
-import {addDoc, addPage} from '../modules/doc';
+import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
+  save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 
 @connect(state => ({
   direction: state.direction,
   docs: state.docs,
   inputMethod: state.inputMethod,
   settings: state.settings
-}), {addDoc, addPage, setInputMethod})
+}), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
+  save, setPageIndex, updatePageImagePath, writePageContent, setInputMethod})
 export default class EditorArea extends React.Component {
 
   static PropTypes = {
