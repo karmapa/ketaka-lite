@@ -1,6 +1,4 @@
 server.js
 webpack.config.js
 node_modules/
-main/
-main.js
 constants/SampleDoc.js
