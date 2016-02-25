@@ -589,7 +589,7 @@ export default class EditorArea extends React.Component {
 
     simpleCombo(shortcuts.switchInputMethod, () => {
 
-      let currentInputMethod = MAP_INPUT_METHODS[this.props.settings.inputMethod];
+      let currentInputMethod = MAP_INPUT_METHODS[this.props.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
       if (-1 === index) {
         index = 0;
@@ -1370,8 +1370,7 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, setPageIndex} = this.props;
-    let inputMethod = settings.inputMethod;
+    let {docs, settings, setPageIndex, inputMethod} = this.props;
     let doc = this.getDoc();
 
     let classes = {
