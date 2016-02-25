@@ -1,12 +1,11 @@
 import React, {PropTypes} from 'react';
 import {Redirect, Router, Route} from 'react-router';
 import {Provider} from 'react-redux';
-import {createStore, applyMiddleware, combineReducers} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
-import * as reducers from './reducers';
+import reducer from './modules/reducer';
 import App from './containers/App';
 
-const reducer = combineReducers(reducers);
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(reducer);
 
