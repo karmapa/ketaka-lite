@@ -10,7 +10,14 @@ import {setFontSize, setInputMethod, setLineHeight, setLetterSpacing,
   toggleDirection, toggleReadonly} from '../modules/app';
 
 @connect(state => ({
-  settings: state.app
+  direction: state.app.direction,
+  fontSize: state.app.fontSize,
+  letterSpacing: state.app.letterSpacing,
+  lineHeight: state.app.lineHeight,
+  readonly: state.app.readonly,
+  showImageOnly: state.app.showImageOnly,
+  showTextOnly: state.app.showTextOnly,
+  spellCheckOn: state.app.spellCheckOn
 }), {setFontSize, setLineHeight, setLetterSpacing, toggleDirection,
   toggleReadonly, setInputMethod})
 export default class EditorToolbar extends React.Component {
@@ -37,7 +44,14 @@ export default class EditorToolbar extends React.Component {
     setInputMethod: PropTypes.func,
     setLetterSpacing: PropTypes.func,
     setLineHeight: PropTypes.func,
-    settings: PropTypes.object,
+    direction: PropTypes.number.isRequired,
+    fontSize: PropTypes.number.isRequired,
+    letterSpacing: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+    readonly: PropTypes.bool.isRequired,
+    showImageOnly: PropTypes.bool.isRequired,
+    showTextOnly: PropTypes.bool.isRequired,
+    spellCheckOn: PropTypes.bool.isRequired,
     toggleDirection: PropTypes.func,
     toggleReadonly: PropTypes.func
   };
@@ -96,7 +110,8 @@ export default class EditorToolbar extends React.Component {
 
     let {onInputChange, onRedoButtonClick, onUndoButtonClick, toggleReadonly,
       onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
-      onSpellCheckButtonClick, settings, onAddPbFileButtonClick,
+      onSpellCheckButtonClick, onAddPbFileButtonClick, readonly, spellCheckOn, direction,
+      showImageOnly, showTextOnly, fontSize, lineHeight, letterSpacing,
       onImageOnlyButtonClick, onTextOnlyButtonClick, toggleDirection} = this.props;
 
     let pageSwitchProps = {
@@ -105,8 +120,6 @@ export default class EditorToolbar extends React.Component {
       pageNames,
       pageIndex
     };
-
-    let {readonly, spellCheckOn, direction} = settings;
 
     let classButtonReadonly = {
       'glyphicon': true,
@@ -180,13 +193,13 @@ export default class EditorToolbar extends React.Component {
           </OverlayTrigger>
 
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-image-area-only">Image Area Only</Tooltip>}>
-            <button className={classNames({on: settings.showImageOnly})} onClick={onImageOnlyButtonClick}>
+            <button className={classNames({on: showImageOnly})} onClick={onImageOnlyButtonClick}>
               <i className="glyphicon glyphicon-picture"></i>
             </button>
           </OverlayTrigger>
 
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-text-area-only">Text Area Only</Tooltip>}>
-            <button className={classNames({on: settings.showTextOnly})} onClick={onTextOnlyButtonClick}>
+            <button className={classNames({on: showTextOnly})} onClick={onTextOnlyButtonClick}>
               <i className="glyphicon glyphicon-subscript"></i>
             </button>
           </OverlayTrigger>
@@ -203,7 +216,7 @@ export default class EditorToolbar extends React.Component {
                 <i className="glyphicon glyphicon-text-height"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={this.onFontSizeInputChange} value={settings.fontSize}>
+                     onChange={this.onFontSizeInputChange} value={fontSize}>
                 {this.renderFontSizeOptions()}
               </Input>
             </div>
@@ -215,7 +228,7 @@ export default class EditorToolbar extends React.Component {
                 <i className="glyphicon glyphicon-sort-by-attributes"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={this.onLineHeightInputChange} value={settings.lineHeight}>
+                     onChange={this.onLineHeightInputChange} value={lineHeight}>
                 {this.renderLineHeightOptions()}
               </Input>
             </div>
@@ -227,7 +240,7 @@ export default class EditorToolbar extends React.Component {
                 <i className="glyphicon glyphicon-text-width"></i>
               </span>
               <Input bsSize="small" type="select"
-                     onChange={this.onLetterSpacingChange} value={settings.letterSpacing}>
+                     onChange={this.onLetterSpacingChange} value={letterSpacing}>
                 {this.renderLetterSpacingOptions()}
               </Input>
             </div>
