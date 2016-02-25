@@ -1,4 +1,4 @@
-import * as AppActions from '../actions/AppActions';
+import {initSettings} from '../modules/app';
 import * as constants from '../constants/AppConstants';
 import {EditorArea} from '../components';
 import React from 'react';
@@ -7,15 +7,15 @@ import {ContextMenu} from '../services';
 
 @connect(state => ({
   settings: state.settings
-}))
+}), {initSettings})
 export default class App extends React.Component {
 
   componentDidMount() {
 
-    let {dispatch, settings} = this.props;
+    let {settings} = this.props;
 
     document.title = constants.APP_NAME;
-    dispatch(AppActions.initSettings());
+    initSettings();
 
     this.changeTheme({newTheme: settings.theme});
     ContextMenu.init();
