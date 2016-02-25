@@ -110,7 +110,6 @@ const actionsMap = {
         ...state.slice(index + 1)
       ];
     }
-    console.log('here inside', [...state, action.doc]);
     return [...state, action.doc];
   },
 
