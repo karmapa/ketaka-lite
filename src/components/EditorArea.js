@@ -39,6 +39,7 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   showImageOnly: state.app.showImageOnly,
   showTextOnly: state.app.showTextOnly,
   spellCheckOn: state.app.spellCheckOn,
+  shortcuts: state.app.shortcuts,
   settings: state.app
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
@@ -66,6 +67,7 @@ export default class EditorArea extends React.Component {
     setSpellCheck: PropTypes.func.isRequired,
     setTextOnly: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
+    shortcuts: PropTypes.object.isRequired,
     toggleSpellCheck: PropTypes.func.isRequired,
     updatePageImagePath: PropTypes.func.isRequired,
     writePageContent: PropTypes.func.isRequired
@@ -569,7 +571,7 @@ export default class EditorArea extends React.Component {
     self.keypressListener = new keypress.Listener();
     let keypressListener = Helper.camelize(['register_combo'], self.keypressListener);
 
-    let shortcuts = _.clone(this.props.settings.shortcuts);
+    let shortcuts = _.clone(this.props.shortcuts);
 
     // format shortcuts data
     _.each(shortcuts, (shortcut, prop) => {
