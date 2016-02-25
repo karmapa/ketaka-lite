@@ -466,6 +466,8 @@ function handleImportZip(paths) {
 
 function handleImportPaths(paths, onProgress, force) {
 
+  let importedRows;
+
   force = force || false;
   onProgress = onProgress || _.noop;
 
