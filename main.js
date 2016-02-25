@@ -1,6 +1,5 @@
-var BrowserWindow = require('browser-window');
-var app = require('app');
-var ipc = require('ipc');
+import electron, {app, ipcMain, BrowserWindow} from 'electron';
+
 var ipcHandlers = require('./main/ipcHandlers');
 var bindEventName = require('./main/decorators/bindEventName');
 var Helper = require('./main/services/Helper');
@@ -8,7 +7,8 @@ var MenuConfig = require('./main/services/MenuConfig');
 var PATH_APP_DOC = require('./main/constants').PATH_APP_DOC;
 var Menu = require('menu');
 
-require('crash-reporter').start();
+require('crash-reporter').start({companyName: 'karmapa'});
+
 
 var mainWindow = null;
 
@@ -26,7 +26,7 @@ app.on('ready', function() {
   Helper.mkdirp(PATH_APP_DOC)
     .then(function() {
 
-      mainWindow.loadUrl('file://' + __dirname + '/index.html');
+      mainWindow.loadURL('file://' + __dirname + '/index.html');
 
       mainWindow.on('closed', function() {
         mainWindow = null;
@@ -44,7 +44,7 @@ app.once('ready', function() {
   Menu.setApplicationMenu(menu);
 });
 
-ipc = bindEventName(ipc);
+const ipc = bindEventName(ipcMain);
 
 ipc.on('import-button-clicked', ipcHandlers.importButtonClicked);
 
