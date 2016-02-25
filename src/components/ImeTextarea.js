@@ -7,8 +7,8 @@ import _ from 'lodash';
 export default class ImeTextarea extends React.Component {
 
   static PropTypes = {
-    inputMethod: PropTypes.string.isRequired,
     className: PropTypes.string,
+    inputMethod: PropTypes.string.isRequired,
     onChange: PropTypes.func,
     onKeyDown: PropTypes.func,
     onKeyPress: PropTypes.func,

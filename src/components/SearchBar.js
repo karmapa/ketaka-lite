@@ -14,26 +14,26 @@ const MODE_CONFIRM = 3;
 export default class SearchBar extends React.Component {
 
   static PropTypes = {
-    inputMethod: PropTypes.string.isRequired,
+    doc: PropTypes.object.isRequired,
+    findMatchCountByKeyword: PropTypes.func.isRequired,
     findNextIndexByKeyword: PropTypes.func.isRequired,
     findPrevIndexByKeyword: PropTypes.func.isRequired,
-    findMatchCountByKeyword: PropTypes.func.isRequired,
-    setPageIndex: PropTypes.func.isRequired,
-    toPrevPage: PropTypes.func.isRequired,
-    doc: PropTypes.object.isRequired,
-    replacePageContent: PropTypes.func.isRequired,
+    getIndexByMatchIndex: PropTypes.func.isRequired,
     getMatchIndexByQuery: PropTypes.func.isRequired,
-    getIndexByMatchIndex: PropTypes.func.isRequired
+    inputMethod: PropTypes.string.isRequired,
+    replacePageContent: PropTypes.func.isRequired,
+    setPageIndex: PropTypes.func.isRequired,
+    toPrevPage: PropTypes.func.isRequired
   };
 
   state = {
+    confirmMessage: '',
+    findKeyword: '',
+    matchCount: 0,
     mode: MODE_SEARCH,
     opened: false,
     replaceKeyword: '',
-    findKeyword: '',
-    withKeyword: '',
-    confirmMessage: '',
-    matchCount: 0
+    withKeyword: ''
   };
 
   cm = null;

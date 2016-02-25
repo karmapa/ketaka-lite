@@ -5,9 +5,9 @@ import {KEY_ENTER} from '../constants/AppConstants';
 export default class PageSwitch extends React.Component {
 
   static PropTypes = {
+    onInputChange: PropTypes.func,
     pageIndex: PropTypes.number,
-    pageNames: PropTypes.array,
-    onInputChange: PropTypes.func
+    pageNames: PropTypes.array
   };
 
   state = {

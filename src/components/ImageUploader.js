@@ -5,8 +5,8 @@ import {Button} from 'react-bootstrap';
 export default class ImageUploader extends React.Component {
 
   static PropTypes = {
-    style: PropTypes.prop,
-    onUploadButtonClick: PropTypes.func.isRequired
+    onUploadButtonClick: PropTypes.func.isRequired,
+    style: PropTypes.prop
   };
 
   shouldComponentUpdate = shouldPureComponentUpdate;

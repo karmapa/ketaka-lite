@@ -13,9 +13,9 @@ import {connect} from 'react-redux';
 
 @connect(state => ({
   fontSize: state.app.fontSize,
-  lineHeight: state.app.lineHeight,
-  letterSpacing: state.app.letterSpacing,
   inputMethod: state.app.inputMethod,
+  letterSpacing: state.app.letterSpacing,
+  lineHeight: state.app.lineHeight,
   readonly: state.app.readonly,
   theme: state.app.theme
 }))

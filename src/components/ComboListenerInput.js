@@ -6,9 +6,9 @@ export default class ComboListenerInput extends React.Component {
 
   static PropTypes = {
     className: PropTypes.string,
-    shortcut: PropTypes.object.isRequired,
     prop: PropTypes.string.isRequired,
-    setShortcuts: PropTypes.func.isRequired
+    setShortcuts: PropTypes.func.isRequired,
+    shortcut: PropTypes.object.isRequired
   };
 
   keyCodes = [];
