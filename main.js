@@ -1,26 +1,20 @@
-import electron, {app, ipcMain, BrowserWindow} from 'electron';
+import {app, ipcMain, crashReporter, screen, BrowserWindow, Menu} from 'electron';
+import ipcHandlers from './main/ipcHandlers';
+import bindEventName from './main/decorators/bindEventName';
+import {Helper, MenuConfig} from './main/services';
+import {PATH_APP_DOC} from './main/constants';
 
-var ipcHandlers = require('./main/ipcHandlers');
-var bindEventName = require('./main/decorators/bindEventName');
-var Helper = require('./main/services/Helper');
-var MenuConfig = require('./main/services/MenuConfig');
-var PATH_APP_DOC = require('./main/constants').PATH_APP_DOC;
-var Menu = require('menu');
+crashReporter.start({companyName: 'karmapa'});
 
-require('crash-reporter').start({companyName: 'karmapa'});
+let mainWindow = null;
 
-
-var mainWindow = null;
-
-app.on('window-all-closed', function() {
+app.on('window-all-closed', () => {
   app.quit();
 });
 
-app.on('ready', function() {
+app.on('ready', () => {
 
-  var screen = require('screen');
-  var size = screen.getPrimaryDisplay().workAreaSize;
-
+  let size = screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({width: size.width, height: size.height});
 
   Helper.mkdirp(PATH_APP_DOC)
@@ -34,13 +28,9 @@ app.on('ready', function() {
     });
 });
 
-app.once('ready', function() {
-
-  if (Menu.getApplicationMenu()) {
- //   return;
-  }
-  var template = MenuConfig.getTemplate({mainWindow: mainWindow});
-  var menu = Menu.buildFromTemplate(template);
+app.once('ready', () => {
+  let template = MenuConfig.getTemplate({mainWindow: mainWindow});
+  let menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 });
 
