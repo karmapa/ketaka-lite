@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import {setExceptionWords} from '../modules/app';
 
 @connect(state => ({
-  settings: state.app,
   words: state.app.exceptionWords
 }), {setExceptionWords}, null, {withRef: true})
 export default class ModalSpellCheckExceptionList extends React.Component {
@@ -15,7 +14,6 @@ export default class ModalSpellCheckExceptionList extends React.Component {
   static PropTypes = {
     words: PropTypes.array.isRequired,
     setExceptionWords: PropTypes.func.isRequired,
-    settings: PropTypes.object.isRequired
   };
 
   componentWillReceiveProps(nextProps) {
