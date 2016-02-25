@@ -1,23 +1,25 @@
 import {initSettings} from '../modules/app';
 import * as constants from '../constants/AppConstants';
 import {EditorArea} from '../components';
-import React from 'react';
+import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {ContextMenu} from '../services';
 
 @connect(state => ({
-  settings: state.settings
+  theme: state.app.theme
 }), {initSettings})
 export default class App extends React.Component {
 
-  componentDidMount() {
+  static PropTypes = {
+    theme: PropTypes.string.isRequired
+  };
 
-    let {settings} = this.props;
+  componentDidMount() {
 
     document.title = constants.APP_NAME;
     initSettings();
 
-    this.changeTheme({newTheme: settings.theme});
+    this.changeTheme({newTheme: this.props.theme});
     ContextMenu.init();
   }
 
@@ -36,8 +38,8 @@ export default class App extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    let currentTheme = this.props.settings.theme;
-    let nextTheme = nextProps.settings.theme;
+    let currentTheme = this.props.theme;
+    let nextTheme = nextProps.theme;
 
     if (currentTheme !== nextTheme) {
       this.changeTheme({
