@@ -29,7 +29,6 @@ const actionsMap = {
   [RECEIVE_DOC]: receiveDoc,
   [SAVE]: save,
   [SAVE_FONT_RECORD]: saveFontRecord,
-  [SETTINGS]: settings,
   [SET_PAGE_INDEX]: setPageIndex,
   [TOGGLE_EDIT_CHUNK]: toggleEditChunk,
   [TO_NEXT_PAGE]: toNextPage,
@@ -75,10 +74,6 @@ function toggleEditChunk(state, action) {
 }
 
 function exportData(state) {
-  return state;
-}
-
-function settings(state) {
   return state;
 }
 
