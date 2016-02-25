@@ -1,9 +1,7 @@
 import * as AppActions from '../actions/AppActions';
-import * as DocActions from '../actions/DocActions';
 import * as constants from '../constants/AppConstants';
 import {EditorArea} from '../components';
 import React from 'react';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ContextMenu} from '../services';
 
@@ -50,15 +48,9 @@ export default class App extends React.Component {
   }
 
   render() {
-    const {dispatch} = this.props;
-    const docActions = bindActionCreators(DocActions, dispatch);
-    const appActions = bindActionCreators(AppActions, dispatch);
-
-    const editorAreaProps = {...this.props, ...docActions, ...appActions};
-
     return (
       <div className="container-fluid root">
-        <EditorArea className="editor-area" {...editorAreaProps} />
+        <EditorArea className="editor-area" />
       </div>
     );
   }
