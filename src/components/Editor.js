@@ -12,12 +12,18 @@ import classNames from 'classnames';
 import {connect} from 'react-redux';
 
 @connect(state => ({
+  fontSize: state.app.fontSize,
+  lineHeight: state.app.lineHeight,
+  letterSpacing: state.app.letterSpacing,
   inputMethod: state.app.inputMethod,
   theme: state.app.theme
 }))
 export default class Editor extends React.Component {
 
   static PropTypes = {
+    fontSize: PropTypes.number.isRequired,
+    lineHeight: PropTypes.number.isRequired,
+    letterSpacing: PropTypes.number.isRequired,
     style: PropTypes.prop,
     className: PropTypes.string,
     code: PropTypes.string,
@@ -139,11 +145,9 @@ export default class Editor extends React.Component {
   componentDidUpdate(previousProps) {
 
     let self = this;
-    let previousSettings = previousProps.settings;
-    let settings = self.props.settings;
 
     ['fontSize', 'lineHeight', 'letterSpacing'].every(prop => {
-      if (previousSettings[prop] !== settings[prop]) {
+      if (previousProps[prop] !== self.props[prop]) {
         self.refresh();
         return false;
       }
@@ -153,7 +157,7 @@ export default class Editor extends React.Component {
 
   render() {
 
-    let {code, className, theme, settings} = this.props;
+    let {code, className, fontSize, lineHeight, letterSpacing, theme, settings} = this.props;
 
     let codemirrorProps = {
       onChange: this.onCodemirrorChange,
@@ -181,9 +185,9 @@ export default class Editor extends React.Component {
 
     let classReadonly = {
       'readonly': readonly,
-      ['fs' + settings.fontSize]: true,
-      ['lh' + settings.lineHeight]: true,
-      ['ls' + settings.letterSpacing]: true
+      ['fs' + fontSize]: true,
+      ['lh' + lineHeight]: true,
+      ['ls' + letterSpacing]: true
     };
 
     let wrapperClasses = {
