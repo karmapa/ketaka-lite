@@ -8,7 +8,7 @@ import {NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, DIRECTION_VERTICAL,
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 
-import {setRatio} from '../actions/AppActions';
+import {setRatio} from '../modules/app';
 
 const DELTA_NS = 0.002;
 const DELTA_EW = 0.0008;
