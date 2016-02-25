@@ -174,9 +174,8 @@ export default class EditorArea extends React.Component {
     if (searchBar) {
       searchBar.cm = codemirror;
     }
-    let previousDirection = _.get(previousProps, 'settings.direction');
-    let direction = _.get(this.props, 'settings.direction');
-    if (previousDirection !== direction) {
+
+    if (previousProps.direction !== this.props.direction) {
       let editor = this.getEditor();
       if (editor) {
         editor.refresh();
@@ -1078,7 +1077,8 @@ export default class EditorArea extends React.Component {
 
   getEditorHeight() {
 
-    let {nsRatio, showTextOnly, showImageOnly, direction} = this.props.settings;
+    let {direction} = this.props;
+    let {nsRatio, showTextOnly, showImageOnly} = this.props.settings;
     let deltaRatio = showTextOnly ? 0 : nsRatio;
 
     if (DIRECTION_VERTICAL === direction) {
@@ -1093,7 +1093,8 @@ export default class EditorArea extends React.Component {
 
   getEditorWidth() {
 
-    let {ewRatio, showTextOnly, showImageOnly, direction} = this.props.settings;
+    let {direction} = this.props;
+    let {ewRatio, showTextOnly, showImageOnly} = this.props.settings;
 
     if (DIRECTION_HORIZONTAL === direction) {
       return window.innerWidth;
@@ -1111,7 +1112,7 @@ export default class EditorArea extends React.Component {
 
     let style = {};
 
-    if (DIRECTION_HORIZONTAL === this.props.settings.direction) {
+    if (DIRECTION_HORIZONTAL === this.props.direction) {
       style.height = this.getImageZoomerHeight();
     }
     else {
@@ -1370,12 +1371,12 @@ export default class EditorArea extends React.Component {
   render() {
 
     let {print} = this.state;
-    let {docs, settings, setPageIndex, inputMethod} = this.props;
+    let {docs, direction, setPageIndex, inputMethod} = this.props;
     let doc = this.getDoc();
 
     let classes = {
       [this.props.className]: true,
-      'vertical': DIRECTION_VERTICAL === settings.direction
+      'vertical': (DIRECTION_VERTICAL === direction)
     };
 
     let searchBarProps = {
