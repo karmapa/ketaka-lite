@@ -20,22 +20,22 @@ const UPDATE_PAGE_IMAGE_PATH = 'UPDATE_PAGE_IMAGE_PATH';
 const WRITE_PAGE_CONTENT = 'WRITE_PAGE_CONTENT';
 
 const actionsMap = {
-  [IMPORT_DATA]: importData,
-  [SAVE]: save,
-  [EXPORT_DATA]: exportData,
-  [SETTINGS]: settings,
-  [RECEIVE_DOC]: receiveDoc,
   [ADD_PAGE]: addPage,
-  [IMPORT_DOC]: importDoc,
   [CLOSE_DOC]: closeDoc,
+  [DELETE_PAGE]: deletePage,
+  [EXPORT_DATA]: exportData,
+  [IMPORT_DATA]: importData,
+  [IMPORT_DOC]: importDoc,
+  [RECEIVE_DOC]: receiveDoc,
+  [SAVE]: save,
+  [SAVE_FONT_RECORD]: saveFontRecord,
+  [SETTINGS]: settings,
+  [SET_PAGE_INDEX]: setPageIndex,
+  [TOGGLE_EDIT_CHUNK]: toggleEditChunk,
   [TO_NEXT_PAGE]: toNextPage,
   [TO_PREVIOUS_PAGE]: toPreviousPage,
-  [SET_PAGE_INDEX]: setPageIndex,
-  [WRITE_PAGE_CONTENT]: writePageContent,
-  [SAVE_FONT_RECORD]: saveFontRecord,
-  [DELETE_PAGE]: deletePage,
-  [TOGGLE_EDIT_CHUNK]: toggleEditChunk,
-  [UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath
+  [UPDATE_PAGE_IMAGE_PATH]: updatePageImagePath,
+  [WRITE_PAGE_CONTENT]: writePageContent
 };
 
 export default function reducer(state = [], action) {
