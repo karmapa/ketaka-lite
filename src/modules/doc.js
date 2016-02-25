@@ -348,7 +348,7 @@ export function receiveDoc(doc) {
 
 export function createDoc() {
   return dispatch => {
-    Api.send('add-doc')
+    return Api.send('add-doc')
       .then(res => dispatch(receiveDoc(res.doc)));
   };
 }
