@@ -4,7 +4,7 @@ const KEY_SHIFT = 16;
 const KEY_BACKSPACE = 8;
 
 import _ from 'lodash';
-import * as bo from '../inputMethods/bo';
+import * as bo from '../constants/inputMethods/bo';
 
 export default class Ime {
 
