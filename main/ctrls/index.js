@@ -12,8 +12,10 @@ import pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
 import saveAs from './saveAs';
 import save from './save';
 import importZip from './importZip';
+import importButtonClicked from './importButtonClicked';
 
 export {
+  importButtonClicked,
   importZip,
   save,
   saveAs,

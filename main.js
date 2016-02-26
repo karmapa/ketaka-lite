@@ -40,7 +40,7 @@ app.once('ready', () => {
 
 const ipc = bindEventName(ipcMain);
 
-ipc.on('import-button-clicked', controllers.importButtonClicked);
+ipc.on('import-button-clicked', ctrls.importButtonClicked);
 
 ipc.on('import-zip', ctrls.importZip);
 
