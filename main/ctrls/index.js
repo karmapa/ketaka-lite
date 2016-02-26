@@ -11,8 +11,10 @@ import addDoc from './addDoc';
 import pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
 import saveAs from './saveAs';
 import save from './save';
+import importZip from './importZip';
 
 export {
+  importZip,
   save,
   saveAs,
   addDoc,

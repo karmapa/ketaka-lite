@@ -42,7 +42,7 @@ const ipc = bindEventName(ipcMain);
 
 ipc.on('import-button-clicked', controllers.importButtonClicked);
 
-ipc.on('import-zip', controllers.importZip);
+ipc.on('import-zip', ctrls.importZip);
 
 ipc.on('save', ctrls.save);
 
