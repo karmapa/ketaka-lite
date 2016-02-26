@@ -44,7 +44,7 @@ ipc.on('import-button-clicked', controllers.importButtonClicked);
 
 ipc.on('import-zip', controllers.importZip);
 
-ipc.on('save', controllers.save);
+ipc.on('save', ctrls.save);
 
 ipc.on('save-as', ctrls.saveAs);
 

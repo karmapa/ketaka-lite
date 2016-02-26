@@ -10,8 +10,10 @@ import findDocNames from './findDocNames';
 import addDoc from './addDoc';
 import pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
 import saveAs from './saveAs';
+import save from './save';
 
 export {
+  save,
   saveAs,
   addDoc,
   open,
