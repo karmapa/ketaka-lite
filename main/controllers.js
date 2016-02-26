@@ -203,11 +203,3 @@ exports.addDoc = ipcHandler(function(event) {
       send({error: true, message: err});
     });
 });
-
-exports.findDocNames = ipcHandler(function(event) {
-  let send = this.send;
-  Doc.getExistedDocNames()
-    .then(function(docNames) {
-      send({docNames: docNames});
-    });
-});
