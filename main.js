@@ -46,7 +46,7 @@ ipc.on('import-zip', controllers.importZip);
 
 ipc.on('save', controllers.save);
 
-ipc.on('save-as', controllers.saveAs);
+ipc.on('save-as', ctrls.saveAs);
 
 ipc.on('page-image-upload-button-clicked', ctrls.pageImageUploadButtonClicked);
 
