@@ -21,11 +21,11 @@ app.on('ready', () => {
   mainWindow = new BrowserWindow({width: size.width, height: size.height});
 
   Helper.mkdirp(PATH_APP_DOC)
-    .then(function() {
+    .then(() => {
 
       mainWindow.loadURL('file://' + __dirname + '/index.html');
 
-      mainWindow.on('closed', function() {
+      mainWindow.on('closed', () => {
         mainWindow = null;
       });
     });
