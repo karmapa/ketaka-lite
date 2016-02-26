@@ -50,7 +50,7 @@ ipc.on('save-as', controllers.saveAs);
 
 ipc.on('page-image-upload-button-clicked', controllers.pageImageUploadButtonClicked);
 
-ipc.on('add-doc', controllers.addDoc);
+ipc.on('add-doc', ctrls.addDoc);
 
 ipc.on('find-doc-names', ctrls.findDocNames);
 

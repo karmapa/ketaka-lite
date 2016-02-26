@@ -7,8 +7,10 @@ import openBamboo from './openBamboo';
 import open from './open';
 import changeDocSettings from './changeDocSettings';
 import findDocNames from './findDocNames';
+import addDoc from './addDoc';
 
 export {
+  addDoc,
   open,
   findDocNames,
   changeDocSettings,
