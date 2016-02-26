@@ -273,38 +273,3 @@ exports.deleteDoc = ipcHandler(function(event, res) {
     });
 });
 
-exports.exportZip = ipcHandler(function(event, arg) {
-  let send = this.send;
-  let name = arg.name;
-  let filename = name + '.zip';
-  let options = {
-    title: 'Choose Export Path',
-    defaultPath: filename
-  };
-
-  dialog.showSaveDialog(options, function(savePath) {
-
-    if (! savePath) {
-      send({message: 'Export was canceled'});
-      return;
-    }
-
-    let archive = archiver('zip');
-    let sourcePath = Path.resolve(PATH_APP_DOC, name);
-    let output = fs.createWriteStream(savePath);
-
-    output.on('close', () => {
-      console.log(archive.pointer() + ' total bytes');
-      console.log('archiver has been finalized and the output file descriptor has closed.');
-      send({message: filename + ' exported successfully'});
-    });
-
-    archive.on('error', err => {
-      send({error: true, message: err});
-    });
-
-    archive.pipe(output);
-    archive.bulk([{expand: true, cwd: sourcePath, src: ['**'], dest: name}]);
-    archive.finalize();
-  });
-});
