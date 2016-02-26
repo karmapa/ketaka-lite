@@ -243,33 +243,3 @@ exports.open = ipcHandler(function(event) {
     });
 });
 
-exports.openBamboo = ipcHandler(function(event, arg) {
-
-  let send = this.send;
-
-  Doc.getDoc(arg.name)
-    .then(function(doc) {
-      send({doc: doc});
-    });
-});
-
-exports.deleteDoc = ipcHandler(function(event, res) {
-
-  let name = res.name;
-  let send = this.send;
-  let path = Path.resolve(PATH_APP_DOC, name);
-
-  if (! name) {
-    send();
-    return;
-  }
-
-  Helper.rimraf(path)
-    .then(function() {
-      return Doc.getExistedDocNames()
-    })
-    .then(function(names) {
-      send({names: names});
-    });
-});
-

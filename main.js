@@ -58,7 +58,7 @@ ipc.on('change-doc-settings', controllers.changeDocSettings);
 
 ipc.on('open', controllers.open);
 
-ipc.on('open-bamboo', controllers.openBamboo);
+ipc.on('open-bamboo', ctrls.openBamboo);
 
 ipc.on('delete-doc', ctrls.deleteDoc);
 
