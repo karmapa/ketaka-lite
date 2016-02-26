@@ -1,12 +1,10 @@
-var Path = require('path');
-var app = require('app');
+import Path from 'path';
+import {app} from 'electron';
 
-var appPath = Path.resolve(app.getPath('appData'), 'ketaka-lite');
+const appPath = Path.resolve(app.getPath('appData'), 'ketaka-lite');
 
-module.exports = {
-  PATH_APP: appPath,
-  PATH_APP_DOC: Path.resolve(appPath, 'docs'),
-  PATH_APP_CACHE: Path.resolve(app.getPath('userCache'), 'zip-cache'),
-  REGEXP_IMAGE: new RegExp('^(\\d+)\\-(\\d+)([abcd])$'),
-  REGEXP_PAGE: new RegExp('^(\\d+)\\.(\\d+)([abcd])$')
-};
+export const PATH_APP = appPath;
+export const PATH_APP_DOC = Path.resolve(appPath, 'docs');
+export const PATH_APP_CACHE = Path.resolve(app.getPath('userCache'), 'zip-cache');
+export const REGEXP_IMAGE = new RegExp('^(\\d+)\\-(\\d+)([abcd])$');
+export const REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
