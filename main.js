@@ -4,7 +4,10 @@ import bindEventName from './main/decorators/bindEventName';
 import {Helper, MenuConfig} from './main/services';
 import {PATH_APP_DOC} from './main/constants';
 
-crashReporter.start({companyName: 'karmapa'});
+crashReporter.start({
+  companyName: 'dharma-treasure',
+  submitURL: 'https://log.dharma-treasure.org/ketaka-lite'
+});
 
 let mainWindow = null;
 
