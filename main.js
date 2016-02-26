@@ -64,7 +64,7 @@ ipc.on('delete-doc', controllers.deleteDoc);
 
 ipc.on('export-zip', controllers.exportZip);
 
-ipc.on('export-file-with-pb', controllers.exportFileWithPb);
+ipc.on('export-file-with-pb', ctrls.exportFileWithPb);
 
 ipc.on('add-pb-files', ctrls.addPbFiles);
 
