@@ -56,7 +56,7 @@ ipc.on('find-doc-names', controllers.findDocNames);
 
 ipc.on('change-doc-settings', controllers.changeDocSettings);
 
-ipc.on('open', controllers.open);
+ipc.on('open', ctrls.open);
 
 ipc.on('open-bamboo', ctrls.openBamboo);
 

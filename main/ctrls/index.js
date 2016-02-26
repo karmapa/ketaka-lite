@@ -4,8 +4,10 @@ import exportFileWithPb from './exportFileWithPb';
 import exportZip from './exportZip';
 import deleteDoc from './deleteDoc';
 import openBamboo from './openBamboo';
+import open from './open';
 
 export {
+  open,
   addPbFiles,
   exportFileWithPb,
   getAppData,
