@@ -29,11 +29,11 @@ exports.importZip = ipcHandler(function(event, args) {
     broadcast('import-start');
 
     Importer.handleImportZip(paths, onProgress)
-      .then(function(doc) {
+      .then(doc => {
         broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
         send({message: 'Imported successfully', doc: doc});
       })
-      .catch(function(err) {
+      .catch(err => {
         send({error: true, message: err.toString()});
       });
 
@@ -164,13 +164,13 @@ exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
       let destDir = Path.dirname(dest);
 
       Helper.mkdirp(destDir)
-        .then(function() {
+        .then(() => {
           return Helper.copyFile(source, dest);
         })
-        .then(function() {
+        .then(() => {
           send({message: 'Image uploaded successfully', pathData: pathData});
         })
-        .catch(function(err) {
+        .catch(err => {
           send({error: true, message: err});
         });
     }
@@ -293,13 +293,13 @@ exports.exportZip = ipcHandler(function(event, arg) {
     let sourcePath = Path.resolve(PATH_APP_DOC, name);
     let output = fs.createWriteStream(savePath);
 
-    output.on('close', function() {
+    output.on('close', () => {
       console.log(archive.pointer() + ' total bytes');
       console.log('archiver has been finalized and the output file descriptor has closed.');
       send({message: filename + ' exported successfully'});
     });
 
-    archive.on('error', function(err) {
+    archive.on('error', err => {
       send({error: true, message: err});
     });
 
@@ -329,16 +329,16 @@ exports.exportFileWithPb = ipcHandler(function(event, arg) {
     console.log('here', savePath);
 
     Doc.getDoc(docName)
-      .then(function(doc) {
+      .then(doc => {
         return Doc.genPbFileContent(doc);
       })
-      .then(function(content) {
+      .then(content => {
         return Helper.writeFile(savePath, content);
       })
-      .then(function() {
+      .then(() => {
         send({message: filename + ' exported successfully'});
       })
-      .catch(function(err) {
+      .catch(err => {
         console.error('error', err);
         send({error: true, message: err.toString()});
       });
