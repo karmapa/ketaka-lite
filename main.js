@@ -60,9 +60,9 @@ ipc.on('open', controllers.open);
 
 ipc.on('open-bamboo', controllers.openBamboo);
 
-ipc.on('delete-doc', controllers.deleteDoc);
+ipc.on('delete-doc', ctrls.deleteDoc);
 
-ipc.on('export-zip', controllers.exportZip);
+ipc.on('export-zip', ctrls.exportZip);
 
 ipc.on('export-file-with-pb', ctrls.exportFileWithPb);
 
