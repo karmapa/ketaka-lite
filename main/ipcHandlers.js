@@ -1,12 +1,11 @@
 import {Doc, Helper, Importer} from './services';
-
-var PATH_APP_DOC = require('./constants').PATH_APP_DOC;
-var Path = require('path');
-var _ = require('lodash');
-var dialog = require('dialog');
-var ipcHandler = require('./decorators/ipcHandler');
-var archiver = require('archiver');
-var fs = require('fs');
+import {PATH_APP_DOC} from './constants';
+import Path from 'path';
+import _ from 'lodash';
+import {dialog} from 'electron';
+import {ipcHandler} from './decorators';
+import archiver from 'archiver';
+import fs from 'fs';
 
 exports.importZip = ipcHandler(function(event, args) {
 
