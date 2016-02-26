@@ -1,6 +1,5 @@
-var Doc = require('./services/Doc');
-var Helper = require('./services/Helper');
-var Importer = require('./services/Importer');
+import {Doc, Helper, Importer} from './services';
+
 var PATH_APP_DOC = require('./constants').PATH_APP_DOC;
 var Path = require('path');
 var _ = require('lodash');
