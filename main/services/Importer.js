@@ -1,19 +1,19 @@
-var Path = require('path');
-var _ = require('lodash');
-var app = require('app');
-var fs = require('fs');
-var readChunk = require('read-chunk');
-var Helper = require('./Helper');
-var Doc = require('./Doc');
+let Path = require('path');
+let _ = require('lodash');
+let app = require('app');
+let fs = require('fs');
+let readChunk = require('read-chunk');
+let Helper = require('./Helper');
+let Doc = require('./Doc');
 
-var constants = require('../constants');
-var PATH_APP_CACHE = constants.PATH_APP_CACHE;
-var PATH_APP_DOC = constants.PATH_APP_DOC;
-var REGEXP_IMAGE = constants.REGEXP_IMAGE;
-var REGEXP_PAGE = constants.REGEXP_PAGE;
-var getNonContinuousPageNames = require('./getNonContinuousPageNames');
+let constants = require('../constants');
+let PATH_APP_CACHE = constants.PATH_APP_CACHE;
+let PATH_APP_DOC = constants.PATH_APP_DOC;
+let REGEXP_IMAGE = constants.REGEXP_IMAGE;
+let REGEXP_PAGE = constants.REGEXP_PAGE;
+let getNonContinuousPageNames = require('./getNonContinuousPageNames');
 
-var htmlparser = require('htmlparser');
+let htmlparser = require('htmlparser');
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -24,7 +24,7 @@ function isFile(row) {
 }
 
 function isSupportedType(row) {
-  var stats = row.stats;
+  let stats = row.stats;
   return stats.isFile() || stats.isDirectory();
 }
 
@@ -36,7 +36,7 @@ function pluckDirPaths(rows) {
 
 function scanPaths(rows) {
 
-  var dirPaths = pluckDirPaths(rows);
+  let dirPaths = pluckDirPaths(rows);
 
   if (_.isEmpty(dirPaths)) {
     return rows;
@@ -116,14 +116,14 @@ function createPagesByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
 
-    var parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
+    let parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
 
       if (err) {
         return reject(error);
       }
 
-      var pages = [];
-      var currentPage = null;
+      let pages = [];
+      let currentPage = null;
 
       dom.forEach(function(node) {
         if (isPbNode(node)) {
@@ -158,12 +158,12 @@ function createPagesByPbRows(pbRows) {
     return [];
   }
 
-  var paths = _.pluck(pbRows, 'path');
-  var pathDataSets = _.pluck(pbRows, 'pathData');
+  let paths = _.pluck(pbRows, 'path');
+  let pathDataSets = _.pluck(pbRows, 'pathData');
 
   return Helper.readFiles(paths)
     .then(function(contents) {
-      var promises = contents.map(function(content, index) {
+      let promises = contents.map(function(content, index) {
         return createPagesByPbContent(content, pathDataSets[index]);
       });
       return Promise.all(promises);
@@ -184,15 +184,15 @@ function createChunkByTextRow(textRow) {
 }
 
 function getDuplicatedPbPages(pbPages) {
-  var usedNames = [];
-  var references = [];
-  var duplicatedPbPages = [];
+  let usedNames = [];
+  let references = [];
+  let duplicatedPbPages = [];
 
   pbPages.forEach(function(page) {
 
-    var name = page.name;
-    var index = usedNames.indexOf(name);
-    var notFound = -1 === index;
+    let name = page.name;
+    let index = usedNames.indexOf(name);
+    let notFound = -1 === index;
 
     if (notFound) {
       usedNames.push(name);
@@ -217,7 +217,7 @@ function getDuplicatedPbPages(pbPages) {
 
 function warnDuplicatePbPages(onProgress, duplicatedPbPages) {
   if (duplicatedPbPages.length > 0) {
-    var messages = duplicatedPbPages.map(function(page) {
+    let messages = duplicatedPbPages.map(function(page) {
       return {
         type: 'warning',
         message: page.name + ' in ' + page.base + ' duplicated.'
@@ -233,9 +233,9 @@ function mergePages(onProgress, textContent, pbPages, imagePages) {
   imagePages = Doc.sortPages(imagePages);
   pbPages = Doc.sortPages(pbPages);
 
-  var hasPbs = pbPages.length > 0;
-  var hasImages = imagePages.length > 0;
-  var hasRawText = _.isString(textContent);
+  let hasPbs = pbPages.length > 0;
+  let hasImages = imagePages.length > 0;
+  let hasRawText = _.isString(textContent);
 
   warnDuplicatePbPages(onProgress, getDuplicatedPbPages(pbPages));
 
@@ -268,8 +268,8 @@ function mergePages(onProgress, textContent, pbPages, imagePages) {
   if ((! hasRawText) && hasPbs && hasImages) {
 
     imagePages.forEach(function(page) {
-      var name = page.name;
-      var pbPage = _.find(pbPages, {name: name});
+      let name = page.name;
+      let pbPage = _.find(pbPages, {name: name});
       if (pbPage) {
         page.content = pbPage.content;
         _.remove(pbPages, {name: name});
@@ -287,8 +287,8 @@ function mergePages(onProgress, textContent, pbPages, imagePages) {
   if (hasRawText && hasPbs && hasImages) {
 
     imagePages.forEach(function(page) {
-      var name = page.name;
-      var pbPage = _.find(pbPages, {name: name});
+      let name = page.name;
+      let pbPage = _.find(pbPages, {name: name});
       if (pbPage) {
         page.content = pbPage.content;
         _.remove(pbPages, {name: name});
@@ -310,12 +310,12 @@ function readTextRow(row) {
 
 function createDocByRows(bambooName, rows, onProgress) {
 
-  var doc;
-  var promises = [];
+  let doc;
+  let promises = [];
 
-  var textRow = _.first(findTextRow(rows, bambooName));
-  var pbRows = findPbRows(rows);
-  var imageRows = filterImageRows(rows, bambooName);
+  let textRow = _.first(findTextRow(rows, bambooName));
+  let pbRows = findPbRows(rows);
+  let imageRows = filterImageRows(rows, bambooName);
 
   return Doc.getDoc(bambooName)
     .then(function(data) {
@@ -350,7 +350,7 @@ function createDocByRows(bambooName, rows, onProgress) {
 
 function copyImages(doc) {
 
-  var folderPath = Path.resolve(PATH_APP_DOC, doc.name, 'images');
+  let folderPath = Path.resolve(PATH_APP_DOC, doc.name, 'images');
 
   doc.pages = doc.pages.map(function(page) {
     if (page.imagePath.length > 0) {
@@ -359,7 +359,7 @@ function copyImages(doc) {
     return page;
   });
 
-  var files = doc.pages.filter(function(page) {
+  let files = doc.pages.filter(function(page) {
     return page.imagePath.length > 0;
   }).map(function(page) {
     return {
@@ -379,7 +379,7 @@ function copyImages(doc) {
 
 function warnNonContinuousPageNames(names, onProgress) {
 
-  var messages = _.map(getNonContinuousPageNames(names) || [], function(name) {
+  let messages = _.map(getNonContinuousPageNames(names) || [], function(name) {
     return {
       type: 'warning',
       message: name + ' might be missing.'
@@ -391,14 +391,14 @@ function warnNonContinuousPageNames(names, onProgress) {
 }
 
 function warnInvalidImages(bambooName, rows, onProgress) {
-  var rowsWithExtJpg = rows.filter(function(row) {
+  let rowsWithExtJpg = rows.filter(function(row) {
     return '.jpg' === row.pathData.ext;
   });
-  var messages = [];
+  let messages = [];
   rowsWithExtJpg.forEach(function(row) {
 
     if (! isValidImageFileType(row)) {
-      var fileType = _.get(row, 'fileType.mime');
+      let fileType = _.get(row, 'fileType.mime');
       messages.push({type: 'warning', message: 'Ignore image ' +
         row.pathData.base + ' with an invalid file type ' + fileType});
     }
@@ -421,13 +421,13 @@ function getJsonFileFromVinylFiles(files) {
 
 function handleZipPaths(paths) {
 
-  var zipPath = _.first(paths);
-  var bambooName;
+  let zipPath = _.first(paths);
+  let bambooName;
 
   return Helper.unzip(zipPath, PATH_APP_CACHE)
     .then(function(files) {
 
-      var jsonFile = getJsonFileFromVinylFiles(files);
+      let jsonFile = getJsonFileFromVinylFiles(files);
 
       if (! jsonFile) {
         throw 'JSON file is missing.';
@@ -442,7 +442,7 @@ function handleZipPaths(paths) {
     })
     .then(function(files) {
 
-      var jsonFile = getJsonFileFromVinylFiles(files);
+      let jsonFile = getJsonFileFromVinylFiles(files);
 
       if (! jsonFile) {
         throw 'JSON file is missing.';
@@ -471,7 +471,7 @@ function handleImportPaths(paths, onProgress, force) {
   force = force || false;
   onProgress = onProgress || _.noop;
 
-  var bambooName;
+  let bambooName;
 
   if (_.isEmpty(paths)) {
     return Promise.resolve([]);
@@ -492,7 +492,7 @@ function handleImportPaths(paths, onProgress, force) {
     })
     .then(function(rows) {
 
-      var fileCount = rows.filter(function(row) {
+      let fileCount = rows.filter(function(row) {
         return row.stats.isFile();
       }).length;
 
@@ -523,7 +523,7 @@ function handleImportPaths(paths, onProgress, force) {
     })
     .then(function(doc) {
 
-      var pageNames = doc.pages.map(function(page) {
+      let pageNames = doc.pages.map(function(page) {
         return page.name;
       })
       .filter(function(name) {
@@ -552,7 +552,7 @@ function findBambooName(row) {
 
 function getBambooName(rows) {
 
-  var dirRow = _.chain(rows).filter(isDirectory).first().value();
+  let dirRow = _.chain(rows).filter(isDirectory).first().value();
 
   if (dirRow) {
     return _.last(dirRow.path.split(Path.sep));
@@ -572,17 +572,17 @@ function getBambooName(rows) {
 }
 
 function isValidImageFileType(row) {
-  var pathData = _.get(row, 'pathData', {});
+  let pathData = _.get(row, 'pathData', {});
   return row.stats.isFile() && (-1 !== ['.bmp', '.gif', '.jpg', '.png'].indexOf(pathData.ext));
 }
 
 function isValidPbFile(row) {
-  var pathData = row.pathData;
+  let pathData = row.pathData;
   return row.stats.isFile() && ('.xml' === pathData.ext);
 }
 
 function isValidTextRow(row) {
-  var pathData = row.pathData;
+  let pathData = row.pathData;
   return row.stats.isFile() && ('.txt' === pathData.ext);
 }
 
@@ -603,7 +603,7 @@ function addPbFiles(doc, paths) {
       return markPathData(rows);
     })
     .then(function(rows) {
-      var pbRows = findPbRows(rows);
+      let pbRows = findPbRows(rows);
       return createPagesByPbRows(pbRows);
     })
     .then(function(pbPages) {
@@ -613,8 +613,8 @@ function addPbFiles(doc, paths) {
       }
 
       doc.pages.forEach(function(page) {
-        var name = page.name;
-        var newPage = _.find(pbPages, {name: name});
+        let name = page.name;
+        let newPage = _.find(pbPages, {name: name});
         if (newPage) {
           page.content = newPage.content;
           _.remove(pbPages, {name: name});

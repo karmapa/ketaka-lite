@@ -9,9 +9,9 @@ import fs from 'fs';
 
 exports.importZip = ipcHandler(function(event, args) {
 
-  var send = this.send;
-  var broadcast = this.broadcast;
-  var options = {
+  let send = this.send;
+  let broadcast = this.broadcast;
+  let options = {
     properties: ['openFile'],
     filters: [
       {name: 'zip', extensions: ['zip']}
@@ -47,9 +47,9 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
 
   args = args || {};
 
-  var send = this.send;
-  var broadcast = this.broadcast;
-  var options = {
+  let send = this.send;
+  let broadcast = this.broadcast;
+  let options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
       {name: 'Images', extensions: ['bmp', 'gif', 'jpg', 'png']},
@@ -97,7 +97,7 @@ exports.importButtonClicked = ipcHandler(function(event, args) {
 
 exports.save = ipcHandler(function(event, doc) {
 
-  var send = this.send;
+  let send = this.send;
   doc.changed = false;
 
   Doc.writeDoc(doc)
@@ -111,15 +111,15 @@ exports.save = ipcHandler(function(event, doc) {
 
 exports.saveAs = ipcHandler(function(event, args) {
 
-  var newDocName = args.newDocName;
-  var oldDoc = args.doc;
-  var send = this.send;
+  let newDocName = args.newDocName;
+  let oldDoc = args.doc;
+  let send = this.send;
 
-  var newDoc = _.cloneDeep(oldDoc);
+  let newDoc = _.cloneDeep(oldDoc);
   newDoc.name = newDocName;
 
-  var oldImageFolderPath = Path.resolve(PATH_APP_DOC, oldDoc.name, 'images');
-  var newImageFolderPath = Path.resolve(PATH_APP_DOC, newDoc.name, 'images');
+  let oldImageFolderPath = Path.resolve(PATH_APP_DOC, oldDoc.name, 'images');
+  let newImageFolderPath = Path.resolve(PATH_APP_DOC, newDoc.name, 'images');
 
   Helper.mkdirp(newImageFolderPath)
     .then(function() {
@@ -138,8 +138,8 @@ exports.saveAs = ipcHandler(function(event, args) {
 
 exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
-  var send = this.send;
-  var options = {
+  let send = this.send;
+  let options = {
     properties: ['openFile'],
     filters: [
       {name: 'Images', extensions: ['jpg']}
@@ -152,16 +152,16 @@ exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
       return;
     }
 
-    var source = _.first(paths);
-    var page = doc.pages[doc.pageIndex];
-    var filename = _.get(page, 'name') ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
-    var dest = Path.resolve(PATH_APP_DOC, doc.name, 'images', filename);
-    var pathData = Path.parse(dest);
-    var fileType = Helper.getFileType(source);
+    let source = _.first(paths);
+    let page = doc.pages[doc.pageIndex];
+    let filename = _.get(page, 'name') ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
+    let dest = Path.resolve(PATH_APP_DOC, doc.name, 'images', filename);
+    let pathData = Path.parse(dest);
+    let fileType = Helper.getFileType(source);
 
     if ('image/jpeg' === fileType.mime) {
 
-      var destDir = Path.dirname(dest);
+      let destDir = Path.dirname(dest);
 
       Helper.mkdirp(destDir)
         .then(function() {
@@ -182,8 +182,8 @@ exports.pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
 exports.addDoc = ipcHandler(function(event) {
 
-  var send = this.send;
-  var docName;
+  let send = this.send;
+  let docName;
 
   Doc.findUniqueUntitledName()
     .then(function(name) {
@@ -191,8 +191,8 @@ exports.addDoc = ipcHandler(function(event) {
       return Helper.mkdirp(Path.resolve(PATH_APP_DOC, name, 'images'));
     })
     .then(function() {
-      var doc = Doc.createDoc({name: docName});
-      var page = Doc.createPage({name: 'untitled'});
+      let doc = Doc.createDoc({name: docName});
+      let page = Doc.createPage({name: 'untitled'});
       doc.pages.push(page);
       return Doc.writeDoc(doc);
     })
@@ -205,7 +205,7 @@ exports.addDoc = ipcHandler(function(event) {
 });
 
 exports.findDocNames = ipcHandler(function(event) {
-  var send = this.send;
+  let send = this.send;
   Doc.getExistedDocNames()
     .then(function(docNames) {
       send({docNames: docNames});
@@ -214,8 +214,8 @@ exports.findDocNames = ipcHandler(function(event) {
 
 exports.changeDocSettings = ipcHandler(function(event, data) {
 
-  var send = this.send;
-  var doc = data.doc;
+  let send = this.send;
+  let doc = data.doc;
 
   Doc.changeDocSettings({
     doc: doc,
@@ -235,7 +235,7 @@ exports.changeDocSettings = ipcHandler(function(event, data) {
 
 exports.open = ipcHandler(function(event) {
 
-  var send = this.send;
+  let send = this.send;
 
   Doc.getExistedDocNames()
     .then(function(names) {
@@ -245,7 +245,7 @@ exports.open = ipcHandler(function(event) {
 
 exports.openBamboo = ipcHandler(function(event, arg) {
 
-  var send = this.send;
+  let send = this.send;
 
   Doc.getDoc(arg.name)
     .then(function(doc) {
@@ -255,9 +255,9 @@ exports.openBamboo = ipcHandler(function(event, arg) {
 
 exports.deleteDoc = ipcHandler(function(event, res) {
 
-  var name = res.name;
-  var send = this.send;
-  var path = Path.resolve(PATH_APP_DOC, name);
+  let name = res.name;
+  let send = this.send;
+  let path = Path.resolve(PATH_APP_DOC, name);
 
   if (! name) {
     send();
@@ -274,10 +274,10 @@ exports.deleteDoc = ipcHandler(function(event, res) {
 });
 
 exports.exportZip = ipcHandler(function(event, arg) {
-  var send = this.send;
-  var name = arg.name;
-  var filename = name + '.zip';
-  var options = {
+  let send = this.send;
+  let name = arg.name;
+  let filename = name + '.zip';
+  let options = {
     title: 'Choose Export Path',
     defaultPath: filename
   };
@@ -289,9 +289,9 @@ exports.exportZip = ipcHandler(function(event, arg) {
       return;
     }
 
-    var archive = archiver('zip');
-    var sourcePath = Path.resolve(PATH_APP_DOC, name);
-    var output = fs.createWriteStream(savePath);
+    let archive = archiver('zip');
+    let sourcePath = Path.resolve(PATH_APP_DOC, name);
+    let output = fs.createWriteStream(savePath);
 
     output.on('close', function() {
       console.log(archive.pointer() + ' total bytes');
@@ -311,10 +311,10 @@ exports.exportZip = ipcHandler(function(event, arg) {
 
 exports.exportFileWithPb = ipcHandler(function(event, arg) {
 
-  var send = this.send;
-  var docName = arg.name;
-  var filename = docName + '.txt';
-  var options = {
+  let send = this.send;
+  let docName = arg.name;
+  let filename = docName + '.txt';
+  let options = {
     title: 'Choose Export Path',
     defaultPath: filename
   };
@@ -348,9 +348,9 @@ exports.exportFileWithPb = ipcHandler(function(event, arg) {
 
 exports.addPbFiles = ipcHandler(function(event, arg) {
 
-  var doc = arg.doc;
-  var send = this.send;
-  var options = {
+  let doc = arg.doc;
+  let send = this.send;
+  let options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
       {name: 'zip', extensions: ['zip']},
@@ -374,7 +374,7 @@ exports.addPbFiles = ipcHandler(function(event, arg) {
 });
 
 exports.getAppData = ipcHandler(function(event, arg) {
-  var send = this.send;
+  let send = this.send;
   send({
     docPath: PATH_APP_DOC
   });
