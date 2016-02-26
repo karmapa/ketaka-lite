@@ -8,10 +8,12 @@ import open from './open';
 import changeDocSettings from './changeDocSettings';
 import findDocNames from './findDocNames';
 import addDoc from './addDoc';
+import pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
 
 export {
   addDoc,
   open,
+  pageImageUploadButtonClicked,
   findDocNames,
   changeDocSettings,
   addPbFiles,

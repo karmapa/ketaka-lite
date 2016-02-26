@@ -48,7 +48,7 @@ ipc.on('save', controllers.save);
 
 ipc.on('save-as', controllers.saveAs);
 
-ipc.on('page-image-upload-button-clicked', controllers.pageImageUploadButtonClicked);
+ipc.on('page-image-upload-button-clicked', ctrls.pageImageUploadButtonClicked);
 
 ipc.on('add-doc', ctrls.addDoc);
 
