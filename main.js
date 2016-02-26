@@ -1,5 +1,5 @@
 import {app, ipcMain, crashReporter, screen, BrowserWindow, Menu} from 'electron';
-import * as ctrls from './main/ctrls';
+import * as controllers from './main/controllers';
 import bindEventName from './main/decorators/bindEventName';
 import {Helper, MenuConfig} from './main/services';
 import {PATH_APP_DOC} from './main/constants';
@@ -39,32 +39,32 @@ app.once('ready', () => {
 
 const ipc = bindEventName(ipcMain);
 
-ipc.on('import-button-clicked', ctrls.importButtonClicked);
+ipc.on('import-button-clicked', controllers.importButtonClicked);
 
-ipc.on('import-zip', ctrls.importZip);
+ipc.on('import-zip', controllers.importZip);
 
-ipc.on('save', ctrls.save);
+ipc.on('save', controllers.save);
 
-ipc.on('save-as', ctrls.saveAs);
+ipc.on('save-as', controllers.saveAs);
 
-ipc.on('page-image-upload-button-clicked', ctrls.pageImageUploadButtonClicked);
+ipc.on('page-image-upload-button-clicked', controllers.pageImageUploadButtonClicked);
 
-ipc.on('add-doc', ctrls.addDoc);
+ipc.on('add-doc', controllers.addDoc);
 
-ipc.on('find-doc-names', ctrls.findDocNames);
+ipc.on('find-doc-names', controllers.findDocNames);
 
-ipc.on('change-doc-settings', ctrls.changeDocSettings);
+ipc.on('change-doc-settings', controllers.changeDocSettings);
 
-ipc.on('open', ctrls.open);
+ipc.on('open', controllers.open);
 
-ipc.on('open-bamboo', ctrls.openBamboo);
+ipc.on('open-bamboo', controllers.openBamboo);
 
-ipc.on('delete-doc', ctrls.deleteDoc);
+ipc.on('delete-doc', controllers.deleteDoc);
 
-ipc.on('export-zip', ctrls.exportZip);
+ipc.on('export-zip', controllers.exportZip);
 
-ipc.on('export-file-with-pb', ctrls.exportFileWithPb);
+ipc.on('export-file-with-pb', controllers.exportFileWithPb);
 
-ipc.on('add-pb-files', ctrls.addPbFiles);
+ipc.on('add-pb-files', controllers.addPbFiles);
 
-ipc.on('get-app-data', ctrls.getAppData);
+ipc.on('get-app-data', controllers.getAppData);
