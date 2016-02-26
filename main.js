@@ -1,5 +1,4 @@
 import {app, ipcMain, crashReporter, screen, BrowserWindow, Menu} from 'electron';
-import controllers from './main/controllers';
 import * as ctrls from './main/ctrls';
 import bindEventName from './main/decorators/bindEventName';
 import {Helper, MenuConfig} from './main/services';
