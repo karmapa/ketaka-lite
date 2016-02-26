@@ -5,9 +5,11 @@ import exportZip from './exportZip';
 import deleteDoc from './deleteDoc';
 import openBamboo from './openBamboo';
 import open from './open';
+import changeDocSettings from './changeDocSettings';
 
 export {
   open,
+  changeDocSettings,
   addPbFiles,
   exportFileWithPb,
   getAppData,

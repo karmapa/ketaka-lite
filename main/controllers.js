@@ -211,35 +211,3 @@ exports.findDocNames = ipcHandler(function(event) {
       send({docNames: docNames});
     });
 });
-
-exports.changeDocSettings = ipcHandler(function(event, data) {
-
-  let send = this.send;
-  let doc = data.doc;
-
-  Doc.changeDocSettings({
-    doc: doc,
-    docName: data.docName,
-    oldDocName: doc.name,
-    pageName: data.pageName,
-    oldPageName: doc.pages[doc.pageIndex].name
-  })
-  .then(function(doc) {
-    send({message: 'Doc settings have been changed', doc: doc});
-  })
-  .catch(function(err) {
-    console.error('error', err);
-    send({error: true, message: err});
-  });
-});
-
-exports.open = ipcHandler(function(event) {
-
-  let send = this.send;
-
-  Doc.getExistedDocNames()
-    .then(function(names) {
-      send({names: names});
-    });
-});
-

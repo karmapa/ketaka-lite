@@ -54,7 +54,7 @@ ipc.on('add-doc', controllers.addDoc);
 
 ipc.on('find-doc-names', controllers.findDocNames);
 
-ipc.on('change-doc-settings', controllers.changeDocSettings);
+ipc.on('change-doc-settings', ctrls.changeDocSettings);
 
 ipc.on('open', ctrls.open);
 
