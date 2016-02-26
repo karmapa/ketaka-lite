@@ -1,5 +1,6 @@
 import {app, ipcMain, crashReporter, screen, BrowserWindow, Menu} from 'electron';
 import controllers from './main/controllers';
+import * as ctrls from './main/ctrls';
 import bindEventName from './main/decorators/bindEventName';
 import {Helper, MenuConfig} from './main/services';
 import {PATH_APP_DOC} from './main/constants';
@@ -65,6 +66,6 @@ ipc.on('export-zip', controllers.exportZip);
 
 ipc.on('export-file-with-pb', controllers.exportFileWithPb);
 
-ipc.on('add-pb-files', controllers.addPbFiles);
+ipc.on('add-pb-files', ctrls.addPbFiles);
 
-ipc.on('get-app-data', controllers.getAppData);
+ipc.on('get-app-data', ctrls.getAppData);
