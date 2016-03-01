@@ -1,6 +1,6 @@
 import Path from 'path';
 import {Doc, Helper} from '../services';
-import {PATH_APP_DOC} from '../constants';
+import {PATH_APP_DOC} from '../constants/appConstants';
 import {ipcHandler} from '../decorators';
 
 let addDoc = ipcHandler(function(event) {

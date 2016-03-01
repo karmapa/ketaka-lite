@@ -1,4 +1,4 @@
-let constants = require('../constants');
+let constants = require('../constants/appConstants');
 
 let REGEXP_IMAGE = constants.REGEXP_IMAGE;
 let PATH_APP_DOC = constants.PATH_APP_DOC;

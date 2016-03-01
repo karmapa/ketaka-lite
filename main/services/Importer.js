@@ -6,7 +6,7 @@ let readChunk = require('read-chunk');
 let Helper = require('./Helper');
 let Doc = require('./Doc');
 
-let constants = require('../constants');
+let constants = require('../constants/appConstants');
 let PATH_APP_CACHE = constants.PATH_APP_CACHE;
 let PATH_APP_DOC = constants.PATH_APP_DOC;
 let REGEXP_IMAGE = constants.REGEXP_IMAGE;

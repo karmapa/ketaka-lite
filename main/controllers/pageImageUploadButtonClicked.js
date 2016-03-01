@@ -3,7 +3,7 @@ import {Doc, Helper} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 import Path from 'path';
-import {PATH_APP_DOC} from '../constants';
+import {PATH_APP_DOC} from '../constants/appConstants';
 
 let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 

@@ -2,7 +2,7 @@ import {app, ipcMain, crashReporter, screen, BrowserWindow, Menu} from 'electron
 import * as controllers from './main/controllers';
 import bindEventName from './main/decorators/bindEventName';
 import {Helper, MenuConfig} from './main/services';
-import {PATH_APP_DOC} from './main/constants';
+import {PATH_APP_DOC} from './main/constants/appConstants';
 
 crashReporter.start({
   companyName: 'dharma-treasure',

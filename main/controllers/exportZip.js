@@ -1,7 +1,7 @@
 import Path from 'path';
 import archiver from 'archiver';
 import fs from 'fs';
-import {PATH_APP_DOC} from '../constants';
+import {PATH_APP_DOC} from '../constants/appConstants';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 
