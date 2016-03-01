@@ -1,4 +1,4 @@
 {
   "presets": ["es2015", "react", "babel-preset-stage-0"],
-  "plugins": ["transform-decorators-legacy"]
+  "plugins": ["transform-async-to-generator", "transform-decorators-legacy"]
 }
