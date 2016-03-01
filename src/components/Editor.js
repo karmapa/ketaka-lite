@@ -18,7 +18,7 @@ import {connect} from 'react-redux';
   lineHeight: state.app.lineHeight,
   readonly: state.app.readonly,
   theme: state.app.theme
-}))
+}), {}, null, {withRef: true})
 export default class Editor extends React.Component {
 
   static PropTypes = {

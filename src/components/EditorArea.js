@@ -27,7 +27,7 @@ let ToastMessageFactory = React.createFactory(ToastMessage.animation);
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 import {setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
-import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
+import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRecord,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 
 @connect(state => ({
@@ -42,7 +42,7 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   showTextOnly: state.app.showTextOnly,
   spellCheckOn: state.app.spellCheckOn
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
-  save, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
+  save, saveFontRecord, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
   setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck})
 export default class EditorArea extends React.Component {
 
@@ -60,6 +60,7 @@ export default class EditorArea extends React.Component {
     nsRatio: PropTypes.number.isRequired,
     receiveDoc: PropTypes.func.isRequired,
     save: PropTypes.func.isRequired,
+    saveFontRecord: PropTypes.func.isRequired,
     setImageOnly: PropTypes.func.isRequired,
     setInputMethod: PropTypes.func.isRequired,
     setPageIndex: PropTypes.func.isRequired,
@@ -379,6 +380,7 @@ export default class EditorArea extends React.Component {
 
     let doc = this.getDoc();
     let cm = this.getCurrentCodemirror();
+
     if (_.isEmpty(cm)) {
       return;
     }
@@ -1137,7 +1139,11 @@ export default class EditorArea extends React.Component {
   getCurrentCodemirror() {
     let uuid = _.get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
-    return _.get(this.refs[editorKey], 'codemirror');
+    let editor = this.refs[editorKey];
+    if (editor) {
+      return _.get(editor.getWrappedInstance(), 'codemirror');
+    }
+    return null;
   }
 
   cancelDeletePage = () => {
@@ -1297,7 +1303,12 @@ export default class EditorArea extends React.Component {
       return null;
     }
     let editorKey = this.getEditorKey(doc.uuid);
-    return this.refs[editorKey];
+    let editor = this.refs[editorKey];
+
+    if (editor) {
+      return editor.getWrappedInstance();
+    }
+    return null;
   }
 
   onRedoButtonClick = () => {
