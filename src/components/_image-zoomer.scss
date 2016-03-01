@@ -1,0 +1,49 @@
+
+.image-zoomer {
+  vertical-align: top;
+  cursor: url(../assets/images/openhand.cur), auto;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border: $border-global;
+  background-color: #000;
+  height: calc(50vh - (#{$height-editor-toolbar} / 2));
+  img.image-zoomable {
+    transition: $transition-global;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    height: auto;
+    position: absolute;
+  }
+  .filename {
+    max-width: 12em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    position: absolute;
+    padding: 0.3em 0.7em;
+    right: 0.7em;
+    bottom: 0.7em;
+    background: $bg-image-zoomer-toolbar;
+    color: $color-border-toolbar;
+  }
+}
+
+.image-zoomer.holding {
+  cursor: url(../assets/images/closehand.cur), auto;
+  img.image-zoomable {
+    transition: none;
+  }
+}
+
+.editor-area.vertical {
+  .image-zoomer, .image-uploader {
+    width: 50%;
+    display: inline-block;
+    height: calc(100vh - #{$height-editor-toolbar});
+  }
+}

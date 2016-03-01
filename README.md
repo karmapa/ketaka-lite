@@ -19,7 +19,12 @@ npm run dev
 ```
 npm run build
 cd dist
-electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version=0.30.4
+
+// for mac
+electron-packager ./ KETAKA-Lite --platform=darwin --arch=x64 --version={version} --icon=treasure_logo.icns
+
+// for windows
+electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version={version} --icon=treasure_logo.ico
 ```
 
 ## Project dependencies:

@@ -1,12 +1,12 @@
-var Helper = require('./Helper');
-var app = require('app');
-var shell = require('shell');
+let Helper = require('./Helper');
+let app = require('app');
+let shell = require('shell');
 
 function getTemplate(args) {
 
-  var webContents = args.mainWindow.webContents;
+  let webContents = args.mainWindow.webContents;
 
-  var submenu = [
+  let submenu = [
     {
       label: 'Undo',
       accelerator: 'CmdOrCtrl+Z',
@@ -54,7 +54,7 @@ function getTemplate(args) {
     }
   ];
 
-  var template = [
+  let template = [
     {
       label: 'App',
       submenu: [

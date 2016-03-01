@@ -1,16 +1,16 @@
-var constants = require('../constants');
+let constants = require('../constants/appConstants');
 
-var REGEXP_IMAGE = constants.REGEXP_IMAGE;
-var PATH_APP_DOC = constants.PATH_APP_DOC;
-var REGEXP_PAGE = constants.REGEXP_PAGE;
+let REGEXP_IMAGE = constants.REGEXP_IMAGE;
+let PATH_APP_DOC = constants.PATH_APP_DOC;
+let REGEXP_PAGE = constants.REGEXP_PAGE;
 
-var Helper = require('./Helper');
-var Path = require('path');
-var _ = require('lodash');
-var uuid = require('node-uuid');
-var zpad = require('zpad');
-var mkdirp = require('mkdirp');
-var naturalSort = require('javascript-natural-sort');
+let Helper = require('./Helper');
+let Path = require('path');
+let _ = require('lodash');
+let uuid = require('node-uuid');
+let zpad = require('zpad');
+let mkdirp = require('mkdirp');
+let naturalSort = require('javascript-natural-sort');
 
 function createDoc(args) {
   return _.extend({
@@ -34,7 +34,7 @@ function createPage(args) {
 }
 
 function getDoc(name) {
-  var path = Path.resolve(PATH_APP_DOC, name, name + '.json');
+  let path = Path.resolve(PATH_APP_DOC, name, name + '.json');
   return Helper.readFile(path)
     .then(function(json) {
       return JSON.parse(json);
@@ -45,7 +45,7 @@ function getDoc(name) {
 }
 
 function getImageFilenameByDoc(doc) {
-  var page = doc.pages[doc.pageIndex];
+  let page = doc.pages[doc.pageIndex];
   return doc.name + '-' + page.name.replace(/(\d+)\.(\d+)/, function(all, volume, page) {
     return zpad(volume, 3) + '-' + zpad(volume, 3);
   }) + '.jpg';
@@ -85,11 +85,11 @@ function isDocNameExisted(name) {
 
 function findUniqueUntitledName() {
 
-  var name = 'untitled';
+  let name = 'untitled';
 
   return getExistedDocNames()
     .then(function(existedNames) {
-      var index = 0;
+      let index = 0;
       while (-1 !== existedNames.indexOf(name)) {
         name = 'untitled' + (++index);
       }
@@ -98,8 +98,8 @@ function findUniqueUntitledName() {
 }
 
 function writeDoc(doc) {
-  var path = Path.resolve(PATH_APP_DOC, doc.name, doc.name + '.json');
-  var content = JSON.stringify(doc);
+  let path = Path.resolve(PATH_APP_DOC, doc.name, doc.name + '.json');
+  let content = JSON.stringify(doc);
 
   return Helper.writeFile(path, content)
     .then(function() {
@@ -123,24 +123,24 @@ function getNewIndexByPageName(pages, pageName) {
 
 function changeDocSettings(args) {
 
-  var doc = args.doc;
-  var oldDocName = args.oldDocName;
-  var docName = args.docName;
-  var oldPageName = args.oldPageName;
-  var pageName = args.pageName;
+  let doc = args.doc;
+  let oldDocName = args.oldDocName;
+  let docName = args.docName;
+  let oldPageName = args.oldPageName;
+  let pageName = args.pageName;
 
-  var oldPath = Path.resolve(PATH_APP_DOC, oldDocName);
-  var oldImagePath = Path.resolve(oldPath, 'images');
-  var path = Path.resolve(PATH_APP_DOC, docName);
-  var imagePath = Path.resolve(path, 'images');
+  let oldPath = Path.resolve(PATH_APP_DOC, oldDocName);
+  let oldImagePath = Path.resolve(oldPath, 'images');
+  let path = Path.resolve(PATH_APP_DOC, docName);
+  let imagePath = Path.resolve(path, 'images');
 
-  var oldJsonPath = Path.resolve(oldPath, oldDocName + '.json');
-  var newJsonPath = Path.resolve(path, docName + '.json');
+  let oldJsonPath = Path.resolve(oldPath, oldDocName + '.json');
+  let newJsonPath = Path.resolve(path, docName + '.json');
 
   // only change page name
   if ((docName === oldDocName) && (pageName !== oldPageName)) {
 
-    var page = _.find(doc.pages, {name: oldPageName});
+    let page = _.find(doc.pages, {name: oldPageName});
 
     if (page) {
       page.name = pageName;
@@ -170,7 +170,7 @@ function changeDocSettings(args) {
 
           // replace image paths
           if (page.destImagePath) {
-            var newBasename = replaceImageName(docName, page.destImagePath);
+            let newBasename = replaceImageName(docName, page.destImagePath);
             page.destImagePath = Path.resolve(imagePath, newBasename);
           }
           return page;
@@ -185,9 +185,9 @@ function changeDocSettings(args) {
       })
       .then(function(subImagePaths) {
         // move image files
-        var rows = subImagePaths.map(function(subImagePath) {
-          var newBasename = replaceImageName(docName, subImagePath);
-          var newSubImagePath = Path.resolve(imagePath, newBasename);
+        let rows = subImagePaths.map(function(subImagePath) {
+          let newBasename = replaceImageName(docName, subImagePath);
+          let newSubImagePath = Path.resolve(imagePath, newBasename);
           return {
             source: subImagePath,
             dest: newSubImagePath
@@ -207,7 +207,7 @@ function changeDocSettings(args) {
 
 function sortPages(pages) {
 
-  var validPages = _.filter(pages, function(page) {
+  let validPages = _.filter(pages, function(page) {
     return REGEXP_PAGE.exec(page.name);
   });
 
@@ -217,7 +217,7 @@ function sortPages(pages) {
 
   validPages = validPages.sort(compare);
 
-  var invalidPages = _.filter(pages, function(page) {
+  let invalidPages = _.filter(pages, function(page) {
     return ! REGEXP_PAGE.exec(page.name);
   });
 

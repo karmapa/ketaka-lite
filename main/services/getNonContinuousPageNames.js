@@ -1,11 +1,11 @@
 
-var _ = require('lodash');
-var compare = require('javascript-natural-sort');
-var REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
+let _ = require('lodash');
+let compare = require('javascript-natural-sort');
+let REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
 
 function getNonContinuousPageNames(names) {
-  var groups = toGroups(names);
-  var missingNames = [];
+  let groups = toGroups(names);
+  let missingNames = [];
   missingNames.push(getMissingNamesBySecondNum(groups));
   missingNames.push(getMissingNamesByPairs(groups));
 
@@ -37,7 +37,7 @@ function pairs(originalNames, names) {
 
 function getMissingNamesByPairs(groups) {
 
-  var missingNames = [];
+  let missingNames = [];
 
   _.each(groups, function(group) {
     missingNames = missingNames.concat(xor('a', group.a, 'b', group.b))
@@ -51,12 +51,12 @@ function getMissingNamesByPairs(groups) {
 
 function xor(letterA, arrA, letterB, arrB) {
 
-  var nums = [];
+  let nums = [];
 
   _.each(arrA, function(rowA) {
-    var numA = pureNumber(rowA.name);
-    var collectNumber = _.every(arrB, function(rowB) {
-      var numB = pureNumber(rowB.name);
+    let numA = pureNumber(rowA.name);
+    let collectNumber = _.every(arrB, function(rowB) {
+      let numB = pureNumber(rowB.name);
       return numA !== numB;
     });
     if (collectNumber) {
@@ -75,20 +75,20 @@ function pureNumber(name) {
 }
 
 function getMissingNamesBySecondNum(groups) {
-  var missingNames = [];
+  let missingNames = [];
   _.each(groups, function(group) {
     _.each(group, function(arr) {
 
-      var lastIndex = arr.length - 1;
+      let lastIndex = arr.length - 1;
       _.each(arr, function(row, index) {
         if (index === lastIndex) {
           return true;
         }
-        var nextRow = arr[index + 1];
-        var delta = nextRow.secondNum - row.secondNum;
+        let nextRow = arr[index + 1];
+        let delta = nextRow.secondNum - row.secondNum;
         if (delta > 1) {
-          var start = row.secondNum + 1;
-          var nums = _.range(start, start + delta - 1)
+          let start = row.secondNum + 1;
+          let nums = _.range(start, start + delta - 1)
             .map(function(num) {
               return row.firstNum + '.' + num + row.letter;
             });
@@ -112,7 +112,7 @@ function toGroups(names) {
         .groupBy(_.property('letter'))
         .tap(function(letterGroups) {
           return ['a', 'b', 'c', 'd'].map(function(letter) {
-            var props = {};
+            let props = {};
             props[letter] = [];
             return _.defaults(letterGroups, props);
           });
@@ -123,7 +123,7 @@ function toGroups(names) {
 }
 
 function toObject(name) {
-  var matches = REGEXP_PAGE.exec(name);
+  let matches = REGEXP_PAGE.exec(name);
   return {
     name: name,
     firstNum: parseInt(matches[1], 10),

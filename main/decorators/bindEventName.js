@@ -1,7 +1,8 @@
+import _ from 'lodash';
 
 module.exports = function(delegate) {
 
-  var on = delegate.on.bind(delegate);
+  let on = delegate.on.bind(delegate);
 
   delegate.on = function(name, fn) {
     fn = fn || _.noop;

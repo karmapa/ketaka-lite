@@ -1,13 +1,13 @@
-var BufferHelper = require('bufferhelper');
-var Path = require('path');
-var csv = require('csv');
-var fileType = require('file-type');
-var fs = require('fs-extra');
-var Decompress = require('decompress');
-var mkdirp = require('mkdirp');
-var readChunk = require('read-chunk');
-var rimraf = require('rimraf');
-var _ = require('lodash');
+let BufferHelper = require('bufferhelper');
+let Path = require('path');
+let csv = require('csv');
+let fileType = require('file-type');
+let fs = require('fs-extra');
+let Decompress = require('decompress');
+let mkdirp = require('mkdirp');
+let readChunk = require('read-chunk');
+let rimraf = require('rimraf');
+let _ = require('lodash');
 
 function isDarwin() {
   return 'darwin' === process.platform;
@@ -28,7 +28,7 @@ function copy(source, dest) {
 function copyFile(source, dest) {
   return new Promise(function(resolve, reject) {
 
-    var writeStream = fs.createWriteStream(dest);
+    let writeStream = fs.createWriteStream(dest);
 
     fs.createReadStream(source)
       .pipe(writeStream)
@@ -46,7 +46,7 @@ function copyFiles(rows) {
   return new Promise(function(resolve, reject) {
 
     (function recurse() {
-      var row = rows.pop();
+      let row = rows.pop();
 
       if (! row) {
         resolve();
@@ -77,8 +77,8 @@ function recursiveCreateFolder(path) {
 function readFile(path) {
   return new Promise(function(resolve, reject) {
 
-    var data = [];
-    var bufferHelper = new BufferHelper();
+    let data = [];
+    let bufferHelper = new BufferHelper();
 
     fs.createReadStream(path)
       .on('data', function(chunk) {
@@ -95,13 +95,13 @@ function readFile(path) {
 
 function readFiles(paths) {
 
-  var contents = [];
+  let contents = [];
 
   return new Promise(function(resolve, reject) {
 
     (function recurse() {
 
-      var path = paths.pop();
+      let path = paths.pop();
       if (! path) {
         resolve(contents);
       }
@@ -120,7 +120,7 @@ function readFiles(paths) {
 function writeFile(path, content) {
   return new Promise(function(resolve, reject) {
 
-    var writeStream = fs.createWriteStream(path)
+    let writeStream = fs.createWriteStream(path)
       .on('finish', function() {
         resolve();
       })
@@ -135,13 +135,13 @@ function writeFile(path, content) {
 
 function getPathsType(paths) {
 
-  var rows = [];
-  var clonedPaths = _.clone(paths);
+  let rows = [];
+  let clonedPaths = _.clone(paths);
 
   return new Promise(function(resolve, reject) {
 
     (function recurse() {
-      var path = clonedPaths.pop();
+      let path = clonedPaths.pop();
 
       if (! path) {
         resolve(rows);
@@ -189,12 +189,12 @@ function readDir(path) {
 
 function readDirs(paths) {
 
-  var sets = [];
+  let sets = [];
 
   return new Promise(function(resolve, reject) {
 
     (function recurse() {
-      var path = paths.pop();
+      let path = paths.pop();
 
       if (! path) {
         resolve(sets);

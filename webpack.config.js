@@ -7,7 +7,7 @@ var config = {
     javascript: [
       'webpack-dev-server/client?http://0.0.0.0:3000',
       'webpack/hot/only-dev-server',
-      './index'
+      './src/index'
     ],
     html: './index.html'
   },
@@ -27,7 +27,9 @@ var config = {
     preLoaders: [
       {
         test: /\.js$/,
-        loader: 'eslint-loader'
+        loader: 'eslint-loader',
+        configFile: './.eslintrc',
+        exclude: /node_modules/
       }
     ],
     loaders: [
@@ -62,7 +64,7 @@ var config = {
 };
 
 if ('production' === process.env.NODE_ENV) {
-  config.entry.javascript = ['./index'];
+  config.entry.javascript = ['./src/index'];
 }
 
 module.exports = config;
