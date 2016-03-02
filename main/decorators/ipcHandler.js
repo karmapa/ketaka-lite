@@ -5,7 +5,6 @@ module.exports = function(fn) {
 
     this.send = function(data) {
       data = data || {};
-      data.id = args.id;
       event.sender.send(name, data);
     };
 
