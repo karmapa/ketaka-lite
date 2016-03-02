@@ -88,6 +88,8 @@ export default class EditorArea extends React.Component {
       print: false,
       docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
+
+    this.isSaving = false;
   }
 
   componentWillMount() {
@@ -310,8 +312,14 @@ export default class EditorArea extends React.Component {
     let doc = self.getDoc();
 
     if (doc) {
+
+      self.isSaving = true;
+
       Api.send('save', doc)
-        .then(() => self.props.save(self.state.docKey));
+        .then(() => self.props.save(self.state.docKey))
+        .then(() => {
+          self.isSaving = false;
+        });
     }
   };
 
@@ -652,7 +660,9 @@ export default class EditorArea extends React.Component {
     });
 
     Api.on('app-save', function() {
-      self.save();
+      if (! self.isSaving) {
+        self.save();
+      }
     });
 
     Api.on('app-save-as', function() {
