@@ -1,4 +1,4 @@
-let ipc = window.require('ipc');
+let ipc = window.require('electron').ipcRenderer;
 
 export default class Api {
 
@@ -13,12 +13,13 @@ export default class Api {
 
   static initEvent(name, resolve, reject) {
 
-    ipc.once(name, function(res) {
-      if (res.error) {
-        reject(res);
+    ipc.once(name, function(event, data) {
+
+      if (data.error) {
+        reject(data);
       }
       else {
-        resolve(res);
+        resolve(data);
       }
     });
   }
