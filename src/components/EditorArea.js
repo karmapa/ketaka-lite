@@ -399,6 +399,7 @@ export default class EditorArea extends React.Component {
       return;
     }
 
+    let {writePageContent, setPageIndex} = this.props;
     let cursor = cm.getCursor();
     let content = cm.getValue();
     let index = cm.indexFromPos(cursor);
@@ -415,17 +416,13 @@ export default class EditorArea extends React.Component {
 
     if (pageIndex < (pages.length - 1)) {
 
-      cm.setValue(firstPart);
-      cursor = cm.getCursor();
-      cm.setCursor({line: cm.lastLine()});
-
+      writePageContent(doc.uuid, pageIndex, firstPart);
       let nextPageIndex = pageIndex + 1;
-
       let nextPage = pages[nextPageIndex];
       let nextPageContent = secondPart + nextPage.content;
 
-      this.props.writePageContent(doc.uuid, nextPageIndex, nextPageContent);
-      this.props.setPageIndex(this.state.docKey, nextPageIndex);
+      writePageContent(doc.uuid, nextPageIndex, nextPageContent);
+      setPageIndex(this.state.docKey, nextPageIndex);
     }
     else {
       this.refs.toast.error('You are on the last page');
