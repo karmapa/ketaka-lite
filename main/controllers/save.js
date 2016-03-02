@@ -8,7 +8,7 @@ let save = ipcHandler(function(event, doc) {
 
   Doc.writeDoc(doc)
     .then(function() {
-      send({message: 'Saved successfully', doc: doc});
+      send({message: 'Saved successfully'});
     })
     .catch(function(error) {
       send({error: true, message: error});
