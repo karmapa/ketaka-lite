@@ -308,7 +308,13 @@ export default class EditorArea extends React.Component {
   }
 
   save = () => {
+
     let self = this;
+
+    if (self.isSaving) {
+      return;
+    }
+
     let doc = self.getDoc();
 
     if (doc) {
@@ -660,9 +666,7 @@ export default class EditorArea extends React.Component {
     });
 
     Api.on('app-save', function() {
-      if (! self.isSaving) {
-        self.save();
-      }
+      self.save();
     });
 
     Api.on('app-save-as', function() {
