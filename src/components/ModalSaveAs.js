@@ -88,7 +88,12 @@ export default class ModalSaveAs extends React.Component {
   }
 
   saveAs = () => {
-    this.props.saveAs(this.state.docName);
+    if (this.state.docName === this.originDocName) {
+      this.close();
+    }
+    else {
+      this.props.saveAs(this.state.docName);
+    }
   }
 
   cancel = () => {
