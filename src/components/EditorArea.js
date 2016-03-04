@@ -710,7 +710,7 @@ export default class EditorArea extends React.Component {
       });
     });
 
-    Api.on('import-progress', function(res) {
+    Api.on('import-progress', function(event, res) {
       self.refs.modalImportStatus.addMessage(res);
     });
 
