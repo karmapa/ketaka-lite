@@ -4,12 +4,15 @@ import bindEventName from './main/decorators/bindEventName';
 import {Helper, MenuConfig} from './main/services';
 import {PATH_APP_DOC} from './main/constants/appConstants';
 
+const ipc = bindEventName(ipcMain);
+
 crashReporter.start({
   companyName: 'dharma-treasure',
   submitURL: 'https://log.dharma-treasure.org/ketaka-lite'
 });
 
 let mainWindow = null;
+let closeConfirmed = false;
 
 app.on('window-all-closed', () => {
   app.quit();
@@ -25,6 +28,18 @@ app.on('ready', () => {
 
       mainWindow.loadURL('file://' + __dirname + '/index.html');
 
+      mainWindow.on('close', event => {
+        if (! closeConfirmed) {
+          event.preventDefault();
+          mainWindow.webContents.send('app-close');
+        }
+      });
+
+      ipc.on('close', () => {
+        closeConfirmed = true;
+        mainWindow.close();
+      });
+
       mainWindow.on('closed', () => {
         mainWindow = null;
       });
@@ -36,8 +51,6 @@ app.once('ready', () => {
   let menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 });
-
-const ipc = bindEventName(ipcMain);
 
 ipc.on('import-button-clicked', controllers.importButtonClicked);
 

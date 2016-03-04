@@ -6,7 +6,7 @@ import _ from 'lodash';
 export default class ModalSaveConfirm extends React.Component {
 
   static PropTypes = {
-    cancel: PropTypes.func.isRequired,
+    cancel: PropTypes.func,
     confirm: PropTypes.func.isRequired,
     discard: PropTypes.func.isRequired
   };
@@ -49,7 +49,7 @@ export default class ModalSaveConfirm extends React.Component {
         </Modal.Header>
         <Modal.Body>{message}</Modal.Body>
         <Modal.Footer>
-          <Button onClick={cancel}>Cancel</Button>
+          {_.isFunction(cancel) && <Button onClick={cancel}>Cancel</Button>}
           <Button onClick={discard}>Discard</Button>
           <Button bsStyle="primary" onClick={confirm}>Save and close</Button>
         </Modal.Footer>

@@ -314,7 +314,7 @@ export default class EditorArea extends React.Component {
     return _.get(doc, 'pageIndex', 0);
   }
 
-  save = () => {
+  save = (doc = this.getDoc()) => {
 
     let self = this;
 
@@ -322,14 +322,12 @@ export default class EditorArea extends React.Component {
       return;
     }
 
-    let doc = self.getDoc();
-
     if (doc) {
 
       self.isSaving = true;
 
       Api.send('save', doc)
-        .then(() => self.props.save(self.state.docKey))
+        .then(() => self.props.save(doc.uuid))
         .then(() => {
           self.isSaving = false;
         });
@@ -613,7 +611,7 @@ export default class EditorArea extends React.Component {
     simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
     simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
     simpleCombo(shortcuts.nextTab, this.rotateTabRight);
-    simpleCombo(shortcuts.save, this.save);
+    simpleCombo(shortcuts.save, () => this.save());
 
     simpleCombo(shortcuts.splitPage, this.splitPage);
     simpleCombo(shortcuts.stop, this.cancel);
@@ -729,6 +727,10 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-spellcheck-exception-list', () => {
       self.getSpellCheckExceptionListModal().open();
+    });
+
+    Api.on('app-close', () => {
+      self.closeConfirm();
     });
 
     window.addEventListener('resize', this.handleResize);
@@ -1442,6 +1444,9 @@ export default class EditorArea extends React.Component {
             <TabItem className="button-add" eventKey={KEY_ADD_DOC} noCloseButton tab="+" />
           </TabBox>
           <ModalSaveConfirm ref="modalSaveConfirm" confirm={this.saveAndClose} discard={this.discard} cancel={this.cancelModalSave} />
+
+          <ModalSaveConfirm ref="modalCloseConfirm" confirm={this.saveAndCloseModalClose} discard={this.discardModalClose} />
+
           <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
             confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
           <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
@@ -1483,4 +1488,35 @@ export default class EditorArea extends React.Component {
     });
   }
 
+  closeConfirm = () => {
+    let unsavedDoc = this.props.docs.find(doc => doc.changed);
+    if (unsavedDoc) {
+      this.refs.modalCloseConfirm.open({
+        title: 'Oops! ' + unsavedDoc.name + ' is not saved !',
+        message: 'Do you want to save it ?'
+      });
+    }
+    else {
+      Api.send('close');
+    }
+  };
+
+  saveAndCloseModalClose = () => {
+    let unsavedDoc = this.props.docs.find(doc => doc.changed);
+    this.save(unsavedDoc);
+    this.closeDoc(unsavedDoc.uuid);
+    this.refs.modalCloseConfirm.close();
+    setTimeout(() => {
+      this.closeConfirm();
+    }, 500);
+  };
+
+  discardModalClose = () => {
+    let unsavedDoc = this.props.docs.find(doc => doc.changed);
+    this.closeDoc(unsavedDoc.uuid);
+    this.refs.modalCloseConfirm.close();
+    setTimeout(() => {
+      this.closeConfirm();
+    }, 500);
+  };
 }
