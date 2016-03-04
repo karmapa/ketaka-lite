@@ -35,7 +35,7 @@
     "path": "0.12.7",
     "react": "0.14.7",
     "react-bootstrap": "0.28.3",
-    "react-codemirror": "git+ssh://git@github.com/kmsheng/react-codemirror.git#fix-performance-hit",
+    "react-codemirror": "https://github.com/kmsheng/react-codemirror.git#fix-performance-hit",
     "react-dom": "0.14.7",
     "react-pure-render": "1.0.2",
     "react-redux": "4.4.0",
