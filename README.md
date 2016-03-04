@@ -4,9 +4,9 @@
  
 [Download KETAKA Lite](https://goo.gl/Q851bH)
 
-[KETAKA Lite Technical Specification Documentation](https://github.com/kmsheng/ketaka-lite/blob/master/files/documentation/Ketaka%20Lite%20Techinical%20Documentation%20v1.2.pdf)
+[KETAKA Lite Technical Specification Documentation](https://github.com/kmsheng/ketaka-lite/blob/master/assets/files/documentation/Ketaka%20Lite%20Techinical%20Documentation%20v1.2.pdf)
 
-![KETAKA Lite](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/files/documentation/ketaka-lite-explain.png)
+![KETAKA Lite](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/assets/files/documentation/ketaka-lite-explain.png)
 
 ## Front-end environment setup
 ```
