@@ -26,11 +26,12 @@ let ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
-import {setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
+import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
 import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRecord,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 
 @connect(state => ({
+  closeConfirmStatus: state.app.closeConfirmStatus,
   direction: state.app.direction,
   docs: state.doc,
   ewRatio: state.app.ewRatio,
@@ -43,12 +44,13 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRec
   spellCheckOn: state.app.spellCheckOn
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, saveFontRecord, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
-  setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck})
+  setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck, setCloseConfirmStatus})
 export default class EditorArea extends React.Component {
 
   static PropTypes = {
     addDoc: PropTypes.func.isRequired,
     addPage: PropTypes.func.isRequired,
+    closeConfirmStatus: PropTypes.bool.isRequired,
     closeDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
@@ -166,8 +168,15 @@ export default class EditorArea extends React.Component {
   }
 
   componentDidUpdate(previousProps, previousState) {
+
     let docs = this.props.docs;
     let codemirror = this.getCurrentCodemirror();
+
+    if (this.props.closeConfirmStatus) {
+      this.closeConfirm();
+      return;
+    }
+
     if (previousProps.docs.length < docs.length) {
       this.activateTab(docs.length - 1);
     }
@@ -731,6 +740,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-close', () => {
       self.closeConfirm();
+      self.props.setCloseConfirmStatus(true);
     });
 
     window.addEventListener('resize', this.handleResize);
@@ -1506,17 +1516,11 @@ export default class EditorArea extends React.Component {
     this.save(unsavedDoc);
     this.closeDoc(unsavedDoc.uuid);
     this.refs.modalCloseConfirm.close();
-    setTimeout(() => {
-      this.closeConfirm();
-    }, 500);
   };
 
   discardModalClose = () => {
     let unsavedDoc = this.props.docs.find(doc => doc.changed);
     this.closeDoc(unsavedDoc.uuid);
     this.refs.modalCloseConfirm.close();
-    setTimeout(() => {
-      this.closeConfirm();
-    }, 500);
   };
 }

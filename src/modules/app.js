@@ -2,6 +2,7 @@ import * as consts from '../constants/AppConstants';
 import Store from '../services/Store';
 import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstants';
 
+const SET_CLOSE_CONFIRM_STATUS = 'SET_CLOSE_CONFIRM_STATUS';
 const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';
 
 let cacheSettings = Store.get('settings') || {};
@@ -12,6 +13,7 @@ const settings = {
   exceptionWords: cacheSettings.exceptionWords || [],
   fontSize: cacheSettings.fontSize || 1,
   inputMethod: cacheSettings.inputMethod || consts.INPUT_METHOD_SYSTEM,
+  closeConfirmStatus: false,
   letterSpacing: cacheSettings.letterSpacing || 1,
   lineHeight: cacheSettings.lineHeight || 1,
   nsRatio: cacheSettings.nsRatio || 0.5,
@@ -26,12 +28,22 @@ const settings = {
 const actionsMap = {
   [RECEIVE_SETTINGS]: (state, action) => {
     return Object.assign({}, state, action.settings);
-  }
+  },
+  [SET_CLOSE_CONFIRM_STATUS]: (state, action) => {
+    return Object.assign({}, state, {closeConfirmStatus: action.closeConfirmStatus});
+  },
 };
 
 export default function reducer(state = settings, action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
+}
+
+export function setCloseConfirmStatus(closeConfirmStatus) {
+  return {
+    type: SET_CLOSE_CONFIRM_STATUS,
+      closeConfirmStatus
+  };
 }
 
 export function toggleDirection() {
