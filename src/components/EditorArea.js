@@ -995,13 +995,11 @@ export default class EditorArea extends React.Component {
     let res = checkSyllables(content);
     let {exceptionWords} = this.props;
 
-    res = res.filter(row => {
+    let queries = res.filter(row => {
       return ! exceptionWords.includes(row[2]);
     });
 
-    let queries = res.map(result => result[2]);
-
-    this.lastQueryRes = res;
+    this.lastQueryRes = queries;
 
     if (_.isEmpty(queries)) {
       return;
@@ -1028,7 +1026,8 @@ export default class EditorArea extends React.Component {
 
   searchOverlay(queries, caseInsensitive) {
 
-    let str = queries.map(query => query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
+    let tokens = _.map(queries, 2);
+    let str = tokens.map(query => query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
       .join('|');
 
     let regexp = new RegExp(str, caseInsensitive ? 'gi' : 'g');
@@ -1041,8 +1040,10 @@ export default class EditorArea extends React.Component {
         let match = regexp.exec(stream.string);
 
         if (match && match.index === stream.pos) {
+          let posArr = _.map(checkSyllables(stream.string), 0);
+          let matchLine = posArr.includes(stream.pos);
           stream.pos += match[0].length;
-          return 'typo';
+          return matchLine ? 'typo' : null;
         }
         else if (match) {
           stream.pos = match.index;
