@@ -591,36 +591,31 @@ function markPathData(rows) {
   });
 }
 
-function addPbFiles(doc, paths) {
+async function addPbFiles(doc, paths) {
 
-  return Helper.getPathsType(paths)
-    .then(function(rows) {
-      return scanPaths(rows);
-    })
-    .then(function(rows) {
-      return markPathData(rows);
-    })
-    .then(function(rows) {
-      let pbRows = findPbRows(rows);
-      return createPagesByPbRows(pbRows);
-    })
-    .then(function(pbPages) {
+  let rows = await Helper.getPathsType(paths);
 
-      if (_.isEmpty(pbPages)) {
-        throw 'Could not find any PB files.';
-      }
+  rows = await scanPaths(rows);
+  rows = await markPathData(rows);
 
-      doc.pages.forEach(function(page) {
-        let name = page.name;
-        let newPage = _.find(pbPages, {name: name});
-        if (newPage) {
-          page.content = newPage.content;
-          _.remove(pbPages, {name: name});
-        }
-      });
-      doc.pages = Doc.sortPages(doc.pages.concat(pbPages));
-      return doc;
-    });
+  let pbRows = findPbRows(rows);
+  let pbPages = await createPagesByPbRows(pbRows);
+
+  if (_.isEmpty(pbPages)) {
+    throw 'Could not find any PB files.';
+  }
+
+  doc.pages.forEach(function(page) {
+    let name = page.name;
+    let newPage = _.find(pbPages, {name: name});
+    if (newPage) {
+      page.content = newPage.content;
+      _.remove(pbPages, {name: name});
+    }
+  });
+  doc.pages = Doc.sortPages(doc.pages.concat(pbPages));
+
+  return doc;
 }
 
 module.exports = {
