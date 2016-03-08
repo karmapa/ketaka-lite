@@ -160,7 +160,7 @@ function isTextNode(node) {
   return 'text' === node.type;
 }
 
-async function createPagesByPbRows(pbRows) {
+async function createPageDataByPbRows(pbRows) {
 
   if (_.isEmpty(pbRows)) {
     return [];
@@ -176,9 +176,11 @@ async function createPagesByPbRows(pbRows) {
   });
 
   let resArr = await Promise.all(promises);
-  let pages = _.map(resArr, 'pages');
 
-  return _.flatten(pages);
+  let pages = _.flatten(_.map(resArr, 'pages'));
+  let tags = _.flatten(_.map(resArr, 'tags'));
+
+  return {pages, tags};
 }
 
 function createChunkByTextRow(textRow) {
@@ -333,7 +335,8 @@ async function createDocByRows(bambooName, rows, onProgress) {
     return content;
   });
 
-  let pbPages = await createPagesByPbRows(pbRows);
+  let pbPages = (await createPageDataByPbRows(pbRows)).pages;
+
   let imagePages = await createPagesByImageRows(imageRows);
   let pages = await mergePages(textContent, pbPages, imagePages, onProgress);
 
@@ -599,7 +602,7 @@ async function addPbFiles(doc, paths) {
   rows = await markPathData(rows);
 
   let pbRows = findPbRows(rows);
-  let pbPages = await createPagesByPbRows(pbRows);
+  let pbPages = (await createPageDataByPbRows(pbRows)).pages;
 
   if (_.isEmpty(pbPages)) {
     throw 'Could not find any PB files.';
