@@ -20,11 +20,9 @@ let exportFileWithPb = ipcHandler(function(event, arg) {
     }
 
    try {
-
      let doc = await Doc.getDoc(docName);
      let content = await Doc.genPbFileContent(doc);
      await Helper.writeFile(savePath, content);
-
    }
    catch(err) {
      console.error('error', err);
