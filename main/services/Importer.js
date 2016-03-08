@@ -236,7 +236,7 @@ function warnDuplicatePbPages(onProgress, duplicatedPbPages) {
   }
 }
 
-function mergePages(onProgress, textContent, pbPages, imagePages) {
+function mergePages(textContent, pbPages, imagePages, onProgress) {
 
   imagePages = Doc.sortPages(imagePages);
   pbPages = Doc.sortPages(pbPages);
@@ -335,7 +335,7 @@ async function createDocByRows(bambooName, rows, onProgress) {
 
   let pbPages = await createPagesByPbRows(pbRows);
   let imagePages = await createPagesByImageRows(imageRows);
-  let pages = await mergePages(onProgress, textContent, pbPages, imagePages);
+  let pages = await mergePages(textContent, pbPages, imagePages, onProgress);
 
   if (0 === pages.length) {
     throw 'Import failed';
