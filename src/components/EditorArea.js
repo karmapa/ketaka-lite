@@ -336,7 +336,9 @@ export default class EditorArea extends React.Component {
       self.isSaving = true;
 
       Api.send('save', doc)
-        .then(() => self.props.save(doc.uuid))
+        .then(() => {
+          return self.props.save(doc.uuid);
+        })
         .then(() => {
           self.isSaving = false;
         });
