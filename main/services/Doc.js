@@ -14,12 +14,12 @@ let naturalSort = require('javascript-natural-sort');
 
 function createDoc(args) {
   return _.extend({
-    uuid: uuid.v4(),
+    chunk: '',
+    editChunk: false,
     name: '',
     pageIndex: 0,
-    editChunk: false,
     pages: [],
-    chunk: ''
+    uuid: uuid.v4()
   }, args);
 }
 
