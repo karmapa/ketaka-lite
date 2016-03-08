@@ -316,44 +316,37 @@ function readTextRow(row) {
     });
 }
 
-function createDocByRows(bambooName, rows, onProgress) {
-
-  let doc;
-  let promises = [];
+async function createDocByRows(bambooName, rows, onProgress) {
 
   let textRow = _.first(findTextRow(rows, bambooName));
   let pbRows = findPbRows(rows);
   let imageRows = filterImageRows(rows, bambooName);
 
-  return Doc.getDoc(bambooName)
-    .then(function(data) {
+  let doc = await Doc.getDoc(bambooName);
 
-      doc = data;
+  if (! doc) {
+    doc = Doc.createDoc({name: bambooName});
+  }
 
-      if (! doc) {
-        doc = Doc.createDoc({name: bambooName});
-      }
+  let promises = [];
 
-      promises.push(readTextRow(textRow).then(function(content) {
-        doc.chunk = content;
-        return content;
-      }));
-      promises.push(createPagesByPbRows(pbRows));
-      promises.push(createPagesByImageRows(imageRows));
+  promises.push(readTextRow(textRow).then(function(content) {
+    doc.chunk = content;
+    return content;
+  }));
+  promises.push(createPagesByPbRows(pbRows));
+  promises.push(createPagesByImageRows(imageRows));
 
-      return Promise.all(promises);
-    })
-    .then(function(sets) {
-      return _.spread(mergePages.bind(null, onProgress))(sets);
-    })
-    .then(function(pages) {
+  let sets = await Promise.all(promises);
+  let pages = await _.spread(mergePages.bind(null, onProgress))(sets);
 
-      if (0 === pages.length) {
-        throw 'Import failed';
-      }
-      doc.pages = pages;
-      return doc;
-    });
+  if (0 === pages.length) {
+    throw 'Import failed';
+  }
+
+  doc.pages = pages;
+
+  return doc;
 }
 
 function copyImages(doc) {
