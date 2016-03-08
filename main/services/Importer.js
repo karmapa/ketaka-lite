@@ -328,17 +328,14 @@ async function createDocByRows(bambooName, rows, onProgress) {
     doc = Doc.createDoc({name: bambooName});
   }
 
-  let promises = [];
-
-  promises.push(readTextRow(textRow).then(function(content) {
+  let textContent = await readTextRow(textRow).then(function(content) {
     doc.chunk = content;
     return content;
-  }));
-  promises.push(createPagesByPbRows(pbRows));
-  promises.push(createPagesByImageRows(imageRows));
+  });
 
-  let sets = await Promise.all(promises);
-  let pages = await _.spread(mergePages.bind(null, onProgress))(sets);
+  let pbPages = await createPagesByPbRows(pbRows);
+  let imagePages = await createPagesByImageRows(imageRows);
+  let pages = await mergePages(onProgress, textContent, pbPages, imagePages);
 
   if (0 === pages.length) {
     throw 'Import failed';
