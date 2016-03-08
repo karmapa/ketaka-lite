@@ -112,7 +112,7 @@ function createPagesByImageRows(imageRows) {
   }));
 }
 
-function createPageDataByPbContent(content, pathData) {
+function createPagesByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
 
@@ -172,7 +172,7 @@ async function createPagesByPbRows(pbRows) {
   let contents = await Helper.readFiles(paths);
 
   let promises = contents.map(function(content, index) {
-    return createPageDataByPbContent(content, pathDataSets[index]);
+    return createPagesByPbContent(content, pathDataSets[index]);
   });
 
   let resArr = await Promise.all(promises);
