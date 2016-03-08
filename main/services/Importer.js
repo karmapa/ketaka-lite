@@ -160,7 +160,7 @@ function isTextNode(node) {
   return 'text' === node.type;
 }
 
-function createPagesByPbRows(pbRows) {
+async function createPagesByPbRows(pbRows) {
 
   if (_.isEmpty(pbRows)) {
     return [];
@@ -169,16 +169,16 @@ function createPagesByPbRows(pbRows) {
   let paths = _.pluck(pbRows, 'path');
   let pathDataSets = _.pluck(pbRows, 'pathData');
 
-  return Helper.readFiles(paths)
-    .then(function(contents) {
-      let promises = contents.map(function(content, index) {
-        return createPagesByPbContent(content, pathDataSets[index]);
-      });
-      return Promise.all(promises);
-    })
-    .then(function(pages) {
-      return _.flatten(pages);
-    });
+  let contents = await Helper.readFiles(paths);
+
+  let promises = contents.map(function(content, index) {
+    return createPageDataByPbContent(content, pathDataSets[index]);
+  });
+
+  let resArr = await Promise.all(promises);
+  let pages = _.map(resArr, 'pages');
+
+  return _.flatten(pages);
 }
 
 function createChunkByTextRow(textRow) {
