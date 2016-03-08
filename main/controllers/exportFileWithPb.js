@@ -12,29 +12,29 @@ let exportFileWithPb = ipcHandler(function(event, arg) {
     defaultPath: filename
   };
 
-  dialog.showSaveDialog(options, function(savePath) {
+  async function onDialogComplete(savePath) {
 
     if (! savePath) {
       send({message: 'Export was canceled'});
       return;
     }
 
-    Doc.getDoc(docName)
-      .then(doc => {
-        return Doc.genPbFileContent(doc);
-      })
-      .then(content => {
-        return Helper.writeFile(savePath, content);
-      })
-      .then(() => {
-        send({message: filename + ' exported successfully'});
-      })
-      .catch(err => {
-        console.error('error', err);
-        send({error: true, message: err.toString()});
-      });
+   try {
 
-  });
+     let doc = await Doc.getDoc(docName);
+     let content = await Doc.genPbFileContent(doc);
+     await Helper.writeFile(savePath, content);
+
+   }
+   catch(err) {
+     console.error('error', err);
+     send({error: true, message: err.toString()});
+   };
+
+   send({message: filename + ' exported successfully'});
+  }
+
+  dialog.showSaveDialog(options, onDialogComplete);
 });
 
 export default exportFileWithPb;
