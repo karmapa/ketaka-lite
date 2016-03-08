@@ -19,6 +19,7 @@ function createDoc(args) {
     name: '',
     pageIndex: 0,
     pages: [],
+    tags: [],
     uuid: uuid.v4()
   }, args);
 }
