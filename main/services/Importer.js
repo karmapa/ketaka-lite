@@ -124,6 +124,7 @@ function createPageDataByPbContent(content, pathData) {
 
       let pages = [];
       let currentPage = null;
+      let nodes = [];
 
       dom.forEach(function(node) {
         if (isPbNode(node)) {
@@ -137,8 +138,15 @@ function createPageDataByPbContent(content, pathData) {
         if (isTextNode(node) && currentPage) {
           currentPage.content += _.trimLeft(node.data);
         }
+
+        // release memory
+        if (isTextNode(node)) {
+          node.data = '';
+        }
+        nodes.push(node);
       });
-      resolve(pages);
+
+      resolve({pages, nodes});
     }));
     parser.parseComplete(content);
   });
