@@ -328,7 +328,7 @@ async function createDocByRows(bambooName, rows, onProgress) {
     doc = Doc.createDoc({name: bambooName});
   }
 
-  let textContent = await readTextRow(textRow).then(function(content) {
+  let textContent = await readTextRow(textRow).then(content => {
     doc.chunk = content;
     return content;
   });
