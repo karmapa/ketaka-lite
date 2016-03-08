@@ -112,7 +112,7 @@ function createPagesByImageRows(imageRows) {
   }));
 }
 
-function createPagesByPbContent(content, pathData) {
+function createPageDataByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
 
