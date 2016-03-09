@@ -10,12 +10,16 @@ function getTemplate(args) {
     {
       label: 'Undo',
       accelerator: 'CmdOrCtrl+Z',
-      role: 'undo'
+      click: () => {
+        webContents.send('app-undo');
+      }
     },
     {
       label: 'Redo',
       accelerator: 'Shift+CmdOrCtrl+Z',
-      role: 'redo'
+      click: () => {
+        webContents.send('app-redo');
+      }
     },
     {
       label: 'Cut',

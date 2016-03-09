@@ -40,6 +40,14 @@ app.on('ready', () => {
         mainWindow.close();
       });
 
+      ipc.on('trigger-undo', () => {
+        mainWindow.webContents.undo();
+      });
+
+      ipc.on('trigger-redo', () => {
+        mainWindow.webContents.redo();
+      });
+
       ipc.on('trigger-selectall', () => {
         mainWindow.webContents.selectAll();
       });

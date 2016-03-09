@@ -727,6 +727,26 @@ export default class EditorArea extends React.Component {
       self.refs.searchBar.find();
     });
 
+    Api.on('app-undo', () => {
+      let editor = self.getEditor();
+      if (editor && editor.hasFocus()) {
+        editor.undo();
+      }
+      else {
+        Api.send('trigger-undo');
+      }
+    });
+
+    Api.on('app-redo', () => {
+      let editor = self.getEditor();
+      if (editor && editor.hasFocus()) {
+        editor.redo();
+      }
+      else {
+        Api.send('trigger-redo');
+      }
+    });
+
     Api.on('app-select-all', () => {
       let cm = self.getCurrentCodemirror();
       if (cm && cm.hasFocus()) {
