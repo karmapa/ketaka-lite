@@ -42,10 +42,6 @@ export default class SearchBar extends React.Component {
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
-  saveCursor() {
-    this.cursor = this.cm.getCursor();
-  }
-
   find = () => {
     this.openSearchBar();
     this.focus();
