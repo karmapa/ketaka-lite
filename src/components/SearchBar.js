@@ -95,7 +95,13 @@ export default class SearchBar extends React.Component {
   }
 
   escape = () => {
-    clearSearch(this.cm);
+    let {cm} = this;
+
+    if (cm) {
+      clearSearch(cm);
+      this.clearSelection(cm);
+      cm.focus();
+    }
     this.stop();
   };
 
@@ -180,7 +186,7 @@ export default class SearchBar extends React.Component {
   findKeyword(query = this.state.findKeyword) {
     let {cm, cursor} = this;
     clearSearch(cm);
-    clearSelection(cm);
+    this.clearSelection(cm);
     this.doSearch({cm, query, cursor});
   }
 
@@ -301,7 +307,7 @@ export default class SearchBar extends React.Component {
 
     if (cm) {
       clearSearch(cm);
-      clearSelection(cm);
+      this.clearSelection(cm);
       cm.focus();
     }
   };
@@ -536,6 +542,16 @@ export default class SearchBar extends React.Component {
     }
   };
 
+  clearSelection = cm => {
+    if (! cm) {
+      return;
+    }
+    let pos = cm.getCursor();
+    let {mode, findKeyword, replaceKeyword} = this.state;
+    pos.ch -= MODE_SEARCH === mode ? findKeyword.length : replaceKeyword.length;
+    cm.setSelection(pos, pos);
+  };
+
   renderConfirm = () => {
 
     let {opened, confirmMessage} = this.state;
@@ -702,12 +718,4 @@ function enterKeyPressed(e) {
 
 function shiftKeyPressed(e) {
   return 16 === e.keyCode;
-}
-
-function clearSelection(cm) {
-  if (! cm) {
-    return;
-  }
-  let pos = cm.getCursor();
-  cm.setSelection(pos, pos);
 }
