@@ -35,20 +35,20 @@ function getTemplate(args) {
     {
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
-      click: function() {
+      click: () => {
         webContents.selectAll();
         webContents.send('select-all');
       }
     },
     {
       label: 'Find',
-      click: function() {
+      click: () => {
         webContents.send('app-find');
       }
     },
     {
       label: 'Replace',
-      click: function() {
+      click: () => {
         webContents.send('app-replace');
       }
     }
@@ -60,55 +60,55 @@ function getTemplate(args) {
       submenu: [
         {
           label: 'Import',
-          click: function() {
+          click: () => {
             webContents.send('app-import');
           }
         },
         {
           label: 'Import Zip',
-          click: function() {
+          click: () => {
             webContents.send('app-import-zip');
           }
         },
         {
           label: 'Open',
-          click: function() {
+          click: () => {
             webContents.send('app-open');
           }
         },
         {
           label: 'Save',
-          click: function() {
+          click: () => {
             webContents.send('app-save');
           }
         },
         {
           label: 'Save As',
-          click: function() {
+          click: () => {
             webContents.send('app-save-as');
           }
         },
         {
           label: 'Export Zip',
-          click: function() {
+          click: () => {
             webContents.send('app-export-zip');
           }
         },
         {
           label: 'Export File With PB',
-          click: function() {
+          click: () => {
             webContents.send('app-export-file-with-pb');
           }
         },
         {
           label: 'Settings',
-          click: function() {
+          click: () => {
             webContents.send('app-settings');
           }
         },
         {
           label: 'Spellcheck Exception List',
-          click: function() {
+          click: () => {
             webContents.send('app-spellcheck-exception-list');
           }
         }
@@ -132,9 +132,7 @@ function getTemplate(args) {
         },
         {
           label: 'Toggle Full Screen',
-          accelerator: (function() {
-            return Helper.isDarwin() ? 'Ctrl+Command+F' : 'F11';
-          })(),
+          accelerator:  Helper.isDarwin() ? 'Ctrl+Command+F' : 'F11',
           click: function(item, focusedWindow) {
             if (focusedWindow) {
               focusedWindow.setFullScreen(! focusedWindow.isFullScreen());
@@ -143,9 +141,7 @@ function getTemplate(args) {
         },
         {
           label: 'Toggle Developer Tools',
-          accelerator: (function() {
-              return Helper.isDarwin() ? 'Alt+Command+I' : 'Ctrl+Shift+I';
-          })(),
+          accelerator:  Helper.isDarwin() ? 'Alt+Command+I' : 'Ctrl+Shift+I',
           click: function(item, focusedWindow) {
             if (focusedWindow) {
               focusedWindow.toggleDevTools();
@@ -176,25 +172,25 @@ function getTemplate(args) {
       submenu: [
         {
           label: 'Learn More',
-          click: function() {
+          click: () => {
             shell.openExternal('http://electron.atom.io');
           }
         },
         {
           label: 'Documentation',
-          click: function() {
+          click: () => {
             shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
           }
         },
         {
           label: 'Community Discussions',
-          click: function() {
+          click: () => {
             shell.openExternal('https://discuss.atom.io/c/electron');
           }
         },
         {
           label: 'Search Issues',
-          click: function() {
+          click: () => {
             shell.openExternal('https://github.com/atom/electron/issues');
           }
         }
@@ -241,7 +237,7 @@ function getTemplate(args) {
         {
           label: 'Quit',
           accelerator: 'Command+Q',
-          click: function() {
+          click: () => {
             app.quit();
           }
         },
