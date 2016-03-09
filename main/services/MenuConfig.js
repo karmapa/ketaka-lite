@@ -36,8 +36,7 @@ function getTemplate(args) {
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
       click: () => {
-        webContents.selectAll();
-        webContents.send('select-all');
+        webContents.send('app-select-all');
       }
     },
     {

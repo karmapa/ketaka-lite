@@ -40,6 +40,10 @@ app.on('ready', () => {
         mainWindow.close();
       });
 
+      ipc.on('trigger-selectall', () => {
+        mainWindow.webContents.selectAll();
+      });
+
       mainWindow.on('closed', () => {
         mainWindow = null;
       });

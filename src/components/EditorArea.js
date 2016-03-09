@@ -727,10 +727,13 @@ export default class EditorArea extends React.Component {
       self.refs.searchBar.find();
     });
 
-    Api.on('select-all', () => {
+    Api.on('app-select-all', () => {
       let cm = self.getCurrentCodemirror();
       if (cm && cm.hasFocus()) {
         CodeMirror.commands.selectAll(cm);
+      }
+      else {
+        Api.send('trigger-selectall');
       }
     });
 
