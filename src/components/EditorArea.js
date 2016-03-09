@@ -1481,7 +1481,7 @@ export default class EditorArea extends React.Component {
           </TabBox>
           <ModalSaveConfirm ref="modalSaveConfirm" confirm={this.saveAndClose} discard={this.discard} cancel={this.cancelModalSave} />
 
-          <ModalSaveConfirm ref="modalCloseConfirm" confirm={this.saveAndCloseModalClose} discard={this.discardModalClose} />
+          <ModalSaveConfirm ref="modalCloseConfirm" confirm={this.saveAndCloseModalClose} discard={this.discardModalClose} cancel={this.cancelModalClose} />
 
           <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
             confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
@@ -1548,5 +1548,10 @@ export default class EditorArea extends React.Component {
     let unsavedDoc = this.props.docs.find(doc => doc.changed);
     this.closeDoc(unsavedDoc.uuid);
     this.refs.modalCloseConfirm.close();
+  };
+
+  cancelModalClose = () => {
+    this.refs.modalCloseConfirm.close();
+    this.props.setCloseConfirmStatus(false);
   };
 }
