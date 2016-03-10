@@ -143,13 +143,25 @@ function createPagesByPbContent(content, pathData) {
         if (isTextNode(node)) {
           node.data = '';
         }
-        tags.push(node);
+
+        // store only for division and vol
+        if (isTag(node) && ('division' === node.name)) {
+          tags.push(node);
+        }
+
+        if (isTag(node) && ('vol' === node.name)) {
+          tags.push(node);
+        }
       });
 
       resolve({pages, tags});
     }));
     parser.parseComplete(content);
   });
+}
+
+function isTag(node) {
+  return 'tag' === node.type;
 }
 
 function isPbNode(node) {
