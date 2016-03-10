@@ -21,7 +21,7 @@ export function isTag(node) {
   return 'tag' === node.type;
 }
 
-export function isPbNode(node) {
+export function isPbTag(node) {
   return ('tag' === node.type) && ('pb' === node.name);
 }
 

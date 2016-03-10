@@ -15,7 +15,7 @@ let getNonContinuousPageNames = require('./getNonContinuousPageNames');
 
 let htmlparser = require('htmlparser');
 
-import {isTag, isPbNode, isTextNode, tagToStr, attrsToStr} from './Tag';
+import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr} from './Tag';
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -137,7 +137,7 @@ function createPagesByPbContent(content, pathData) {
         else if (isTag(node) && ('vol' === node.name)) {
           tags.push(node);
         }
-        else if (isPbNode(node)) {
+        else if (isPbTag(node)) {
           currentPage = Doc.createPage({
             name: node.attribs.id,
             content: '',
