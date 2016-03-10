@@ -124,7 +124,7 @@ function createPagesByPbContent(content, pathData) {
 
       let pages = [];
       let currentPage = null;
-      let nodes = [];
+      let tags = [];
 
       dom.forEach(function(node) {
         if (isPbNode(node)) {
@@ -143,10 +143,10 @@ function createPagesByPbContent(content, pathData) {
         if (isTextNode(node)) {
           node.data = '';
         }
-        nodes.push(node);
+        tags.push(node);
       });
 
-      resolve({pages, nodes});
+      resolve({pages, tags});
     }));
     parser.parseComplete(content);
   });
@@ -178,9 +178,9 @@ async function createPageDataByPbRows(pbRows) {
   let resArr = await Promise.all(promises);
 
   let pages = _.flatten(_.map(resArr, 'pages'));
-  let nodes = _.flatten(_.map(resArr, 'nodes'));
+  let tags = _.flatten(_.map(resArr, 'tags'));
 
-  return {pages, nodes};
+  return {pages, tags};
 }
 
 function createChunkByTextRow(textRow) {
@@ -337,7 +337,7 @@ async function createDocByRows(bambooName, rows, onProgress) {
 
   let pageData = await createPageDataByPbRows(pbRows);
   let pbPages = pageData.pages;
-  let nodes = pageData.nodes;
+  let tags = pageData.tags;
 
   let imagePages = await createPagesByImageRows(imageRows);
   let pages = await mergePages(textContent, pbPages, imagePages, onProgress);
@@ -347,7 +347,7 @@ async function createDocByRows(bambooName, rows, onProgress) {
   }
 
   doc.pages = pages;
-  doc.nodes = nodes;
+  doc.tags = tags;
 
   return doc;
 }
@@ -607,7 +607,7 @@ async function addPbFiles(doc, paths) {
   let pbRows = findPbRows(rows);
   let pageData = await createPageDataByPbRows(pbRows);
   let pbPages = pageData.pages;
-  let nodes = pageData.nodes;
+  let tags = pageData.tags;
 
   if (_.isEmpty(pbPages)) {
     throw 'Could not find any PB files.';
@@ -623,8 +623,8 @@ async function addPbFiles(doc, paths) {
   });
   doc.pages = Doc.sortPages(doc.pages.concat(pbPages));
 
-  doc.nodes = doc.nodes || [];
-  doc.nodes.push(nodes);
+  doc.tags = doc.tags || [];
+  doc.tags.push(tags);
 
   return doc;
 }
