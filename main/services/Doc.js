@@ -231,7 +231,7 @@ function sortPages(pages) {
 
 function genPbFileContent(doc) {
 
-  let content = _.map(doc.tags, tagToStr).join('');
+  let content = _.map(doc.tags, tagToStr).join('\n');
 
   return content + doc.pages.map(function(page) {
     return '<pb id="' + page.name + '"/>\n' + page.content + '\n';
