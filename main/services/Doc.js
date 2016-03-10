@@ -12,6 +12,8 @@ let zpad = require('zpad');
 let mkdirp = require('mkdirp');
 let naturalSort = require('javascript-natural-sort');
 
+import {tagToStr} from './Tag';
+
 function createDoc(args) {
   return _.extend({
     chunk: '',
@@ -228,7 +230,10 @@ function sortPages(pages) {
 }
 
 function genPbFileContent(doc) {
-  return doc.pages.map(function(page) {
+
+  let content = _.map(doc.tags, tagToStr).join('');
+
+  return content + doc.pages.map(function(page) {
     return '<pb id="' + page.name + '"/>\n' + page.content + '\n';
   }).join('');
 }

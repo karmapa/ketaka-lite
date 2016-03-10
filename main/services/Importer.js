@@ -15,6 +15,8 @@ let getNonContinuousPageNames = require('./getNonContinuousPageNames');
 
 let htmlparser = require('htmlparser');
 
+import {isTag, isPbNode, isTextNode, tagToStr, attrsToStr} from './Tag';
+
 function isDirectory(row) {
   return row.stats.isDirectory();
 }
@@ -127,7 +129,15 @@ function createPagesByPbContent(content, pathData) {
       let tags = [];
 
       dom.forEach(function(node) {
-        if (isPbNode(node)) {
+
+        // store only for division and vol
+        if (isTag(node) && ('division' === node.name)) {
+          tags.push(node);
+        }
+        else if (isTag(node) && ('vol' === node.name)) {
+          tags.push(node);
+        }
+        else if (isPbNode(node)) {
           currentPage = Doc.createPage({
             name: node.attribs.id,
             content: '',
@@ -135,22 +145,15 @@ function createPagesByPbContent(content, pathData) {
           });
           pages.push(currentPage);
         }
-        if (isTextNode(node) && currentPage) {
+        else if (isTextNode(node) && currentPage) {
           currentPage.content += _.trimLeft(node.data);
+        } else if (isTag(node) && currentPage) {
+          currentPage.content += tagToStr(node);
         }
 
         // release memory
         if (isTextNode(node)) {
           node.data = '';
-        }
-
-        // store only for division and vol
-        if (isTag(node) && ('division' === node.name)) {
-          tags.push(node);
-        }
-
-        if (isTag(node) && ('vol' === node.name)) {
-          tags.push(node);
         }
       });
 
@@ -158,18 +161,6 @@ function createPagesByPbContent(content, pathData) {
     }));
     parser.parseComplete(content);
   });
-}
-
-function isTag(node) {
-  return 'tag' === node.type;
-}
-
-function isPbNode(node) {
-  return ('tag' === node.type) && ('pb' === node.name);
-}
-
-function isTextNode(node) {
-  return 'text' === node.type;
 }
 
 async function createPageDataByPbRows(pbRows) {
