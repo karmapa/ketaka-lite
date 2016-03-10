@@ -613,7 +613,7 @@ export default class EditorArea extends React.Component {
       return keypressListener.registerCombo({
         keys,
         'on_keyup': cb,
-        'prevent_default': true,
+        'prevent_default': false,
         'is_exclusive': true,
         'is_unordered': true
       });
