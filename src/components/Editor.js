@@ -1,6 +1,9 @@
 require('codemirror/addon/selection/active-line');
 require('codemirror/addon/search/search');
 require('codemirror/addon/search/searchcursor');
+require('codemirror/addon/fold/xml-fold');
+require('codemirror/addon/edit/matchtags');
+require('codemirror/mode/xml/xml');
 
 import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
@@ -167,6 +170,8 @@ export default class Editor extends React.Component {
     let codemirrorProps = {
       onChange: this.onCodemirrorChange,
       options: {
+        mode: 'text/html',
+        matchTags: {bothTags: true},
         theme: theme,
         lineWrapping: true,
         lineNumbers: true,
