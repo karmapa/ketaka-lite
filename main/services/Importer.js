@@ -146,7 +146,8 @@ function createPagesByPbContent(content, pathData) {
           pages.push(currentPage);
         }
         else if (isTextNode(node) && currentPage) {
-          currentPage.content += _.trimLeft(node.data);
+          // https://github.com/karmapa/ketaka-lite/issues/120
+          currentPage.content += _.trim(node.data);
         } else if (isTag(node) && currentPage) {
           currentPage.content += tagToStr(node);
         }
