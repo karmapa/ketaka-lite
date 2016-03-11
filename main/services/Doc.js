@@ -233,6 +233,11 @@ function genPbFileContent(doc) {
 
   let content = _.map(doc.tags, tagToStr).join('\n');
 
+  // https://github.com/karmapa/ketaka-lite/issues/121
+  if (content) {
+    content += '\n';
+  }
+
   return content + doc.pages.map(function(page) {
     return '<pb id="' + page.name + '"/>\n' + page.content + '\n';
   }).join('');
