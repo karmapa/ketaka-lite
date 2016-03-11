@@ -183,6 +183,14 @@ async function createPageDataByPbRows(pbRows) {
   let pages = _.flatten(_.map(resArr, 'pages'));
   let tags = _.flatten(_.map(resArr, 'tags'));
 
+  let countData = _.countBy(tags, tag => tag.name);
+
+  _.each(countData, (value, name) => {
+    if (['division', 'vol'].includes(name) && (value > 1)) {
+      throw 'Invalid division or vol count: ' + JSON.stringify(countData);
+    }
+  });
+
   return {pages, tags};
 }
 
