@@ -49,7 +49,7 @@ function getDoc(name) {
 
 function getImageFilenameByDoc(doc) {
   let page = doc.pages[doc.pageIndex];
-  return doc.name + '-' + page.name.replace(/(\d+)\.(\d+)/, function(all, volume, page) {
+  return doc.name + '-' + page.name.replace(/(\d+[abcde]?)\.(\d+)/, function(all, volume, page) {
     return zpad(volume, 3) + '-' + zpad(volume, 3);
   }) + '.jpg';
 }
@@ -59,7 +59,13 @@ function getPageNameByImageFilename(filename) {
     if (! all) {
       return Path.basename(filename);
     }
-    return parseInt(volume, 10) + '.' + parseInt(page, 10) + char;
+    let trailingChar = '';
+    let lastChar = volume.slice(-1);
+
+    if (lastChar.match(/[abcde]/)) {
+      trailingChar = lastChar;
+    }
+    return parseInt(volume, 10) + trailingChar + '.' + parseInt(page, 10) + char;
   })(REGEXP_IMAGE.exec(filename));
 }
 
