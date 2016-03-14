@@ -336,3 +336,7 @@ div.CodeMirror-cursors {
 
 /* Help users use markselection to safely style text background */
 span.CodeMirror-selectedtext { background: none; }
+
+.cm-tag, .cm-attribute, .cm-equals, .cm-string {
+  background-color: rgba(255, 0, 0, 0.2);
+}
