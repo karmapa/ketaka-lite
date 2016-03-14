@@ -111,7 +111,7 @@ function writeDoc(doc) {
 }
 
 function replaceImageName(bambooName, path) {
-  basename = Path.basename(path);
+  let basename = Path.basename(path);
   return basename.replace(/^(.+)\-(\d+)\-(\d+[abcd]).jpg/g, function(all, name, volume, pageName) {
     return [bambooName, volume, pageName].join('-') + '.jpg';
   });
