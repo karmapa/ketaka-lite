@@ -169,6 +169,9 @@ export default class Editor extends React.Component {
 
     let codemirrorProps = {
       onChange: this.onCodemirrorChange,
+      componentDidMount: CM => {
+        CM.keyMap.default.fallthrough = 'basic';
+      },
       options: {
         mode: 'text/html',
         matchTags: {bothTags: true},
