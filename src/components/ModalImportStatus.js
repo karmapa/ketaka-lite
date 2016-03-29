@@ -51,7 +51,12 @@ export default class ModalImportStatus extends React.Component {
       if ('progress' in args) {
         state.progress = args.progress;
       }
-      state.messages = [...this.state.messages, {type: args.type, message: args.message}];
+      if (args.clean) {
+        state.messages = [{type: args.type, message: args.message}];
+      }
+      else {
+        state.messages = [{type: args.type, message: args.message}, ...this.state.messages];
+      }
     }
     this.setState(state);
   }
@@ -91,7 +96,10 @@ export default class ModalImportStatus extends React.Component {
   }
 
   renderButtons() {
-    if (this.state.showPrompt) {
+
+    const {showPrompt, progress} = this.state;
+
+    if (showPrompt) {
       return (
         <div>
           <Button onClick={this.close}>Cancel</Button>
@@ -99,7 +107,7 @@ export default class ModalImportStatus extends React.Component {
         </div>
       );
     }
-    else {
+    else if (100 === progress) {
       return <Button bsStyle="primary" onClick={this.close}>OK</Button>;
     }
   }
