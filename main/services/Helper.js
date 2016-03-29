@@ -1,3 +1,5 @@
+import StreamZip from 'node-stream-zip';
+
 let BufferHelper = require('bufferhelper');
 let Path = require('path');
 let csv = require('csv');
@@ -219,16 +221,36 @@ function recursiveRemove(path) {
   });
 }
 
-function unzip(path, dest) {
+function unzip(path, dest, onExtract = () => {}) {
 
   return new Promise(function(resolve, reject) {
-    new Decompress({mode: '755'})
-      .src(path)
-      .dest(dest)
-      .use(Decompress.zip())
-      .run(function(err, files) {
-        return err ? reject(err) : resolve(files);
+
+    let extractedCount = 0;
+
+    const zip = new StreamZip({
+      file: path,
+      storeEntries: true
+    });
+
+    zip.on('ready', () => {
+      zip.extract(null, dest, (err, count) => {
+        if (err) {
+          reject(err);
+        }
+        else {
+          resolve(zip.entries());
+        }
       });
+    });
+
+    zip.on('extract', function(entry, file) {
+      onExtract({
+        entriesCount: zip.entriesCount,
+        extractedCount: ++extractedCount,
+        entry,
+        file
+      });
+    });
   });
 }
 
