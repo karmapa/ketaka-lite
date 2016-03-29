@@ -18,11 +18,6 @@ export function isTextNode(node) {
 
 export function tagToStr(node) {
 
-  // empty non-self-closing tag
-  if (node.data === node.name) {
-    node.children = [];
-  }
-
   // non-self-closing tag
   if (node.children) {
     return '<' + node.name + ' ' + attrsToStr(node.attribs) + '>' + node.children.map(tagToStr).join('') + '</' + node.name + '>';
