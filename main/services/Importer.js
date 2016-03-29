@@ -429,55 +429,44 @@ function isZipUpload(paths) {
   return ('.zip' === Path.extname(_.first(paths))) && (1 === paths.length);
 }
 
-function getJsonFileFromVinylFiles(files) {
-  return _.find(files, function(file) {
-    return file.path.match(/([a-zA-Z0-9]+\.json)$/) && file.isBuffer();
-  });
+function getBamboonNameFromEntries(entries) {
+
+  const re = new RegExp(/([a-zA-Z0-9]+)\.json$/);
+  const entry = _.find(entries, row => (! row.isDirectory) && re.test(row.name));
+
+  if (entry) {
+    return re.exec(entry.name)[1];
+  }
+  return null;
 }
 
-function handleZipPaths(paths) {
+async function handleImportZip(paths, onProgress) {
 
-  let zipPath = _.first(paths);
-  let bambooName;
+  const zipPath = _.first(paths);
+  const entries = await Helper.unzip(zipPath, PATH_APP_DOC, onExtract);
+  const bambooName = getBamboonNameFromEntries(entries);
 
-  return Helper.unzip(zipPath, PATH_APP_CACHE)
-    .then(function(files) {
+  let lastProgress = 0;
 
-      let jsonFile = getJsonFileFromVinylFiles(files);
+  function onExtract({extractedCount, entriesCount, entry, file}) {
 
-      if (! jsonFile) {
-        throw 'JSON file is missing.';
-      }
+    const progress = parseInt((extractedCount / entriesCount) * 100, 10);
 
-      bambooName = Path.basename(jsonFile.path, '.json');
-
-      return Doc.getExistedDocNames()
-    })
-    .then(function(names) {
-      return Helper.unzip(zipPath, PATH_APP_DOC);
-    })
-    .then(function(files) {
-
-      let jsonFile = getJsonFileFromVinylFiles(files);
-
-      if (! jsonFile) {
-        throw 'JSON file is missing.';
-      }
-      bambooName = Path.basename(jsonFile.path, '.json');
-
-      Helper.rimraf(Path.resolve(PATH_APP_CACHE, bambooName));
-
-      return Doc.getDoc(bambooName);
-    });
-}
-
-function handleImportZip(paths) {
-
-  if (_.isEmpty(paths)) {
-    return Promise.resolve([]);
+    if (lastProgress !== progress) {
+      onProgress({
+        type: 'info',
+        progress: progress,
+        message: `Extracted ${entry.name} to ${file}`,
+        clean: true
+      });
+      lastProgress = progress;
+    }
   }
 
-  return handleZipPaths(paths);
+  if (! bambooName) {
+    return null;
+  }
+  return Doc.getDoc(bambooName);
 }
 
 function handleImportPaths(paths, onProgress, force) {
