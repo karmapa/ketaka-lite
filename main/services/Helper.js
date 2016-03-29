@@ -5,7 +5,6 @@ let Path = require('path');
 let csv = require('csv');
 let fileType = require('file-type');
 let fs = require('fs-extra');
-let Decompress = require('decompress');
 let mkdirp = require('mkdirp');
 let readChunk = require('read-chunk');
 let rimraf = require('rimraf');
