@@ -53,7 +53,7 @@
     "babel": "6.5.2",
     "babel-core": "6.5.2",
     "babel-eslint": "5.0.0",
-    "babel-jest": "^6.0.1",
+    "babel-jest": "6.0.1",
     "babel-loader": "6.2.3",
     "babel-runtime": "5.8.20",
     "concurrently": "1.0.0",
