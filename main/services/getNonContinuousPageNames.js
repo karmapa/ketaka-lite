@@ -1,135 +1,40 @@
+const _ = require('lodash');
+const compare = require('javascript-natural-sort');
+const REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
 
-let _ = require('lodash');
-let compare = require('javascript-natural-sort');
-let REGEXP_PAGE = new RegExp('^(\\d+)\\.(\\d+)([abcd])$');
+export default function getNonContinuousPageNames(names) {
 
-function getNonContinuousPageNames(names) {
-  let groups = toGroups(names);
-  let missingNames = [];
-  missingNames.push(getMissingNamesBySecondNum(groups));
-  missingNames.push(getMissingNamesByPairs(groups));
-
-  return  _.chain(missingNames)
-    .flatten(missingNames)
-    .tap(pairs.bind(names))
-    .unique()
+  return _.chain(names)
     .sort(compare)
-    .value();
-}
+    .map(parse)
+    .groupBy(row => row.num1 + '.' + row.num2)
+    .reduce((res, arr) => {
 
-function pairs(originalNames, names) {
-  _.each(names, function(name) {
-    if ('a' === name.slice(-1)) {
-      names.push(name.substring(0, name.length - 1) + 'b');
-    }
-    if ('b' === name.slice(-1)) {
-      names.push(name.substring(0, name.length - 1) + 'a');
-    }
-    if ('c' === name.slice(-1)) {
-      names.push(name.substring(0, name.length - 1) + 'd');
-    }
-    if ('d' === name.slice(-1)) {
-      names.push(name.substring(0, name.length - 1) + 'c');
-    }
-  });
-  return _.without(names, originalNames);
-}
+      const firstRow = _.first(arr);
+      const num = firstRow.num1 + '.' + firstRow.num2;
 
-function getMissingNamesByPairs(groups) {
+      let record = arr.reduce((map, row) => {
+        map[row.char] = true;
+        return map;
+      }, {a: false, b: false, c: false, d: false});
 
-  let missingNames = [];
+      if ((! record.c) && (! record.d)) {
+        delete record.c;
+        delete record.d;
+      }
 
-  _.each(groups, function(group) {
-    missingNames = missingNames.concat(xor('a', group.a, 'b', group.b))
-      .concat(xor('c', group.c, 'd', group.d));
-  });
-
-  _.filter(missingNames, _.isEmpty);
-
-  return missingNames;
-}
-
-function xor(letterA, arrA, letterB, arrB) {
-
-  let nums = [];
-
-  _.each(arrA, function(rowA) {
-    let numA = pureNumber(rowA.name);
-    let collectNumber = _.every(arrB, function(rowB) {
-      let numB = pureNumber(rowB.name);
-      return numA !== numB;
-    });
-    if (collectNumber) {
-      nums.push(numA + letterB);
-    }
-    if (_.isEmpty(arrB)) {
-      nums.push(numA + letterB);
-    }
-  });
-
-  return nums;
-}
-
-function pureNumber(name) {
-  return name.substring(0, name.length - 1);
-}
-
-function getMissingNamesBySecondNum(groups) {
-  let missingNames = [];
-  _.each(groups, function(group) {
-    _.each(group, function(arr) {
-
-      let lastIndex = arr.length - 1;
-      _.each(arr, function(row, index) {
-        if (index === lastIndex) {
-          return true;
-        }
-        let nextRow = arr[index + 1];
-        let delta = nextRow.secondNum - row.secondNum;
-        if (delta > 1) {
-          let start = row.secondNum + 1;
-          let nums = _.range(start, start + delta - 1)
-            .map(function(num) {
-              return row.firstNum + '.' + num + row.letter;
-            });
-          missingNames = missingNames.concat(nums);
+      _.each(record, (value, char) => {
+        if (! record[char]) {
+          res.push(num + char);
         }
       });
-    });
-  });
 
-  return missingNames;
-}
-
-function toGroups(names) {
-  return _.chain(names || [])
-    .sort(compare)
-    .map(toObject)
-    .groupBy(_.property('firstNum'))
-    .map(function(rows) {
-
-      return _.chain(rows)
-        .groupBy(_.property('letter'))
-        .tap(function(letterGroups) {
-          return ['a', 'b', 'c', 'd'].map(function(letter) {
-            let props = {};
-            props[letter] = [];
-            return _.defaults(letterGroups, props);
-          });
-        })
-        .value();
-    })
+      return res;
+    }, [])
     .value();
-}
 
-function toObject(name) {
-  let matches = REGEXP_PAGE.exec(name);
-  return {
-    name: name,
-    firstNum: parseInt(matches[1], 10),
-    secondNum: parseInt(matches[2], 10),
-    letter: matches[3]
+  function parse(name) {
+    const [all, num1, num2, char] = REGEXP_PAGE.exec(name);
+    return {name, num1, num2, char};
   }
 }
-
-module.exports = getNonContinuousPageNames;
