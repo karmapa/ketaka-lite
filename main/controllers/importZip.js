@@ -3,11 +3,11 @@ import {Importer} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 
-let importZip = ipcHandler(function(event, args) {
+const importZip = ipcHandler(function(event, args) {
 
-  let send = this.send;
-  let broadcast = this.broadcast;
-  let options = {
+  const send = this.send;
+  const broadcast = this.broadcast;
+  const options = {
     properties: ['openFile'],
     filters: [
       {name: 'zip', extensions: ['zip']}
@@ -16,25 +16,25 @@ let importZip = ipcHandler(function(event, args) {
 
   dialog.showOpenDialog(options, importPaths);
 
-  function importPaths(paths) {
+  function onProgress(res) {
+    broadcast('import-progress', res);
+  }
+
+  async function importPaths(paths) {
 
     if (_.isEmpty(paths)) {
       return;
     }
 
     broadcast('import-start');
+    const doc = await Importer.handleImportZip(paths, onProgress);
 
-    Importer.handleImportZip(paths, onProgress)
-      .then(doc => {
-        broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
-        send({message: 'Imported successfully', doc: doc});
-      })
-      .catch(err => {
-        send({error: true, message: err.toString()});
-      });
-
-    function onProgress(res) {
-      broadcast('import-progress', res);
+    if (doc) {
+      broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully', clean: true});
+      send({message: 'Imported successfully', doc});
+    }
+    else {
+      send({error: true, message: 'Doc not created'});
     }
   }
 });
