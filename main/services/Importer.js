@@ -11,10 +11,10 @@ let PATH_APP_CACHE = constants.PATH_APP_CACHE;
 let PATH_APP_DOC = constants.PATH_APP_DOC;
 let REGEXP_IMAGE = constants.REGEXP_IMAGE;
 let REGEXP_PAGE = constants.REGEXP_PAGE;
-let getNonContinuousPageNames = require('./getNonContinuousPageNames');
 
 let htmlparser = require('htmlparser');
 
+import getNonContinuousPageNames from './getNonContinuousPageNames';
 import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr} from './Tag';
 
 function isDirectory(row) {
