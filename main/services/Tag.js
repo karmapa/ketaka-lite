@@ -41,3 +41,22 @@ export function strToTags(content = '') {
   return tags || [];
 }
 
+export function attrStrToObj(attrStr = '') {
+  const re = new RegExp('\\s*([\\w\\-]+)(="([^"]+)")?\\s*', 'g');
+  let obj = {};
+  let match;
+  while (match = re.exec(attrStr)) {
+    let [all, prop, equal, value] = match;
+
+    // handle boolean values
+    if ('true' === value) {
+      value = true;
+    }
+    if ('false' === value) {
+      value = false;
+    }
+    obj[prop] = undefined === value ? true : value;
+  }
+  return obj;
+}
+
