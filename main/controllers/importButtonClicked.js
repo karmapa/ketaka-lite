@@ -3,13 +3,11 @@ import {Importer} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 
-let importButtonClicked = ipcHandler(function(event, args) {
+const importButtonClicked = ipcHandler(function(event, args = {}) {
 
-  args = args || {};
-
-  let send = this.send;
-  let broadcast = this.broadcast;
-  let options = {
+  const send = this.send;
+  const broadcast = this.broadcast;
+  const options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
       {name: 'Images', extensions: ['bmp', 'gif', 'jpg', 'png']},
@@ -24,7 +22,7 @@ let importButtonClicked = ipcHandler(function(event, args) {
     dialog.showOpenDialog(options, importPaths);
   }
 
-  function importPaths(paths) {
+  async function importPaths(paths) {
 
     if (_.isEmpty(paths)) {
       return;
@@ -32,26 +30,27 @@ let importButtonClicked = ipcHandler(function(event, args) {
 
     broadcast('import-start');
 
-    Importer.handleImportPaths(paths, onProgress, args.force)
-      .then(function(doc) {
-        broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
-        send({message: 'Imported successfully', doc: doc});
-      })
-      .catch(function(err) {
-        if ('fileCountWarning' === err.type) {
-          send({
-            error: true,
-            type: 'fileCountWarning',
-            fileCount: err.fileCount,
-            paths: paths
-          });
-        }
-        send({error: true, message: err.toString()});
-      });
-
-    function onProgress(res) {
-      broadcast('import-progress', res);
+    try {
+      const doc = await Importer.handleImportPaths(paths, onProgress, args.force);
+      broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
+      send({message: 'Imported successfully', doc});
     }
+    catch(err) {
+
+      if ('fileCountWarning' === err.type) {
+        send({
+          error: true,
+          type: 'fileCountWarning',
+          fileCount: err.fileCount,
+          paths
+        });
+      }
+      send({error: true, message: err.toString()});
+    }
+  }
+
+  function onProgress(res) {
+    broadcast('import-progress', res);
   }
 });
 

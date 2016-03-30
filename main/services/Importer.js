@@ -475,76 +475,62 @@ async function handleImportZip(paths, onProgress) {
   return Doc.getDoc(bambooName);
 }
 
-function handleImportPaths(paths, onProgress, force) {
-
-  let importedRows;
-
-  force = force || false;
-  onProgress = onProgress || _.noop;
-
-  let bambooName;
+async function handleImportPaths(paths, onProgress = _.noop, force = false) {
 
   if (_.isEmpty(paths)) {
-    return Promise.resolve([]);
+    return null;
   }
 
-  return Helper.getPathsType(paths)
-    .then(function(rows) {
-      onProgress({progress: 5, type: 'info', message: 'Step1: Scan Paths'});
-      return scanPaths(rows);
-    })
-    .then(function(rows) {
+  let rows = await Helper.getPathsType(paths);
 
-      if (_.isEmpty(rows)) {
-        throw 'Could not find any files.';
-      }
-      onProgress({progress: 20, type: 'info', message: 'Step2: Mark Supported Rows'});
-      return markSupportedRows(rows);
-    })
-    .then(function(rows) {
+  onProgress({progress: 5, type: 'info', message: 'Step1: Scan Paths'});
 
-      let fileCount = rows.filter(function(row) {
-        return row.stats.isFile();
-      }).length;
+  rows = await scanPaths(rows);
 
-      if ((fileCount > 800) && (! force)) {
-        throw {type: 'fileCountWarning', fileCount: fileCount};
-      }
+  if (_.isEmpty(rows)) {
+    throw 'Could not find any files.';
+  }
 
-      onProgress({progress: 30, type: 'info', message: 'Step3: Mark Path Data'});
-      return markPathData(rows);
-    })
-    .then(function(rows) {
-      onProgress({progress: 50, type: 'info', message: 'Step4: Mark File Type'});
-      return markFileType(rows);
-    })
-    .then(function(rows) {
-      onProgress({progress: 60, type: 'info', message: 'Step5: Generate Bamboo Name'});
-      importedRows = rows;
-      return Doc.findUniqueUntitledName();
-    })
-    .then(function(bambooName) {
-      onProgress({progress: 70, type: 'info', message: 'Step6: Create Bamboo By Imported Rows'});
-      warnInvalidImages(bambooName, importedRows, onProgress);
-      return createDocByRows(bambooName, importedRows, onProgress);
-    })
-    .then(function(doc) {
-      onProgress({progress: 80, type: 'info', message: 'Step7: Copy Images'});
-      return copyImages(doc);
-    })
-    .then(function(doc) {
+  onProgress({progress: 20, type: 'info', message: 'Step2: Mark Supported Rows'});
 
-      let pageNames = doc.pages.map(function(page) {
-        return page.name;
-      })
-      .filter(function(name) {
-        return name.match(/^(\d+).(\d+)([abcd])$/);
-      });
-      warnNonContinuousPageNames(pageNames, onProgress);
+  rows = await markSupportedRows(rows);
 
-      onProgress({progress: 95, type: 'info', message: 'Step8: Write Bamboo'});
-      return Doc.writeDoc(doc);
-    });
+  const fileCount = rows.filter(row => row.stats.isFile()).length;
+
+  if ((fileCount > 800) && (! force)) {
+    throw {type: 'fileCountWarning', fileCount};
+  }
+
+  onProgress({progress: 30, type: 'info', message: 'Step3: Mark Path Data'});
+
+  rows = await markPathData(rows);
+
+  onProgress({progress: 50, type: 'info', message: 'Step4: Mark File Type'});
+
+  rows = await markFileType(rows);
+
+  onProgress({progress: 60, type: 'info', message: 'Step5: Generate Bamboo Name'});
+
+  const bambooName = await Doc.findUniqueUntitledName();
+
+  onProgress({progress: 70, type: 'info', message: 'Step6: Create Bamboo By Imported Rows'});
+
+  warnInvalidImages(bambooName, rows, onProgress);
+
+  let doc = await createDocByRows(bambooName, rows, onProgress);
+
+  onProgress({progress: 80, type: 'info', message: 'Step7: Copy Images'});
+
+  doc = await copyImages(doc);
+
+  let pageNames = doc.pages.map(page => page.name)
+    .filter(name => name.match(/^(\d+).(\d+)([abcd])$/));
+
+  warnNonContinuousPageNames(pageNames, onProgress);
+
+  onProgress({progress: 95, type: 'info', message: 'Step8: Write Bamboo'});
+
+  return Doc.writeDoc(doc);
 }
 
 function findBambooName(row) {

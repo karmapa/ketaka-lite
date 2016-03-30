@@ -97,6 +97,21 @@ export default class ModalImportStatus extends React.Component {
       firstButtonText, secondButtonText, messages, firstButtonStyle,
       secondButtonStyle, showSecondButton, showFirstButton} = this.props;
 
+    let firstButtonProps = {
+      onClick: this.handleFirstButtonClick
+    };
+
+    let secondButtonProps = {
+      onClick: this.handleSecondButtonClick
+    };
+
+    if (firstButtonStyle) {
+      firstButtonProps.bsStyle = firstButtonStyle;
+    }
+    if (secondButtonStyle) {
+      secondButtonProps.bsStyle = secondButtonStyle;
+    }
+
     return (
       <Modal show={isModalVisible} className={className} backdrop="static" onHide={() => {}}>
         <Modal.Header>
@@ -107,8 +122,8 @@ export default class ModalImportStatus extends React.Component {
           {this.renderMessages(messages)}
         </Modal.Body>
         <Modal.Footer>
-          {showFirstButton && <Button bsStyle={firstButtonStyle} onClick={this.handleFirstButtonClick}>{firstButtonText}</Button>}
-          {showSecondButton && <Button bsStyle={secondButtonStyle} onClick={this.handleSecondButtonClick}>{secondButtonText}</Button>}
+          {showFirstButton && <Button {...firstButtonProps}>{firstButtonText}</Button>}
+          {showSecondButton && <Button {...secondButtonProps}>{secondButtonText}</Button>}
         </Modal.Footer>
       </Modal>
     );

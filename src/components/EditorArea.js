@@ -818,7 +818,9 @@ export default class EditorArea extends React.Component {
   }
 
   import() {
+
     let self = this;
+    const modalImport = self.getImportModal();
 
     Api.send('import-button-clicked')
       .then(res => {
@@ -834,18 +836,40 @@ export default class EditorArea extends React.Component {
       .catch(res => {
 
         if ('fileCountWarning' === res.type) {
-          self.getImportModal().showPrompt({
-            progressStyle: 'warning',
-            promptMessage: 'You are importing a large folder. Are you sure to import?',
-            confirm: () => {
 
-              self.getImportModal().hidePrompt();
+          modalImport.setMessages({
+            type: 'warning',
+            message: 'You are importing a large folder. Are you sure to import?'
+          })
+          .setOptions({
+            progressBarStyle: 'warning',
+            showFirstButton: true,
+            firstButtonStyle: '',
+            firstButtonText: 'Cancel',
+            handleFirstButtonClick: () => modalImport.close(),
+            showSecondButton: true,
+            secondButtonStyle: 'warning',
+            secondButtonText: 'Proceed',
+            handleSecondButtonClick: () => {
+
+              modalImport.setMessages([])
+                .setOptions({
+                  progressBarStyle: 'info',
+                  showFirstButton: false,
+                  showSecondButton: false
+                });
 
               Api.send('import-button-clicked', {force: true, paths: res.paths})
                 .then(res => {
                   self.props.importDoc(res.doc);
                   self.initHistory();
                   self.refs.toast.success(res.message);
+
+                  modalImport.setOptions({
+                    showFirstButton: true,
+                    firstButtonStyle: 'primary',
+                    firstButtonText: 'OK'
+                  })
                 })
                 .catch(res => {
                   self.refs.toast.error(res.message);
@@ -855,18 +879,18 @@ export default class EditorArea extends React.Component {
         }
         else {
           self.refs.toast.error(res.message);
-          self.getImportModal()
-            .setMessages({
-              type: 'danger',
-              message: res.message
-            })
-            .setOptions({
-              progressBarStyle: 'danger',
-              progressBarActive: false,
-              showFirstButton: true,
-              firstButtonStyle: 'danger',
-              firstButtonText: 'I understand.'
-            });
+          modalImport.setMessages({
+            type: 'danger',
+            message: res.message
+          })
+          .setOptions({
+            progressBarStyle: 'danger',
+            progressBarActive: false,
+            showFirstButton: true,
+            handleFirstButtonClick: () => modalImport.close(),
+            firstButtonStyle: 'danger',
+            firstButtonText: 'I understand.'
+          });
         }
       });
   }
