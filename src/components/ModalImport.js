@@ -52,10 +52,10 @@ export default class ModalImportStatus extends React.Component {
 
   open = args => this.props.openModal(args);
 
-  close = args => {
+  close = () => {
     this.props.closeModal();
     this.initModal();
-  }
+  };
 
   setProgress = progress => {
     this.props.setOptions({progress});

@@ -9,14 +9,14 @@ const SET_OPTIONS = 'ketaka-lite/modalImport/SET_OPTIONS';
 
 const initialState = {
   firstButtonStyle: 'link',
-  firstButtonText: 'Cancel',
+  firstButtonText: 'First Button',
   messages: [],
   isModalVisible: false,
   progress: 0,
   progressBarStyle: 'info',
   progressBarActive: false,
   secondButtonStyle: 'primary',
-  secondButtonText: 'OK',
+  secondButtonText: 'Second Button',
   showFirstButton: false,
   showSecondButton: false
 };
