@@ -6,7 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
-  ModalImportStatus, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
+  ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
   Resizer, PrintArea} from '.';
 import {Helper, Ime} from '../services/';
 import CodeMirror from 'codemirror';
@@ -908,7 +908,7 @@ export default class EditorArea extends React.Component {
 
   getSpellCheckExceptionListModal = () => this.refs.modalSpellCheckExceptionList.getWrappedInstance();
 
-  getImportModal = () => this.refs.modalImportStatus.getWrappedInstance();
+  getImportModal = () => this.refs.modalImport.getWrappedInstance();
 
   openSettingsModal() {
     this.getSettingsModal().open();
@@ -1532,7 +1532,7 @@ export default class EditorArea extends React.Component {
           <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
           <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
-          <ModalImportStatus className="modal-import-status" ref="modalImportStatus" />
+          <ModalImport className="modal-import" ref="modalImport" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
           <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />
           <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" />
