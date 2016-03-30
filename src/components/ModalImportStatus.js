@@ -1,130 +1,124 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Alert, Button, Modal, ProgressBar} from 'react-bootstrap';
+import {connect} from 'react-redux';
 import _ from 'lodash';
+import {initModal, openModal, closeModal, addMessages, setOptions, setMessages} from '../modules/modalImport';
 
+@connect(state => ({
+  firstButtonStyle: state.modalImport.firstButtonStyle,
+  firstButtonText: state.modalImport.firstButtonText,
+  isModalVisible: state.modalImport.isModalVisible,
+  messages: state.modalImport.messages,
+  progress: state.modalImport.progress,
+  progressBarActive: state.modalImport.progressBarActive,
+  progressBarStyle: state.modalImport.progressBarStyle,
+  secondButtonStyle: state.modalImport.secondButtonStyle,
+  secondButtonText: state.modalImport.secondButtonText,
+  showFirstButton: state.modalImport.showFirstButton,
+  showSecondButton: state.modalImport.showSecondButton
+}), {initModal, openModal, closeModal, addMessages, setOptions, setMessages}, null, {withRef: true})
 export default class ModalImportStatus extends React.Component {
 
-  state = {
-    show: false,
-    showPrompt: false,
-    progressStyle: 'info',
-    progress: 0,
-    messages: [],
+  static propTypes = {
+    addMessages: PropTypes.func.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    firstButtonStyle: PropTypes.string.isRequired,
+    firstButtonText: PropTypes.string.isRequired,
+    initModal: PropTypes.func.isRequired,
+    isModalVisible: PropTypes.bool.isRequired,
+    messages: PropTypes.array.isRequired,
+    openModal: PropTypes.func.isRequired,
+    progress: PropTypes.number.isRequired,
+    progressBarActive: PropTypes.bool.isRequired,
+    progressBarStyle: PropTypes.string.isRequired,
+    secondButtonStyle: PropTypes.string.isRequired,
+    secondButtonText: PropTypes.string.isRequired,
+    setMessages: PropTypes.func.isRequired,
+    setOptions: PropTypes.func.isRequired,
+    showFirstButton: PropTypes.bool.isRequired,
+    showSecondButton: PropTypes.bool.isRequired
   };
 
-  onModalHide() {
+  handleFirstButtonClick = () => this.close();
+
+  handleSecondButtonClick = () => this.close();
+
+  initModal = () => {
+    this.handleFirstButtonClick = () => this.close();
+    this.handleSecondButtonClick = () => this.close();
+    this.props.initModal();
+  };
+
+  open = args => this.props.openModal(args);
+
+  close = args => {
+    this.props.closeModal();
+    this.initModal();
   }
 
-  confirm() {
-  }
+  setProgress = progress => {
+    this.props.setOptions({progress});
+    return this;
+  };
 
-  open(args) {
-    this.setState(_.extend({
-      show: true
-    }, args));
-  }
-
-  showPrompt(args) {
-    this.confirm = args.confirm || (() => {});
-    this.setState({
-      showPrompt: true,
-      progressStyle: 'warning',
-      promptMessage: args.promptMessage
-    });
-  }
-
-  hidePrompt() {
-    this.setState({
-      progressStyle: 'info',
-      showPrompt: false
-    });
-  }
-
-  addMessage(args) {
-    let state = {};
-
-    if (_.isArray(args)) {
-      state.messages = [...this.state.messages, ...args];
+  setOptions = (options = {}) => {
+    if (_.isFunction(options.handleFirstButtonClick)) {
+      this.handleFirstButtonClick = options.handleFirstButtonClick;
     }
-    else {
-      if ('progress' in args) {
-        state.progress = args.progress;
-      }
-      if (args.clean) {
-        state.messages = [{type: args.type, message: args.message}];
-      }
-      else {
-        state.messages = [{type: args.type, message: args.message}, ...this.state.messages];
-      }
+    if (_.isFunction(options.handleSecondButtonClick)) {
+      this.handleSecondButtonClick = options.handleSecondButtonClick;
     }
-    this.setState(state);
+    this.props.setOptions(options);
+    return this;
+  };
+
+  addMessages(messages) {
+    if (! _.isArray(messages)) {
+      messages = [messages];
+    }
+    this.props.addMessages(messages);
+    return this;
   }
 
-  close = () => {
-    this.setState({
-      show: false,
-      showPrompt: false,
-      promptMessage: '',
-      messages: [],
-      progressStyle: 'info',
-      progress: 0
-    });
+  setMessages(messages) {
+    if (! _.isArray(messages)) {
+      messages = [messages];
+    }
+    this.props.setMessages(messages);
+    return this;
   }
 
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
 
-    let {className} = this.props;
-    let {show, progress, messages, progressStyle} = this.state;
+    const {className, isModalVisible, progressBarStyle, progressBarActive, progress,
+      firstButtonText, secondButtonText, messages, firstButtonStyle,
+      secondButtonStyle, showSecondButton, showFirstButton} = this.props;
 
     return (
-      <Modal show={show} className={className} backdrop="static" onHide={this.onModalHide}>
+      <Modal show={isModalVisible} className={className} backdrop="static" onHide={() => {}}>
         <Modal.Header>
           <Modal.Title>Import Status</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ProgressBar active bsStyle={progressStyle} now={progress} />
+          <ProgressBar active={progressBarActive} bsStyle={progressBarStyle} now={progress} />
           {this.renderMessages(messages)}
         </Modal.Body>
         <Modal.Footer>
-          {this.renderButtons()}
+          {showFirstButton && <Button bsStyle={firstButtonStyle} onClick={this.handleFirstButtonClick}>{firstButtonText}</Button>}
+          {showSecondButton && <Button bsStyle={secondButtonStyle} onClick={this.handleSecondButtonClick}>{secondButtonText}</Button>}
         </Modal.Footer>
       </Modal>
     );
   }
 
-  renderButtons() {
-
-    const {showPrompt, progress} = this.state;
-
-    if (showPrompt) {
-      return (
-        <div>
-          <Button onClick={this.close}>Cancel</Button>
-          <Button bsStyle="warning" onClick={this.confirm}>Proceed</Button>
-        </div>
-      );
-    }
-    else if (100 === progress) {
-      return <Button bsStyle="primary" onClick={this.close}>OK</Button>;
-    }
-  }
-
   renderMessages(messages) {
-
-    if (this.state.showPrompt) {
-      return (
-        <Alert bsStyle="warning">{this.state.promptMessage}</Alert>
-      );
-    }
-    else {
-      return _.chain(messages)
-        .groupBy('type')
-        .map((rows, type) => (<Alert key={type} bsStyle={type}>{this.renderRows(rows)}</Alert>))
-        .value();
-    }
+    return _.chain(messages)
+      .groupBy('type')
+      .map((rows, type) => (<Alert key={type} bsStyle={type}>{this.renderRows(rows)}</Alert>))
+      .value();
   }
 
   renderRows(rows) {

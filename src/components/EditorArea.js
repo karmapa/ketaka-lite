@@ -715,13 +715,28 @@ export default class EditorArea extends React.Component {
     });
 
     Api.on('import-start', function() {
-      self.refs.modalImportStatus.open({
+      self.getImportModal().open({
         title: 'Import Status'
       });
     });
 
     Api.on('import-progress', function(event, res) {
-      self.refs.modalImportStatus.addMessage(res);
+
+      const importModal = self.getImportModal();
+
+      if (res.clean) {
+        importModal.setMessages(res);
+      }
+      else {
+        importModal.addMessages(res);
+      }
+
+      if (res.progress) {
+        importModal.setProgress(res.progress);
+      }
+
+      importModal.setOptions({progressBarActive: true});
+
     });
 
     Api.on('app-find', () => {
@@ -810,16 +825,21 @@ export default class EditorArea extends React.Component {
         self.props.importDoc(res.doc);
         self.initHistory();
         self.refs.toast.success(res.message);
+        self.getImportModal().setOptions({
+          showFirstButton: true,
+          firstButtonText: 'OK',
+          firstButtonStyle: 'primary'
+        });
       })
       .catch(res => {
 
         if ('fileCountWarning' === res.type) {
-          self.refs.modalImportStatus.showPrompt({
+          self.getImportModal().showPrompt({
             progressStyle: 'warning',
             promptMessage: 'You are importing a large folder. Are you sure to import?',
             confirm: () => {
 
-              self.refs.modalImportStatus.hidePrompt();
+              self.getImportModal().hidePrompt();
 
               Api.send('import-button-clicked', {force: true, paths: res.paths})
                 .then(res => {
@@ -835,17 +855,37 @@ export default class EditorArea extends React.Component {
         }
         else {
           self.refs.toast.error(res.message);
+          self.getImportModal()
+            .setMessages({
+              type: 'danger',
+              message: res.message
+            })
+            .setOptions({
+              progressBarStyle: 'danger',
+              progressBarActive: false,
+              showFirstButton: true,
+              firstButtonStyle: 'danger',
+              firstButtonText: 'I understand.'
+            });
         }
       });
   }
 
   importZip() {
-    let self = this;
+
+    const self = this;
+    const modalImport = self.getImportModal();
 
     Api.send('import-zip')
       .then(res => {
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
+        modalImport.setOptions({
+          showFirstButton: true,
+          firstButtonStyle: 'primary',
+          firstButtonText: 'OK',
+          handleFirstButtonClick: modalImport.close
+        });
       })
       .catch(res => {
         console.error(res.message);
@@ -867,6 +907,8 @@ export default class EditorArea extends React.Component {
   getSettingsModal = () => this.refs.modalSettings.getWrappedInstance();
 
   getSpellCheckExceptionListModal = () => this.refs.modalSpellCheckExceptionList.getWrappedInstance();
+
+  getImportModal = () => this.refs.modalImportStatus.getWrappedInstance();
 
   openSettingsModal() {
     this.getSettingsModal().open();
