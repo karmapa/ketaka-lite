@@ -32,3 +32,12 @@ export function tagToStr(node) {
     return node.data;
   }
 }
+
+export function strToTags(content = '') {
+  // 1: self-closing tag e.g. <div />
+  // 2: open tag e.g. <div>
+  // 3: close tag e.g. </div>
+  const tags = content.match(/<([\w\-]+)([^>]+)?\/>|<([\w\-]+)([^>]+)?>|<\s*\/([^>]+)?>/g);
+  return tags || [];
+}
+
