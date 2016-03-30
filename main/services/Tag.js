@@ -1,4 +1,4 @@
-let _ = require('lodash');
+import _ from 'lodash';
 
 export function attrsToStr(attrs) {
   return _.map(attrs, (value, attr) => attr + '="' + value + '"').join(' ');
