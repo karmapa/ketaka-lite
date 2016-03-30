@@ -873,6 +873,7 @@ export default class EditorArea extends React.Component {
   }
 
   componentWillUnmount() {
+    Api.removeAllListeners();
     this.keypressListener.destroy();
     window.removeEventListener('resize', this.handleResize);
   }
