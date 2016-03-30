@@ -60,3 +60,29 @@ export function attrStrToObj(attrStr = '') {
   return obj;
 }
 
+export function getTagData(tag = '') {
+
+  const matchSelfClosing = tag.match(/^<([\w\-]+)([^>]+)?\/>$/);
+
+  if (matchSelfClosing) {
+    const [all, name, attrStr] = matchSelfClosing;
+    return {name, attrs: attrStrToObj(attrStr), type: 'self-closing'};
+  }
+
+  const matchOpen = tag.match(/^<([\w\-]+)([^>]+)?>$/);
+
+  if (matchOpen) {
+    const [all, name, attrStr] = matchOpen;
+    return {name, attrs: attrStrToObj(attrStr), type: 'open'};
+  }
+
+  const matchClose = tag.match(/^\<\s*\/\s*([\w\-]+)\s*\>$/);
+
+  if (matchClose) {
+    const [all, name, attrStr] = matchClose;
+    return {name, attrs: attrStrToObj(attrStr), type: 'close'};
+  }
+
+  return null;
+}
+
