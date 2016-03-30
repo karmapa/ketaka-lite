@@ -86,3 +86,26 @@ export function getTagData(tag = '') {
   return null;
 }
 
+export function getMissingTags(content = '') {
+
+  return _.chain(strToTags(content))
+    .map(getTagData)
+    .filter(row => 'self-closing' !== row.type)
+    .reduce((stacks, row) => {
+
+      const prev = _.last(stacks);
+
+      if (prev && (prev.name === row.name) && (('open' === prev.type) && ('close' === row.type))) {
+        stacks.pop();
+      }
+      else {
+        stacks.push(row);
+      }
+      return stacks;
+    }, [])
+    .map(row => {
+      row.type = ('open' === row.type) ? 'close' : 'open';
+      return row;
+    })
+    .value();
+}
