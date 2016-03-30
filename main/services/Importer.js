@@ -15,7 +15,7 @@ let REGEXP_PAGE = constants.REGEXP_PAGE;
 let htmlparser = require('htmlparser');
 
 import getNonContinuousPageNames from './getNonContinuousPageNames';
-import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr} from './Tag';
+import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr, getMissingTags} from './Tag';
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -118,6 +118,12 @@ function createPagesByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
 
+    const missingTags = getMissingTags(content);
+
+    if (missingTags.length > 0) {
+      return reject('The following tags are not finished: ' + missingTags.map(tag => tag.name));
+    }
+
     let parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
 
       if (err) {
@@ -176,7 +182,7 @@ async function createPageDataByPbRows(pbRows) {
   let contents = await Helper.readFiles(paths);
 
   let promises = contents.map(function(content, index) {
-    return createPagesByPbContent(content, pathDataSets[index]);
+    return createPagesByPbContent(content.toString(), pathDataSets[index]);
   });
 
   let resArr = await Promise.all(promises);
