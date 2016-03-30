@@ -13,6 +13,7 @@ var config = {
   },
   output: {
     path: path.join(__dirname, 'dist'),
+    publicPath: 'http://localhost:3000/',
     filename: 'bundle.js'
   },
   plugins: [
