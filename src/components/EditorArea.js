@@ -694,6 +694,8 @@ export default class EditorArea extends React.Component {
     }
   };
 
+  handleAppExportZip = () => this.exportZip();
+
   componentDidMount() {
 
     let self = this;
@@ -716,9 +718,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-settings', this.handleAppSettings);
 
-    Api.on('app-export-zip', function() {
-      self.exportZip();
-    });
+    Api.on('app-export-zip', this.handleAppExportZip);
 
     Api.on('app-export-file-with-pb', function() {
       self.exportFileWithPb();
