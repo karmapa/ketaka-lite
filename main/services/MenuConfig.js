@@ -80,6 +80,12 @@ function getTemplate(args) {
           }
         },
         {
+          label: 'Edit Docs',
+          click: () => {
+            webContents.send('app-edit-docs');
+          }
+        },
+        {
           label: 'Save',
           click: () => {
             webContents.send('app-save');
