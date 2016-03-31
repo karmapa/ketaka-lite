@@ -768,6 +768,8 @@ export default class EditorArea extends React.Component {
     return Api.on(eventName, cb);
   };
 
+  offEvents = () => this.registeredEvents.forEach(({eventName, cb}) => Api.off(eventName, cb));
+
   bindAppEvents = () => {
 
     this.on('app-import', this.handleAppImport);
@@ -1005,7 +1007,7 @@ export default class EditorArea extends React.Component {
   }
 
   componentWillUnmount() {
-    Api.removeAllListeners();
+    this.offEvents();
     this.keypressListener.destroy();
     window.removeEventListener('resize', this.handleResize);
   }
