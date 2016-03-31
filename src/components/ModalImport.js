@@ -137,6 +137,9 @@ export default class ModalImportStatus extends React.Component {
   }
 
   renderRows(rows) {
-    return rows.map((row, index) => (<p key={row.type + index}>{row.message}</p>));
+    return rows.map((row, index) => {
+      return row.message.split('\n')
+        .map((message, subIndex) => (<p key={row.type + index + ':' + subIndex}>{message}</p>));
+    });
   }
 }
