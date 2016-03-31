@@ -91,6 +91,7 @@ export default class EditorArea extends React.Component {
       docKey: docs.length > 0 ? _.first(docs).uuid : null
     };
 
+    this.registeredEvents = [];
     this.isSaving = false;
   }
 
@@ -762,6 +763,50 @@ export default class EditorArea extends React.Component {
     this.props.setCloseConfirmStatus(true);
   };
 
+  on = (eventName, cb) => {
+    this.registeredEvents.push({eventName, cb});
+    return Api.on(eventName, cb);
+  };
+
+  bindAppEvents = () => {
+
+    this.on('app-import', this.handleAppImport);
+
+    this.on('app-import-zip', this.handleAppImportZip);
+
+    this.on('app-edit-docs', this.handleAppEditDocs);
+
+    this.on('app-open', this.handleAppOpen);
+
+    this.on('app-save', this.handleAppSave);
+
+    this.on('app-save-as', this.handleAppSaveAs);
+
+    this.on('app-settings', this.handleAppSettings);
+
+    this.on('app-export-zip', this.handleAppExportZip);
+
+    this.on('app-export-file-with-pb', this.handleAppExportFileWithPb);
+
+    this.on('import-start', this.handleImportStart);
+
+    this.on('import-progress', this.handleImportProgress);
+
+    this.on('app-find', this.handleAppFind);
+
+    this.on('app-undo', this.handleAppUndo);
+
+    this.on('app-redo', this.handleAppRedo);
+
+    this.on('app-select-all', this.handleAppSelectAll);
+
+    this.on('app-replace', this.runWithPage(this.refs.searchBar.replace));
+
+    this.on('app-spellcheck-exception-list', this.handleAppSpellcheckExceptionList);
+
+    this.on('app-close', this.handleAppClose);
+  };
+
   componentDidMount() {
 
     let self = this;
@@ -769,42 +814,7 @@ export default class EditorArea extends React.Component {
     Ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
     this.bindKeyboardEvents();
-
-    Api.on('app-import', this.handleAppImport);
-
-    Api.on('app-import-zip', this.handleAppImportZip);
-
-    Api.on('app-edit-docs', this.handleAppEditDocs);
-
-    Api.on('app-open', this.handleAppOpen);
-
-    Api.on('app-save', this.handleAppSave);
-
-    Api.on('app-save-as', this.handleAppSaveAs);
-
-    Api.on('app-settings', this.handleAppSettings);
-
-    Api.on('app-export-zip', this.handleAppExportZip);
-
-    Api.on('app-export-file-with-pb', this.handleAppExportFileWithPb);
-
-    Api.on('import-start', this.handleImportStart);
-
-    Api.on('import-progress', this.handleImportProgress);
-
-    Api.on('app-find', this.handleAppFind);
-
-    Api.on('app-undo', this.handleAppUndo);
-
-    Api.on('app-redo', this.handleAppRedo);
-
-    Api.on('app-select-all', this.handleAppSelectAll);
-
-    Api.on('app-replace', self.runWithPage(self.refs.searchBar.replace));
-
-    Api.on('app-spellcheck-exception-list', this.handleAppSpellcheckExceptionList);
-
-    Api.on('app-close', this.handleAppClose);
+    this.bindAppEvents();
 
     window.addEventListener('resize', this.handleResize);
 
