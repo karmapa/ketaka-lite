@@ -590,7 +590,7 @@ export default class EditorArea extends React.Component {
 
   bindKeyboardEvents = () => {
 
-    let self = this;
+    const self = this;
 
     if (self.keypressListener) {
       self.keypressListener.destroy();
