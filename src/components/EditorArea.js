@@ -1026,10 +1026,6 @@ export default class EditorArea extends React.Component {
       });
   }
 
-  closeModalDocSettings = () => {
-    this.refs.modalDocSettings.close();
-  }
-
   saveAndCloseModalDocSettings = data => {
     let self = this;
     let doc = this.getDoc();
@@ -1558,7 +1554,7 @@ export default class EditorArea extends React.Component {
 
           <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
             confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
-          <ModalDocSettings ref="modalDocSettings" cancel={this.closeModalDocSettings} confirm={this.saveAndCloseModalDocSettings} />
+          <ModalDocSettings ref="modalDocSettings" confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
           <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
           <ModalImport className="modal-import" ref="modalImport" />
