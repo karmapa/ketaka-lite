@@ -32,7 +32,7 @@ function isSupportedType(row) {
 
 function pluckDirPaths(rows) {
   return _.chain(rows).remove(isDirectory)
-    .pluck('path')
+    .map('path')
     .value();
 }
 
@@ -563,7 +563,7 @@ function getBambooName(rows) {
     .pairs()
     .sortBy(1)
     .reverse()
-    .pluck(0)
+    .map(0)
     .first()
     .value();
 }
