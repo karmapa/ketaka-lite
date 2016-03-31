@@ -669,6 +669,8 @@ export default class EditorArea extends React.Component {
 
   handleAppOpen = () => this.open();
 
+  handleAppSave = () => this.save();
+
   componentDidMount() {
 
     let self = this;
@@ -685,9 +687,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-open', this.handleAppOpen);
 
-    Api.on('app-save', function() {
-      self.save();
-    });
+    Api.on('app-save', this.handleAppSave);
 
     Api.on('app-save-as', function() {
 
