@@ -671,6 +671,21 @@ export default class EditorArea extends React.Component {
 
   handleAppSave = () => this.save();
 
+  handleAppSaveAs = async () => {
+
+    const doc = this.getDoc();
+
+    if (doc) {
+
+      const {docNames} = await Api.send('list-doc-name');
+
+      this.refs.modalSaveAs.open({
+        docName: doc.name,
+        docNames
+      });
+    }
+  };
+
   componentDidMount() {
 
     let self = this;
@@ -689,21 +704,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-save', this.handleAppSave);
 
-    Api.on('app-save-as', function() {
-
-      let doc = self.getDoc();
-
-      if (doc) {
-
-        Api.send('list-doc-name')
-          .then(res => {
-            self.refs.modalSaveAs.open({
-              docName: doc.name,
-              docNames: res.docNames
-            });
-          });
-      }
-    });
+    Api.on('app-save-as', this.handleAppSaveAs);
 
     Api.on('app-settings', function() {
       self.openSettingsModal();
