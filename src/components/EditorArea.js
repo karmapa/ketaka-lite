@@ -700,6 +700,23 @@ export default class EditorArea extends React.Component {
 
   handleImportStart = () => this.getImportModal().open();
 
+  handleImportProgress = (event, res) => {
+
+    const importModal = this.getImportModal();
+
+    if (res.clean) {
+      importModal.setMessages(res);
+    }
+    else {
+      importModal.addMessages(res);
+    }
+
+    if (res.progress) {
+      importModal.setProgress(res.progress);
+    }
+    importModal.setOptions({progressBarActive: true});
+  };
+
   componentDidMount() {
 
     let self = this;
@@ -728,24 +745,8 @@ export default class EditorArea extends React.Component {
 
     Api.on('import-start', this.handleImportStart);
 
-    Api.on('import-progress', function(event, res) {
+    Api.on('import-progress', this.handleImportProgress);
 
-      const importModal = self.getImportModal();
-
-      if (res.clean) {
-        importModal.setMessages(res);
-      }
-      else {
-        importModal.addMessages(res);
-      }
-
-      if (res.progress) {
-        importModal.setProgress(res.progress);
-      }
-
-      importModal.setOptions({progressBarActive: true});
-
-    });
 
     Api.on('app-find', () => {
       self.refs.searchBar.find();
