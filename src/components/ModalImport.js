@@ -113,7 +113,7 @@ export default class ModalImportStatus extends React.Component {
     }
 
     return (
-      <Modal show={isModalVisible} className={className} backdrop="static" onHide={() => {}}>
+      <Modal show={isModalVisible} className={className}>
         <Modal.Header>
           <Modal.Title>Import Status</Modal.Title>
         </Modal.Header>
