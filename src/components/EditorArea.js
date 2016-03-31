@@ -881,9 +881,7 @@ export default class EditorArea extends React.Component {
         });
 
       try {
-        console.log('here', paths);
         const {doc, message} = await Api.send('import-button-clicked', {force: true, paths});
-        console.log('here!!', doc, message);
 
         this.props.importDoc(doc);
         this.initHistory();
