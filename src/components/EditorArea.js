@@ -22,7 +22,7 @@ import {checkSyllables} from 'check-tibetan';
 import Path from 'path';
 import {connect} from 'react-redux';
 
-let ToastMessageFactory = React.createFactory(ToastMessage.animation);
+const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
