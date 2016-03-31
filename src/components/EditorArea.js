@@ -822,83 +822,117 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  import() {
+  handleFileCountWarning = paths => {
 
-    let self = this;
-    const modalImport = self.getImportModal();
+    const modalImport = this.getImportModal();
 
-    Api.send('import-button-clicked')
-      .then(res => {
-        self.props.importDoc(res.doc);
-        self.initHistory();
-        self.refs.toast.success(res.message);
-        self.getImportModal().setOptions({
-          showFirstButton: true,
-          firstButtonText: 'OK',
-          firstButtonStyle: 'primary'
+    modalImport.setMessages({
+      type: 'warning',
+      message: 'You are importing a large folder. Are you sure to import?'
+    })
+    .setOptions({
+      progressBarStyle: 'warning',
+      showFirstButton: true,
+      firstButtonStyle: '',
+      firstButtonText: 'Cancel',
+      handleFirstButtonClick: () => modalImport.close(),
+      showSecondButton: true,
+      secondButtonStyle: 'warning',
+      secondButtonText: 'Proceed',
+      handleSecondButtonClick: handleSecondButtonClick.bind(this)
+    });
+
+    async function handleSecondButtonClick() {
+
+      modalImport.setMessages([])
+        .setOptions({
+          progressBarStyle: 'info',
+          showFirstButton: false,
+          showSecondButton: false
         });
-      })
-      .catch(res => {
 
-        if ('fileCountWarning' === res.type) {
+      try {
+        console.log('here', paths);
+        const {doc, message} = await Api.send('import-button-clicked', {force: true, paths});
+        console.log('here!!', doc, message);
 
-          modalImport.setMessages({
-            type: 'warning',
-            message: 'You are importing a large folder. Are you sure to import?'
-          })
-          .setOptions({
-            progressBarStyle: 'warning',
-            showFirstButton: true,
-            firstButtonStyle: '',
-            firstButtonText: 'Cancel',
-            handleFirstButtonClick: () => modalImport.close(),
-            showSecondButton: true,
-            secondButtonStyle: 'warning',
-            secondButtonText: 'Proceed',
-            handleSecondButtonClick: () => {
+        this.props.importDoc(doc);
+        this.initHistory();
+        this.refs.toast.success(message);
 
-              modalImport.setMessages([])
-                .setOptions({
-                  progressBarStyle: 'info',
-                  showFirstButton: false,
-                  showSecondButton: false
-                });
+        modalImport.setOptions({
+          showFirstButton: true,
+          firstButtonStyle: 'primary',
+          firstButtonText: 'OK'
+        });
+      }
+      catch (err) {
+        const {message} = err;
+        this.refs.toast.error(message);
+        modalImport.setMessages({
+          type: 'danger',
+          message
+        })
+        .setOptions({
+          progressBarStyle: 'danger',
+          progressBarActive: false,
+          showFirstButton: true,
+          handleFirstButtonClick: () => modalImport.close(),
+          firstButtonStyle: 'danger',
+          firstButtonText: 'I understand.'
+        });
+      }
+    }
+  };
 
-              Api.send('import-button-clicked', {force: true, paths: res.paths})
-                .then(res => {
-                  self.props.importDoc(res.doc);
-                  self.initHistory();
-                  self.refs.toast.success(res.message);
+  handleImportError = message => {
 
-                  modalImport.setOptions({
-                    showFirstButton: true,
-                    firstButtonStyle: 'primary',
-                    firstButtonText: 'OK'
-                  });
-                })
-                .catch(res => {
-                  self.refs.toast.error(res.message);
-                });
-            }
-          });
-        }
-        else {
-          self.refs.toast.error(res.message);
-          modalImport.setMessages({
-            type: 'danger',
-            message: res.message
-          })
-          .setOptions({
-            progressBarStyle: 'danger',
-            progressBarActive: false,
-            showFirstButton: true,
-            handleFirstButtonClick: () => modalImport.close(),
-            firstButtonStyle: 'danger',
-            firstButtonText: 'I understand.'
-          });
-        }
+    const modalImport = this.getImportModal();
+    this.refs.toast.error(message);
+
+    modalImport.setMessages({
+      type: 'danger',
+      message
+    })
+    .setOptions({
+      progressBarStyle: 'danger',
+      progressBarActive: false,
+      showFirstButton: true,
+      handleFirstButtonClick: () => modalImport.close(),
+      firstButtonStyle: 'danger',
+      firstButtonText: 'I understand.'
+    });
+  };
+
+  import = async () => {
+
+    const modalImport = this.getImportModal();
+
+    try {
+      const {doc, message} = await Api.send('import-button-clicked');
+
+      this.props.importDoc(doc);
+      this.initHistory();
+      this.refs.toast.success(message);
+
+      modalImport.setOptions({
+        showFirstButton: true,
+        firstButtonText: 'OK',
+        firstButtonStyle: 'primary'
       });
-  }
+    }
+    catch (err) {
+
+      const {type, paths, message} = err;
+
+      if ('fileCountWarning' === type) {
+        this.handleFileCountWarning(paths);
+      }
+      else {
+        this.handleImportError(message);
+      }
+    }
+  };
 
   importZip() {
 
