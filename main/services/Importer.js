@@ -257,14 +257,8 @@ function getDuplicatedPbPages(pbPages) {
 
 function warnDuplicatePbPages(onProgress, duplicatedPbPages) {
   if (duplicatedPbPages.length > 0) {
-    let messages = duplicatedPbPages.map(function(page) {
-      return {
-        type: 'warning',
-        message: page.name + ' in ' + page.base + ' duplicated.'
-      };
-    });
-    onProgress(messages);
-    throw 'Import failed';
+    let messages = duplicatedPbPages.map(page =>  page.name + ' in ' + page.base + ' is duplicated.');
+    throw messages.join('\n');
   }
 }
 
