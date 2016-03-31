@@ -32,7 +32,7 @@ const importButtonClicked = ipcHandler(function(event, args = {}) {
 
     try {
       const doc = await Importer.handleImportPaths(paths, onProgress, args.force);
-      broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully'});
+      onProgress({progress: 100, type: 'info', message: 'Imported successfully'});
       send({message: 'Imported successfully', doc});
     }
     catch(err) {
