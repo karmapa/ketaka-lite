@@ -662,6 +662,8 @@ export default class EditorArea extends React.Component {
   getModalEditDocs = () => this.refs.modalEditDocs.getWrappedInstance();
   handleAppEditDocs = () => this.getModalEditDocs().openModal();
 
+  handleAppImport = () => this.import();
+
   componentDidMount() {
 
     let self = this;
@@ -670,9 +672,7 @@ export default class EditorArea extends React.Component {
 
     this.bindKeyboardEvents();
 
-    Api.on('app-import', function() {
-      self.import();
-    });
+    Api.on('app-import', this.handleAppImport);
 
     Api.on('app-import-zip', function() {
       self.importZip();
