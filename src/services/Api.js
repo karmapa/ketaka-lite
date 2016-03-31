@@ -26,5 +26,5 @@ export default class Api {
 
   static on = ipc.on.bind(ipc);
 
-  static removeAllListeners = ipc.removeAllListeners.bind(ipc);
+  static off = ipc.removeListener.bind(ipc);
 }
