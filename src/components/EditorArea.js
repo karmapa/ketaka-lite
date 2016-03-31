@@ -731,6 +731,19 @@ export default class EditorArea extends React.Component {
     }
   };
 
+  handleAppRedo = () => {
+
+    const editor = this.getEditor();
+
+    if (editor && editor.hasFocus()) {
+      editor.redo();
+    }
+    else {
+      Api.send('trigger-redo');
+    }
+  };
+
+
   componentDidMount() {
 
     let self = this;
@@ -765,15 +778,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-undo', this.handleAppUndo);
 
-    Api.on('app-redo', () => {
-      let editor = self.getEditor();
-      if (editor && editor.hasFocus()) {
-        editor.redo();
-      }
-      else {
-        Api.send('trigger-redo');
-      }
-    });
+    Api.on('app-redo', this.handleAppRedo);
 
     Api.on('app-select-all', () => {
       let cm = self.getCurrentCodemirror();
