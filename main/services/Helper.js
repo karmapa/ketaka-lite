@@ -1,4 +1,5 @@
 import StreamZip from 'node-stream-zip';
+import _ from 'lodash';
 
 let BufferHelper = require('bufferhelper');
 let Path = require('path');
@@ -8,7 +9,6 @@ let fs = require('fs-extra');
 let mkdirp = require('mkdirp');
 let readChunk = require('read-chunk');
 let rimraf = require('rimraf');
-let _ = require('lodash');
 
 function isDarwin() {
   return 'darwin' === process.platform;
@@ -96,13 +96,13 @@ function readFile(path) {
 
 function readFiles(paths) {
 
+  let index = -1;
   let contents = [];
 
   return new Promise(function(resolve, reject) {
 
     (function recurse() {
-
-      let path = paths.pop();
+      let path = paths[++index];
       if (! path) {
         resolve(contents);
       }
