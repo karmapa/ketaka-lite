@@ -121,7 +121,11 @@ function createPagesByPbContent(content, pathData) {
     const missingTags = getMissingTags(content);
 
     if (missingTags.length > 0) {
-      return reject('The following tags are not finished: ' + missingTags.map(tag => tag.name));
+      // catch Promise.all doesn't get all errors, so I'm doing this way
+      return resolve({
+        error: true,
+        message: 'The following tags in ' + pathData.base + ' are not finished: ' + missingTags.map(tag => tag.name)
+      });
     }
 
     let parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
@@ -176,20 +180,28 @@ async function createPageDataByPbRows(pbRows) {
     return [];
   }
 
-  let paths = _.pluck(pbRows, 'path');
-  let pathDataSets = _.pluck(pbRows, 'pathData');
+  let paths = _.map(pbRows, 'path');
+  let pathDataSets = _.map(pbRows, 'pathData');
 
   let contents = await Helper.readFiles(paths);
 
-  let promises = contents.map(function(content, index) {
+  let promises = contents.map((content, index) => {
     return createPagesByPbContent(content.toString(), pathDataSets[index]);
   });
 
   let resArr = await Promise.all(promises);
 
+  let errors = _.chain(resArr)
+    .filter(row => row.error)
+    .map('message')
+    .value();
+
+  if (errors.length > 0) {
+    throw errors.join('\n');
+  }
+
   let pages = _.flatten(_.map(resArr, 'pages'));
   let tags = _.flatten(_.map(resArr, 'tags'));
-
   let countData = _.countBy(tags, tag => tag.name);
 
   _.each(countData, (value, name) => {
@@ -352,6 +364,12 @@ async function createDocByRows(bambooName, rows, onProgress) {
     doc.chunk = content;
     return content;
   });
+
+  const missingTags = getMissingTags(textContent);
+
+  if (missingTags.length > 0) {
+    throw 'The following tags in ' + textRow.pathData.base + ' are not finished: ' + missingTags.map(tag => tag.name)
+  }
 
   let pageData = await createPageDataByPbRows(pbRows);
   let pbPages = pageData.pages;
