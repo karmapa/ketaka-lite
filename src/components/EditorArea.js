@@ -660,6 +660,7 @@ export default class EditorArea extends React.Component {
   };
 
   getModalEditDocs = () => this.refs.modalEditDocs.getWrappedInstance();
+
   handleAppEditDocs = () => this.getModalEditDocs().openModal();
 
   handleAppImport = () => this.import();
