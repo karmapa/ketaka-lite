@@ -869,7 +869,7 @@ export default class EditorArea extends React.Component {
                     showFirstButton: true,
                     firstButtonStyle: 'primary',
                     firstButtonText: 'OK'
-                  })
+                  });
                 })
                 .catch(res => {
                   self.refs.toast.error(res.message);
