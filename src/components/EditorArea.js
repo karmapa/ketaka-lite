@@ -698,6 +698,8 @@ export default class EditorArea extends React.Component {
 
   handleAppExportFileWithPb = () => this.exportFileWithPb();
 
+  handleImportStart = () => this.getImportModal().open();
+
   componentDidMount() {
 
     let self = this;
@@ -724,11 +726,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-export-file-with-pb', this.handleAppExportFileWithPb);
 
-    Api.on('import-start', function() {
-      self.getImportModal().open({
-        title: 'Import Status'
-      });
-    });
+    Api.on('import-start', this.handleImportStart);
 
     Api.on('import-progress', function(event, res) {
 
