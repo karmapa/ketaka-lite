@@ -717,6 +717,8 @@ export default class EditorArea extends React.Component {
     importModal.setOptions({progressBarActive: true});
   };
 
+  handleAppFind = () => this.refs.searchBar.find();
+
   componentDidMount() {
 
     let self = this;
@@ -747,10 +749,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('import-progress', this.handleImportProgress);
 
-
-    Api.on('app-find', () => {
-      self.refs.searchBar.find();
-    });
+    Api.on('app-find', this.handleAppFind);
 
     Api.on('app-undo', () => {
       let editor = self.getEditor();
