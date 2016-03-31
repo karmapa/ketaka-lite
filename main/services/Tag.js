@@ -37,7 +37,7 @@ export function strToTags(content = '') {
   // 1: self-closing tag e.g. <div />
   // 2: open tag e.g. <div>
   // 3: close tag e.g. </div>
-  const tags = content.match(/<([\w\-]+)([^>]+)?\/>|<([\w\-]+)([^>]+)?>|<\s*\/([^>]+)?>/g);
+  const tags = (content || '').match(/<([\w\-]+)([^>]+)?\/>|<([\w\-]+)([^>]+)?>|<\s*\/([^>]+)?>/g);
   return tags || [];
 }
 
@@ -61,6 +61,8 @@ export function attrStrToObj(attrStr = '') {
 }
 
 export function getTagData(tag = '') {
+
+  tag = tag || '';
 
   const matchSelfClosing = tag.match(/^<([\w\-]+)([^>]+)?\/>$/);
 
@@ -87,6 +89,8 @@ export function getTagData(tag = '') {
 }
 
 export function getMissingTags(content = '') {
+
+  content = content || '';
 
   return _.chain(strToTags(content))
     .map(getTagData)
