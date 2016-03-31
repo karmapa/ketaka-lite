@@ -6,7 +6,6 @@ import _ from 'lodash';
 export default class ModalDocSettings extends React.Component {
 
   static PropTypes = {
-    cancel: PropTypes.func.isRequired,
     confirm: PropTypes.func.isRequired
   }
 
@@ -35,18 +34,12 @@ export default class ModalDocSettings extends React.Component {
     });
   }
 
-  close() {
-    this.originDocName = null;
-    this.originPageName = null;
+  close = () => {
     this.setState({
       show: false,
-      loaing: false,
-      docName: ''
+      loading: false,
     });
-  }
-
-  onModalHide() {
-  }
+  };
 
   isValidDocNameFormat(name) {
     return name.match(/^[a-zA-Z0-9\-]+$/);
@@ -145,11 +138,10 @@ export default class ModalDocSettings extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {cancel} = this.props;
     let {show, docName, pageName, loading} = this.state;
 
     return (
-      <Modal show={show} onHide={this.onModalHide}>
+      <Modal show={show}>
         <Modal.Header>
           <Modal.Title>Doc Settings</Modal.Title>
         </Modal.Header>
@@ -166,7 +158,7 @@ export default class ModalDocSettings extends React.Component {
         </Modal.Body>
 
         <Modal.Footer>
-          <Button onClick={cancel}>Cancel</Button>
+          <Button onClick={this.close}>Cancel</Button>
           <Button bsStyle="primary" onClick={this.confirm} disabled={(! this.isValidDocName()) || (! this.isValidPageName() || (loading))}>Save and close</Button>
         </Modal.Footer>
       </Modal>
