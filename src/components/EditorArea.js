@@ -743,6 +743,17 @@ export default class EditorArea extends React.Component {
     }
   };
 
+  handleAppSelectAll = () => {
+
+    const cm = this.getCurrentCodemirror();
+
+    if (cm && cm.hasFocus()) {
+      CodeMirror.commands.selectAll(cm);
+    }
+    else {
+      Api.send('trigger-selectall');
+    }
+  };
 
   componentDidMount() {
 
@@ -780,15 +791,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-redo', this.handleAppRedo);
 
-    Api.on('app-select-all', () => {
-      let cm = self.getCurrentCodemirror();
-      if (cm && cm.hasFocus()) {
-        CodeMirror.commands.selectAll(cm);
-      }
-      else {
-        Api.send('trigger-selectall');
-      }
-    });
+    Api.on('app-select-all', this.handleAppSelectAll);
 
     Api.on('app-replace', self.runWithPage(self.refs.searchBar.replace));
 
