@@ -6,7 +6,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
-  ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar,
+  ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
   Resizer, PrintArea} from '.';
 import {Helper, Ime} from '../services/';
 import CodeMirror from 'codemirror';
@@ -659,6 +659,9 @@ export default class EditorArea extends React.Component {
     simpleCombo(shortcuts.prevWord, this.prevWord);
   };
 
+  getModalEditDocs = () => this.refs.modalEditDocs.getWrappedInstance();
+  handleAppEditDocs = () => this.getModalEditDocs().openModal();
+
   componentDidMount() {
 
     let self = this;
@@ -674,6 +677,8 @@ export default class EditorArea extends React.Component {
     Api.on('app-import-zip', function() {
       self.importZip();
     });
+
+    Api.on('app-edit-docs', self.handleAppEditDocs);
 
     Api.on('app-open', function() {
       self.open();
@@ -1558,6 +1563,9 @@ export default class EditorArea extends React.Component {
           <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
           <ModalImport className="modal-import" ref="modalImport" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
+
+          <ModalEditDocs ref="modalEditDocs" />
+
           <ModalSaveAs ref="modalSaveAs" saveAs={this.saveAs} />
           <ModalSpellCheckExceptionList ref="modalSpellCheckExceptionList" />
           <ToastContainer ref="toast" toastMessageFactory={ToastMessageFactory} className="toast-top-right" />
