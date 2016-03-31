@@ -675,15 +675,16 @@ export default class EditorArea extends React.Component {
 
     const doc = this.getDoc();
 
-    if (doc) {
-
-      const {docNames} = await Api.send('list-doc-name');
-
-      this.refs.modalSaveAs.open({
-        docName: doc.name,
-        docNames
-      });
+    if (! doc) {
+      return false;
     }
+
+    const {docNames} = await Api.send('list-doc-name');
+
+    this.refs.modalSaveAs.open({
+      docName: doc.name,
+      docNames
+    });
   };
 
   componentDidMount() {
