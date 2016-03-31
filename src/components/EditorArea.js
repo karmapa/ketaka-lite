@@ -667,6 +667,8 @@ export default class EditorArea extends React.Component {
 
   handleAppImportZip = () => this.importZip();
 
+  handleAppOpen = () => this.open();
+
   componentDidMount() {
 
     let self = this;
@@ -681,9 +683,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-edit-docs', self.handleAppEditDocs);
 
-    Api.on('app-open', function() {
-      self.open();
-    });
+    Api.on('app-open', this.handleAppOpen);
 
     Api.on('app-save', function() {
       self.save();
