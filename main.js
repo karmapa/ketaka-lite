@@ -76,7 +76,7 @@ ipc.on('page-image-upload-button-clicked', controllers.pageImageUploadButtonClic
 
 ipc.on('add-doc', controllers.addDoc);
 
-ipc.on('find-doc-names', controllers.findDocNames);
+ipc.on('list-doc-name', controllers.listDocName);
 
 ipc.on('change-doc-settings', controllers.changeDocSettings);
 

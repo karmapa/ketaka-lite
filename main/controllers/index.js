@@ -6,7 +6,7 @@ import deleteDoc from './deleteDoc';
 import openBamboo from './openBamboo';
 import open from './open';
 import changeDocSettings from './changeDocSettings';
-import findDocNames from './findDocNames';
+import listDocName from './listDocName';
 import addDoc from './addDoc';
 import pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
 import saveAs from './saveAs';
@@ -22,7 +22,7 @@ export {
   addDoc,
   open,
   pageImageUploadButtonClicked,
-  findDocNames,
+  listDocName,
   changeDocSettings,
   addPbFiles,
   exportFileWithPb,

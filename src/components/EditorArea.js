@@ -694,7 +694,7 @@ export default class EditorArea extends React.Component {
 
       if (doc) {
 
-        Api.send('find-doc-names')
+        Api.send('list-doc-name')
           .then(res => {
             self.refs.modalSaveAs.open({
               docName: doc.name,
@@ -1013,7 +1013,7 @@ export default class EditorArea extends React.Component {
   onSettingsButtonClick = () => {
     let self = this;
 
-    Api.send('find-doc-names')
+    Api.send('list-doc-name')
       .then(res => {
         let doc = self.getDoc();
         let page = self.getCurrentPage(doc);
