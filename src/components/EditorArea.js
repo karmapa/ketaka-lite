@@ -757,6 +757,11 @@ export default class EditorArea extends React.Component {
 
   handleAppSpellcheckExceptionList = () => this.getSpellCheckExceptionListModal().open();
 
+  handleAppClose = () => {
+    this.closeConfirm();
+    this.props.setCloseConfirmStatus(true);
+  };
+
   componentDidMount() {
 
     let self = this;
@@ -799,10 +804,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-spellcheck-exception-list', this.handleAppSpellcheckExceptionList);
 
-    Api.on('app-close', () => {
-      self.closeConfirm();
-      self.props.setCloseConfirmStatus(true);
-    });
+    Api.on('app-close', this.handleAppClose);
 
     window.addEventListener('resize', this.handleResize);
 
