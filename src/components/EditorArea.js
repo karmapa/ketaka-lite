@@ -696,6 +696,8 @@ export default class EditorArea extends React.Component {
 
   handleAppExportZip = () => this.exportZip();
 
+  handleAppExportFileWithPb = () => this.exportFileWithPb();
+
   componentDidMount() {
 
     let self = this;
@@ -720,9 +722,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-export-zip', this.handleAppExportZip);
 
-    Api.on('app-export-file-with-pb', function() {
-      self.exportFileWithPb();
-    });
+    Api.on('app-export-file-with-pb', this.handleAppExportFileWithPb);
 
     Api.on('import-start', function() {
       self.getImportModal().open({
