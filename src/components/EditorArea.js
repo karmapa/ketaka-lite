@@ -681,7 +681,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-import-zip', this.handleAppImportZip);
 
-    Api.on('app-edit-docs', self.handleAppEditDocs);
+    Api.on('app-edit-docs', this.handleAppEditDocs);
 
     Api.on('app-open', this.handleAppOpen);
 
