@@ -687,6 +687,13 @@ export default class EditorArea extends React.Component {
     });
   };
 
+  handleAppSettings = () => {
+    this.openSettingsModal();
+    if (this.keypressListener) {
+      this.keypressListener.destroy();
+    }
+  };
+
   componentDidMount() {
 
     let self = this;
@@ -707,12 +714,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-save-as', this.handleAppSaveAs);
 
-    Api.on('app-settings', function() {
-      self.openSettingsModal();
-      if (self.keypressListener) {
-        self.keypressListener.destroy();
-      }
-    });
+    Api.on('app-settings', this.handleAppSettings);
 
     Api.on('app-export-zip', function() {
       self.exportZip();
