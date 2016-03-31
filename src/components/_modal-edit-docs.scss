@@ -1,0 +1,23 @@
+.box-doc-names {
+  height: 300px;
+  overflow-x: auto;
+  padding: 0.4em;
+  .item {
+    margin: 0.4em;
+    border: 1px solid transparent;
+    display: inline-block;
+    padding: 0.4em 1em;
+    .text {
+      padding-left: 0.4em;
+    }
+  }
+}
+.box-selected {
+  float: left;
+}
+
+.box-warning {
+  p {
+    font-size: 1.4em;
+  }
+}
