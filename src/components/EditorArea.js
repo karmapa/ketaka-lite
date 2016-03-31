@@ -755,6 +755,8 @@ export default class EditorArea extends React.Component {
     }
   };
 
+  handleAppSpellcheckExceptionList = () => this.getSpellCheckExceptionListModal().open();
+
   componentDidMount() {
 
     let self = this;
@@ -795,9 +797,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-replace', self.runWithPage(self.refs.searchBar.replace));
 
-    Api.on('app-spellcheck-exception-list', () => {
-      self.getSpellCheckExceptionListModal().open();
-    });
+    Api.on('app-spellcheck-exception-list', this.handleAppSpellcheckExceptionList);
 
     Api.on('app-close', () => {
       self.closeConfirm();
