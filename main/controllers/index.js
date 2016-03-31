@@ -3,6 +3,7 @@ import getAppData from './getAppData';
 import exportFileWithPb from './exportFileWithPb';
 import exportZip from './exportZip';
 import deleteDoc from './deleteDoc';
+import deleteDocs from './deleteDocs';
 import openBamboo from './openBamboo';
 import open from './open';
 import changeDocSettings from './changeDocSettings';
@@ -29,5 +30,6 @@ export {
   getAppData,
   exportZip,
   deleteDoc,
+  deleteDocs,
   openBamboo
 };

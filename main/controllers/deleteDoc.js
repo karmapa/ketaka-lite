@@ -2,6 +2,9 @@ import Path from 'path';
 import {Doc, Helper} from '../services';
 import {ipcHandler} from '../decorators';
 
+const constants = require('../constants/appConstants');
+const PATH_APP_DOC = constants.PATH_APP_DOC;
+
 let deleteDoc = ipcHandler(function(event, res) {
 
   let name = res.name;
