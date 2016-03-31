@@ -719,6 +719,18 @@ export default class EditorArea extends React.Component {
 
   handleAppFind = () => this.refs.searchBar.find();
 
+  handleAppUndo = () => {
+
+    const editor = this.getEditor();
+
+    if (editor && editor.hasFocus()) {
+      editor.undo();
+    }
+    else {
+      Api.send('trigger-undo');
+    }
+  };
+
   componentDidMount() {
 
     let self = this;
@@ -751,15 +763,7 @@ export default class EditorArea extends React.Component {
 
     Api.on('app-find', this.handleAppFind);
 
-    Api.on('app-undo', () => {
-      let editor = self.getEditor();
-      if (editor && editor.hasFocus()) {
-        editor.undo();
-      }
-      else {
-        Api.send('trigger-undo');
-      }
-    });
+    Api.on('app-undo', this.handleAppUndo);
 
     Api.on('app-redo', () => {
       let editor = self.getEditor();
