@@ -27,8 +27,6 @@ let exportZip = ipcHandler(function(event, arg) {
     let output = fs.createWriteStream(savePath);
 
     output.on('close', () => {
-      console.log(archive.pointer() + ' total bytes');
-      console.log('archiver has been finalized and the output file descriptor has closed.');
       send({message: filename + ' exported successfully'});
     });
 
