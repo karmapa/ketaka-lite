@@ -16,6 +16,7 @@ let htmlparser = require('htmlparser');
 
 import getNonContinuousPageNames from './getNonContinuousPageNames';
 import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr, getMissingTags} from './Tag';
+import {getMissingTagsMessage} from './Message';
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -124,7 +125,7 @@ function createPagesByPbContent(content, pathData) {
       // catch Promise.all doesn't get all errors, so I'm doing this way
       return resolve({
         error: true,
-        message: 'The following tags in ' + pathData.base + ' are not finished: ' + missingTags.map(tag => tag.name)
+        message: getMissingTagsMessage(pathData.base, missingTags)
       });
     }
 
@@ -362,7 +363,7 @@ async function createDocByRows(bambooName, rows, onProgress) {
   const missingTags = getMissingTags(textContent);
 
   if (missingTags.length > 0) {
-    throw 'The following tags in ' + textRow.pathData.base + ' are not finished: ' + missingTags.map(tag => tag.name)
+    throw getMissingTagsMessage(textRow.pathData.base, missingTags);
   }
 
   let pageData = await createPageDataByPbRows(pbRows);
