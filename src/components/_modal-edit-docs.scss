@@ -3,13 +3,22 @@
   overflow-x: auto;
   padding: 0.4em;
   .item {
-    margin: 0.4em;
+    margin-right: 0.4em;
+    margin-bottom: 0.8em;
     border: 1px solid transparent;
     display: inline-block;
-    padding: 0.4em 1em;
+    padding: 0.4em 1em 0.4em 0;
     .text {
-      padding-left: 0.4em;
+      padding-left: 0.6em;
     }
+  }
+}
+.box-opened-names {
+  border-bottom: 1px solid #595959;
+  padding-bottom: 0.4em;
+  .text {
+    display: inline-block;
+    padding: 0.4em;
   }
 }
 .box-selected {
