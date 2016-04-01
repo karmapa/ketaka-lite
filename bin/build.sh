@@ -4,6 +4,7 @@ PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $
 ROOT_DIR=$(cd $(dirname $0)/..; pwd)
 cd $ROOT_DIR
 
+rm -r dist
 mkdir -p dist
 NODE_ENV=production webpack
 sed -i '' -e 's/http:\/\/localhost:3000\///g' dist/index.html
