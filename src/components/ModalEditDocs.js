@@ -12,18 +12,20 @@ import Api from '../services/Api';
   docs: state.modalEditDocs.docs,
   isModalVisible: state.modalEditDocs.isModalVisible,
   isWarningVisible: state.modalEditDocs.isWarningVisible,
+  openedDocs: state.doc
 }), {openModal, closeModal, loadDocNames, setDocs, showWarning, hideWarning}, null, {withRef: true})
 export default class ModalEditDocs extends Component {
 
   static PropTypes = {
+    closeModal: PropTypes.func.isRequired,
     docs: PropTypes.array.isRequired,
+    hideWarning: PropTypes.func.isRequired,
     isModalVisible: PropTypes.bool.isRequired,
     isWarningVisible: PropTypes.bool.isRequired,
     openModal: PropTypes.func.isRequired,
-    showWarning: PropTypes.func.isRequired,
-    hideWarning: PropTypes.func.isRequired,
+    openedDocs: PropTypes.array.isRequired,
     setDocs: PropTypes.func.isRequired,
-    closeModal: PropTypes.func.isRequired
+    showWarning: PropTypes.func.isRequired
   };
 
   openModal = () => {
@@ -53,19 +55,42 @@ export default class ModalEditDocs extends Component {
     setDocs(_.clone(docs));
   };
 
-  renderDocs = docs => {
-    return docs.map(doc => {
-      const itemClass = classNames({
-        item: true,
-        active: doc.checked
-      });
+  renderOpenedDocs = () => {
+
+    const {openedDocs} = this.props;
+
+    if (openedDocs.length > 0) {
+
       return (
-        <label key={'item-' + doc.name} className={itemClass}>
+        <div className="box-opened-names">
+          <span>Opened Docs:</span>
+          {openedDocs.map(doc => {
+            return (
+              <span key={'span-' + doc.name} className="text">{doc.name}</span>
+            );
+          })}
+        </div>
+      );
+    }
+  };
+
+  renderDocsContent = () => {
+
+    const {docs, openedDocs} = this.props;
+    const openedDocNames = _.map(openedDocs, 'name');
+    const closed = doc => -1 === openedDocNames.indexOf(doc.name);
+
+    return docs.filter(closed)
+      .map(doc => (
+        <label key={'item-' + doc.name} className={classNames({item: true, active: doc.checked})}>
           <input type="checkbox" onChange={this.handleCheckboxChange} checked={doc.checked} value={doc.name} />
           <span className="text">{doc.name}</span>
         </label>
-      );
-    });
+      ));
+  };
+
+  renderDocs = () => {
+    return <div className="box-doc-names">{this.renderDocsContent()}</div>;
   };
 
   getSelectedDocs = () => this.props.docs.filter(doc => doc.checked);
@@ -91,8 +116,9 @@ export default class ModalEditDocs extends Component {
     }
     else {
       return (
-        <div className="box-doc-names">
-          {this.renderDocs(this.props.docs)}
+        <div>
+          {this.renderOpenedDocs()}
+          {this.renderDocs()}
         </div>
       );
     }
