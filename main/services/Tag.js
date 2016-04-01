@@ -92,10 +92,18 @@ export function getMissingTags(content = '') {
 
   content = content || '';
 
+  let currentPbId = null;
+
   return _.chain(strToTags(content))
     .map(getTagData)
-    .filter(row => 'self-closing' !== row.type)
     .reduce((stacks, row) => {
+
+      if ('self-closing' === row.type) {
+        if ('pb' === row.name) {
+          currentPbId = row.attrs.id;
+        }
+        return stacks;
+      }
 
       const prev = _.last(stacks);
 
@@ -103,6 +111,7 @@ export function getMissingTags(content = '') {
         stacks.pop();
       }
       else {
+        row.pbId = currentPbId;
         stacks.push(row);
       }
       return stacks;
