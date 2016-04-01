@@ -412,14 +412,25 @@ function copyImages(doc) {
     });
 };
 
-function warnNonContinuousPageNames(names, onProgress) {
+function warnNonContinuousPageNames(pages, onProgress) {
 
-  let messages = _.map(getNonContinuousPageNames(names) || [], function(name) {
+  const validPages = pages.filter(page => page.name.match(/^(\d+).(\d+)([abcd])$/));
+  const names = _.map(validPages, 'name');
+  const reportedNames = getNonContinuousPageNames(names) || [];
+
+  let messages = _.map(reportedNames, name => {
+
+    // cut [abcd]
+    const num = name.slice(0, -1);
+    const page = _.find(validPages, page => page.name.slice(0, -1) === num);
+    const filename = _.get(page, 'pathData.base', 'unknown');
+
     return {
       type: 'warning',
-      message: name + ' might be missing.'
+      message: `${name} might be missing in ${filename}`
     };
-  })
+  });
+
   if (messages.length > 0) {
     onProgress(messages);
   }
@@ -536,10 +547,7 @@ async function handleImportPaths(paths, onProgress = _.noop, force = false) {
 
   doc = await copyImages(doc);
 
-  let pageNames = doc.pages.map(page => page.name)
-    .filter(name => name.match(/^(\d+).(\d+)([abcd])$/));
-
-  warnNonContinuousPageNames(pageNames, onProgress);
+  warnNonContinuousPageNames(doc.pages, onProgress);
 
   onProgress({progress: 95, type: 'info', message: 'Step8: Write Bamboo'});
 
