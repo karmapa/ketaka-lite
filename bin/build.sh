@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g')
+PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
 ROOT_DIR=$(cd $(dirname $0)/..; pwd)
 cd $ROOT_DIR
 
