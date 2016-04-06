@@ -415,12 +415,6 @@ export default class SearchBar extends React.Component {
     }
   }
 
-  onSearchBoxBlur = e => {
-    if (! ['BUTTON', 'INPUT'].includes(_.get(e, 'relatedTarget.tagName'))) {
-     // this.close();
-    }
-  };
-
   renderSearch = () => {
 
     let classnames = {
@@ -440,7 +434,7 @@ export default class SearchBar extends React.Component {
     };
 
     return (
-      <div className={classNames(classnames)} onBlur={this.onSearchBoxBlur}>
+      <div className={classNames(classnames)}>
         <span>Search: </span>
         <div className="wrapper">
           <ImeInput {...findInputProps} />
