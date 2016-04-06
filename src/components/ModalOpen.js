@@ -39,9 +39,6 @@ export default class ModalConfirm extends React.Component {
     });
   }
 
-  onModalHide() {
-  }
-
   toggleEditMode() {
     this.setState({
       isEdit: ! this.state.isEdit
@@ -64,7 +61,7 @@ export default class ModalConfirm extends React.Component {
   render() {
     let {show} = this.state;
     return (
-      <Modal show={show} onHide={this.onModalHide}>
+      <Modal show={show}>
         <Modal.Header>
           <Modal.Title>
             <div className="modal-open-title">
