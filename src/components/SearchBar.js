@@ -230,10 +230,11 @@ export default class SearchBar extends React.Component {
 
     cm.operation(function() {
       setTimeout(() => {
-        let state = getSearchState(cm);
-        let cursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
 
-        if (! cursor.find(rev)) {
+        let state = getSearchState(cm);
+        let searchCursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
+
+        if (! searchCursor.find(rev)) {
 
           if (rev) {
             let prevPageIndex = findPrevIndexByKeyword(state.query);
@@ -242,7 +243,7 @@ export default class SearchBar extends React.Component {
               return;
             }
             setPageIndex(doc.uuid, prevPageIndex);
-            cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
+            searchCursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
           }
           else {
             let nextPageIndex = findNextIndexByKeyword(state.query);
@@ -251,17 +252,17 @@ export default class SearchBar extends React.Component {
               return;
             }
             setPageIndex(doc.uuid, nextPageIndex);
-            cursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
+            searchCursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.firstLine(), 0));
           }
 
-          if (! cursor.find(rev)) {
+          if (! searchCursor.find(rev)) {
             return;
           }
         }
-        cm.setSelection(cursor.from(), cursor.to());
-        cm.scrollIntoView({from: cursor.from(), to: cursor.to()}, 20);
-        state.posFrom = cursor.from();
-        state.posTo = cursor.to();
+        cm.setSelection(searchCursor.from(), searchCursor.to());
+        cm.scrollIntoView({from: searchCursor.from(), to: searchCursor.to()}, 20);
+        state.posFrom = searchCursor.from();
+        state.posTo = searchCursor.to();
       });
     });
   }
