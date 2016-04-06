@@ -231,7 +231,13 @@ export default class SearchBar extends React.Component {
     cm.operation(() => {
       setTimeout(() => {
 
+        const cursor = cm.getCursor();
         let state = getSearchState(cm);
+
+        const index = cm.indexFromPos(cursor);
+        state.posFrom = cm.posFromIndex(index - state.query.length);
+        state.posTo = cursor;
+
         let searchCursor = getSearchCursor(cm, state.query, rev ? state.posFrom : state.posTo);
 
         if (! searchCursor.find(rev)) {
