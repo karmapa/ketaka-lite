@@ -228,7 +228,7 @@ export default class SearchBar extends React.Component {
 
     let {findPrevIndexByKeyword, findNextIndexByKeyword, doc, setPageIndex} = this.props;
 
-    cm.operation(function() {
+    cm.operation(() => {
       setTimeout(() => {
 
         let state = getSearchState(cm);
