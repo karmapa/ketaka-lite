@@ -66,6 +66,7 @@ var config = {
 
 if ('production' === process.env.NODE_ENV) {
   config.entry.javascript = ['./src/index'];
+  delete config.output.publicPath;
 }
 
 module.exports = config;
