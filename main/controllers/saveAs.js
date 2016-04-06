@@ -12,8 +12,10 @@ let saveAs = ipcHandler(function(event, args) {
   let send = this.send;
 
   let newDoc = _.cloneDeep(oldDoc);
+
   newDoc.uuid = uuid.v4();
   newDoc.name = newDocName;
+  newDoc.changed = false;
 
   let oldImageFolderPath = Path.resolve(PATH_APP_DOC, oldDoc.name, 'images');
   let newImageFolderPath = Path.resolve(PATH_APP_DOC, newDoc.name, 'images');

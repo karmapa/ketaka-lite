@@ -17,6 +17,7 @@ import {tagToStr} from './Tag';
 function createDoc(args) {
   return _.extend({
     chunk: '',
+    changed: false,
     editChunk: false,
     name: '',
     pageIndex: 0,
