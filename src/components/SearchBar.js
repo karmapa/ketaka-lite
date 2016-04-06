@@ -542,7 +542,7 @@ export default class SearchBar extends React.Component {
     }
     let pos = cm.getCursor();
     let {mode, findKeyword, replaceKeyword} = this.state;
-    pos.ch -= MODE_SEARCH === mode ? findKeyword.length : replaceKeyword.length;
+    pos.ch -= (MODE_SEARCH === mode) ? findKeyword.length : replaceKeyword.length;
     cm.setSelection(pos, pos);
   };
 
