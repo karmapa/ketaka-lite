@@ -2,8 +2,6 @@ let ipc = window.require('electron').ipcRenderer;
 
 export default class Api {
 
-  static events = {};
-
   static send(name, args = {}) {
     return new Promise((resolve, reject) => {
       this.initEvent(name, resolve, reject);
