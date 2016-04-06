@@ -1033,6 +1033,7 @@ export default class EditorArea extends React.Component {
     else {
       this.props.writePageContent(uuid, pageIndex, content);
     }
+
     if (this.props.spellCheckOn) {
       this.lazyAddSpellCheckOverlay();
     }
