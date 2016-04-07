@@ -202,6 +202,10 @@ function getTemplate(args) {
           click: () => {
             shell.openExternal('https://github.com/atom/electron/issues');
           }
+        },
+        {
+          label: 'About KETAKA Lite',
+          role: 'about'
         }
       ]
     }
