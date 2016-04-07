@@ -3,7 +3,7 @@ const KEY_ENTER = 13;
 const KEY_SHIFT = 16;
 const KEY_BACKSPACE = 8;
 
-import _ from 'lodash';
+import {extend, toArray, isFunction} from 'lodash';
 import * as bo from '../constants/inputMethods/bo';
 
 export default class Ime {
@@ -19,7 +19,7 @@ export default class Ime {
     let method = bo[name];
 
     if (method) {
-      this.inputmethod = _.extend({
+      this.inputmethod = extend({
         contextLength: 0,
         maxKeyLength: 1
       }, method);
@@ -114,7 +114,7 @@ export default class Ime {
     }
     if (KEY_ENTER === keyCode) {
       // it's a bug that codemirror don't fire keypress on enter key
-      this.keypress.apply(this, _.toArray(arguments));
+      this.keypress.apply(this, toArray(arguments));
     }
   }
 
@@ -145,7 +145,7 @@ export default class Ime {
          .concat(patterns);
     }
 
-    if (_.isFunction(patterns)) {
+    if (isFunction(patterns)) {
       // For backwards compatibility, allow the rule functions to return plain
       // string. Determine noop by checking whether input is different from
       // output. If the rule function returns object, just return it as-is.
