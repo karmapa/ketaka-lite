@@ -461,7 +461,7 @@ function isZipUpload(paths) {
 
 function getBamboonNameFromEntries(entries) {
 
-  const re = new RegExp(/([a-zA-Z0-9]+)\.json$/);
+  const re = new RegExp(/([a-zA-Z0-9\-]+)\.json$/);
   const entry = _.find(entries, row => (! row.isDirectory) && re.test(row.name));
 
   if (entry) {
