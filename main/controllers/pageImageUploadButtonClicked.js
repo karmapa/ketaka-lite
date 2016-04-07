@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {first, get, isEmpty} from 'lodash';
 import {Doc, Helper} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
@@ -17,13 +17,13 @@ let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
   dialog.showOpenDialog(options, function(paths) {
 
-    if (_.isEmpty(paths)) {
+    if (isEmpty(paths)) {
       return;
     }
 
-    let source = _.first(paths);
+    let source = first(paths);
     let page = doc.pages[doc.pageIndex];
-    let filename = _.get(page, 'name') ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
+    let filename = get(page, 'name') ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
     let dest = Path.resolve(PATH_APP_DOC, doc.name, 'images', filename);
     let pathData = Path.parse(dest);
     let fileType = Helper.getFileType(source);

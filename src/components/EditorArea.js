@@ -1,5 +1,5 @@
 import React, {PropTypes} from 'react';
-import _ from 'lodash';
+import {first, get, find, findIndex, isEmpty} from 'lodash';
 import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
@@ -90,7 +90,7 @@ export default class EditorArea extends React.Component {
 
     this.state = {
       print: false,
-      docKey: docs.length > 0 ? _.first(docs).uuid : null
+      docKey: docs.length > 0 ? first(docs).uuid : null
     };
 
     this.registeredEvents = [];
@@ -163,7 +163,7 @@ export default class EditorArea extends React.Component {
       return;
     }
 
-    let fontRecords = _.get(page, 'config.fontRecords', []);
+    let fontRecords = get(page, 'config.fontRecords', []);
     fontRecords.forEach(record => {
       let {from, to, css} = record;
       codemirror.markText(from, to, css);
@@ -267,7 +267,7 @@ export default class EditorArea extends React.Component {
     this.props.closeDoc(key);
   }
 
-  getDocByKey = key => _.find(this.props.docs, {uuid: key});
+  getDocByKey = key => find(this.props.docs, {uuid: key});
 
   docChanged(doc = this.getDoc()) {
     return doc.changed;
@@ -305,7 +305,7 @@ export default class EditorArea extends React.Component {
   }
 
   findPageIndexByName(name) {
-    return _.get(this.getDoc(), 'pages', [])
+    return get(this.getDoc(), 'pages', [])
       .findIndex(page => page.name === name);
   }
 
@@ -318,11 +318,11 @@ export default class EditorArea extends React.Component {
   };
 
   getPageInputValue(page = this.getCurrentPage()) {
-    return _.get(page, 'name', '');
+    return get(page, 'name', '');
   }
 
   getPageIndex(doc = this.getDoc()) {
-    return _.get(doc, 'pageIndex', 0);
+    return get(doc, 'pageIndex', 0);
   }
 
   save = (doc = this.getDoc()) => {
@@ -361,7 +361,7 @@ export default class EditorArea extends React.Component {
   };
 
   closeDocByName = name => {
-    let doc = _.find(this.props.docs, {name});
+    let doc = find(this.props.docs, {name});
     if (doc) {
       this.closeDoc(doc.uuid);
     }
@@ -505,7 +505,7 @@ export default class EditorArea extends React.Component {
   getIndexByMatchIndex = (query, index) => {
     query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
-    let content = _.get(this.getCurrentPage(), 'content', '');
+    let content = get(this.getCurrentPage(), 'content', '');
 
     let re = new RegExp(query, 'g');
     let match = re.exec(content);
@@ -1115,7 +1115,7 @@ export default class EditorArea extends React.Component {
   }
 
   getImageSrc = (page, doc) => {
-    let src = _.get(page, 'pathData.base');
+    let src = get(page, 'pathData.base');
     if (! src) {
       return '';
     }
@@ -1133,10 +1133,10 @@ export default class EditorArea extends React.Component {
         let doc = self.getDoc();
         let page = self.getCurrentPage(doc);
         self.refs.modalDocSettings.open({
-          docName: _.get(doc, 'name'),
-          pageName: _.get(page, 'name'),
+          docName: get(doc, 'name'),
+          pageName: get(page, 'name'),
           docNames: res.docNames,
-          pageNames: _.get(doc, 'pages', []).map(page => page.name)
+          pageNames: get(doc, 'pages', []).map(page => page.name)
         });
       });
   }
@@ -1163,7 +1163,7 @@ export default class EditorArea extends React.Component {
 
   onPageAddButtonClick = () => {
     this.refs.modalPageAdd.open({
-      pageNames: _.get(this.getDoc(), 'pages', []).map(page => page.name)
+      pageNames: get(this.getDoc(), 'pages', []).map(page => page.name)
     });
   }
 
@@ -1300,7 +1300,7 @@ export default class EditorArea extends React.Component {
   addPageAndCloseModal = pageName => {
     let doc = this.getDoc();
     this.props.addPage(doc.uuid, pageName);
-    let pageIndex = _.findIndex(doc.pages, {name: pageName});
+    let pageIndex = findIndex(doc.pages, {name: pageName});
     this.props.setPageIndex(this.state.docKey, pageIndex);
     this.refs.modalPageAdd.close();
   }
@@ -1377,11 +1377,11 @@ export default class EditorArea extends React.Component {
   }
 
   getCurrentCodemirror() {
-    let uuid = _.get(this.getDoc(), 'uuid');
+    let uuid = get(this.getDoc(), 'uuid');
     let editorKey = this.getEditorKey(uuid);
     let editor = this.refs[editorKey];
     if (editor) {
-      return _.get(editor.getWrappedInstance(), 'codemirror');
+      return get(editor.getWrappedInstance(), 'codemirror');
     }
     return null;
   }
@@ -1448,11 +1448,11 @@ export default class EditorArea extends React.Component {
 
   onBambooClick = name => {
     let self = this;
-    let openedDoc = _.find(this.props.docs, {name});
+    let openedDoc = find(this.props.docs, {name});
     if (openedDoc) {
 
       // activate this doc if its already opened
-      let index = _.findIndex(this.props.docs, {uuid: openedDoc.uuid});
+      let index = findIndex(this.props.docs, {uuid: openedDoc.uuid});
       if (-1 !== index) {
         this.activateTab(index);
       }
@@ -1513,7 +1513,7 @@ export default class EditorArea extends React.Component {
     let page = doc.pages[--pageIndex];
 
     while (page) {
-      let content = _.get(page, 'content', '');
+      let content = get(page, 'content', '');
       if (content.includes(keyword)) {
         return pageIndex;
       }
@@ -1528,7 +1528,7 @@ export default class EditorArea extends React.Component {
     let page = doc.pages[++pageIndex];
 
     while (page) {
-      let content = _.get(page, 'content', '');
+      let content = get(page, 'content', '');
       if (content.includes(keyword)) {
         return pageIndex;
       }
