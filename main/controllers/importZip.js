@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {isEmpty} from 'lodash';
 import {Importer} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
@@ -22,7 +22,7 @@ const importZip = ipcHandler(function(event, args) {
 
   async function importPaths(paths) {
 
-    if (_.isEmpty(paths)) {
+    if (isEmpty(paths)) {
       return;
     }
 

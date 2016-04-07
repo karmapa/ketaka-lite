@@ -1,7 +1,6 @@
 import Path from 'path';
 import {Doc, Helper} from '../services';
 import {ipcHandler} from '../decorators';
-import _ from 'lodash';
 import {PATH_APP_DOC} from '../constants/appConstants';
 
 let deleteDocs = ipcHandler(function(event, res) {

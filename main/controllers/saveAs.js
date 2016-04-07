@@ -2,7 +2,7 @@ import Path from 'path';
 import {Doc, Helper} from '../services';
 import {PATH_APP_DOC} from '../constants/appConstants';
 import {ipcHandler} from '../decorators';
-import _ from 'lodash';
+import {cloneDeep} from 'lodash';
 import uuid from 'node-uuid';
 
 let saveAs = ipcHandler(function(event, args) {
@@ -11,7 +11,7 @@ let saveAs = ipcHandler(function(event, args) {
   let oldDoc = args.doc;
   let send = this.send;
 
-  let newDoc = _.cloneDeep(oldDoc);
+  let newDoc = cloneDeep(oldDoc);
 
   newDoc.uuid = uuid.v4();
   newDoc.name = newDocName;
