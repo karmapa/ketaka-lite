@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
-import _ from 'lodash';
+import {isString} from 'lodash';
 
 export default class ImeTextarea extends React.Component {
 
@@ -43,7 +43,7 @@ export default class ImeTextarea extends React.Component {
 
   onKeyPress = e => {
     let value = Ime.keypress(e, {element: this.input});
-    if (_.isString(value)) {
+    if (isString(value)) {
       this.props.onKeyPress(value);
     }
   }

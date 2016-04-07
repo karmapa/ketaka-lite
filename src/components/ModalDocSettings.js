@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Input, Modal} from 'react-bootstrap';
-import _ from 'lodash';
+import {isEmpty, pick} from 'lodash';
 
 export default class ModalDocSettings extends React.Component {
 
@@ -53,7 +53,7 @@ export default class ModalDocSettings extends React.Component {
     let {docName} = this.state;
     let {originDocName} = this;
 
-    if (_.isEmpty(docName)) {
+    if (isEmpty(docName)) {
       return false;
     }
     if (! this.isValidDocNameFormat(docName)) {
@@ -71,7 +71,7 @@ export default class ModalDocSettings extends React.Component {
 
   isValidPageName = () => {
     let {pageName} = this.state;
-    if (_.isEmpty(pageName)) {
+    if (isEmpty(pageName)) {
       return false;
     }
     if (pageName === this.originPageName) {
@@ -82,7 +82,7 @@ export default class ModalDocSettings extends React.Component {
 
   pageNameHelp() {
     let {pageName} = this.state;
-    if (_.isEmpty(pageName)) {
+    if (isEmpty(pageName)) {
       return 'Page name cannot be empty.';
     }
     if (this.isPageNameExisted(pageName) && (pageName !== this.originPageName)) {
@@ -94,7 +94,7 @@ export default class ModalDocSettings extends React.Component {
   docNameHelp = () => {
     let {docName} = this.state;
 
-    if (_.isEmpty(docName)) {
+    if (isEmpty(docName)) {
       return 'Doc name cannot be empty.';
     }
     if (! this.isValidDocNameFormat(docName)) {
@@ -131,7 +131,7 @@ export default class ModalDocSettings extends React.Component {
       this.setState({
         loading: true
       });
-      this.props.confirm(_.pick(this.state, ['docName', 'pageName']));
+      this.props.confirm(pick(this.state, ['docName', 'pageName']));
     }
   }
 

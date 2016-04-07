@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
-import _ from 'lodash';
+import {extend} from 'lodash';
 
 export default class ModalConfirm extends React.Component {
 
@@ -19,7 +19,7 @@ export default class ModalConfirm extends React.Component {
   };
 
   open(args) {
-    this.setState(_.extend({
+    this.setState(extend({
       show: true,
       title: '',
       message: ''

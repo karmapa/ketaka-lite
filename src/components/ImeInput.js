@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
+import {isString} from 'lodash';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Ime} from '../services';
 
@@ -41,7 +41,7 @@ export default class ImeInput extends React.Component {
 
   onKeyPress = e => {
     let value = Ime.keypress(e, {element: this.input});
-    if (_.isString(value)) {
+    if (isString(value)) {
       this.props.onKeyPress(value);
     }
   };
