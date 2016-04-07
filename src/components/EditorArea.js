@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
-import {first, get, find, findIndex, isEmpty} from 'lodash';
+import {first, get, find, findIndex, isEmpty, isNull, values,
+  invert, clone, each, throttle, debounce, map} from 'lodash';
 import classNames from 'classnames';
 import keypress from 'keypress.js';
 import shouldPureComponentUpdate from 'react-pure-render/function';
@@ -23,7 +24,6 @@ import Path from 'path';
 import {connect} from 'react-redux';
 
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
-
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
@@ -413,7 +413,7 @@ export default class EditorArea extends React.Component {
     let doc = this.getDoc();
     let cm = this.getCurrentCodemirror();
 
-    if (_.isEmpty(cm)) {
+    if (isEmpty(cm)) {
       return;
     }
 
@@ -523,7 +523,7 @@ export default class EditorArea extends React.Component {
 
   nextWord = () => {
 
-    if (_.isEmpty(this.lastQueryRes)) {
+    if (isEmpty(this.lastQueryRes)) {
       return;
     }
 
@@ -537,7 +537,7 @@ export default class EditorArea extends React.Component {
     let index = cm.indexFromPos(cursor);
     let query = this.findNextQuery(this.lastQueryRes, index);
 
-    if (_.isNull(query)) {
+    if (isNull(query)) {
       return;
     }
 
@@ -552,7 +552,7 @@ export default class EditorArea extends React.Component {
 
   prevWord = () => {
 
-    if (_.isEmpty(this.lastQueryRes)) {
+    if (isEmpty(this.lastQueryRes)) {
       return;
     }
 
@@ -567,7 +567,7 @@ export default class EditorArea extends React.Component {
     let index = cm.indexFromPos(cursor) - selection.length;
     let query = this.findPrevQuery(this.lastQueryRes, index);
 
-    if (_.isNull(query)) {
+    if (isNull(query)) {
       return;
     }
 
@@ -598,16 +598,16 @@ export default class EditorArea extends React.Component {
       self.keypressListener.destroy();
     }
 
-    let inputMethods = _.values(MAP_INPUT_METHODS);
-    let invertedInputMethods = _.invert(MAP_INPUT_METHODS);
+    let inputMethods = values(MAP_INPUT_METHODS);
+    let invertedInputMethods = invert(MAP_INPUT_METHODS);
 
     self.keypressListener = new keypress.Listener();
     let keypressListener = Helper.camelize(['register_combo'], self.keypressListener);
 
-    let shortcuts = _.clone(this.props.shortcuts);
+    let shortcuts = clone(this.props.shortcuts);
 
     // format shortcuts data
-    _.each(shortcuts, (shortcut, prop) => {
+    each(shortcuts, (shortcut, prop) => {
       shortcuts[prop] = shortcut.value.split(' + ').join(' ');
     });
 
@@ -841,7 +841,7 @@ export default class EditorArea extends React.Component {
 
   }
 
-  handleResize = _.throttle(() => {
+  handleResize = throttle(() => {
     this.forceUpdate();
   }, 300);
 
@@ -1025,7 +1025,7 @@ export default class EditorArea extends React.Component {
     let pos = 0;
     let action = [];
 
-    _.each(diffRows, diffRow => {
+    each(diffRows, diffRow => {
 
       const diffRowValueLength = diffRow.value.length;
 
@@ -1073,7 +1073,7 @@ export default class EditorArea extends React.Component {
     }
   };
 
-  onCodemirrorChange = _.debounce((cm, content) => {
+  onCodemirrorChange = debounce((cm, content) => {
 
     let doc = this.getDoc();
     let page = this.getCurrentPage(doc);
@@ -1092,7 +1092,7 @@ export default class EditorArea extends React.Component {
     }
   }, 300);
 
-  lazyAddSpellCheckOverlay = _.throttle(this.addSpellCheckOverlay, 1000);
+  lazyAddSpellCheckOverlay = throttle(this.addSpellCheckOverlay, 1000);
 
   getTabName = doc => {
     let tabName = doc.name;
@@ -1210,7 +1210,7 @@ export default class EditorArea extends React.Component {
 
     this.lastQueryRes = queries;
 
-    if (_.isEmpty(queries)) {
+    if (isEmpty(queries)) {
       return;
     }
 
@@ -1235,7 +1235,7 @@ export default class EditorArea extends React.Component {
 
   searchOverlay(queries, caseInsensitive) {
 
-    let tokens = _.map(queries, 2);
+    let tokens = map(queries, 2);
     let str = tokens.map(query => query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
       .join('|');
 
@@ -1249,7 +1249,7 @@ export default class EditorArea extends React.Component {
         let match = regexp.exec(stream.string);
 
         if (match && match.index === stream.pos) {
-          let posArr = _.map(checkSyllables(stream.string), 0);
+          let posArr = map(checkSyllables(stream.string), 0);
           let matchLine = posArr.includes(stream.pos);
           stream.pos += match[0].length;
           return matchLine ? 'typo' : null;
@@ -1604,7 +1604,7 @@ export default class EditorArea extends React.Component {
 
   renderEditorToolbar() {
 
-    if (_.isEmpty(this.props.docs)) {
+    if (isEmpty(this.props.docs)) {
       return false;
     }
 
