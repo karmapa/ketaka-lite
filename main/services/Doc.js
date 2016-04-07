@@ -24,7 +24,7 @@ function createDoc(args) {
     pageIndex: 0,
     pages: [],
     nodes: [],
-    uuid: uuid.v4()
+    uuid: 'doc:' + uuid.v4()
   }, args);
 }
 
