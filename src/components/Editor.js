@@ -178,6 +178,7 @@ export default class Editor extends React.Component {
         theme: theme,
         lineWrapping: true,
         lineNumbers: true,
+        undoDepth: 0,
         styleActiveLine: true,
         extraKeys: {
           Tab: cm => {
