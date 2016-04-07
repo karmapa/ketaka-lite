@@ -9,10 +9,11 @@ let Path = require('path');
 let _ = require('lodash');
 let uuid = require('node-uuid');
 let zpad = require('zpad');
-let mkdirp = require('mkdirp');
-let naturalSort = require('javascript-natural-sort');
 
 import {tagToStr} from './Tag';
+
+let mkdirp = require('mkdirp');
+let naturalSort = require('javascript-natural-sort');
 
 function createDoc(args) {
   return _.extend({
