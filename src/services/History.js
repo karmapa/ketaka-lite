@@ -5,7 +5,6 @@ export default class History {
   static data = {};
 
   static add(key, action) {
-    console.log(key, action);
     this.autoCreateStructure(key);
     this.data[key].done.push(action);
   }
