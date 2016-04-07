@@ -163,7 +163,7 @@ export default class EditorArea extends React.Component {
   markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
 
     if (! codemirror) {
-      return;
+      return false;
     }
 
     let fontRecords = get(page, 'config.fontRecords', []);
@@ -180,7 +180,7 @@ export default class EditorArea extends React.Component {
 
     if (this.props.closeConfirmStatus) {
       this.closeConfirm();
-      return;
+      return false;
     }
 
     if (previousProps.docs.length < docs.length) {
@@ -219,7 +219,7 @@ export default class EditorArea extends React.Component {
   changeActiveDocWhenClosing(uuid) {
     // don't do anything for non-active doc
     if (uuid !== this.state.docKey) {
-      return;
+      return false;
     }
     let docs = this.props.docs;
     let index = this.getDocIndexByUuid(uuid);
@@ -245,7 +245,7 @@ export default class EditorArea extends React.Component {
         title: 'Oops',
         message: 'You have unsaved content ! Do you want to save it ?'
       });
-      return;
+      return false;
     }
     this.closeDoc(key);
   }
@@ -286,7 +286,7 @@ export default class EditorArea extends React.Component {
   rotateTabLeft = () => {
     let docs = this.props.docs;
     if (docs.length < 2) {
-      return;
+      return false;
     }
     let index = this.getDocIndexByUuid(this.state.docKey);
     let nextIndex = (index - 1) < 0 ? docs.length - 1 : index - 1;
@@ -296,7 +296,7 @@ export default class EditorArea extends React.Component {
   rotateTabRight = () => {
     let docs = this.props.docs;
     if (docs.length < 2) {
-      return;
+      return false;
     }
     let index = this.getDocIndexByUuid(this.state.docKey);
     let nextIndex = (index + 1) > docs.length - 1 ? 0 : index + 1;
@@ -333,7 +333,7 @@ export default class EditorArea extends React.Component {
     let self = this;
 
     if (self.isSaving) {
-      return;
+      return false;
     }
 
     if (doc) {
@@ -377,7 +377,7 @@ export default class EditorArea extends React.Component {
 
     if (! doc) {
       self.refs.toast.error('Open a bamboo then try export again');
-      return;
+      return false;
     }
 
     Api.send('export-zip', {name: doc.name})
@@ -394,7 +394,7 @@ export default class EditorArea extends React.Component {
 
     if (! doc) {
       self.refs.toast.error('Open a bamboo then try export again');
-      return;
+      return false;
     }
 
     Api.send('export-file-with-pb', {name: doc.name})
@@ -417,7 +417,7 @@ export default class EditorArea extends React.Component {
     let cm = this.getCurrentCodemirror();
 
     if (isEmpty(cm)) {
-      return;
+      return false;
     }
 
     let {writePageContent, setPageIndex} = this.props;
@@ -527,13 +527,13 @@ export default class EditorArea extends React.Component {
   nextWord = () => {
 
     if (isEmpty(this.lastQueryRes)) {
-      return;
+      return false;
     }
 
     let cm = this.getCurrentCodemirror();
 
     if (! cm) {
-      return;
+      return false;
     }
 
     let cursor = cm.getCursor();
@@ -541,7 +541,7 @@ export default class EditorArea extends React.Component {
     let query = this.findNextQuery(this.lastQueryRes, index);
 
     if (isNull(query)) {
-      return;
+      return false;
     }
 
     let from = query[0];
@@ -556,13 +556,13 @@ export default class EditorArea extends React.Component {
   prevWord = () => {
 
     if (isEmpty(this.lastQueryRes)) {
-      return;
+      return false;
     }
 
     let cm = this.getCurrentCodemirror();
 
     if (! cm) {
-      return;
+      return false;
     }
 
     let cursor = cm.getCursor();
@@ -571,7 +571,7 @@ export default class EditorArea extends React.Component {
     let query = this.findPrevQuery(this.lastQueryRes, index);
 
     if (isNull(query)) {
-      return;
+      return false;
     }
 
     let from = query[0];
@@ -1195,7 +1195,7 @@ export default class EditorArea extends React.Component {
     let codemirror = this.getCurrentCodemirror();
 
     if (! codemirror) {
-      return;
+      return false;
     }
 
     if (this.lastOverlay) {
@@ -1214,7 +1214,7 @@ export default class EditorArea extends React.Component {
     this.lastQueryRes = queries;
 
     if (isEmpty(queries)) {
-      return;
+      return false;
     }
 
     let overlay = this.searchOverlay(queries, true);
