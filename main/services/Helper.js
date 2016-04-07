@@ -1,5 +1,5 @@
 import StreamZip from 'node-stream-zip';
-import _ from 'lodash';
+import {clone} from 'lodash';
 
 let BufferHelper = require('bufferhelper');
 let Path = require('path');
@@ -137,7 +137,7 @@ function writeFile(path, content) {
 function getPathsType(paths) {
 
   let rows = [];
-  let clonedPaths = _.clone(paths);
+  let clonedPaths = clone(paths);
 
   return new Promise(function(resolve, reject) {
 
