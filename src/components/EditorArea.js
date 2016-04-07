@@ -87,7 +87,7 @@ export default class EditorArea extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    let {docs} = this.props;
+    const {docs} = this.props;
 
     this.state = {
       print: false,
@@ -99,7 +99,9 @@ export default class EditorArea extends React.Component {
   }
 
   componentWillMount() {
-    let self = this;
+
+    const self = this;
+
     Api.send('get-app-data')
      .then(res => {
       self.docPath = res.docPath;
