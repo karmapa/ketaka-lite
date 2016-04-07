@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
-import _ from 'lodash';
+import {extend, isFunction} from 'lodash';
 
 export default class ModalSaveConfirm extends React.Component {
 
@@ -18,7 +18,7 @@ export default class ModalSaveConfirm extends React.Component {
   };
 
   open(args) {
-    this.setState(_.extend({
+    this.setState(extend({
       show: true,
       title: '',
       message: ''
@@ -49,7 +49,7 @@ export default class ModalSaveConfirm extends React.Component {
         </Modal.Header>
         <Modal.Body>{message}</Modal.Body>
         <Modal.Footer>
-          {_.isFunction(cancel) && <Button onClick={cancel}>Cancel</Button>}
+          {isFunction(cancel) && <Button onClick={cancel}>Cancel</Button>}
           <Button onClick={discard}>Discard</Button>
           <Button bsStyle="primary" onClick={confirm}>Save and close</Button>
         </Modal.Footer>

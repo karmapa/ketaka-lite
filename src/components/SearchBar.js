@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
+import {isEmpty, isNull, isString, isFunction, get} from 'lodash';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {ImeInput} from '.';
 import classNames from 'classnames';
@@ -51,7 +51,7 @@ export default class SearchBar extends React.Component {
   };
 
   findMatchCount = keyword => {
-    if (_.isEmpty(keyword)) {
+    if (isEmpty(keyword)) {
       this.setState({matchCount: 0});
       return;
     }
@@ -245,7 +245,7 @@ export default class SearchBar extends React.Component {
           if (rev) {
             let prevPageIndex = findPrevIndexByKeyword(state.query);
 
-            if (_.isNull(prevPageIndex)) {
+            if (isNull(prevPageIndex)) {
               return;
             }
             setPageIndex(doc.uuid, prevPageIndex);
@@ -254,7 +254,7 @@ export default class SearchBar extends React.Component {
           else {
             let nextPageIndex = findNextIndexByKeyword(state.query);
 
-            if (_.isNull(nextPageIndex)) {
+            if (isNull(nextPageIndex)) {
               return;
             }
             setPageIndex(doc.uuid, nextPageIndex);
@@ -384,7 +384,7 @@ export default class SearchBar extends React.Component {
 
           let nextPageIndex = findNextIndexByKeyword(query);
 
-          if (! _.isNull(nextPageIndex)) {
+          if (! isNull(nextPageIndex)) {
 
             self.props.setPageIndex(doc.uuid, nextPageIndex);
 
@@ -410,7 +410,7 @@ export default class SearchBar extends React.Component {
 
         self.openConfirmDialog({
           yes: () => {
-            cursor.replace(_.isString(query) ? text : text.replace(/\$(\d)/g, (_, i) => match[i]));
+            cursor.replace(isString(query) ? text : text.replace(/\$(\d)/g, (_, i) => match[i]));
             advance();
           },
           no: advance,
@@ -538,7 +538,7 @@ export default class SearchBar extends React.Component {
   };
 
   onConfirmBoxBlur = e => {
-    if ('BUTTON' !== _.get(e, 'relatedTarget.tagName')) {
+    if ('BUTTON' !== get(e, 'relatedTarget.tagName')) {
       this.close();
     }
   };
@@ -580,7 +580,7 @@ export default class SearchBar extends React.Component {
     };
     let renderFunc = map[this.state.mode];
 
-    if (! _.isFunction(renderFunc)) {
+    if (! isFunction(renderFunc)) {
       throw 'Undefined render function';
     }
     return renderFunc();
@@ -666,7 +666,7 @@ function parseQuery(query) {
     query = parseString(query);
   }
 
-  if (_.isString(query) ? ('' === query) : query.test('')) {
+  if (isString(query) ? ('' === query) : query.test('')) {
     query = /x^/;
   }
   return query;
@@ -674,7 +674,7 @@ function parseQuery(query) {
 
 function searchOverlay(query, caseInsensitive) {
 
-  if (_.isString(query)) {
+  if (isString(query)) {
     query = new RegExp(query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'), caseInsensitive ? 'gi' : 'g');
   }
   else if (! query.global) {

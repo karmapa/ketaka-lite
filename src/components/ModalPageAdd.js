@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Input, Modal} from 'react-bootstrap';
-import _ from 'lodash';
+import {isEmpty} from 'lodash';
 
 export default class ModalPageAdd extends React.Component {
 
@@ -47,7 +47,7 @@ export default class ModalPageAdd extends React.Component {
 
   isValidPageName = () => {
     let {pageName} = this.state;
-    if (_.isEmpty(pageName)) {
+    if (isEmpty(pageName)) {
       return false;
     }
     if (pageName === this.originPageName) {
@@ -61,7 +61,7 @@ export default class ModalPageAdd extends React.Component {
       return '';
     }
     let {pageName} = this.state;
-    if (_.isEmpty(pageName)) {
+    if (isEmpty(pageName)) {
       return 'Page name cannot be empty.';
     }
     if (this.isPageNameExisted(pageName) && (pageName !== this.originPageName)) {

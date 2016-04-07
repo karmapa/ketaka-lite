@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal} from 'react-bootstrap';
 import {ImeTextarea} from '../components';
-import _ from 'lodash';
+import {isEqual} from 'lodash';
 import {connect} from 'react-redux';
 import {setExceptionWords} from '../modules/app';
 
@@ -17,7 +17,7 @@ export default class ModalSpellCheckExceptionList extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (! _.isEqual(this.props.words, nextProps.words)) {
+    if (! isEqual(this.props.words, nextProps.words)) {
       this.setState({
         textareaValue: nextProps.words.join(',')
       });

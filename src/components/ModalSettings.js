@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
 import {ComboListenerInput} from '.';
-import _ from 'lodash';
+import {map} from 'lodash';
 
 import {DEFAULT_SHORTCUTS} from '../constants/AppConstants';
 import {connect} from 'react-redux';
@@ -62,7 +62,7 @@ export default class ModalSettings extends React.Component {
 
   renderComboInputs = () => {
     let self = this;
-    return _.map(self.props.shortcuts, (shortcut, prop) => {
+    return map(self.props.shortcuts, (shortcut, prop) => {
       return (
         <li key={prop}>
           <span className="combo-text">{shortcut.text}</span>

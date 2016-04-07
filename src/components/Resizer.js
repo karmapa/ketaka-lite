@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {throttle} from 'lodash';
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 import shouldPureComponentUpdate from 'react-pure-render/function';
@@ -79,7 +79,7 @@ export default class Resizer extends React.Component {
     return x > this.mouse.x;
   }
 
-  onResize = _.throttle(() => {
+  onResize = throttle(() => {
     this.forceUpdate();
   }, 300);
 

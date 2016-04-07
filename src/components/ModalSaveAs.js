@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
-import _ from 'lodash';
+import {isEmpty} from 'lodash';
 
 export default class ModalSaveAs extends React.Component {
 
@@ -50,7 +50,7 @@ export default class ModalSaveAs extends React.Component {
 
   isValidDocName = () => {
     let {docName} = this.state;
-    if (_.isEmpty(docName)) {
+    if (isEmpty(docName)) {
       return false;
     }
     if (docName === this.originDocName) {
@@ -64,7 +64,7 @@ export default class ModalSaveAs extends React.Component {
       return '';
     }
     let {docName} = this.state;
-    if (_.isEmpty(docName)) {
+    if (isEmpty(docName)) {
       return 'Doc name cannot be empty.';
     }
     if (this.isDocNameExisted(docName) && (docName !== this.originDocName)) {
