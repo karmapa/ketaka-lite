@@ -8,7 +8,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
   ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
   Resizer, PrintArea} from '.';
-import {Helper, Ime} from '../services/';
+import {Helper, Ime, History} from '../services/';
 import CodeMirror from 'codemirror';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -29,6 +29,9 @@ const KEY_ADD_DOC = 'KEY_ADD_DOC';
 import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
 import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRecord,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
+import uuid from 'node-uuid';
+
+const jsdiff = require('diff');
 
 @connect(state => ({
   closeConfirmStatus: state.app.closeConfirmStatus,
@@ -78,7 +81,6 @@ export default class EditorArea extends React.Component {
 
   docPath = '';
   keypressListener = null;
-
   lastQueryRes = [];
 
   constructor(props, context) {
@@ -843,13 +845,6 @@ export default class EditorArea extends React.Component {
     this.forceUpdate();
   }, 300);
 
-  initHistory = () => {
-    let cm = this.getCurrentCodemirror();
-    if (cm) {
-      cm.clearHistory();
-    }
-  }
-
   handleFileCountWarning = paths => {
 
     const modalImport = this.getImportModal();
@@ -883,7 +878,6 @@ export default class EditorArea extends React.Component {
         const {doc, message} = await Api.send('import-button-clicked', {force: true, paths});
 
         this.props.importDoc(doc);
-        this.initHistory();
         this.refs.toast.success(message);
 
         modalImport.setOptions({
@@ -938,7 +932,6 @@ export default class EditorArea extends React.Component {
       const {doc, message} = await Api.send('import-button-clicked');
 
       this.props.importDoc(doc);
-      this.initHistory();
       this.refs.toast.success(message);
 
       modalImport.setOptions({
@@ -1019,10 +1012,70 @@ export default class EditorArea extends React.Component {
     return doc.pages[pageIndex];
   }
 
-  onCodemirrorChange = (cm, content) => {
+  handleLegacyPage = page => {
+    if (! page.uuid) {
+      page.uuid = 'page:' + uuid.v4();
+    }
+  };
+
+  getActionByContents = (content1, content2) => {
+
+    const diffRows = jsdiff.diffLines(content1, content2);
+
+    let pos = 0;
+    let action = [];
+
+    _.each(diffRows, diffRow => {
+
+      const diffRowValueLength = diffRow.value.length;
+
+      if (diffRow.added) {
+        action.push({
+          added: true,
+          value: diffRow.value,
+          from: pos,
+          to: pos + diffRowValueLength
+        });
+      }
+      else if (diffRow.removed) {
+
+        action.push({
+          removed: true,
+          value: diffRow.value,
+          from: pos,
+          to: pos + diffRowValueLength
+        });
+      }
+      else {
+        pos += diffRowValueLength;
+      }
+    });
+
+    return action;
+  };
+
+  handleHistory = (cm, content) => {
+
+    if (cm.disableHistory) {
+      cm.disableHistory = false;
+      return false;
+    }
+
+    const page = this.getCurrentPage();
+    this.handleLegacyPage(page);
+
+    const key = this.getHistoryKey();
+
+    const action = this.getActionByContents(page.content, content);
+
+    if (action.length > 0) {
+      History.add(key, action);
+    }
+  };
+
+  onCodemirrorChange = _.debounce((cm, content) => {
 
     let doc = this.getDoc();
-    let {uuid, pageIndex} = doc;
     let page = this.getCurrentPage(doc);
 
     // switching pages
@@ -1030,13 +1083,14 @@ export default class EditorArea extends React.Component {
       this.markFontColor(cm, page);
     }
     else {
-      this.props.writePageContent(uuid, pageIndex, content);
+      this.handleHistory(cm, content);
+      this.props.writePageContent(doc.uuid, doc.pageIndex, content);
     }
 
     if (this.props.spellCheckOn) {
       this.lazyAddSpellCheckOverlay();
     }
-  }
+  }, 300);
 
   lazyAddSpellCheckOverlay = _.throttle(this.addSpellCheckOverlay, 1000);
 
@@ -1442,6 +1496,17 @@ export default class EditorArea extends React.Component {
     );
   }
 
+  getHistoryKey = () => {
+
+    const doc = this.getDoc();
+    const page = this.getCurrentPage();
+
+    if (doc && page) {
+      return doc.uuid + ':' + page.uuid;
+    }
+    return null;
+  };
+
   findPrevIndexByKeyword = keyword => {
     let doc = this.getDoc();
     let pageIndex = doc.pageIndex;
@@ -1498,17 +1563,15 @@ export default class EditorArea extends React.Component {
   }
 
   onRedoButtonClick = () => {
-    let editor = this.getEditor();
-    if (editor) {
-      return editor.redo();
-    }
+    const key = this.getHistoryKey();
+    const cm = this.getCurrentCodemirror();
+    History.redo(key, cm);
   }
 
   onUndoButtonClick = () => {
-    let editor = this.getEditor();
-    if (editor) {
-      return editor.undo();
-    }
+    const key = this.getHistoryKey();
+    const cm = this.getCurrentCodemirror();
+    History.undo(key, cm);
   }
 
   onImageOnlyButtonClick = () => {
