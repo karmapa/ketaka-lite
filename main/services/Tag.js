@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import {map, last} from 'lodash';
 
 export function attrsToStr(attrs) {
-  return _.map(attrs, (value, attr) => attr + '="' + value + '"').join(' ');
+  return map(attrs, (value, attr) => attr + '="' + value + '"').join(' ');
 }
 
 export function isTag(node) {
@@ -94,7 +94,7 @@ export function getMissingTags(content = '') {
 
   let currentPbId = null;
 
-  return _.chain(strToTags(content))
+  return strToTags(content)
     .map(getTagData)
     .reduce((stacks, row) => {
 
@@ -105,7 +105,7 @@ export function getMissingTags(content = '') {
         return stacks;
       }
 
-      const prev = _.last(stacks);
+      const prev = last(stacks);
 
       if (prev && (prev.name === row.name) && (('open' === prev.type) && ('close' === row.type))) {
         stacks.pop();
@@ -119,6 +119,5 @@ export function getMissingTags(content = '') {
     .map(row => {
       row.type = ('open' === row.type) ? 'close' : 'open';
       return row;
-    })
-    .value();
+    });
 }
