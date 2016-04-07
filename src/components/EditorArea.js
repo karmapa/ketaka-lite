@@ -257,16 +257,10 @@ export default class EditorArea extends React.Component {
   };
 
   closeDoc(key) {
+
     if (! key) {
       key = this.state.docKey;
     }
-
-    let cm = this.getCurrentCodemirror();
-
-    // fix closing tab performance
-    // https://github.com/karmapa/ketaka-lite/issues/113#issuecomment-191170044
-    cm.setValue('');
-
     this.changeActiveDocWhenClosing(key);
     this.props.closeDoc(key);
   }
