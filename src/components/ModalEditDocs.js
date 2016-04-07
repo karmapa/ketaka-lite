@@ -4,7 +4,7 @@ import {Button, Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {openModal, closeModal, loadDocNames, setDocs,
   showWarning, hideWarning} from '../modules/modalEditDocs';
-import _ from 'lodash';
+import {find, clone, map} from 'lodash';
 import classNames from 'classnames';
 import Api from '../services/Api';
 
@@ -50,9 +50,9 @@ export default class ModalEditDocs extends Component {
   handleCheckboxChange = event => {
     const {checked, value} = event.target;
     let {docs, setDocs} =  this.props;
-    let checkedDoc = _.find(docs, {name: value});
+    let checkedDoc = find(docs, {name: value});
     checkedDoc.checked = checked;
-    setDocs(_.clone(docs));
+    setDocs(clone(docs));
   };
 
   renderOpenedDocs = () => {
@@ -77,7 +77,7 @@ export default class ModalEditDocs extends Component {
   renderDocsContent = () => {
 
     const {docs, openedDocs} = this.props;
-    const openedDocNames = _.map(openedDocs, 'name');
+    const openedDocNames = map(openedDocs, 'name');
     const closed = doc => -1 === openedDocNames.indexOf(doc.name);
 
     return docs.filter(closed)

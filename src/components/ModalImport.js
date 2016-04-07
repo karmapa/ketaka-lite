@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Alert, Button, Modal, ProgressBar} from 'react-bootstrap';
 import {connect} from 'react-redux';
-import _ from 'lodash';
+import {isArray, isFunction, groupBy, map} from 'lodash';
 import {initModal, openModal, closeModal, addMessages, setOptions, setMessages} from '../modules/modalImport';
 
 @connect(state => ({
@@ -63,10 +63,10 @@ export default class ModalImportStatus extends React.Component {
   };
 
   setOptions = (options = {}) => {
-    if (_.isFunction(options.handleFirstButtonClick)) {
+    if (isFunction(options.handleFirstButtonClick)) {
       this.handleFirstButtonClick = options.handleFirstButtonClick;
     }
-    if (_.isFunction(options.handleSecondButtonClick)) {
+    if (isFunction(options.handleSecondButtonClick)) {
       this.handleSecondButtonClick = options.handleSecondButtonClick;
     }
     this.props.setOptions(options);
@@ -74,7 +74,7 @@ export default class ModalImportStatus extends React.Component {
   };
 
   addMessages(messages) {
-    if (! _.isArray(messages)) {
+    if (! isArray(messages)) {
       messages = [messages];
     }
     this.props.addMessages(messages);
@@ -82,7 +82,7 @@ export default class ModalImportStatus extends React.Component {
   }
 
   setMessages(messages) {
-    if (! _.isArray(messages)) {
+    if (! isArray(messages)) {
       messages = [messages];
     }
     this.props.setMessages(messages);
@@ -130,10 +130,10 @@ export default class ModalImportStatus extends React.Component {
   }
 
   renderMessages(messages) {
-    return _.chain(messages)
-      .groupBy('type')
-      .map((rows, type) => (<Alert key={type} bsStyle={type}>{this.renderRows(rows)}</Alert>))
-      .value();
+    return map(
+      groupBy(messages, 'type'),
+      (rows, type) => (<Alert key={type} bsStyle={type}>{this.renderRows(rows)}</Alert>)
+    );
   }
 
   renderRows(rows) {
