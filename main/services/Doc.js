@@ -29,6 +29,7 @@ function createDoc(args) {
 
 function createPage(args) {
   return _.extend({
+    uuid: 'page:' + uuid.v4(),
     name: '',
     content: '',
     imagePath: '',

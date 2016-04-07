@@ -1,6 +1,7 @@
 import Api from '../services/Api';
 import _ from 'lodash';
 import naturalSort from 'javascript-natural-sort';
+import uuid from 'node-uuid';
 import {REGEXP_PAGE} from '../constants/AppConstants';
 
 const ADD_PAGE = 'ADD_PAGE';
@@ -31,6 +32,7 @@ const actionsMap = {
     let insertIndex = findPageInsertIndex(doc.pages, action.pageName);
 
     let newPage = {
+      uuid: uuid.v4(),
       name: action.pageName,
       content: '',
       pathData: {},
