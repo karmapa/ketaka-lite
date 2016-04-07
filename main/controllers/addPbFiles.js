@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {isEmpty} from 'lodash';
 import {Importer} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
@@ -16,7 +16,7 @@ let addPbFiles = ipcHandler(function(event, arg) {
   };
 
   dialog.showOpenDialog(options, function(paths) {
-    if (_.isEmpty(paths)) {
+    if (isEmpty(paths)) {
       return;
     }
     Importer.addPbFiles(doc, paths)
