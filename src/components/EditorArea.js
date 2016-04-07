@@ -26,7 +26,8 @@ import {connect} from 'react-redux';
 const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
-import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck} from '../modules/app';
+import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck,
+  setTextOnly, toggleSpellCheck} from '../modules/app';
 import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRecord,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 import uuid from 'node-uuid';
