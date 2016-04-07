@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, {PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Button, Modal, Input} from 'react-bootstrap';
 import {ComboListenerInput} from '.';
