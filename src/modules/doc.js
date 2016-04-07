@@ -1,5 +1,5 @@
 import Api from '../services/Api';
-import _ from 'lodash';
+import {isArray} from 'lodash';
 import naturalSort from 'javascript-natural-sort';
 import uuid from 'node-uuid';
 import {REGEXP_PAGE} from '../constants/AppConstants';
@@ -143,7 +143,7 @@ const actionsMap = {
       return state;
     }
 
-    if (! _.isArray(page.config.fontRecords)) {
+    if (! isArray(page.config.fontRecords)) {
       page.config.fontRecords = [];
     }
 

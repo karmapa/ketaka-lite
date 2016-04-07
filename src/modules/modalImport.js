@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import {each, isFunction} from 'lodash';
 
 const INIT_MODAL = 'ketaka-lite/modalImport/INIT_MODAL';
 const ADD_MESSAGES = 'ketaka-lite/modalImport/ADD_MESSAGES';
@@ -42,8 +42,8 @@ export default function reducer(state = initialState, action) {
 }
 
 function removeFuncProp(args) {
-  _.each(args, (value, prop) => {
-    if (_.isFunction(value)) {
+  each(args, (value, prop) => {
+    if (isFunction(value)) {
       delete args[prop];
     }
   });
