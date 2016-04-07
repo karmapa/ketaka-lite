@@ -232,7 +232,10 @@ export default class EditorArea extends React.Component {
   }
 
   closeTab(key) {
-    if (this.docChanged()) {
+
+    const doc = this.getDocByKey(key);
+
+    if (doc && this.docChanged(doc)) {
       this.refs.modalSaveConfirm.open({
         title: 'Oops',
         message: 'You have unsaved content ! Do you want to save it ?'
@@ -267,6 +270,8 @@ export default class EditorArea extends React.Component {
     this.changeActiveDocWhenClosing(key);
     this.props.closeDoc(key);
   }
+
+  getDocByKey = key => _.find(this.props.docs, {uuid: key});
 
   docChanged(doc = this.getDoc()) {
     return doc.changed;
