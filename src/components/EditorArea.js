@@ -311,7 +311,7 @@ export default class EditorArea extends React.Component {
       .findIndex(page => page.name === name);
   }
 
-  onInputChange = pageIndex => {
+  handleInputChange = pageIndex => {
     if (this.props.spellCheckOn) {
       this.removeSpellCheckOverlay();
       this.addSpellCheckOverlay();
@@ -1614,7 +1614,7 @@ export default class EditorArea extends React.Component {
       className: 'editor-toolbar',
       onAddPbFileButtonClick: this.onAddPbFileButtonClick,
       onColorButtonClick: this.onColorButtonClick,
-      onInputChange: this.onInputChange,
+      onInputChange: this.handleInputChange,
       onPageAddButtonClick: this.handlePageAddButtonClick,
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
       onRedoButtonClick: this.handleRedoButtonClick,
