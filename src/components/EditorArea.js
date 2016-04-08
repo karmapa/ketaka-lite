@@ -1120,7 +1120,7 @@ export default class EditorArea extends React.Component {
     return Path.resolve(this.docPath, doc.name, 'images', src);
   }
 
-  onSettingsButtonClick = () => {
+  handleSettingsButtonClick = () => {
     let self = this;
 
     Api.send('list-doc-name')
@@ -1618,7 +1618,7 @@ export default class EditorArea extends React.Component {
       onPageAddButtonClick: this.handlePageAddButtonClick,
       onPageDeleteButtonClick: this.handlePageDeleteButtonClick,
       onRedoButtonClick: this.handleRedoButtonClick,
-      onSettingsButtonClick: this.onSettingsButtonClick,
+      onSettingsButtonClick: this.handleSettingsButtonClick,
       onSpellCheckButtonClick: this.handleSpellCheckButtonClick,
       onPrintButtonClick: this.handlePrintButtonClick,
       onUndoButtonClick: this.handleUndoButtonClick,
