@@ -238,6 +238,13 @@ export default class EditorArea extends React.Component {
     const doc = this.getDocByKey(key);
 
     if (doc && this.docChanged(doc)) {
+
+      // close a tab that's not active
+      if (doc.uuid !== this.state.docKey) {
+        let index = this.getDocIndexByUuid(doc.uuid);
+        this.activateTab(index);
+      }
+
       this.refs.modalSaveConfirm.open({
         title: 'Oops',
         message: 'You have unsaved content ! Do you want to save it ?'
