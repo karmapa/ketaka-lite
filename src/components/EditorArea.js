@@ -1573,7 +1573,7 @@ export default class EditorArea extends React.Component {
 
   handleUndoButtonClick = () => this.undo();
 
-  onImageOnlyButtonClick = () => {
+  handleImageOnlyButtonClick = () => {
     let {showImageOnly, showTextOnly} = this.props;
 
     if (showTextOnly) {
@@ -1622,7 +1622,7 @@ export default class EditorArea extends React.Component {
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
       onPrintButtonClick: this.onPrintButtonClick,
       onUndoButtonClick: this.handleUndoButtonClick,
-      onImageOnlyButtonClick: this.onImageOnlyButtonClick,
+      onImageOnlyButtonClick: this.handleImageOnlyButtonClick,
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
       pageNames: doc ? doc.pages.map(page => page.name) : []
