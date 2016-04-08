@@ -32,6 +32,7 @@ import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRec
 import uuid from 'node-uuid';
 
 const jsdiff = require('diff');
+const eventHelper = new Event();
 
 @connect(state => ({
   closeConfirmStatus: state.app.closeConfirmStatus,
@@ -93,7 +94,6 @@ export default class EditorArea extends React.Component {
       docKey: docs.length > 0 ? first(docs).uuid : null
     };
 
-    this.registeredEvents = [];
     this.isSaving = false;
   }
 
@@ -766,50 +766,43 @@ export default class EditorArea extends React.Component {
     this.props.setCloseConfirmStatus(true);
   };
 
-  on = (eventName, cb) => {
-    this.registeredEvents.push({eventName, cb});
-    return Api.on(eventName, cb);
-  };
-
-  offEvents = () => this.registeredEvents.forEach(({eventName, cb}) => Api.off(eventName, cb));
-
   bindAppEvents = () => {
 
-    this.on('app-import', this.handleAppImport);
+    eventHelper.on('app-import', this.handleAppImport);
 
-    this.on('app-import-zip', this.handleAppImportZip);
+    eventHelper.on('app-import-zip', this.handleAppImportZip);
 
-    this.on('app-edit-docs', this.handleAppEditDocs);
+    eventHelper.on('app-edit-docs', this.handleAppEditDocs);
 
-    this.on('app-open', this.handleAppOpen);
+    eventHelper.on('app-open', this.handleAppOpen);
 
-    this.on('app-save', this.handleAppSave);
+    eventHelper.on('app-save', this.handleAppSave);
 
-    this.on('app-save-as', this.handleAppSaveAs);
+    eventHelper.on('app-save-as', this.handleAppSaveAs);
 
-    this.on('app-settings', this.handleAppSettings);
+    eventHelper.on('app-settings', this.handleAppSettings);
 
-    this.on('app-export-zip', this.handleAppExportZip);
+    eventHelper.on('app-export-zip', this.handleAppExportZip);
 
-    this.on('app-export-file-with-pb', this.handleAppExportFileWithPb);
+    eventHelper.on('app-export-file-with-pb', this.handleAppExportFileWithPb);
 
-    this.on('import-start', this.handleImportStart);
+    eventHelper.on('import-start', this.handleImportStart);
 
-    this.on('import-progress', this.handleImportProgress);
+    eventHelper.on('import-progress', this.handleImportProgress);
 
-    this.on('app-find', this.handleAppFind);
+    eventHelper.on('app-find', this.handleAppFind);
 
-    this.on('app-undo', this.handleAppUndo);
+    eventHelper.on('app-undo', this.handleAppUndo);
 
-    this.on('app-redo', this.handleAppRedo);
+    eventHelper.on('app-redo', this.handleAppRedo);
 
-    this.on('app-select-all', this.handleAppSelectAll);
+    eventHelper.on('app-select-all', this.handleAppSelectAll);
 
-    this.on('app-replace', this.runWithPage(this.refs.searchBar.replace));
+    eventHelper.on('app-replace', this.runWithPage(this.refs.searchBar.replace));
 
-    this.on('app-spellcheck-exception-list', this.handleAppSpellcheckExceptionList);
+    eventHelper.on('app-spellcheck-exception-list', this.handleAppSpellcheckExceptionList);
 
-    this.on('app-close', this.handleAppClose);
+    eventHelper.on('app-close', this.handleAppClose);
   };
 
   componentDidMount() {
@@ -999,7 +992,7 @@ export default class EditorArea extends React.Component {
   }
 
   componentWillUnmount() {
-    this.offEvents();
+    eventHelper.off();
     this.keypressListener.destroy();
     window.removeEventListener('resize', this.handleResize);
   }
