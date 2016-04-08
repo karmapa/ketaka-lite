@@ -155,9 +155,7 @@ export default class EditorArea extends React.Component {
     });
   }
 
-  addDoc = () => {
-    this.props.createDoc();
-  };
+  addDoc = () => this.props.createDoc();
 
   markFontColor(codemirror = this.getCurrentCodemirror(), page = this.getCurrentPage()) {
 
