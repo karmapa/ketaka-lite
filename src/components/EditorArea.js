@@ -728,7 +728,7 @@ export default class EditorArea extends React.Component {
     const editor = this.getEditor();
 
     if (editor && editor.hasFocus()) {
-      editor.undo();
+      this.undo();
     }
     else {
       Api.send('trigger-undo');
