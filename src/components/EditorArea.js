@@ -1571,7 +1571,7 @@ export default class EditorArea extends React.Component {
     History.undo(key, cm);
   };
 
-  onUndoButtonClick = () => this.undo();
+  handleUndoButtonClick = () => this.undo();
 
   onImageOnlyButtonClick = () => {
     let {showImageOnly, showTextOnly} = this.props;
@@ -1621,7 +1621,7 @@ export default class EditorArea extends React.Component {
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
       onPrintButtonClick: this.onPrintButtonClick,
-      onUndoButtonClick: this.onUndoButtonClick,
+      onUndoButtonClick: this.handleUndoButtonClick,
       onImageOnlyButtonClick: this.onImageOnlyButtonClick,
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
       pageIndex: doc ? doc.pageIndex : 0,
