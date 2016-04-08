@@ -1595,7 +1595,7 @@ export default class EditorArea extends React.Component {
     this.refs.modalSaveConfirm.close();
   };
 
-  onPrintButtonClick = () => {
+  handlePrintButtonClick = () => {
     this.setState({
       print: true
     });
@@ -1620,7 +1620,7 @@ export default class EditorArea extends React.Component {
       onRedoButtonClick: this.handleRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
-      onPrintButtonClick: this.onPrintButtonClick,
+      onPrintButtonClick: this.handlePrintButtonClick,
       onUndoButtonClick: this.handleUndoButtonClick,
       onImageOnlyButtonClick: this.handleImageOnlyButtonClick,
       onTextOnlyButtonClick: this.onTextOnlyButtonClick,
