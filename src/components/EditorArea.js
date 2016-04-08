@@ -1162,7 +1162,7 @@ export default class EditorArea extends React.Component {
     });
   }
 
-  onPageDeleteButtonClick = () => {
+  handlePageDeleteButtonClick = () => {
     this.refs.modalPageDeleteConfirm.open({
       title: 'Oops',
       message: 'Are you sure to delete this page ?'
@@ -1616,7 +1616,7 @@ export default class EditorArea extends React.Component {
       onColorButtonClick: this.handleColorButtonClick,
       onInputChange: this.handleInputChange,
       onPageAddButtonClick: this.handlePageAddButtonClick,
-      onPageDeleteButtonClick: this.onPageDeleteButtonClick,
+      onPageDeleteButtonClick: this.handlePageDeleteButtonClick,
       onRedoButtonClick: this.handleRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.handleSpellCheckButtonClick,
