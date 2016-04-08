@@ -953,12 +953,12 @@ export default class EditorArea extends React.Component {
     }
   };
 
-  importZip() {
+  importZip(args) {
 
     const self = this;
     const modalImport = self.getImportModal();
 
-    Api.send('import-zip')
+    Api.send('import-zip', args)
       .then(res => {
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
@@ -966,14 +966,37 @@ export default class EditorArea extends React.Component {
           showFirstButton: true,
           firstButtonStyle: 'primary',
           firstButtonText: 'OK',
+          showSecondButton: false,
           handleFirstButtonClick: modalImport.close
         });
       })
-      .catch(res => {
-        console.error(res.message);
-        self.refs.toast.error(res.message);
+      .catch(err => {
+        if (err.duplicated) {
+          this.handleDuplicatedImportZip(err);
+        }
+        else {
+          self.refs.toast.error(err.message);
+        }
       });
   }
+
+  handleDuplicatedImportZip = ({paths, duplicatedDocName}) => {
+    const modalImport = this.getImportModal();
+    modalImport.setMessages({
+      type: 'warning',
+      message: 'Doc ' + duplicatedDocName + ' existed. Are you sure you want to override ?'
+    });
+    modalImport.setOptions({
+      showFirstButton: true,
+      firstButtonStyle: '',
+      firstButtonText: 'Cancel',
+      handleFirstButtonClick: () => modalImport.close(),
+      showSecondButton: true,
+      secondButtonStyle: 'warning',
+      secondButtonText: 'Override',
+      handleSecondButtonClick: () => this.importZip({override: true, paths})
+    });
+  };
 
   open() {
     let self = this;

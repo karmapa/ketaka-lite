@@ -220,6 +220,21 @@ function recursiveRemove(path) {
   });
 }
 
+function readZip(path) {
+
+  return new Promise((resolve, reject) => {
+    const zip = new StreamZip({
+      file: path,
+      storeEntries: true
+    });
+
+    const entries = [];
+
+    zip.on('entry', entry => entries.push(entry));
+    zip.on('ready', () => resolve(entries));
+  });
+}
+
 function unzip(path, dest, onExtract = () => {}) {
 
   return new Promise(function(resolve, reject) {
@@ -266,6 +281,7 @@ module.exports = {
   parseCsvBuffer: parseCsvBuffer,
   readDir: readDir,
   readDirs: readDirs,
+  readZip,
   readFile: readFile,
   readFiles: readFiles,
   rimraf: recursiveRemove,
