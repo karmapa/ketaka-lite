@@ -9,7 +9,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
   ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
   Resizer, PrintArea} from '.';
-import {Helper, Ime, History} from '../services/';
+import {Helper, Ime, History, Event, Api} from '../services/';
 import CodeMirror from 'codemirror';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -17,7 +17,6 @@ import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
   INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
 
 import {ToastContainer, ToastMessage} from 'react-toastr';
-import Api from '../services/Api';
 
 import {checkSyllables} from 'check-tibetan';
 import Path from 'path';
