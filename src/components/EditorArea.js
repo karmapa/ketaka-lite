@@ -445,7 +445,7 @@ export default class EditorArea extends React.Component {
     else {
       this.refs.toast.error('You are on the last page');
     }
-  }
+  };
 
   findNextQuery = (res, index) => {
     for (let i = 0, len = res.length; i < len; i++) {
@@ -455,7 +455,7 @@ export default class EditorArea extends React.Component {
       }
     }
     return null;
-  }
+  };
 
   findPrevQuery = (res, index) => {
     for (let i = res.length - 1; i >= 0; i--) {
@@ -465,7 +465,7 @@ export default class EditorArea extends React.Component {
       }
     }
     return null;
-  }
+  };
 
   replacePageContent = (query, text) => {
 
@@ -491,7 +491,7 @@ export default class EditorArea extends React.Component {
     }
     this.refs.toast.success(replaceCount + ' keywords have been replaced.');
     return replaceCount;
-  }
+  };
 
   getMatchIndexByQuery = (query, index) => {
 
@@ -500,7 +500,7 @@ export default class EditorArea extends React.Component {
     let page = this.getCurrentPage();
     let content = page.content.substring(0, index);
     return (content.match(new RegExp(query, 'g')) || []).length;
-  }
+  };
 
   getIndexByMatchIndex = (query, index) => {
     query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
@@ -519,7 +519,7 @@ export default class EditorArea extends React.Component {
       match = re.exec(content);
     }
     return null;
-  }
+  };
 
   nextWord = () => {
 
