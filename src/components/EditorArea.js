@@ -1156,7 +1156,7 @@ export default class EditorArea extends React.Component {
       .catch(res => self.refs.toast.error(res.message));
   }
 
-  onPageAddButtonClick = () => {
+  handlePageAddButtonClick = () => {
     this.refs.modalPageAdd.open({
       pageNames: get(this.getDoc(), 'pages', []).map(page => page.name)
     });
@@ -1615,7 +1615,7 @@ export default class EditorArea extends React.Component {
       onAddPbFileButtonClick: this.onAddPbFileButtonClick,
       onColorButtonClick: this.onColorButtonClick,
       onInputChange: this.onInputChange,
-      onPageAddButtonClick: this.onPageAddButtonClick,
+      onPageAddButtonClick: this.handlePageAddButtonClick,
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
       onRedoButtonClick: this.handleRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
