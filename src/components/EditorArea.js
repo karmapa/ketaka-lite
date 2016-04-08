@@ -580,7 +580,7 @@ export default class EditorArea extends React.Component {
     cm.setSelection(fromPos, toPos);
   };
 
-  runWithPage = (fn) => {
+  runWithPage = fn => {
     let self = this;
     return () => {
       let page = self.getCurrentPage();
