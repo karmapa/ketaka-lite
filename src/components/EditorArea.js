@@ -1259,7 +1259,7 @@ export default class EditorArea extends React.Component {
     };
   }
 
-  onColorButtonClick = color => {
+  handleColorButtonClick = color => {
     let doc = this.getDoc();
     let codemirror = this.getCurrentCodemirror();
     let hexColor = MAP_COLORS[color];
@@ -1613,7 +1613,7 @@ export default class EditorArea extends React.Component {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
       className: 'editor-toolbar',
       onAddPbFileButtonClick: this.handleAddPbFileButtonClick,
-      onColorButtonClick: this.onColorButtonClick,
+      onColorButtonClick: this.handleColorButtonClick,
       onInputChange: this.handleInputChange,
       onPageAddButtonClick: this.handlePageAddButtonClick,
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
