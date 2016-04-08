@@ -1557,17 +1557,21 @@ export default class EditorArea extends React.Component {
     return null;
   }
 
-  onRedoButtonClick = () => {
+  redo = () => {
     const key = this.getHistoryKey();
     const cm = this.getCurrentCodemirror();
     History.redo(key, cm);
-  }
+  };
 
-  onUndoButtonClick = () => {
+  onRedoButtonClick = () => this.redo();
+
+  undo = () => {
     const key = this.getHistoryKey();
     const cm = this.getCurrentCodemirror();
     History.undo(key, cm);
-  }
+  };
+
+  onUndoButtonClick = () => this.undo();
 
   onImageOnlyButtonClick = () => {
     let {showImageOnly, showTextOnly} = this.props;
