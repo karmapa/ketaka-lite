@@ -1580,7 +1580,7 @@ export default class EditorArea extends React.Component {
       this.props.setTextOnly(false);
     }
     this.props.setImageOnly(! showImageOnly);
-  }
+  };
 
   onTextOnlyButtonClick = () => {
     let {showImageOnly, showTextOnly} = this.props;
@@ -1589,7 +1589,7 @@ export default class EditorArea extends React.Component {
       this.props.setImageOnly(false);
     }
     this.props.setTextOnly(! showTextOnly);
-  }
+  };
 
   cancelModalSave = () => {
     this.refs.modalSaveConfirm.close();
