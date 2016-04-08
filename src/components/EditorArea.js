@@ -1424,7 +1424,7 @@ export default class EditorArea extends React.Component {
     return <TabItem eventKey={key} tab={this.getTabName(doc)} key={key} />;
   }
 
-  onAddPbFileButtonClick = () => {
+  handleAddPbFileButtonClick = () => {
     let self = this;
     Api.send('add-pb-files', {doc: self.getDoc()})
       .then(res => {
@@ -1612,7 +1612,7 @@ export default class EditorArea extends React.Component {
     let editorToolbarProps = {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
       className: 'editor-toolbar',
-      onAddPbFileButtonClick: this.onAddPbFileButtonClick,
+      onAddPbFileButtonClick: this.handleAddPbFileButtonClick,
       onColorButtonClick: this.onColorButtonClick,
       onInputChange: this.handleInputChange,
       onPageAddButtonClick: this.handlePageAddButtonClick,
