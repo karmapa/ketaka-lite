@@ -205,7 +205,7 @@ function getTemplate(args) {
         },
         {
           label: 'About KETAKA Lite',
-          role: 'about'
+          click: () => webContents.send('app-about')
         }
       ]
     }
