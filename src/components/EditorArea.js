@@ -740,7 +740,7 @@ export default class EditorArea extends React.Component {
     const editor = this.getEditor();
 
     if (editor && editor.hasFocus()) {
-      editor.redo();
+      this.redo();
     }
     else {
       Api.send('trigger-redo');
