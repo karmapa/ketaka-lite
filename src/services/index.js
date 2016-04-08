@@ -6,3 +6,4 @@ export ContextMenu from './ContextMenu';
 export keyCode from './keyCode';
 export History from './History';
 export Event from './Event';
+export getWrappedInstance from './getWrappedInstance';

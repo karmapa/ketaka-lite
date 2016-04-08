@@ -95,3 +95,5 @@ ipc.on('export-file-with-pb', controllers.exportFileWithPb);
 ipc.on('add-pb-files', controllers.addPbFiles);
 
 ipc.on('get-app-data', controllers.getAppData);
+
+ipc.on('get-versions', controllers.getVersions);

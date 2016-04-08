@@ -23,3 +23,4 @@ export TabBox from './TabBox';
 export TabItem from './TabItem';
 export ImeInput from './ImeInput';
 export ImeTextarea from './ImeTextarea';
+export ModalAbout from './ModalAbout';

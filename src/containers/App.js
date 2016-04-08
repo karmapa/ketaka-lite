@@ -1,27 +1,50 @@
-import {initSettings} from '../modules/app';
+import {initSettings, setElectronVersion, setAppVersion} from '../modules/app';
 import * as constants from '../constants/AppConstants';
 import {EditorArea} from '../components';
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {ContextMenu} from '../services';
+import {ContextMenu, getWrappedInstance, Api} from '../services';
+import {Event} from '../services';
+import {ModalAbout} from '../components';
+
+const eventHelper = new Event();
 
 @connect(state => ({
   theme: state.app.theme
-}), {initSettings})
+}), {initSettings, setElectronVersion, setAppVersion})
 export default class App extends React.Component {
 
   static PropTypes = {
     theme: PropTypes.string.isRequired
   };
 
+  getWrappedInstance = getWrappedInstance;
+
   componentDidMount() {
+
+    const {theme, setAppVersion, setElectronVersion} = this.props;
 
     document.title = constants.APP_NAME;
     initSettings();
 
-    this.changeTheme({newTheme: this.props.theme});
+    this.changeTheme({newTheme: theme});
     ContextMenu.init();
+    eventHelper.on('app-about', this.handleAppAbout);
+
+    Api.send('get-versions')
+      .then(({versions}) => {
+        setAppVersion(versions.app);
+        setElectronVersion(versions.electron);
+      });
   }
+
+  componentWillUnmount() {
+    eventHelper.off();
+  }
+
+  handleAppAbout = async () => {
+    this.getWrappedInstance('modalAbout').openModal();
+  };
 
   changeTheme(args) {
 
@@ -53,6 +76,7 @@ export default class App extends React.Component {
     return (
       <div className="container-fluid root">
         <EditorArea className="editor-area" />
+        <ModalAbout ref="modalAbout" />
       </div>
     );
   }

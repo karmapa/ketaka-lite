@@ -2,8 +2,10 @@ import * as consts from '../constants/AppConstants';
 import Store from '../services/Store';
 import {DIRECTION_HORIZONTAL, DIRECTION_VERTICAL} from '../constants/AppConstants';
 
-const SET_CLOSE_CONFIRM_STATUS = 'SET_CLOSE_CONFIRM_STATUS';
-const RECEIVE_SETTINGS = 'RECEIVE_SETTINGS';
+const SET_CLOSE_CONFIRM_STATUS = 'ketaka-lite/app/SET_CLOSE_CONFIRM_STATUS';
+const RECEIVE_SETTINGS = 'ketaka-lite/app/RECEIVE_SETTINGS';
+const SET_APP_VERSION = 'ketaka-lite/app/SET_APP_VERSION';
+const SET_ELECTRON_VERSION = 'ketaka-lite/app/SET_ELECTRON_VERSION';
 
 let cacheSettings = Store.get('settings') || {};
 
@@ -14,6 +16,8 @@ const settings = {
   fontSize: cacheSettings.fontSize || 1,
   inputMethod: cacheSettings.inputMethod || consts.INPUT_METHOD_SYSTEM,
   closeConfirmStatus: false,
+  appVersion: '',
+  electronVersion: '',
   letterSpacing: cacheSettings.letterSpacing || 1,
   lineHeight: cacheSettings.lineHeight || 1,
   nsRatio: cacheSettings.nsRatio || 0.5,
@@ -26,12 +30,23 @@ const settings = {
 };
 
 const actionsMap = {
+
   [RECEIVE_SETTINGS]: (state, action) => {
     return Object.assign({}, state, action.settings);
   },
+
   [SET_CLOSE_CONFIRM_STATUS]: (state, action) => {
     return Object.assign({}, state, {closeConfirmStatus: action.closeConfirmStatus});
   },
+
+  [SET_APP_VERSION]: (state, action) => {
+    return Object.assign({}, state, {appVersion: action.appVersion});
+  },
+
+  [SET_ELECTRON_VERSION]: (state, action) => {
+    return Object.assign({}, state, {electronVersion: action.electronVersion});
+  }
+
 };
 
 export default function reducer(state = settings, action) {
@@ -42,7 +57,21 @@ export default function reducer(state = settings, action) {
 export function setCloseConfirmStatus(closeConfirmStatus) {
   return {
     type: SET_CLOSE_CONFIRM_STATUS,
-      closeConfirmStatus
+    closeConfirmStatus
+  };
+}
+
+export function setAppVersion(appVersion) {
+  return {
+    type: SET_APP_VERSION,
+    appVersion
+  };
+}
+
+export function setElectronVersion(electronVersion) {
+  return {
+    type: SET_ELECTRON_VERSION,
+    electronVersion
   };
 }
 

@@ -14,6 +14,7 @@ import saveAs from './saveAs';
 import save from './save';
 import importZip from './importZip';
 import importButtonClicked from './importButtonClicked';
+import getVersions from './getVersions';
 
 export {
   importButtonClicked,
@@ -28,6 +29,7 @@ export {
   addPbFiles,
   exportFileWithPb,
   getAppData,
+  getVersions,
   exportZip,
   deleteDoc,
   deleteDocs,
