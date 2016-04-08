@@ -1563,7 +1563,7 @@ export default class EditorArea extends React.Component {
     History.redo(key, cm);
   };
 
-  onRedoButtonClick = () => this.redo();
+  handleRedoButtonClick = () => this.redo();
 
   undo = () => {
     const key = this.getHistoryKey();
@@ -1617,7 +1617,7 @@ export default class EditorArea extends React.Component {
       onInputChange: this.onInputChange,
       onPageAddButtonClick: this.onPageAddButtonClick,
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
-      onRedoButtonClick: this.onRedoButtonClick,
+      onRedoButtonClick: this.handleRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
       onSpellCheckButtonClick: this.onSpellCheckButtonClick,
       onPrintButtonClick: this.onPrintButtonClick,
