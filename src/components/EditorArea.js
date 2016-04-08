@@ -1276,7 +1276,7 @@ export default class EditorArea extends React.Component {
     this.props.saveFontRecord(doc.uuid, doc.pageIndex, fontRecords);
   }
 
-  onSpellCheckButtonClick = () => {
+  handleSpellCheckButtonClick = () => {
     this.checkSpelling();
   }
 
@@ -1619,7 +1619,7 @@ export default class EditorArea extends React.Component {
       onPageDeleteButtonClick: this.onPageDeleteButtonClick,
       onRedoButtonClick: this.handleRedoButtonClick,
       onSettingsButtonClick: this.onSettingsButtonClick,
-      onSpellCheckButtonClick: this.onSpellCheckButtonClick,
+      onSpellCheckButtonClick: this.handleSpellCheckButtonClick,
       onPrintButtonClick: this.handlePrintButtonClick,
       onUndoButtonClick: this.handleUndoButtonClick,
       onImageOnlyButtonClick: this.handleImageOnlyButtonClick,
