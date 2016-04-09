@@ -6,7 +6,7 @@ const FIX_KEYCODE = {
 };
 
 export default function keyCode(code) {
-  let result = keycode(code);
-  let fix = FIX_KEYCODE[result];
+  const result = keycode(code);
+  const fix = FIX_KEYCODE[result];
   return fix ? fix : result;
 }

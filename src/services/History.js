@@ -8,7 +8,7 @@ export default class History {
 
   static add(key, action) {
     this.autoCreateStructure(key);
-    let {done} = this.data[key];
+    const {done} = this.data[key];
     done.push(action);
     this.data[key].done = done.slice(-HISTORY_SIZE);
   }

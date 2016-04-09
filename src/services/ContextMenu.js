@@ -1,12 +1,12 @@
-let remote = window.require('remote');
-let Menu = remote.require('menu');
-let MenuItem = remote.require('menu-item');
+const remote = window.require('remote');
+const Menu = remote.require('menu');
+const MenuItem = remote.require('menu-item');
 
 export default class ContextMenu {
 
   static init() {
 
-    let menu = new Menu();
+    const menu = new Menu();
 
     menu.append(new MenuItem({
       label: 'Copy',
