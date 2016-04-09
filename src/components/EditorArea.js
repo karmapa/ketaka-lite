@@ -334,7 +334,7 @@ export default class EditorArea extends React.Component {
 
   save = (doc = this.getDoc()) => {
 
-    let self = this;
+    const self = this;
 
     if (self.isSaving) {
       return false;
@@ -356,7 +356,7 @@ export default class EditorArea extends React.Component {
 
   saveAs = newDocName => {
 
-    let self = this;
+    const self = this;
     let doc = self.getDoc();
     Api.send('save-as', {doc, newDocName})
       .then(res => {
@@ -376,7 +376,7 @@ export default class EditorArea extends React.Component {
 
   exportZip() {
 
-    let self = this;
+    const self = this;
     let doc = self.getDoc();
 
     if (! doc) {
@@ -393,7 +393,7 @@ export default class EditorArea extends React.Component {
 
   exportFileWithPb() {
 
-    let self = this;
+    const self = this;
     let doc = self.getDoc();
 
     if (! doc) {
@@ -588,7 +588,7 @@ export default class EditorArea extends React.Component {
   };
 
   runWithPage = fn => {
-    let self = this;
+    const self = this;
     return () => {
       let page = self.getCurrentPage();
       if (page) {
@@ -812,7 +812,7 @@ export default class EditorArea extends React.Component {
 
   componentDidMount() {
 
-    let self = this;
+    const self = this;
 
     Ime.setInputMethod(MAP_INPUT_METHODS[self.props.inputMethod]);
 
@@ -999,7 +999,7 @@ export default class EditorArea extends React.Component {
   };
 
   open() {
-    let self = this;
+    const self = this;
 
     Api.send('open')
       .then(res => {
@@ -1126,7 +1126,7 @@ export default class EditorArea extends React.Component {
   }
 
   onUploadButtonClick = () => {
-    let self = this;
+    const self = this;
     let doc = this.getDoc();
     let {uuid, pageIndex} = doc;
     Api.send('page-image-upload-button-clicked', doc)
@@ -1149,7 +1149,7 @@ export default class EditorArea extends React.Component {
   }
 
   handleSettingsButtonClick = () => {
-    let self = this;
+    const self = this;
 
     Api.send('list-doc-name')
       .then(res => {
@@ -1165,7 +1165,7 @@ export default class EditorArea extends React.Component {
   }
 
   saveAndCloseModalDocSettings = data => {
-    let self = this;
+    const self = this;
     let doc = this.getDoc();
     let page = doc.pages[doc.pageIndex];
     data.doc = doc;
@@ -1453,7 +1453,7 @@ export default class EditorArea extends React.Component {
   }
 
   handleAddPbFileButtonClick = () => {
-    let self = this;
+    const self = this;
     Api.send('add-pb-files', {doc: self.getDoc()})
       .then(res => {
         self.props.importDoc(res.doc);
@@ -1463,14 +1463,14 @@ export default class EditorArea extends React.Component {
   }
 
   onBambooDeleteClick = name => {
-    let self = this;
+    const self = this;
     self.closeDocByName(name);
     Api.send('delete-doc', {name})
       .then(res => self.refs.modalOpen.setNames(res.names));
   }
 
   onBambooClick = name => {
-    let self = this;
+    const self = this;
     let openedDoc = find(this.props.docs, {name});
     if (openedDoc) {
 
