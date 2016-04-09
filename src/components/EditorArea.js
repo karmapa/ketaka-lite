@@ -1747,9 +1747,18 @@ export default class EditorArea extends React.Component {
   };
 
   renderMenuItem(currentMethod, methods) {
+
     return methods.map((method, index) => {
+
+      const props = {
+        eventKey: index,
+        key: index,
+        onSelect: this.onMenuItemSelect.bind(this, method)
+      };
+      const showCheckMark = (currentMethod === method);
+
       return (
-        <MenuItem eventKey={index} key={index} onSelect={this.onMenuItemSelect.bind(this, method)}>{this.renderCheckMark(currentMethod === method)}{method}</MenuItem>
+        <MenuItem {...props}>{this.renderCheckMark(showCheckMark)}{method}</MenuItem>
       );
     });
   }
