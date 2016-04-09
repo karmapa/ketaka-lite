@@ -16,7 +16,7 @@ export default class Ime {
 
   static setInputMethod(name) {
 
-    let method = bo[name];
+    const method = bo[name];
 
     if (method) {
       this.inputmethod = extend({
@@ -31,10 +31,10 @@ export default class Ime {
 
   static keypress(e, options = {}) {
 
-    let {cm, element} = options;
+    const {cm, element} = options;
+    const keyCode = this.getKeyCode(e);
 
     let altGr = false;
-    let keyCode = this.getKeyCode(e);
 
     if (! this.inputmethod) {
       return true;
@@ -61,7 +61,7 @@ export default class Ime {
       return true;
     }
 
-    let c = String.fromCharCode(keyCode);
+    const c = String.fromCharCode(keyCode);
     let pos, startPos, endPos;
 
     if (cm) {
@@ -75,11 +75,11 @@ export default class Ime {
       endPos = element.selectionEnd;
     }
 
-    let content = cm ? cm.getLine(pos.line) : e.target.value;
+    const content = cm ? cm.getLine(pos.line) : e.target.value;
     let input = this.lastNChars(content, startPos, this.inputmethod.maxKeyLength);
     input += c;
 
-    let replacement = this.transliterate(input, this.context, altGr);
+    const replacement = this.transliterate(input, this.context, altGr);
 
     this.context += c;
 
@@ -98,7 +98,7 @@ export default class Ime {
     }
 
     // Drop a common prefix, if any
-    let divergingPos = this.firstDivergence(input, replacement.output);
+    const divergingPos = this.firstDivergence(input, replacement.output);
     input = input.substring(divergingPos);
     replacement.output = replacement.output.substring(divergingPos);
 
@@ -108,7 +108,7 @@ export default class Ime {
   }
 
   static keyup(e) {
-    let keyCode = this.getKeyCode(e);
+    const keyCode = this.getKeyCode(e);
     if (KEY_SHIFT === keyCode) {
       this.shifted = false;
     }
@@ -119,7 +119,7 @@ export default class Ime {
   }
 
   static keydown(e) {
-    let keyCode = this.getKeyCode(e);
+    const keyCode = this.getKeyCode(e);
     if (KEY_SHIFT === keyCode) {
       this.shifted = true;
     }
@@ -127,8 +127,8 @@ export default class Ime {
 
   static transliterate(input, context, altGr) {
 
-    let {inputmethod} = this;
-    let patterns, regex, rule, replacement, i, retval;
+    const {inputmethod} = this;
+    let patterns;
 
     if (altGr) {
       patterns = inputmethod.patterns_x || [];
@@ -149,21 +149,22 @@ export default class Ime {
       // For backwards compatibility, allow the rule functions to return plain
       // string. Determine noop by checking whether input is different from
       // output. If the rule function returns object, just return it as-is.
-      retval = patterns.call(this, input, context);
+      const retval = patterns.call(this, input, context);
       if ('string' === typeof retval) {
         return {noop: input === retval, output: retval};
       }
       return retval;
     }
 
-    for (i = 0; i < patterns.length; i++) {
-      rule = patterns[i];
-      regex = new RegExp( rule[0] + '$' );
+    for (let i = 0; i < patterns.length; i++) {
+
+      const rule = patterns[i];
+      const regex = new RegExp( rule[0] + '$' );
 
       // Last item in the rules.
       // It can also be a function, because the replace
       // method can have a function as the second argument.
-      replacement = rule.slice( -1 )[0];
+      const replacement = rule.slice( -1 )[0];
 
       // Input string match test
       if (regex.test(input)) {
@@ -200,22 +201,22 @@ export default class Ime {
 
   static replaceText(replacement, start, end, options = {}) {
 
-    let {cm, e, pos} = options;
+    const {cm, e, pos} = options;
 
     if (cm) {
       cm.replaceRange(replacement, {line: pos.line, ch: start}, {line: pos.line, ch: end});
     }
     else {
-      let value = e.target.value;
+      const value = e.target.value;
       return value.substring(0, start) + replacement + value.substring(end, value.length);
     }
   }
 
   static firstDivergence(a, b) {
-    let minLength, i;
-    minLength = a.length < b.length ? a.length : b.length;
 
-    for (i = 0; i < minLength; i++) {
+    const minLength = (a.length < b.length) ? a.length : b.length;
+
+    for (let i = 0; i < minLength; i++) {
       if (a.charCodeAt(i) !== b.charCodeAt(i)) {
         return i;
       }
