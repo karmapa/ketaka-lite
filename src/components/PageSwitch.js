@@ -17,7 +17,7 @@ export default class PageSwitch extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   componentWillUpdate(nextProps) {
-    let {pageIndex, pageNames} = this.props;
+    const {pageIndex, pageNames} = this.props;
     if ((pageIndex !== nextProps.pageIndex) || (pageNames.length !== nextProps.pageNames.length)) {
       this.setState({
         inputValue: nextProps.pageNames[nextProps.pageIndex]
@@ -59,7 +59,7 @@ export default class PageSwitch extends React.Component {
 
   checkInput(name) {
 
-    let {pageIndex, pageNames, onInputChange} = this.props;
+    const {pageIndex, pageNames, onInputChange} = this.props;
 
     if (this.hasInputName(name)) {
       onInputChange(pageNames.indexOf(name));
@@ -72,7 +72,7 @@ export default class PageSwitch extends React.Component {
   }
 
   onInputKeyDown = e => {
-    let keyCode = e.keyCode || e.which;
+    const keyCode = e.keyCode || e.which;
 
     if (KEY_ENTER === keyCode) {
       this.checkInput(e.target.value);

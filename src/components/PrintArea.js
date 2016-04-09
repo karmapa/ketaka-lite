@@ -18,7 +18,7 @@ export default class PrintArea extends React.Component {
 
   render() {
 
-    let content = this.props.doc.pages.map(page => page.content).join('');
+    const content = this.props.doc.pages.map(page => page.content).join('');
 
     return (
       <div className="print-area">{content}</div>

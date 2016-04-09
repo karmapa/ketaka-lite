@@ -44,12 +44,12 @@ export default class Editor extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   isVowels(e) {
-    let vowelsKeyCodes = [65, 69, 73, 79, 85];
+    const vowelsKeyCodes = [65, 69, 73, 79, 85];
     return vowelsKeyCodes.includes(e.keyCode);
   }
 
   checkVowels = e => {
-    let inputMethods = [
+    const inputMethods = [
       INPUT_METHOD_TIBETAN_SAMBHOTA,
       INPUT_METHOD_TIBETAN_SAMBHOTA2
     ];
@@ -61,7 +61,7 @@ export default class Editor extends React.Component {
   };
 
   isStackingKey = e => {
-    let inputMethod = this.props.inputMethod;
+    const inputMethod = this.props.inputMethod;
 
     if (INPUT_METHOD_TIBETAN_SAMBHOTA === inputMethod) {
       // a
@@ -81,7 +81,7 @@ export default class Editor extends React.Component {
     this.ime = Ime;
     this.codemirror = this.refs.codemirror.getCodeMirror();
 
-    let {ime, codemirror} = this;
+    const {ime, codemirror} = this;
 
     this.imeKeypress = (cm, e) => ime.keypress(e, {cm});
     this.imeKeydown = (cm, e) => {
@@ -100,7 +100,7 @@ export default class Editor extends React.Component {
     codemirror.on('keydown', this.imeKeydown);
     codemirror.on('keyup', this.imeKeyup);
 
-    let {width, height} = this.props.style;
+    const {width, height} = this.props.style;
     codemirror.setSize(width, height);
   }
 
@@ -115,7 +115,7 @@ export default class Editor extends React.Component {
   }
 
   componentWillUnmount() {
-    let {codemirror} = this;
+    const {codemirror} = this;
     codemirror.off('keypress', this.imeKeypress);
     codemirror.off('keydown', this.imeKeydown);
     codemirror.off('keyup', this.imeKeyup);
@@ -152,7 +152,7 @@ export default class Editor extends React.Component {
 
   componentDidUpdate(previousProps) {
 
-    let self = this;
+    const self = this;
 
     ['fontSize', 'lineHeight', 'letterSpacing'].every(prop => {
       if (previousProps[prop] !== self.props[prop]) {
@@ -165,9 +165,9 @@ export default class Editor extends React.Component {
 
   render() {
 
-    let {code, className, fontSize, lineHeight, letterSpacing, readonly, theme} = this.props;
+    const {code, className, fontSize, lineHeight, letterSpacing, readonly, theme} = this.props;
 
-    let codemirrorProps = {
+    const codemirrorProps = {
       onChange: this.onCodemirrorChange,
       componentDidMount: CM => {
         CM.keyMap.default.fallthrough = 'basic';
@@ -191,18 +191,18 @@ export default class Editor extends React.Component {
       value: code
     };
 
-    let classBoxReadonly = {
+    const classBoxReadonly = {
       'box-readonly': readonly
     };
 
-    let classReadonly = {
+    const classReadonly = {
       'readonly': readonly,
       ['fs' + fontSize]: true,
       ['lh' + lineHeight]: true,
       ['ls' + letterSpacing]: true
     };
 
-    let wrapperClasses = {
+    const wrapperClasses = {
       [className]: true,
       'stacking': this.state.stacking
     };

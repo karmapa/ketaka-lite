@@ -21,7 +21,7 @@ export default class ModalDocSettings extends React.Component {
   };
 
   open(args) {
-    let {docName, pageName, docNames, pageNames} = args;
+    const {docName, pageName, docNames, pageNames} = args;
     this.originDocName = docName;
     this.originPageName = pageName;
     this.docNames = docNames;
@@ -50,8 +50,8 @@ export default class ModalDocSettings extends React.Component {
   }
 
   isValidDocName = () => {
-    let {docName} = this.state;
-    let {originDocName} = this;
+    const {docName} = this.state;
+    const {originDocName} = this;
 
     if (isEmpty(docName)) {
       return false;
@@ -70,7 +70,7 @@ export default class ModalDocSettings extends React.Component {
   }
 
   isValidPageName = () => {
-    let {pageName} = this.state;
+    const {pageName} = this.state;
     if (isEmpty(pageName)) {
       return false;
     }
@@ -81,7 +81,7 @@ export default class ModalDocSettings extends React.Component {
   }
 
   pageNameHelp() {
-    let {pageName} = this.state;
+    const {pageName} = this.state;
     if (isEmpty(pageName)) {
       return 'Page name cannot be empty.';
     }
@@ -92,7 +92,7 @@ export default class ModalDocSettings extends React.Component {
   }
 
   docNameHelp = () => {
-    let {docName} = this.state;
+    const {docName} = this.state;
 
     if (isEmpty(docName)) {
       return 'Doc name cannot be empty.';
@@ -138,7 +138,7 @@ export default class ModalDocSettings extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {show, docName, pageName, loading} = this.state;
+    const {show, docName, pageName, loading} = this.state;
 
     return (
       <Modal show={show}>

@@ -39,8 +39,8 @@ export default class ModalSaveConfirm extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {cancel, confirm, discard} = this.props;
-    let {show, title, message} = this.state;
+    const {cancel, confirm, discard} = this.props;
+    const {show, title, message} = this.state;
 
     return (
       <Modal show={show} onHide={this.onModalHide}>

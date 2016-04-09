@@ -20,7 +20,7 @@ export default class TabItem extends React.Component {
 
   render() {
 
-    let classes = {
+    const classes = {
       'tab-pane': true,
       'fade': true,
       'active': this.props.active,

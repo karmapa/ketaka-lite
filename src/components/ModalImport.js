@@ -97,11 +97,11 @@ export default class ModalImportStatus extends React.Component {
       firstButtonText, secondButtonText, messages, firstButtonStyle,
       secondButtonStyle, showSecondButton, showFirstButton} = this.props;
 
-    let firstButtonProps = {
+    const firstButtonProps = {
       onClick: this.handleFirstButtonClick
     };
 
-    let secondButtonProps = {
+    const secondButtonProps = {
       onClick: this.handleSecondButtonClick
     };
 

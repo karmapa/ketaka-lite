@@ -20,7 +20,7 @@ export default class ModalPageAdd extends React.Component {
   };
 
   open(args) {
-    let {pageNames} = args;
+    const {pageNames} = args;
     this.pageNames = pageNames;
     this.setState({
       show: true,
@@ -46,7 +46,7 @@ export default class ModalPageAdd extends React.Component {
   }
 
   isValidPageName = () => {
-    let {pageName} = this.state;
+    const {pageName} = this.state;
     if (isEmpty(pageName)) {
       return false;
     }
@@ -60,7 +60,7 @@ export default class ModalPageAdd extends React.Component {
     if (! this.state.dirty) {
       return '';
     }
-    let {pageName} = this.state;
+    const {pageName} = this.state;
     if (isEmpty(pageName)) {
       return 'Page name cannot be empty.';
     }
@@ -102,8 +102,8 @@ export default class ModalPageAdd extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {cancel} = this.props;
-    let {show, pageName, loading} = this.state;
+    const {cancel} = this.props;
+    const {show, pageName, loading} = this.state;
 
     return (
       <Modal show={show} onHide={this.onModalHide}>

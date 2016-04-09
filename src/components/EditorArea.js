@@ -113,22 +113,22 @@ export default class EditorArea extends React.Component {
   };
 
   findMatchCountByKeyword = (keyword, index) => {
-    let doc = this.getDoc();
-    let pages = doc.pages;
-    let page = pages[doc.pageIndex];
-    let content = page.content.substring(index);
+    const doc = this.getDoc();
+    const pages = doc.pages;
+    const page = pages[doc.pageIndex];
+    const content = page.content.substring(index);
 
     keyword = keyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-    let regexp = new RegExp(keyword, 'g');
-    let match = content.match(regexp);
+    const regexp = new RegExp(keyword, 'g');
+    const match = content.match(regexp);
     let count = match ? match.length : 0;
 
     let pageIndex = doc.pageIndex;
     let nextPage = pages[++pageIndex];
 
     while (nextPage) {
-      let content = nextPage.content;
-      let match = content.match(regexp);
+      const content = nextPage.content;
+      const match = content.match(regexp);
       count += match ? match.length : 0;
       nextPage = pages[++pageIndex];
     }
@@ -148,7 +148,7 @@ export default class EditorArea extends React.Component {
   };
 
   activateTab(index) {
-    let activeDoc = this.props.docs[index];
+    const activeDoc = this.props.docs[index];
 
     this.setState({
       docKey: activeDoc ? activeDoc.uuid : null
@@ -163,17 +163,17 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
-    let fontRecords = get(page, 'config.fontRecords', []);
+    const fontRecords = get(page, 'config.fontRecords', []);
     fontRecords.forEach(record => {
-      let {from, to, css} = record;
+      const {from, to, css} = record;
       codemirror.markText(from, to, css);
     });
   }
 
   componentDidUpdate(previousProps, previousState) {
 
-    let docs = this.props.docs;
-    let codemirror = this.getCurrentCodemirror();
+    const docs = this.props.docs;
+    const codemirror = this.getCurrentCodemirror();
 
     if (this.props.closeConfirmStatus) {
       this.closeConfirm();
@@ -190,19 +190,19 @@ export default class EditorArea extends React.Component {
       this.markFontColor(codemirror);
     }
 
-    let doc = this.getDoc();
-    let previousDoc = this.getDoc(this.state.docKey, previousProps);
+    const doc = this.getDoc();
+    const previousDoc = this.getDoc(this.state.docKey, previousProps);
 
     if (previousDoc && doc && previousDoc.editChunk && (false === doc.editChunk)) {
       codemirror.refresh();
     }
-    let searchBar = this.refs.searchBar;
+    const searchBar = this.refs.searchBar;
     if (searchBar) {
       searchBar.cm = codemirror;
     }
 
     if (previousProps.direction !== this.props.direction) {
-      let editor = this.getEditor();
+      const editor = this.getEditor();
       if (editor) {
         editor.refresh();
       }
@@ -218,12 +218,12 @@ export default class EditorArea extends React.Component {
     if (uuid !== this.state.docKey) {
       return false;
     }
-    let docs = this.props.docs;
-    let index = this.getDocIndexByUuid(uuid);
-    let nextIndex = index + 1;
-    let previousIndex = index - 1;
-    let nextDoc = docs[nextIndex];
-    let previousDoc = docs[previousIndex];
+    const docs = this.props.docs;
+    const index = this.getDocIndexByUuid(uuid);
+    const nextIndex = index + 1;
+    const previousIndex = index - 1;
+    const nextDoc = docs[nextIndex];
+    const previousDoc = docs[previousIndex];
 
     if (nextDoc) {
       this.activateTab(nextIndex);
@@ -241,7 +241,7 @@ export default class EditorArea extends React.Component {
 
       // close a tab that's not active
       if (doc.uuid !== this.state.docKey) {
-        let index = this.getDocIndexByUuid(doc.uuid);
+        const index = this.getDocIndexByUuid(doc.uuid);
         this.activateTab(index);
       }
 
@@ -288,22 +288,22 @@ export default class EditorArea extends React.Component {
   };
 
   rotateTabLeft = () => {
-    let docs = this.props.docs;
+    const docs = this.props.docs;
     if (docs.length < 2) {
       return false;
     }
-    let index = this.getDocIndexByUuid(this.state.docKey);
-    let nextIndex = (index - 1) < 0 ? docs.length - 1 : index - 1;
+    const index = this.getDocIndexByUuid(this.state.docKey);
+    const nextIndex = (index - 1) < 0 ? docs.length - 1 : index - 1;
     this.activateTab(nextIndex);
   };
 
   rotateTabRight = () => {
-    let docs = this.props.docs;
+    const docs = this.props.docs;
     if (docs.length < 2) {
       return false;
     }
-    let index = this.getDocIndexByUuid(this.state.docKey);
-    let nextIndex = (index + 1) > docs.length - 1 ? 0 : index + 1;
+    const index = this.getDocIndexByUuid(this.state.docKey);
+    const nextIndex = (index + 1) > docs.length - 1 ? 0 : index + 1;
     this.activateTab(nextIndex);
   };
 
@@ -357,7 +357,7 @@ export default class EditorArea extends React.Component {
   saveAs = newDocName => {
 
     const self = this;
-    let doc = self.getDoc();
+    const doc = self.getDoc();
     Api.send('save-as', {doc, newDocName})
       .then(res => {
         self.refs.modalSaveAs.close();
@@ -368,7 +368,7 @@ export default class EditorArea extends React.Component {
   };
 
   closeDocByName = name => {
-    let doc = find(this.props.docs, {name});
+    const doc = find(this.props.docs, {name});
     if (doc) {
       this.closeDoc(doc.uuid);
     }
@@ -377,7 +377,7 @@ export default class EditorArea extends React.Component {
   exportZip() {
 
     const self = this;
-    let doc = self.getDoc();
+    const doc = self.getDoc();
 
     if (! doc) {
       self.refs.toast.error('Open a bamboo then try export again');
@@ -394,7 +394,7 @@ export default class EditorArea extends React.Component {
   exportFileWithPb() {
 
     const self = this;
-    let doc = self.getDoc();
+    const doc = self.getDoc();
 
     if (! doc) {
       self.refs.toast.error('Open a bamboo then try export again');
@@ -409,7 +409,7 @@ export default class EditorArea extends React.Component {
   }
 
   cancel = () => {
-    let searchBar = this.refs.searchBar;
+    const searchBar = this.refs.searchBar;
     if (searchBar) {
       searchBar.close();
     }
@@ -417,22 +417,22 @@ export default class EditorArea extends React.Component {
 
   splitPage = () => {
 
-    let doc = this.getDoc();
-    let cm = this.getCurrentCodemirror();
+    const doc = this.getDoc();
+    const cm = this.getCurrentCodemirror();
 
     if (isEmpty(cm)) {
       return false;
     }
 
-    let {writePageContent, setPageIndex} = this.props;
-    let cursor = cm.getCursor();
-    let content = cm.getValue();
-    let index = cm.indexFromPos(cursor);
+    const {writePageContent, setPageIndex} = this.props;
+    const cursor = cm.getCursor();
+    const content = cm.getValue();
+    const index = cm.indexFromPos(cursor);
 
-    let firstPart = content.substring(0, index);
+    const firstPart = content.substring(0, index);
     let secondPart = content.substring(index, content.length);
-    let pageIndex = doc.pageIndex;
-    let pages = doc.pages;
+    const pageIndex = doc.pageIndex;
+    const pages = doc.pages;
 
     // https://github.com/karmapa/ketaka-lite/issues/53
     if (('\n' === secondPart[0]) && (secondPart.length > 1)) {
@@ -442,9 +442,9 @@ export default class EditorArea extends React.Component {
     if (pageIndex < (pages.length - 1)) {
 
       writePageContent(doc.uuid, pageIndex, firstPart);
-      let nextPageIndex = pageIndex + 1;
-      let nextPage = pages[nextPageIndex];
-      let nextPageContent = secondPart + nextPage.content;
+      const nextPageIndex = pageIndex + 1;
+      const nextPage = pages[nextPageIndex];
+      const nextPageContent = secondPart + nextPage.content;
 
       writePageContent(doc.uuid, nextPageIndex, nextPageContent);
       setPageIndex(this.state.docKey, nextPageIndex);
@@ -456,7 +456,7 @@ export default class EditorArea extends React.Component {
 
   findNextQuery = (res, index) => {
     for (let i = 0, len = res.length; i < len; i++) {
-      let query = res[i];
+      const query = res[i];
       if (index < query[0]) {
         return query;
       }
@@ -466,7 +466,7 @@ export default class EditorArea extends React.Component {
 
   findPrevQuery = (res, index) => {
     for (let i = res.length - 1; i >= 0; i--) {
-      let query = res[i];
+      const query = res[i];
       if (index > query[0]) {
         return query;
       }
@@ -478,12 +478,12 @@ export default class EditorArea extends React.Component {
 
     query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
-    let regexp = new RegExp(query, 'g');
-    let {writePageContent} = this.props;
-    let doc = this.getDoc();
-    let pages = doc.pages;
+    const regexp = new RegExp(query, 'g');
+    const {writePageContent} = this.props;
+    const doc = this.getDoc();
+    const pages = doc.pages;
     let replaceCount = 0;
-    let replaceFunc = () => {
+    const replaceFunc = () => {
       ++replaceCount;
       return text;
     };
@@ -492,7 +492,7 @@ export default class EditorArea extends React.Component {
     let page = pages[pageIndex];
 
     while (page) {
-      let content = page.content.replace(regexp, replaceFunc);
+      const content = page.content.replace(regexp, replaceFunc);
       writePageContent(doc.uuid, pageIndex, content);
       page = pages[++pageIndex];
     }
@@ -504,17 +504,17 @@ export default class EditorArea extends React.Component {
 
     query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
-    let page = this.getCurrentPage();
-    let content = page.content.substring(0, index);
+    const page = this.getCurrentPage();
+    const content = page.content.substring(0, index);
     return (content.match(new RegExp(query, 'g')) || []).length;
   };
 
   getIndexByMatchIndex = (query, index) => {
     query = query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 
-    let content = get(this.getCurrentPage(), 'content', '');
+    const content = get(this.getCurrentPage(), 'content', '');
 
-    let re = new RegExp(query, 'g');
+    const re = new RegExp(query, 'g');
     let match = re.exec(content);
     let count = 0;
 
@@ -534,25 +534,25 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
-    let cm = this.getCurrentCodemirror();
+    const cm = this.getCurrentCodemirror();
 
     if (! cm) {
       return false;
     }
 
-    let cursor = cm.getCursor();
-    let index = cm.indexFromPos(cursor);
-    let query = this.findNextQuery(this.lastQueryRes, index);
+    const cursor = cm.getCursor();
+    const index = cm.indexFromPos(cursor);
+    const query = this.findNextQuery(this.lastQueryRes, index);
 
     if (isNull(query)) {
       return false;
     }
 
-    let from = query[0];
-    let to = from + query[1];
+    const from = query[0];
+    const to = from + query[1];
 
-    let fromPos = cm.posFromIndex(from);
-    let toPos = cm.posFromIndex(to);
+    const fromPos = cm.posFromIndex(from);
+    const toPos = cm.posFromIndex(to);
 
     cm.setSelection(fromPos, toPos);
   };
@@ -563,26 +563,26 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
-    let cm = this.getCurrentCodemirror();
+    const cm = this.getCurrentCodemirror();
 
     if (! cm) {
       return false;
     }
 
-    let cursor = cm.getCursor();
-    let selection = cm.getSelection();
-    let index = cm.indexFromPos(cursor) - selection.length;
-    let query = this.findPrevQuery(this.lastQueryRes, index);
+    const cursor = cm.getCursor();
+    const selection = cm.getSelection();
+    const index = cm.indexFromPos(cursor) - selection.length;
+    const query = this.findPrevQuery(this.lastQueryRes, index);
 
     if (isNull(query)) {
       return false;
     }
 
-    let from = query[0];
-    let to = from + query[1];
+    const from = query[0];
+    const to = from + query[1];
 
-    let fromPos = cm.posFromIndex(from);
-    let toPos = cm.posFromIndex(to);
+    const fromPos = cm.posFromIndex(from);
+    const toPos = cm.posFromIndex(to);
 
     cm.setSelection(fromPos, toPos);
   };
@@ -590,7 +590,7 @@ export default class EditorArea extends React.Component {
   runWithPage = fn => {
     const self = this;
     return () => {
-      let page = self.getCurrentPage();
+      const page = self.getCurrentPage();
       if (page) {
         fn();
       }
@@ -605,20 +605,20 @@ export default class EditorArea extends React.Component {
       self.keypressListener.destroy();
     }
 
-    let inputMethods = values(MAP_INPUT_METHODS);
-    let invertedInputMethods = invert(MAP_INPUT_METHODS);
+    const inputMethods = values(MAP_INPUT_METHODS);
+    const invertedInputMethods = invert(MAP_INPUT_METHODS);
 
     self.keypressListener = new keypress.Listener();
-    let keypressListener = Helper.camelize(['register_combo'], self.keypressListener);
+    const keypressListener = Helper.camelize(['register_combo'], self.keypressListener);
 
-    let shortcuts = clone(this.props.shortcuts);
+    const shortcuts = clone(this.props.shortcuts);
 
     // format shortcuts data
     each(shortcuts, (shortcut, prop) => {
       shortcuts[prop] = shortcut.value.split(' + ').join(' ');
     });
 
-    let simpleCombo = (keys, cb) => {
+    const simpleCombo = (keys, cb) => {
       return keypressListener.registerCombo({
         keys,
         'on_keyup': cb,
@@ -639,7 +639,7 @@ export default class EditorArea extends React.Component {
 
     simpleCombo(shortcuts.switchInputMethod, () => {
 
-      let currentInputMethod = MAP_INPUT_METHODS[this.props.inputMethod];
+      const currentInputMethod = MAP_INPUT_METHODS[this.props.inputMethod];
       let index = inputMethods.indexOf(currentInputMethod);
       if (-1 === index) {
         index = 0;
@@ -648,7 +648,7 @@ export default class EditorArea extends React.Component {
       if (index >= inputMethods.length) {
         index = 0;
       }
-      let newMethod = inputMethods[index];
+      const newMethod = inputMethods[index];
       this.props.setInputMethod(invertedInputMethods[newMethod]);
     });
 
@@ -826,7 +826,7 @@ export default class EditorArea extends React.Component {
     }
 
     if (window.matchMedia) {
-      let mediaQueryList = window.matchMedia('print');
+      const mediaQueryList = window.matchMedia('print');
       mediaQueryList.addListener(function(mql) {
         if (mql.matches) {
           // before print
@@ -1031,7 +1031,7 @@ export default class EditorArea extends React.Component {
     if (! doc) {
       return null;
     }
-    let pageIndex = this.getPageIndex(doc);
+    const pageIndex = this.getPageIndex(doc);
     return doc.pages[pageIndex];
   }
 
@@ -1046,7 +1046,7 @@ export default class EditorArea extends React.Component {
     const diffRows = jsdiff.diffLines(content1, content2);
 
     let pos = 0;
-    let action = [];
+    const action = [];
 
     each(diffRows, diffRow => {
 
@@ -1098,8 +1098,8 @@ export default class EditorArea extends React.Component {
 
   onCodemirrorChange = debounce((cm, content) => {
 
-    let doc = this.getDoc();
-    let page = this.getCurrentPage(doc);
+    const doc = this.getDoc();
+    const page = this.getCurrentPage(doc);
 
     // switching pages
     if (page.content === content) {
@@ -1118,7 +1118,7 @@ export default class EditorArea extends React.Component {
   lazyAddSpellCheckOverlay = throttle(this.addSpellCheckOverlay, 1000);
 
   getTabName = doc => {
-    let tabName = doc.name;
+    const tabName = doc.name;
     if (this.docChanged(doc)) {
       return tabName + '*';
     }
@@ -1127,8 +1127,8 @@ export default class EditorArea extends React.Component {
 
   onUploadButtonClick = () => {
     const self = this;
-    let doc = this.getDoc();
-    let {uuid, pageIndex} = doc;
+    const doc = this.getDoc();
+    const {uuid, pageIndex} = doc;
     Api.send('page-image-upload-button-clicked', doc)
       .then(res => {
         self.props.updatePageImagePath(uuid, pageIndex, res.pathData);
@@ -1138,7 +1138,7 @@ export default class EditorArea extends React.Component {
   }
 
   getImageSrc = (page, doc) => {
-    let src = get(page, 'pathData.base');
+    const src = get(page, 'pathData.base');
     if (! src) {
       return '';
     }
@@ -1153,8 +1153,8 @@ export default class EditorArea extends React.Component {
 
     Api.send('list-doc-name')
       .then(res => {
-        let doc = self.getDoc();
-        let page = self.getCurrentPage(doc);
+        const doc = self.getDoc();
+        const page = self.getCurrentPage(doc);
         self.refs.modalDocSettings.open({
           docName: get(doc, 'name'),
           pageName: get(page, 'name'),
@@ -1166,8 +1166,8 @@ export default class EditorArea extends React.Component {
 
   saveAndCloseModalDocSettings = data => {
     const self = this;
-    let doc = this.getDoc();
-    let page = doc.pages[doc.pageIndex];
+    const doc = this.getDoc();
+    const page = doc.pages[doc.pageIndex];
     data.doc = doc;
 
     if ((doc.name === data.docName) && (page.name === data.pageName)) {
@@ -1176,7 +1176,7 @@ export default class EditorArea extends React.Component {
 
     Api.send('change-doc-settings', data)
       .then(res => {
-        let doc = res.doc;
+        const doc = res.doc;
         self.props.receiveDoc(doc);
         self.refs.toast.success(res.message);
         self.refs.modalDocSettings.close();
@@ -1198,9 +1198,9 @@ export default class EditorArea extends React.Component {
   }
 
   removeSpellCheckOverlay() {
-    let lastOverlay = this.lastOverlay;
+    const lastOverlay = this.lastOverlay;
     if (lastOverlay) {
-      let codemirror = this.getCurrentCodemirror();
+      const codemirror = this.getCurrentCodemirror();
       codemirror.removeOverlay(lastOverlay, false);
       this.lastOverlay = null;
     }
@@ -1212,7 +1212,7 @@ export default class EditorArea extends React.Component {
   }
 
   addSpellCheckOverlay() {
-    let codemirror = this.getCurrentCodemirror();
+    const codemirror = this.getCurrentCodemirror();
 
     if (! codemirror) {
       return false;
@@ -1222,12 +1222,12 @@ export default class EditorArea extends React.Component {
       this.removeSpellCheckOverlay();
     }
 
-    let content = codemirror.getValue();
+    const content = codemirror.getValue();
 
-    let res = checkSyllables(content);
-    let {exceptionWords} = this.props;
+    const res = checkSyllables(content);
+    const {exceptionWords} = this.props;
 
-    let queries = res.filter(row => {
+    const queries = res.filter(row => {
       return ! exceptionWords.includes(row[2]);
     });
 
@@ -1237,7 +1237,7 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
-    let overlay = this.searchOverlay(queries, true);
+    const overlay = this.searchOverlay(queries, true);
     codemirror.addOverlay(overlay, {className: 'spellcheck'});
 
     this.lastOverlay = overlay;
@@ -1245,7 +1245,7 @@ export default class EditorArea extends React.Component {
 
   checkSpelling() {
 
-    let {spellCheckOn, toggleSpellCheck} = this.props;
+    const {spellCheckOn, toggleSpellCheck} = this.props;
 
     if (spellCheckOn) {
       this.removeSpellCheckOverlay();
@@ -1258,22 +1258,22 @@ export default class EditorArea extends React.Component {
 
   searchOverlay(queries, caseInsensitive) {
 
-    let tokens = map(queries, 2);
-    let str = tokens.map(query => query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
+    const tokens = map(queries, 2);
+    const str = tokens.map(query => query.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'))
       .join('|');
 
-    let regexp = new RegExp(str, caseInsensitive ? 'gi' : 'g');
+    const regexp = new RegExp(str, caseInsensitive ? 'gi' : 'g');
 
     return {
       token: function(stream) {
 
         regexp.lastIndex = stream.pos;
 
-        let match = regexp.exec(stream.string);
+        const match = regexp.exec(stream.string);
 
         if (match && match.index === stream.pos) {
-          let posArr = map(checkSyllables(stream.string), 0);
-          let matchLine = posArr.includes(stream.pos);
+          const posArr = map(checkSyllables(stream.string), 0);
+          const matchLine = posArr.includes(stream.pos);
           stream.pos += match[0].length;
           return matchLine ? 'typo' : null;
         }
@@ -1288,15 +1288,15 @@ export default class EditorArea extends React.Component {
   }
 
   handleColorButtonClick = color => {
-    let doc = this.getDoc();
-    let codemirror = this.getCurrentCodemirror();
-    let hexColor = MAP_COLORS[color];
-    let fontRecords = [];
+    const doc = this.getDoc();
+    const codemirror = this.getCurrentCodemirror();
+    const hexColor = MAP_COLORS[color];
+    const fontRecords = [];
 
     codemirror.listSelections()
       .forEach(selection => {
-        let [from, to] = Helper.handleReverseSelection(selection.anchor, selection.head);
-        let css = {css: 'color: ' + hexColor};
+        const [from, to] = Helper.handleReverseSelection(selection.anchor, selection.head);
+        const css = {css: 'color: ' + hexColor};
         codemirror.markText(from, to, css);
         fontRecords.push({from, to, css});
       });
@@ -1321,16 +1321,16 @@ export default class EditorArea extends React.Component {
   }
 
   addPageAndCloseModal = pageName => {
-    let doc = this.getDoc();
+    const doc = this.getDoc();
     this.props.addPage(doc.uuid, pageName);
-    let pageIndex = findIndex(doc.pages, {name: pageName});
+    const pageIndex = findIndex(doc.pages, {name: pageName});
     this.props.setPageIndex(this.state.docKey, pageIndex);
     this.refs.modalPageAdd.close();
   }
 
   getImageZoomerHeight = () => {
 
-    let {nsRatio, showImageOnly, showTextOnly} = this.props;
+    const {nsRatio, showImageOnly, showTextOnly} = this.props;
     let deltaRatio = showImageOnly ? 1 : nsRatio;
 
     if (showTextOnly) {
@@ -1341,7 +1341,7 @@ export default class EditorArea extends React.Component {
 
   getImageZoomerWidth = () => {
 
-    let {ewRatio, showImageOnly, showTextOnly} = this.props;
+    const {ewRatio, showImageOnly, showTextOnly} = this.props;
     let deltaRatio = showImageOnly ? 1 : ewRatio;
 
     if (showTextOnly) {
@@ -1352,7 +1352,7 @@ export default class EditorArea extends React.Component {
 
   getEditorHeight() {
 
-    let {direction, nsRatio, showTextOnly, showImageOnly} = this.props;
+    const {direction, nsRatio, showTextOnly, showImageOnly} = this.props;
     let deltaRatio = showTextOnly ? 0 : nsRatio;
 
     if (DIRECTION_VERTICAL === direction) {
@@ -1367,8 +1367,8 @@ export default class EditorArea extends React.Component {
 
   getEditorWidth() {
 
-    let {direction} = this.props;
-    let {ewRatio, showTextOnly, showImageOnly} = this.props;
+    const {direction} = this.props;
+    const {ewRatio, showTextOnly, showImageOnly} = this.props;
 
     if (DIRECTION_HORIZONTAL === direction) {
       return window.innerWidth;
@@ -1384,7 +1384,7 @@ export default class EditorArea extends React.Component {
 
   renderImageArea(key, src) {
 
-    let style = {};
+    const style = {};
 
     if (DIRECTION_HORIZONTAL === this.props.direction) {
       style.height = this.getImageZoomerHeight();
@@ -1400,9 +1400,9 @@ export default class EditorArea extends React.Component {
   }
 
   getCurrentCodemirror() {
-    let uuid = get(this.getDoc(), 'uuid');
-    let editorKey = this.getEditorKey(uuid);
-    let editor = this.refs[editorKey];
+    const uuid = get(this.getDoc(), 'uuid');
+    const editorKey = this.getEditorKey(uuid);
+    const editor = this.refs[editorKey];
     if (editor) {
       return get(editor.getWrappedInstance(), 'codemirror');
     }
@@ -1414,8 +1414,8 @@ export default class EditorArea extends React.Component {
   }
 
   deleteCurrentPage = () => {
-    let doc = this.getDoc();
-    let currentPageIndex = doc.pageIndex;
+    const doc = this.getDoc();
+    const currentPageIndex = doc.pageIndex;
 
     if (currentPageIndex === (doc.pages.length - 1)) {
       doc.pageIndex = currentPageIndex - 1;
@@ -1431,11 +1431,11 @@ export default class EditorArea extends React.Component {
 
   renderDoc = doc => {
 
-    let pageIndex = this.getPageIndex(doc);
-    let page = doc.pages[pageIndex];
-    let src = this.getImageSrc(page, doc);
-    let key = doc.uuid;
-    let imageZoomerKey = this.getImageZoomerKey(key);
+    const pageIndex = this.getPageIndex(doc);
+    const page = doc.pages[pageIndex];
+    const src = this.getImageSrc(page, doc);
+    const key = doc.uuid;
+    const imageZoomerKey = this.getImageZoomerKey(key);
 
     if (this.isCurrentDoc(doc)) {
 
@@ -1471,11 +1471,11 @@ export default class EditorArea extends React.Component {
 
   onBambooClick = name => {
     const self = this;
-    let openedDoc = find(this.props.docs, {name});
+    const openedDoc = find(this.props.docs, {name});
     if (openedDoc) {
 
       // activate this doc if its already opened
-      let index = findIndex(this.props.docs, {uuid: openedDoc.uuid});
+      const index = findIndex(this.props.docs, {uuid: openedDoc.uuid});
       if (-1 !== index) {
         this.activateTab(index);
       }
@@ -1494,18 +1494,18 @@ export default class EditorArea extends React.Component {
 
   renderEditorArea = (doc, pageIndex) => {
 
-    let {editChunk} = doc;
-    let page = doc.pages[pageIndex];
+    const {editChunk} = doc;
+    const page = doc.pages[pageIndex];
 
-    let style = {
+    const style = {
       width: this.getEditorWidth(),
       height: this.getEditorHeight()
     };
 
-    let key = doc.uuid;
-    let editorKey = this.getEditorKey(key);
+    const key = doc.uuid;
+    const editorKey = this.getEditorKey(key);
 
-    let editorProps = {
+    const editorProps = {
       style,
       className: classNames({'editor': true, 'hidden': editChunk}),
       code: page.content || '',
@@ -1531,12 +1531,12 @@ export default class EditorArea extends React.Component {
   };
 
   findPrevIndexByKeyword = keyword => {
-    let doc = this.getDoc();
+    const doc = this.getDoc();
     let pageIndex = doc.pageIndex;
     let page = doc.pages[--pageIndex];
 
     while (page) {
-      let content = get(page, 'content', '');
+      const content = get(page, 'content', '');
       if (content.includes(keyword)) {
         return pageIndex;
       }
@@ -1546,12 +1546,12 @@ export default class EditorArea extends React.Component {
   }
 
   findNextIndexByKeyword = keyword => {
-    let doc = this.getDoc();
+    const doc = this.getDoc();
     let pageIndex = doc.pageIndex;
     let page = doc.pages[++pageIndex];
 
     while (page) {
-      let content = get(page, 'content', '');
+      const content = get(page, 'content', '');
       if (content.includes(keyword)) {
         return pageIndex;
       }
@@ -1561,8 +1561,8 @@ export default class EditorArea extends React.Component {
   }
 
   toPrevPage = () => {
-    let doc = this.getDoc();
-    let prevPageIndex = doc.pageIndex - 1;
+    const doc = this.getDoc();
+    const prevPageIndex = doc.pageIndex - 1;
     if (prevPageIndex >= 0) {
       this.props.setPageIndex(doc.uuid, prevPageIndex);
       return true;
@@ -1576,8 +1576,8 @@ export default class EditorArea extends React.Component {
     if (! doc) {
       return null;
     }
-    let editorKey = this.getEditorKey(doc.uuid);
-    let editor = this.refs[editorKey];
+    const editorKey = this.getEditorKey(doc.uuid);
+    const editor = this.refs[editorKey];
 
     if (editor) {
       return editor.getWrappedInstance();
@@ -1602,7 +1602,8 @@ export default class EditorArea extends React.Component {
   handleUndoButtonClick = () => this.undo();
 
   handleImageOnlyButtonClick = () => {
-    let {showImageOnly, showTextOnly} = this.props;
+
+    const {showImageOnly, showTextOnly} = this.props;
 
     if (showTextOnly) {
       this.props.setTextOnly(false);
@@ -1611,7 +1612,8 @@ export default class EditorArea extends React.Component {
   };
 
   handleTextOnlyButtonClick = () => {
-    let {showImageOnly, showTextOnly} = this.props;
+
+    const {showImageOnly, showTextOnly} = this.props;
 
     if (showImageOnly) {
       this.props.setImageOnly(false);
@@ -1635,9 +1637,9 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
-    let doc = this.getDoc();
+    const doc = this.getDoc();
 
-    let editorToolbarProps = {
+    const editorToolbarProps = {
       canShowPageDeleteButton: doc && (doc.pages.length > 1),
       className: 'editor-toolbar',
       onAddPbFileButtonClick: this.handleAddPbFileButtonClick,
@@ -1660,16 +1662,16 @@ export default class EditorArea extends React.Component {
 
   render() {
 
-    let {print} = this.state;
-    let {docs, direction, setPageIndex, inputMethod} = this.props;
-    let doc = this.getDoc();
+    const {print} = this.state;
+    const {docs, direction, setPageIndex, inputMethod} = this.props;
+    const doc = this.getDoc();
 
-    let classes = {
+    const classes = {
       [this.props.className]: true,
       'vertical': (DIRECTION_VERTICAL === direction)
     };
 
-    let searchBarProps = {
+    const searchBarProps = {
       inputMethod,
       findNextIndexByKeyword: this.findNextIndexByKeyword,
       findPrevIndexByKeyword: this.findPrevIndexByKeyword,
@@ -1740,7 +1742,7 @@ export default class EditorArea extends React.Component {
 
   onMenuItemSelect = method => {
     this.props.setInputMethod(method);
-    let cm = this.getCurrentCodemirror();
+    const cm = this.getCurrentCodemirror();
     if (cm) {
       cm.focus();
     }

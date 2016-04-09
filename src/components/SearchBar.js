@@ -56,8 +56,8 @@ export default class SearchBar extends React.Component {
       return;
     }
     if (this.cm) {
-      let index = this.cm.indexFromPos(this.cursor);
-      let matchCount = this.props.findMatchCountByKeyword(keyword, index);
+      const index = this.cm.indexFromPos(this.cursor);
+      const matchCount = this.props.findMatchCountByKeyword(keyword, index);
       this.setState({matchCount});
     }
   };
@@ -73,7 +73,7 @@ export default class SearchBar extends React.Component {
     this.replaceCursor = this.cm.getCursor();
     this.focus();
     this.setCursor();
-    let {replaceKeyword} = this.state;
+    const {replaceKeyword} = this.state;
     this.findMatchCount(replaceKeyword);
     this.findKeyword(replaceKeyword);
   };
@@ -95,7 +95,7 @@ export default class SearchBar extends React.Component {
   }
 
   escape = () => {
-    let {cm} = this;
+    const {cm} = this;
 
     if (cm) {
       clearSearch(cm);
@@ -106,7 +106,7 @@ export default class SearchBar extends React.Component {
   };
 
   onFindInputChange = e => {
-    let findKeyword = e.target.value;
+    const findKeyword = e.target.value;
     this.setState({
       findKeyword
     });
@@ -143,7 +143,7 @@ export default class SearchBar extends React.Component {
   };
 
   onReplaceInputChange = e => {
-    let replaceKeyword = e.target.value;
+    const replaceKeyword = e.target.value;
     this.setState({
       replaceKeyword
     });
@@ -166,7 +166,7 @@ export default class SearchBar extends React.Component {
   onWithInputKeyUp = e => {
 
     if (enterKeyPressed(e)) {
-      let replaceAll = this.shiftKeyHolding;
+      const replaceAll = this.shiftKeyHolding;
       this.replaceOne(this.cm, replaceAll);
     }
   };
@@ -184,7 +184,7 @@ export default class SearchBar extends React.Component {
   };
 
   findKeyword(query = this.state.findKeyword) {
-    let {cm, cursor} = this;
+    const {cm, cursor} = this;
     clearSearch(cm);
     this.clearSelection(cm);
     this.doSearch({cm, query, cursor});
@@ -205,9 +205,9 @@ export default class SearchBar extends React.Component {
 
   doSearch(args = {}) {
 
-    let self = this;
-    let {cm, rev, query, cursor} = args;
-    let state = getSearchState(cm);
+    const self = this;
+    const {cm, rev, query, cursor} = args;
+    const state = getSearchState(cm);
 
     if (state.query) {
       return self.findNext(cm, rev);
@@ -226,13 +226,13 @@ export default class SearchBar extends React.Component {
 
   findNext(cm, rev) {
 
-    let {findPrevIndexByKeyword, findNextIndexByKeyword, doc, setPageIndex} = this.props;
+    const {findPrevIndexByKeyword, findNextIndexByKeyword, doc, setPageIndex} = this.props;
 
     cm.operation(() => {
       setTimeout(() => {
 
         const cursor = cm.getCursor();
-        let state = getSearchState(cm);
+        const state = getSearchState(cm);
 
         const index = cm.indexFromPos(cursor);
         state.posFrom = cm.posFromIndex(index - state.query.length);
@@ -243,7 +243,7 @@ export default class SearchBar extends React.Component {
         if (! searchCursor.find(rev)) {
 
           if (rev) {
-            let prevPageIndex = findPrevIndexByKeyword(state.query);
+            const prevPageIndex = findPrevIndexByKeyword(state.query);
 
             if (isNull(prevPageIndex)) {
               return;
@@ -252,7 +252,7 @@ export default class SearchBar extends React.Component {
             searchCursor = getSearchCursor(cm, state.query, CodeMirror.Pos(cm.lastLine()));
           }
           else {
-            let nextPageIndex = findNextIndexByKeyword(state.query);
+            const nextPageIndex = findNextIndexByKeyword(state.query);
 
             if (isNull(nextPageIndex)) {
               return;
@@ -274,16 +274,16 @@ export default class SearchBar extends React.Component {
   }
 
   focus() {
-    let {mode} = this.state;
+    const {mode} = this.state;
 
     if (MODE_SEARCH === mode) {
-      let findInput = ReactDOM.findDOMNode(this.refs.findInput);
+      const findInput = ReactDOM.findDOMNode(this.refs.findInput);
       if (findInput) {
         findInput.focus();
       }
     }
     if (MODE_REPLACE === mode) {
-      let replaceInput = ReactDOM.findDOMNode(this.refs.replaceInput);
+      const replaceInput = ReactDOM.findDOMNode(this.refs.replaceInput);
       if (replaceInput) {
         replaceInput.focus();
       }
@@ -306,7 +306,7 @@ export default class SearchBar extends React.Component {
 
   close = () => {
 
-    let {cm} = this;
+    const {cm} = this;
 
     this.setState({
       opened: false
@@ -335,10 +335,11 @@ export default class SearchBar extends React.Component {
       return;
     }
 
-    let self = this;
+    const self = this;
+    const {doc, replacePageContent, findNextIndexByKeyword, getMatchIndexByQuery, getIndexByMatchIndex} = self.props;
+
     let query = self.state.replaceKeyword;
     let text = self.state.withKeyword;
-    let {doc, replacePageContent, findNextIndexByKeyword, getMatchIndexByQuery, getIndexByMatchIndex} = self.props;
 
     if (! query) {
       return;
@@ -349,9 +350,9 @@ export default class SearchBar extends React.Component {
 
     if (all) {
 
-      let self = this;
-      let index = this.cm.indexFromPos(this.cm.getCursor());
-      let matchIndex = getMatchIndexByQuery(query, index);
+      const self = this;
+      const index = this.cm.indexFromPos(this.cm.getCursor());
+      const matchIndex = getMatchIndexByQuery(query, index);
 
       replacePageContent(query, text);
 
@@ -359,8 +360,8 @@ export default class SearchBar extends React.Component {
 
       if (matchIndex > 0) {
         setTimeout(() => {
-          let newIndex = getIndexByMatchIndex(text, matchIndex);
-          let pos = this.cm.posFromIndex(newIndex);
+          const newIndex = getIndexByMatchIndex(text, matchIndex);
+          const pos = this.cm.posFromIndex(newIndex);
           self.cm.setCursor(pos);
         });
       }
@@ -376,13 +377,13 @@ export default class SearchBar extends React.Component {
 
       let cursor = getSearchCursor(cm, query, cursorInstance);
 
-      let advance = () => {
+      const advance = () => {
 
         let match = cursor.findNext();
 
         if (! match) {
 
-          let nextPageIndex = findNextIndexByKeyword(query);
+          const nextPageIndex = findNextIndexByKeyword(query);
 
           if (! isNull(nextPageIndex)) {
 
@@ -391,8 +392,8 @@ export default class SearchBar extends React.Component {
             cursor = getSearchCursor(cm, query);
             setTimeout(() => {
               match = cursor.findNext();
-              let from = cursor.from();
-              let to = cursor.to();
+              const from = cursor.from();
+              const to = cursor.to();
               cm.setSelection(from, to);
               cm.scrollIntoView({from, to});
             });
@@ -403,8 +404,8 @@ export default class SearchBar extends React.Component {
           return;
         }
 
-        let from = cursor.from();
-        let to = cursor.to();
+        const from = cursor.from();
+        const to = cursor.to();
         cm.setSelection(from, to);
         cm.scrollIntoView({from, to});
 
@@ -424,12 +425,12 @@ export default class SearchBar extends React.Component {
 
   renderSearch = () => {
 
-    let classnames = {
+    const classnames = {
       'box-search': true,
       'hidden': ! this.state.opened
     };
 
-    let findInputProps = {
+    const findInputProps = {
       className: 'find-input',
       onChange: this.onFindInputChange,
       onKeyDown: this.onFindInputKeyDown,
@@ -465,7 +466,7 @@ export default class SearchBar extends React.Component {
   };
 
   onReplaceAllButtonClick = () => {
-    let self = this;
+    const self = this;
 
     self.openConfirmDialog({
       yes: () => {
@@ -480,15 +481,15 @@ export default class SearchBar extends React.Component {
 
   renderReplace = () => {
 
-    let {opened, replaceKeyword, withKeyword} = this.state;
-    let {inputMethod} = this.props;
+    const {opened, replaceKeyword, withKeyword} = this.state;
+    const {inputMethod} = this.props;
 
-    let classnames = {
+    const classnames = {
       'box-search': true,
       'hidden': ! opened
     };
 
-    let replaceInputProps = {
+    const replaceInputProps = {
       className: 'replace-input',
       inputMethod,
       onChange: this.onReplaceInputChange,
@@ -497,7 +498,7 @@ export default class SearchBar extends React.Component {
       value: replaceKeyword
     };
 
-    let withInputProps = {
+    const withInputProps = {
       inputMethod,
       onChange: this.onWithInputChange,
       onKeyDown: this.onWithInputKeyDown,
@@ -547,17 +548,17 @@ export default class SearchBar extends React.Component {
     if (! cm) {
       return;
     }
-    let pos = cm.getCursor();
-    let {mode, findKeyword, replaceKeyword} = this.state;
+    const pos = cm.getCursor();
+    const {mode, findKeyword, replaceKeyword} = this.state;
     pos.ch -= (MODE_SEARCH === mode) ? findKeyword.length : replaceKeyword.length;
     cm.setSelection(pos, pos);
   };
 
   renderConfirm = () => {
 
-    let {opened, confirmMessage} = this.state;
+    const {opened, confirmMessage} = this.state;
 
-    let classnames = {
+    const classnames = {
       'box-search': true,
       'hidden': ! opened
     };
@@ -573,12 +574,12 @@ export default class SearchBar extends React.Component {
   };
 
   render() {
-    let map = {
+    const map = {
       [MODE_SEARCH]: this.renderSearch,
       [MODE_REPLACE]: this.renderReplace,
       [MODE_CONFIRM]: this.renderConfirm,
     };
-    let renderFunc = map[this.state.mode];
+    const renderFunc = map[this.state.mode];
 
     if (! isFunction(renderFunc)) {
       throw 'Undefined render function';
@@ -595,7 +596,7 @@ function clearSearch(cm) {
 
   cm.operation(function() {
 
-    let state = getSearchState(cm);
+    const state = getSearchState(cm);
     state.lastQuery = state.query;
 
     if (! state.query) {
@@ -652,7 +653,7 @@ function startSearch(cm, state, query) {
 
 function parseQuery(query) {
 
-  let isRE = query.match(/^\/(.*)\/([a-z]*)$/);
+  const isRE = query.match(/^\/(.*)\/([a-z]*)$/);
 
   if (isRE) {
     try {
@@ -686,7 +687,7 @@ function searchOverlay(query, caseInsensitive) {
 
       query.lastIndex = stream.pos;
 
-      let match = query.exec(stream.string);
+      const match = query.exec(stream.string);
 
       if (match && match.index === stream.pos) {
         stream.pos += match[0].length;
@@ -704,11 +705,11 @@ function searchOverlay(query, caseInsensitive) {
 
 function parseString(string) {
   return string.replace(/\\(.)/g, function(_, ch) {
-    let map = {
+    const map = {
       n: '\n',
       r: '\r'
     };
-    let char = map[ch];
+    const char = map[ch];
     return char ? char : ch;
   });
 }

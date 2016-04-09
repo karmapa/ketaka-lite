@@ -13,7 +13,7 @@ export default class ImageUploader extends React.Component {
 
   render() {
 
-    let {style, className} = this.props;
+    const {style, className} = this.props;
 
     return (
       <div style={style} className={className}>

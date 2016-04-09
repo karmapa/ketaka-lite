@@ -43,7 +43,7 @@ export default class Resizer extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   getRatio = () => {
-    let {direction, nsRatio, ewRatio} = this.props;
+    const {direction, nsRatio, ewRatio} = this.props;
     return (DIRECTION_HORIZONTAL === direction) ? nsRatio : ewRatio;
   };
 
@@ -85,33 +85,33 @@ export default class Resizer extends React.Component {
 
   handleMouseMove = () => {
 
-    let {mouse, event} = this;
-    let {setRatio, direction} = this.props;
-    let ratio = this.getRatio();
+    const {mouse, event} = this;
+    const {setRatio, direction} = this.props;
+    const ratio = this.getRatio();
 
-    let x = event.clientX;
-    let y = event.clientY;
-    let delta = (DIRECTION_HORIZONTAL === direction) ? DELTA_NS : DELTA_EW;
+    const x = event.clientX;
+    const y = event.clientY;
+    const delta = (DIRECTION_HORIZONTAL === direction) ? DELTA_NS : DELTA_EW;
 
     if (DIRECTION_HORIZONTAL === direction) {
       if (this.isMovingUp(y)) {
-        let newRatio = ratio - ((mouse.y - y) * delta);
+        const newRatio = ratio - ((mouse.y - y) * delta);
         setRatio((newRatio < BOUNDARY_MIN) ? BOUNDARY_MIN : newRatio, direction);
       }
 
       if (this.isMovingDown(y)) {
-        let newRatio = ratio + (y - mouse.y) * delta;
+        const newRatio = ratio + (y - mouse.y) * delta;
         setRatio((newRatio > BOUNDARY_MAX) ? BOUNDARY_MAX : newRatio, direction);
       }
     }
     else {
       if (this.isMovingLeft(x)) {
-        let newRatio = ratio - ((mouse.x - x) * delta);
+        const newRatio = ratio - ((mouse.x - x) * delta);
         setRatio((newRatio < BOUNDARY_MIN) ? BOUNDARY_MIN : newRatio, direction);
       }
 
       if (this.isMovingRight(x)) {
-        let newRatio = ratio + ((x - mouse.x) * delta);
+        const newRatio = ratio + ((x - mouse.x) * delta);
         setRatio((newRatio > BOUNDARY_MAX) ? BOUNDARY_MAX : newRatio, direction);
       }
     }
@@ -121,14 +121,14 @@ export default class Resizer extends React.Component {
 
   onMouseDown = e => {
     this.event = e;
-    let {mouse} = this;
+    const {mouse} = this;
     mouse.isDragging = true;
     mouse.y = e.clientY;
   };
 
   onMouseMove = e => {
     this.event = e;
-    let {mouse, animator} = this;
+    const {mouse, animator} = this;
 
     if (! this.mouse.isDragging) {
       mouse.x = e.clientX;
@@ -164,10 +164,12 @@ export default class Resizer extends React.Component {
   }
 
   getLeftTop() {
+
+    const {direction} = this.props;
+    const halfResizerSize = RESIZER_SIZE / 2;
+    const ratio = this.getRatio();
+
     let top, left;
-    let {direction} = this.props;
-    let halfResizerSize = RESIZER_SIZE / 2;
-    let ratio = this.getRatio();
 
     if (DIRECTION_HORIZONTAL === direction) {
       top = NON_EDITOR_AREA_HEIGHT + ((window.innerHeight - NON_EDITOR_AREA_HEIGHT) * ratio) - halfResizerSize;
@@ -182,9 +184,9 @@ export default class Resizer extends React.Component {
 
   render() {
 
-    let style = this.getLeftTop();
-    let {direction} = this.props;
-    let classes = {
+    const style = this.getLeftTop();
+    const {direction} = this.props;
+    const classes = {
       'resizer': true,
       'vertical': DIRECTION_VERTICAL === direction
     };

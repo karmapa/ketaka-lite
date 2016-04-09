@@ -108,26 +108,26 @@ export default class EditorToolbar extends React.Component {
 
   render() {
 
-    let {onInputChange, onRedoButtonClick, onUndoButtonClick, toggleReadonly,
+    const {onInputChange, onRedoButtonClick, onUndoButtonClick, toggleReadonly,
       onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       onSpellCheckButtonClick, onAddPbFileButtonClick, readonly, spellCheckOn, direction,
       showImageOnly, showTextOnly, fontSize, lineHeight, letterSpacing,
       onImageOnlyButtonClick, onTextOnlyButtonClick, toggleDirection} = this.props;
 
-    let pageSwitchProps = {
+    const pageSwitchProps = {
       className: 'section section-doc',
       onInputChange,
       pageNames,
       pageIndex
     };
 
-    let classButtonReadonly = {
+    const classButtonReadonly = {
       'glyphicon': true,
       'glyphicon-eye-open': readonly,
       'glyphicon-pencil': ! readonly,
     };
 
-    let directionButtonProps = {
+    const directionButtonProps = {
       className: classNames({
         'btn-direction': true,
         'vertical': DIRECTION_VERTICAL === direction
@@ -283,7 +283,7 @@ export default class EditorToolbar extends React.Component {
   }
 
   renderPageDeleteButton() {
-    let {canShowPageDeleteButton, onPageDeleteButtonClick} = this.props;
+    const {canShowPageDeleteButton, onPageDeleteButtonClick} = this.props;
     if (canShowPageDeleteButton) {
       return (
         <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-page-delete">Delete Current Page</Tooltip>}>

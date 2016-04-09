@@ -49,8 +49,8 @@ export default class ModalEditDocs extends Component {
 
   handleCheckboxChange = event => {
     const {checked, value} = event.target;
-    let {docs, setDocs} =  this.props;
-    let checkedDoc = find(docs, {name: value});
+    const {docs, setDocs} =  this.props;
+    const checkedDoc = find(docs, {name: value});
     checkedDoc.checked = checked;
     setDocs(clone(docs));
   };

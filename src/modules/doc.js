@@ -23,15 +23,15 @@ const actionsMap = {
 
   [ADD_PAGE]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
 
     if (! doc) {
       return state;
     }
 
-    let insertIndex = findPageInsertIndex(doc.pages, action.pageName);
+    const insertIndex = findPageInsertIndex(doc.pages, action.pageName);
 
-    let newPage = {
+    const newPage = {
       uuid: uuid.v4(),
       name: action.pageName,
       content: '',
@@ -57,14 +57,14 @@ const actionsMap = {
 
   [DELETE_PAGE]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
-    let {pageIndex} = action;
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
+    const {pageIndex} = action;
 
     if (! doc) {
       return state;
     }
 
-    let page = doc.pages[pageIndex];
+    const page = doc.pages[pageIndex];
 
     if (! page) {
       return state;
@@ -85,7 +85,7 @@ const actionsMap = {
 
   [IMPORT_DOC]: (state, action) => {
 
-    let {doc, index} = findDocDataByName(state, action.doc.name);
+    const {doc, index} = findDocDataByName(state, action.doc.name);
 
     // override existed doc
     if (doc) {
@@ -102,7 +102,7 @@ const actionsMap = {
 
   [RECEIVE_DOC]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.doc.uuid);
+    const {doc, index} = findDocDataByUuid(state, action.doc.uuid);
 
     // override existed doc
     if (doc) {
@@ -117,7 +117,7 @@ const actionsMap = {
 
   [SAVE]: (state, action) => {
 
-    let {index, doc} = findDocDataByUuid(state, action.uuid);
+    const {index, doc} = findDocDataByUuid(state, action.uuid);
 
     if (! doc) {
       return state;
@@ -131,13 +131,13 @@ const actionsMap = {
 
   [SAVE_FONT_RECORD]: (state, action) => {
 
-    let doc = state.find(doc => doc.uuid === action.uuid);
+    const doc = state.find(doc => doc.uuid === action.uuid);
 
     if (! doc) {
       return state;
     }
 
-    let page = doc.pages[action.pageIndex];
+    const page = doc.pages[action.pageIndex];
 
     if (! page) {
       return state;
@@ -154,8 +154,8 @@ const actionsMap = {
 
   [SET_PAGE_INDEX]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
-    let pageIndex = action.pageIndex;
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
+    const pageIndex = action.pageIndex;
 
     if (! doc) {
       return state;
@@ -173,13 +173,13 @@ const actionsMap = {
 
   [TO_NEXT_PAGE]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
 
     if (! doc) {
       return state;
     }
 
-    let nextPageIndex = doc.pageIndex + 1;
+    const nextPageIndex = doc.pageIndex + 1;
 
     if (nextPageIndex < doc.pages.length) {
       return [
@@ -193,13 +193,13 @@ const actionsMap = {
 
   [TO_PREVIOUS_PAGE]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
 
     if (! doc) {
       return state;
     }
 
-    let previousPageIndex = doc.pageIndex - 1;
+    const previousPageIndex = doc.pageIndex - 1;
 
     if (previousPageIndex >= 0) {
       return [
@@ -213,14 +213,14 @@ const actionsMap = {
 
   [UPDATE_PAGE_IMAGE_PATH]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
-    let {pageIndex} = action;
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
+    const {pageIndex} = action;
 
     if (! doc) {
       return state;
     }
 
-    let page = doc.pages[pageIndex];
+    const page = doc.pages[pageIndex];
 
     if (! page) {
       return state;
@@ -237,13 +237,13 @@ const actionsMap = {
 
   [WRITE_PAGE_CONTENT]: (state, action) => {
 
-    let {doc, index} = findDocDataByUuid(state, action.uuid);
+    const {doc, index} = findDocDataByUuid(state, action.uuid);
 
     if (! doc) {
       return state;
     }
 
-    let page = doc.pages[action.pageIndex];
+    const page = doc.pages[action.pageIndex];
 
     if (! page) {
       return state;
@@ -265,16 +265,16 @@ export default function reducer(state = [], action) {
 function findPageInsertIndex(pages, pageName) {
 
   // wether matches format like 1.1a, 1.1b ..etc
-  let isInsertPageValid = REGEXP_PAGE.test(pageName);
+  const isInsertPageValid = REGEXP_PAGE.test(pageName);
 
-  let validPages = pages.filter(page => REGEXP_PAGE.test(page.name));
-  let inValidPages = pages.filter(page => ! REGEXP_PAGE.test(page.name));
+  const validPages = pages.filter(page => REGEXP_PAGE.test(page.name));
+  const inValidPages = pages.filter(page => ! REGEXP_PAGE.test(page.name));
 
   if (isInsertPageValid) {
     for (let i = 0, len = validPages.length; i < len; i++) {
 
-      let page = validPages[i];
-      let res = naturalSort(pageName, page.name);
+      const page = validPages[i];
+      const res = naturalSort(pageName, page.name);
 
       if (-1 === res) {
         return i;
@@ -286,8 +286,8 @@ function findPageInsertIndex(pages, pageName) {
   else {
     for (let i = 0, len = inValidPages.length; i < len; i++) {
 
-      let page = inValidPages[i];
-      let res = naturalSort(pageName, page.name);
+      const page = inValidPages[i];
+      const res = naturalSort(pageName, page.name);
 
       if (-1 === res) {
         return i + validPages.length;
@@ -308,7 +308,7 @@ function findDocDataByName(docs, name) {
 
 function findDocDataByProp(docs, prop, value) {
   let foundIndex = -1;
-  let foundDoc = docs.find((doc, index) => {
+  const foundDoc = docs.find((doc, index) => {
     if (doc[prop] === value) {
       foundIndex = index;
       return true;

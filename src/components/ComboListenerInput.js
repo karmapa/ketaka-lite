@@ -28,8 +28,8 @@ export default class ComboListenerInput extends React.Component {
 
   onKeyDown = e => {
 
-    let {prop, setShortcuts, shortcut} = this.props;
-    let text = shortcut.text;
+    const {prop, setShortcuts, shortcut} = this.props;
+    const text = shortcut.text;
 
     if ('backspace' === keyCode(e.keyCode)) {
       this.keyCodes.length = 0;
@@ -42,7 +42,7 @@ export default class ComboListenerInput extends React.Component {
       return;
     }
 
-    let keyCodes = this.keyCodes;
+    const keyCodes = this.keyCodes;
     if (! keyCodes.includes(e.keyCode)) {
       keyCodes.push(e.keyCode);
     }
@@ -58,9 +58,9 @@ export default class ComboListenerInput extends React.Component {
 
   render() {
 
-    let {className, shortcut} = this.props;
+    const {className, shortcut} = this.props;
 
-    let props = {
+    const props = {
       className,
       onChange: this.onChange,
       onKeyDown: this.onKeyDown,

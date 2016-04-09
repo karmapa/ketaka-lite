@@ -61,7 +61,7 @@ export default class ModalSettings extends React.Component {
   }
 
   renderComboInputs = () => {
-    let self = this;
+    const self = this;
     return map(self.props.shortcuts, (shortcut, prop) => {
       return (
         <li key={prop}>
@@ -73,8 +73,8 @@ export default class ModalSettings extends React.Component {
   };
 
   render() {
-    let {theme} = this.props;
-    let {show} = this.state;
+    const {theme} = this.props;
+    const {show} = this.state;
 
     return (
       <Modal show={show} onHide={this.onModalHide}>

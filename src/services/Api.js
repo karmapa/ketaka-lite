@@ -1,4 +1,4 @@
-let ipc = window.require('electron').ipcRenderer;
+const ipc = window.require('electron').ipcRenderer;
 
 export default class Api {
 

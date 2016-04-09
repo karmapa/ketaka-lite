@@ -38,9 +38,9 @@ export default class TabBox extends React.Component {
 
   renderTab = child => {
 
-    let {eventKey, className, tab, disabled, noCloseButton} = child.props;
-    let {onClose} = this.props;
-    let classes = {
+    const {eventKey, className, tab, disabled, noCloseButton} = child.props;
+    const {onClose} = this.props;
+    const classes = {
       'close': true,
       'hidden': noCloseButton
     };
@@ -57,8 +57,8 @@ export default class TabBox extends React.Component {
 
   renderPane = (child, index) => {
 
-    let activeKey = this.props.activeKey;
-    let active = (child.props.eventKey === activeKey);
+    const activeKey = this.props.activeKey;
+    const active = (child.props.eventKey === activeKey);
 
     return cloneElement(child, {
       active,

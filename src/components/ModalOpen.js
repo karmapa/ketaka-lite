@@ -59,7 +59,7 @@ export default class ModalConfirm extends React.Component {
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
-    let {show} = this.state;
+    const {show} = this.state;
     return (
       <Modal show={show}>
         <Modal.Header>
@@ -82,9 +82,9 @@ export default class ModalConfirm extends React.Component {
   }
 
   renderBamboos() {
-    let {names} = this.state;
-    let {onBambooDeleteClick} = this.props;
-    let buttonDeleteClasses = {
+    const {names} = this.state;
+    const {onBambooDeleteClick} = this.props;
+    const buttonDeleteClasses = {
       'button-delete': true,
       'hidden': ! this.state.isEdit
     };

@@ -48,8 +48,8 @@ export default class App extends React.Component {
 
   changeTheme(args) {
 
-    let {oldTheme, newTheme} = args;
-    let classList = document.body.classList;
+    const {oldTheme, newTheme} = args;
+    const classList = document.body.classList;
 
     if (oldTheme) {
       classList.remove(oldTheme);
@@ -61,8 +61,8 @@ export default class App extends React.Component {
 
   componentWillReceiveProps(nextProps) {
 
-    let currentTheme = this.props.theme;
-    let nextTheme = nextProps.theme;
+    const currentTheme = this.props.theme;
+    const nextTheme = nextProps.theme;
 
     if (currentTheme !== nextTheme) {
       this.changeTheme({

@@ -3,7 +3,7 @@ import humps from 'humps';
 export default class Helper {
 
   static camelize(fromNames, obj) {
-    let toNames = fromNames.map(name => humps.camelize(name));
+    const toNames = fromNames.map(name => humps.camelize(name));
     fromNames.forEach((name, index) => {
       obj[toNames[index]] = obj[name];
     });
@@ -19,7 +19,7 @@ export default class Helper {
   }
 
   static allIndexOf(str, toSearch, limit = 10) {
-    let indices = [];
+    const indices = [];
     for (let pos = str.indexOf(toSearch); (-1 !== pos) && (indices.length <= limit); pos = str.indexOf(toSearch, pos + 1)) {
       indices.push(pos);
     }

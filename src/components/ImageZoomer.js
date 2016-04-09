@@ -54,13 +54,13 @@ export default class ImageZoomer extends React.Component {
 
   handleMouseMove = () => {
 
-    let mouse = this.mouse;
-    let e = mouse.event;
-    let newX = e.clientX;
-    let newY = e.clientY;
+    const mouse = this.mouse;
+    const e = mouse.event;
+    const newX = e.clientX;
+    const newY = e.clientY;
     let deltaX = 0;
     let deltaY = 0;
-    let movingSpeed = this.props.movingSpeed;
+    const movingSpeed = this.props.movingSpeed;
 
     if (this.isOverflowX()) {
       deltaX = (newX - mouse.x) * movingSpeed;
@@ -79,7 +79,7 @@ export default class ImageZoomer extends React.Component {
   }
 
   onMouseDown = e => {
-    let mouse = this.mouse;
+    const mouse = this.mouse;
     mouse.event = e;
     // prevent image downloading in chrome
     if (['DIV', 'IMG'].includes(e.target.tagName)) {
@@ -94,7 +94,7 @@ export default class ImageZoomer extends React.Component {
 
   onMouseMove = e => {
 
-    let animator = this.animator;
+    const animator = this.animator;
     this.mouse.event = e;
 
     if (this.state.isHolding) {
@@ -108,12 +108,12 @@ export default class ImageZoomer extends React.Component {
   }
 
   isOverflowX(percent = this.state.percent) {
-    let ratio = percent / 100;
+    const ratio = percent / 100;
     return ((this.image.width * ratio) > this.container.width);
   }
 
   isOverflowY(percent = this.state.percent) {
-    let ratio = percent / 100;
+    const ratio = percent / 100;
     return ((this.image.height * ratio) > this.container.height);
   }
 
@@ -128,7 +128,7 @@ export default class ImageZoomer extends React.Component {
   enlarge = e => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
-    let newPercent = this.state.percent + this.props.deltaPercent;
+    const newPercent = this.state.percent + this.props.deltaPercent;
 
     this.setState({
       percent: newPercent,
@@ -140,7 +140,7 @@ export default class ImageZoomer extends React.Component {
   shrink = e => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
-    let newPercent = this.state.percent - this.props.deltaPercent;
+    const newPercent = this.state.percent - this.props.deltaPercent;
 
     if (newPercent >= 25) {
       this.setState({
@@ -153,8 +153,8 @@ export default class ImageZoomer extends React.Component {
 
   handleInputChange = e => {
 
-    let value = e.target.value;
-    let parsedValue = parseFloat(value);
+    const value = e.target.value;
+    const parsedValue = parseFloat(value);
 
     this.setState({
       percent: isNaN(parsedValue) ? this.state.percent : parsedValue,
@@ -196,9 +196,9 @@ export default class ImageZoomer extends React.Component {
   }
 
   setOffsetSize() {
-    let domContainer = ReactDOM.findDOMNode(this.refs.imageZoomer);
-    let domImage = ReactDOM.findDOMNode(this.refs.imageZoomable);
-    let {container, image} = this;
+    const domContainer = ReactDOM.findDOMNode(this.refs.imageZoomer);
+    const domImage = ReactDOM.findDOMNode(this.refs.imageZoomable);
+    const {container, image} = this;
 
     container.width = domContainer.offsetWidth;
     container.height = domContainer.offsetHeight;
@@ -207,7 +207,7 @@ export default class ImageZoomer extends React.Component {
   }
 
   componentDidMount() {
-    let mouse = this.mouse;
+    const mouse = this.mouse;
     mouse.onMouseMove = this.onMouseMove;
     mouse.onMouseUp = this.onMouseUp;
 
@@ -239,10 +239,10 @@ export default class ImageZoomer extends React.Component {
 
   render() {
 
-    let {translateX, translateY, percent, isDragging, isHolding} = this.state;
-    let {src, style} = this.props;
+    const {translateX, translateY, percent, isDragging, isHolding} = this.state;
+    const {src, style} = this.props;
 
-    let classes = {
+    const classes = {
       [this.props.className]: true,
       'holding': isHolding,
       'dragging': isDragging

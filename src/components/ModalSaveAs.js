@@ -18,7 +18,7 @@ export default class ModalSaveAs extends React.Component {
   docNames = [];
 
   open(args = {}) {
-    let {docName, docNames} = args;
+    const {docName, docNames} = args;
     this.originDocName = docName;
     this.docNames = docNames;
     this.setState({
@@ -49,7 +49,7 @@ export default class ModalSaveAs extends React.Component {
   }
 
   isValidDocName = () => {
-    let {docName} = this.state;
+    const {docName} = this.state;
     if (isEmpty(docName)) {
       return false;
     }
@@ -63,7 +63,7 @@ export default class ModalSaveAs extends React.Component {
     if (! this.state.dirty) {
       return '';
     }
-    let {docName} = this.state;
+    const {docName} = this.state;
     if (isEmpty(docName)) {
       return 'Doc name cannot be empty.';
     }
@@ -102,9 +102,9 @@ export default class ModalSaveAs extends React.Component {
 
   render() {
 
-    let {show, docName} = this.state;
+    const {show, docName} = this.state;
 
-    let docNameInputProps = {
+    const docNameInputProps = {
       bsStyle: this.getDocNameInputState(),
       groupClassName: 'group-class',
       hasFeedback: true,

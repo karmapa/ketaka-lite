@@ -40,7 +40,7 @@ export default class ImeInput extends React.Component {
   };
 
   onKeyPress = e => {
-    let value = Ime.keypress(e, {element: this.input});
+    const value = Ime.keypress(e, {element: this.input});
     if (isString(value)) {
       this.props.onKeyPress(value);
     }
@@ -52,7 +52,7 @@ export default class ImeInput extends React.Component {
 
   render() {
 
-    let inputProps = {
+    const inputProps = {
       className: this.props.className,
       onChange: this.onChange,
       onKeyDown: this.onKeyDown,

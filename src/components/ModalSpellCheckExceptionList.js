@@ -73,8 +73,8 @@ export default class ModalSpellCheckExceptionList extends React.Component {
 
   render() {
 
-    let {show, textareaValue} = this.state;
-    let textareaProps = {
+    const {show, textareaValue} = this.state;
+    const textareaProps = {
       className: 'form-control',
       type: 'text',
       onChange: this.onChange,

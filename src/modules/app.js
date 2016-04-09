@@ -7,7 +7,7 @@ const RECEIVE_SETTINGS = 'ketaka-lite/app/RECEIVE_SETTINGS';
 const SET_APP_VERSION = 'ketaka-lite/app/SET_APP_VERSION';
 const SET_ELECTRON_VERSION = 'ketaka-lite/app/SET_ELECTRON_VERSION';
 
-let cacheSettings = Store.get('settings') || {};
+const cacheSettings = Store.get('settings') || {};
 
 const settings = {
   direction: cacheSettings.direction || consts.DIRECTION_HORIZONTAL,
@@ -78,7 +78,7 @@ export function setElectronVersion(electronVersion) {
 export function toggleDirection() {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     // init
     if (undefined === settings.direction) {
@@ -93,7 +93,7 @@ export function toggleDirection() {
 
 export function setInputMethod(inputMethod) {
   return dispatch => {
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.inputMethod = inputMethod;
     Store.set('settings', settings);
@@ -103,7 +103,7 @@ export function setInputMethod(inputMethod) {
 
 export function setImageOnly(status) {
   return dispatch => {
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.showImageOnly = status;
     Store.set('settings', settings);
@@ -113,7 +113,7 @@ export function setImageOnly(status) {
 
 export function setTextOnly(status) {
   return dispatch => {
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.showTextOnly = status;
     Store.set('settings', settings);
@@ -123,7 +123,7 @@ export function setTextOnly(status) {
 
 export function toggleReadonly() {
   return dispatch => {
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.readonly = ! settings.readonly;
     Store.set('settings', settings);
@@ -141,7 +141,7 @@ export function receiveSettings(settings) {
 export function setFontSize(fontSize) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.fontSize = fontSize;
     Store.set('settings', settings);
@@ -153,7 +153,7 @@ export function setFontSize(fontSize) {
 export function setLineHeight(lineHeight) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.lineHeight = lineHeight;
     Store.set('settings', settings);
@@ -165,7 +165,7 @@ export function setLineHeight(lineHeight) {
 export function setLetterSpacing(letterSpacing) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.letterSpacing = letterSpacing;
     Store.set('settings', settings);
@@ -177,7 +177,7 @@ export function setLetterSpacing(letterSpacing) {
 export function setRatio(ratio, direction = DIRECTION_HORIZONTAL) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     if (DIRECTION_HORIZONTAL === direction) {
       settings.nsRatio = ratio;
@@ -195,7 +195,7 @@ export function toggleSpellCheck() {
 
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.spellCheckOn = ! settings.spellCheckOn;
     Store.set('settings', settings);
@@ -207,7 +207,7 @@ export function toggleSpellCheck() {
 export function setSpellCheck(status) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
 
     settings.spellCheckOn = status;
     Store.set('settings', settings);
@@ -219,7 +219,7 @@ export function setSpellCheck(status) {
 export function updateSettings(newSettings) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
     newSettings = Object.assign({}, settings, newSettings);
     Store.set('settings', newSettings);
 
@@ -229,7 +229,7 @@ export function updateSettings(newSettings) {
 
 export function initSettings() {
   return dispatch => {
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
     dispatch(receiveSettings(settings));
   };
 }
@@ -237,7 +237,7 @@ export function initSettings() {
 export function setExceptionWords(words) {
   return dispatch => {
 
-    let settings = Store.get('settings') || {};
+    const settings = Store.get('settings') || {};
     settings.exceptionWords = words;
     Store.set('settings', settings);
 
