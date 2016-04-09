@@ -128,7 +128,7 @@ describe('Tag.getMissingTag', () => {
 
   it('should return missing tags', () => {
     const input = fs.readFileSync(__dirname + '/missingTags.txt').toString();
-    const output = [{name: 'div', type: 'close', attrs: {}}];
+    const output = [{name: 'div', type: 'close', attrs: {}, pbId: '1.1a'}];
     expect(Tag.getMissingTags(input)).toEqual(output);
   });
 
