@@ -1728,7 +1728,14 @@ export default class EditorArea extends React.Component {
   }
 
   renderCheckMark(render) {
-    return render ? <i className="glyphicon glyphicon-ok"></i> : <i className="empty"></i>;
+
+    const className = classNames({
+      'glyphicon': render,
+      'glyphicon-ok': render,
+      'empty': (! render)
+    });
+
+    return <i className={className}></i>;
   }
 
   onMenuItemSelect = method => {
