@@ -1764,16 +1764,16 @@ export default class EditorArea extends React.Component {
   }
 
   closeConfirm = () => {
-    let unsavedDoc = this.props.docs.find(doc => doc.changed);
+
+    const unsavedDoc = this.props.docs.find(doc => doc.changed);
+
     if (unsavedDoc) {
-      this.refs.modalCloseConfirm.open({
+      return this.refs.modalCloseConfirm.open({
         title: 'Oops! ' + unsavedDoc.name + ' is not saved !',
         message: 'Do you want to save it ?'
       });
     }
-    else {
-      Api.send('close');
-    }
+    Api.send('close');
   };
 
   saveAndCloseModalClose = () => {
