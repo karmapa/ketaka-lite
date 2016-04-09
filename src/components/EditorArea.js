@@ -1727,12 +1727,12 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  renderCheckMark(render) {
+  renderCheckMark(show) {
 
     const className = classNames({
-      'glyphicon': render,
-      'glyphicon-ok': render,
-      'empty': (! render)
+      'glyphicon': show,
+      'glyphicon-ok': show,
+      'empty': (! show)
     });
 
     return <i className={className}></i>;
