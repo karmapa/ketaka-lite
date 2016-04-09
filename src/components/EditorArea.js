@@ -1777,14 +1777,14 @@ export default class EditorArea extends React.Component {
   };
 
   saveAndCloseModalClose = () => {
-    let unsavedDoc = this.props.docs.find(doc => doc.changed);
+    const unsavedDoc = this.props.docs.find(doc => doc.changed);
     this.save(unsavedDoc);
     this.closeDoc(unsavedDoc.uuid);
     this.refs.modalCloseConfirm.close();
   };
 
   discardModalClose = () => {
-    let unsavedDoc = this.props.docs.find(doc => doc.changed);
+    const unsavedDoc = this.props.docs.find(doc => doc.changed);
     this.closeDoc(unsavedDoc.uuid);
     this.refs.modalCloseConfirm.close();
   };
