@@ -984,7 +984,7 @@ export default class EditorArea extends React.Component {
     const modalImport = this.getImportModal();
     modalImport.setMessages({
       type: 'warning',
-      message: 'Doc ' + duplicatedDocName + ' existed. Are you sure you want to override ?'
+      message: 'Doc ' + duplicatedDocName + ' already exists. Are you sure you want to override ?'
     });
     modalImport.setOptions({
       showFirstButton: true,
