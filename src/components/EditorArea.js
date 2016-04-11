@@ -978,6 +978,13 @@ export default class EditorArea extends React.Component {
         }
         else {
           self.refs.toast.error(err.message);
+          modalImport.setOptions({
+            showFirstButton: true,
+            firstButtonStyle: '',
+            firstButtonText: 'Cancel',
+            showSecondButton: false,
+            handleFirstButtonClick: modalImport.close
+          });
         }
       });
   }
