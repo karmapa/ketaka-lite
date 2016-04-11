@@ -43,7 +43,7 @@ export default class History {
           content = content.substring(0, row.from) + content.substring(row.to);
         }
         else if (row.removed) {
-          content = content.substring(0, row.from) + row.value + content.substring(row.to);
+          content = content.substring(0, row.from) + row.value + content.substring(row.from);
         }
       });
 
@@ -72,7 +72,7 @@ export default class History {
     action.reverse()
       .forEach(row => {
         if (row.added) {
-          content = content.substring(0, row.from) + row.value + content.substring(row.to);
+          content = content.substring(0, row.from) + row.value + content.substring(row.from);
         }
         else if (row.removed) {
           content = content.substring(0, row.from) + content.substring(row.to);
