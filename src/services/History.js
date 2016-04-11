@@ -51,6 +51,13 @@ export default class History {
     cm.disableHistory = true;
     cm.setValue(content);
 
+    if (addedRow && removedRow) {
+      const cursorPos = cm.posFromIndex(addedRow.to);
+      cm.setCursor(cursorPos);
+    }
+
+    cm.focus();
+
     undone.push(action);
     this.data[key].undone = undone.slice(-HISTORY_SIZE);
   }
@@ -81,6 +88,13 @@ export default class History {
 
     cm.disableHistory = true;
     cm.setValue(content);
+
+    if (addedRow && removedRow) {
+      const cursorPos = cm.posFromIndex(addedRow.to);
+      cm.setCursor(cursorPos);
+    }
+
+    cm.focus();
 
     done.push(action);
     this.data[key].undone = undone.slice(-HISTORY_SIZE);
