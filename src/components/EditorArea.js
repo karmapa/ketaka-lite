@@ -1154,7 +1154,8 @@ export default class EditorArea extends React.Component {
     if (! src.match(/\.(bmp|gif|jpg|png)$/)) {
       return '';
     }
-    return Path.resolve(this.docPath, doc.name, 'images', src);
+    const hashSrc = src + '?v=' + uuid.v4();
+    return Path.resolve(this.docPath, doc.name, 'images', hashSrc);
   }
 
   handleSettingsButtonClick = () => {
