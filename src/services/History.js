@@ -35,7 +35,6 @@ export default class History {
     if (! action) {
       return false;
     }
-    console.log('action', action);
 
     let content = cm.getValue();
 
@@ -51,7 +50,6 @@ export default class History {
 
     cm.disableHistory = true;
     cm.setValue(content);
-    console.log('here', content);
 
     undone.push(action);
     this.data[key].undone = undone.slice(-HISTORY_SIZE);
