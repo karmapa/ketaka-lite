@@ -142,6 +142,10 @@ export default class Editor extends React.Component {
     return this.codemirror.hasFocus();
   }
 
+  focus() {
+    return this.codemirror.focus();
+  }
+
   undo() {
     this.codemirror.execCommand('undo');
   }

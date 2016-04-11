@@ -628,6 +628,8 @@ export default class EditorArea extends React.Component {
       });
     };
 
+    simpleCombo(shortcuts.undo, this.handleShortCutUndo);
+    simpleCombo(shortcuts.redo, this.handleShortCutRedo);
     simpleCombo(shortcuts.addTab, this.addDoc);
     simpleCombo(shortcuts.closeTab, this.closeTab.bind(this, null));
     simpleCombo(shortcuts.prevTab, this.rotateTabLeft);
@@ -1600,6 +1602,32 @@ export default class EditorArea extends React.Component {
   };
 
   handleUndoButtonClick = () => this.undo();
+
+  handleShortCutUndo = () => {
+    const editor = this.getEditor();
+    if (! editor) {
+      return false;
+    }
+    if (editor.hasFocus()) {
+      this.undo();
+    }
+    else {
+      editor.focus();
+    }
+  }
+
+  handleShortCutRedo = () => {
+    const editor = this.getEditor();
+    if (! editor) {
+      return false;
+    }
+    if (editor.hasFocus()) {
+      this.redo();
+    }
+    else {
+      editor.focus();
+    }
+  }
 
   handleImageOnlyButtonClick = () => {
 

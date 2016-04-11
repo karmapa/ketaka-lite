@@ -45,6 +45,14 @@ export const NON_EDITOR_AREA_HEIGHT = 60;
 export const RESIZER_SIZE = 15;
 
 export const DEFAULT_SHORTCUTS = {
+  undo: {
+    text: 'Undo',
+    value: 'ctrl + z'
+  },
+  redo: {
+    text: 'Redo',
+    value: 'ctrl + shift + z'
+  },
   addTab: {
     text: 'Add a new tab',
     value: 'cmd + j'

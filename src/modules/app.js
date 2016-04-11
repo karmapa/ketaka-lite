@@ -22,7 +22,7 @@ const settings = {
   lineHeight: cacheSettings.lineHeight || 1,
   nsRatio: cacheSettings.nsRatio || 0.5,
   readonly: cacheSettings.readonly || false,
-  shortcuts: cacheSettings.shortcuts || consts.DEFAULT_SHORTCUTS,
+  shortcuts: Object.assign({}, consts.DEFAULT_SHORTCUTS, cacheSettings.shortcuts),
   showImageOnly: cacheSettings.showImageOnly || false,
   showTextOnly: cacheSettings.showTextOnly || false,
   spellCheckOn: cacheSettings.spellCheckOn || false,
