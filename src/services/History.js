@@ -1,4 +1,4 @@
-import {isPlainObject} from 'lodash';
+import {isPlainObject, find} from 'lodash';
 
 const HISTORY_SIZE = 200;
 
@@ -11,6 +11,7 @@ export default class History {
     const {done} = this.data[key];
     done.push(action);
     this.data[key].done = done.slice(-HISTORY_SIZE);
+    this.data[key].undone.length = 0;
   }
 
   static autoCreateStructure(key) {
@@ -34,21 +35,23 @@ export default class History {
     if (! action) {
       return false;
     }
+    console.log('action', action);
 
     let content = cm.getValue();
 
-    action.reverse()
-      .forEach(row => {
-        if (row.added) {
-          content = content.substring(0, row.from) + content.substring(row.to);
-        }
-        else if (row.removed) {
-          content = content.substring(0, row.from) + row.value + content.substring(row.from);
-        }
-      });
+    const addedRow = find(action, {added: true});
+    const removedRow = find(action, {removed: true});
+
+    if (addedRow) {
+      content = content.substring(0, addedRow.from) + content.substring(addedRow.to);
+    }
+    if (removedRow) {
+      content = content.substring(0, removedRow.from) + removedRow.value + content.substring(removedRow.from);
+    }
 
     cm.disableHistory = true;
     cm.setValue(content);
+    console.log('here', content);
 
     undone.push(action);
     this.data[key].undone = undone.slice(-HISTORY_SIZE);
@@ -68,16 +71,15 @@ export default class History {
     }
 
     let content = cm.getValue();
+    const addedRow = find(action, {added: true});
+    const removedRow = find(action, {removed: true});
 
-    action.reverse()
-      .forEach(row => {
-        if (row.added) {
-          content = content.substring(0, row.from) + row.value + content.substring(row.from);
-        }
-        else if (row.removed) {
-          content = content.substring(0, row.from) + content.substring(row.to);
-        }
-      });
+    if (removedRow) {
+      content = content.substring(0, removedRow.from) + content.substring(removedRow.to);
+    }
+    if (addedRow) {
+      content = content.substring(0, addedRow.from) + addedRow.value + content.substring(addedRow.from);
+    }
 
     cm.disableHistory = true;
     cm.setValue(content);
