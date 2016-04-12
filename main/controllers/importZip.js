@@ -3,6 +3,7 @@ import {Importer, Helper, Doc} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 import Path from 'path';
+import uuid from 'node-uuid';
 
 const importZip = ipcHandler(function(event, args) {
 
@@ -45,9 +46,14 @@ const importZip = ipcHandler(function(event, args) {
       return send({error: true, duplicated: true, paths, duplicatedDocName: incomingDocName});
     }
 
-    const doc = await Importer.handleImportZip(paths, onProgress);
+    let doc = await Importer.handleImportZip(paths, onProgress);
 
     if (doc) {
+
+      // make sure every new import uses a new id
+      doc.uuid = uuid.v4();
+      await Doc.writeDoc(doc);
+
       broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully', clean: true});
       send({message: 'Imported successfully', doc});
     }
