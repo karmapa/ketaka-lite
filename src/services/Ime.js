@@ -40,6 +40,10 @@ export default class Ime {
       return true;
     }
 
+    if (cm) {
+      cm.replaceSelection('');
+    }
+
     e.preventDefault();
 
     // handle backspace
