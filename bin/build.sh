@@ -20,7 +20,7 @@ npm install --verbose --production
 electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.ico &&
 zip -r "${ZIP_WIN}" KETAKA-Lite-win32-ia32
 gdrive upload "${ZIP_WIN}" -p "${FOLDER_ID}" &&
-rm -r KETAKA-Lite-win32-ia32* &&
+rm -rf KETAKA-Lite-win32-ia32* &&
 electron-packager ./ KETAKA-Lite --platform=darwin --arch=x64 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.icns &&
 zip -r "${ZIP_IOS}" KETAKA-Lite-darwin-x64 &&
 gdrive upload "${ZIP_IOS}" -p "${FOLDER_ID}"
