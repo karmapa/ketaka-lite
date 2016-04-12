@@ -1,3 +1,7 @@
+const USER_AGENT = navigator.userAgent;
+const PLATFORM = navigator.platform;
+const IOS = /AppleWebKit/.test(USER_AGENT) && /Mobile\/\w+/.test(USER_AGENT);
+const IS_MAC = IOS || /Mac/.test(PLATFORM);
 
 export const APP_NAME = 'KETAKA Lite';
 
@@ -47,31 +51,31 @@ export const RESIZER_SIZE = 15;
 export const DEFAULT_SHORTCUTS = {
   undo: {
     text: 'Undo',
-    value: 'ctrl + z'
+    value: IS_MAC ? 'cmd + z' : 'ctrl + z'
   },
   redo: {
     text: 'Redo',
-    value: 'ctrl + shift + z'
+    value: IS_MAC ? 'cmd + shift + z' : 'ctrl + shift + z'
   },
   addTab: {
     text: 'Add a new tab',
-    value: 'cmd + j'
+    value: IS_MAC ? 'cmd + j' : 'ctrl + j'
   },
   closeTab: {
     text: 'Close current tab',
-    value: 'cmd + k'
+    value: IS_MAC ? 'cmd + k' : 'ctrl + k'
   },
   prevTab: {
     text: 'Switch to previous tab',
-    value: 'ctrl + alt + left'
+    value: IS_MAC ? 'cmd + alt + left' : 'ctrl + alt + left'
   },
   nextTab: {
     text: 'Switch to next tab',
-    value: 'ctrl + alt + right'
+    value: IS_MAC ? 'cmd + alt + right' : 'ctrl + alt + right'
   },
   save: {
     text: 'Save current bamboo',
-    value: 'ctrl + s'
+    value: IS_MAC ? 'cmd + s' : 'ctrl + s'
   },
   switchInputMethod: {
     text: 'Switch input method',
