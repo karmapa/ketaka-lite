@@ -3,7 +3,7 @@ import {Doc, Helper} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 import Path from 'path';
-import {PATH_APP_DOC} from '../constants/appConstants';
+import {PATH_APP_DOC, VALID_IMAGE_EXTENSIONS} from '../constants/appConstants';
 
 let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
@@ -11,7 +11,7 @@ let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
   let options = {
     properties: ['openFile'],
     filters: [
-      {name: 'Images', extensions: ['jpg']}
+      {name: 'Images', extensions: VALID_IMAGE_EXTENSIONS}
     ]
   };
 
@@ -28,24 +28,18 @@ let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
     let pathData = Path.parse(dest);
     let fileType = Helper.getFileType(source);
 
-    if ('image/jpeg' === fileType.mime) {
+    let destDir = Path.dirname(dest);
 
-      let destDir = Path.dirname(dest);
-
-      Helper.mkdirp(destDir)
-        .then(() => {
-          return Helper.copyFile(source, dest);
-        })
-        .then(() => {
-          send({message: 'Image uploaded successfully', pathData: pathData});
-        })
-        .catch(err => {
-          send({error: true, message: err});
-        });
-    }
-    else {
-      send({error: true, message: 'Invalid image file type: ' + fileType.mime});
-    }
+    Helper.mkdirp(destDir)
+      .then(() => {
+        return Helper.copyFile(source, dest);
+      })
+      .then(() => {
+        send({message: 'Image uploaded successfully', pathData: pathData});
+      })
+      .catch(err => {
+        send({error: true, message: err});
+      });
   });
 });
 

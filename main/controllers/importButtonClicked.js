@@ -2,6 +2,7 @@ import {isEmpty} from 'lodash';
 import {Importer} from '../services';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
+import {VALID_IMAGE_EXTENSIONS} from '../constants/appConstants';
 
 const importButtonClicked = ipcHandler(function(event, args = {}) {
 
@@ -10,7 +11,7 @@ const importButtonClicked = ipcHandler(function(event, args = {}) {
   const options = {
     properties: ['openFile', 'openDirectory', 'multiSelections', 'createDirectory'],
     filters: [
-      {name: 'Images', extensions: ['bmp', 'gif', 'jpg', 'png']},
+      {name: 'Images', extensions: VALID_IMAGE_EXTENSIONS},
       {name: 'Text Files', extensions: ['xml', 'txt']}
     ]
   };
