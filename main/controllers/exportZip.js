@@ -5,26 +5,27 @@ import {PATH_APP_DOC} from '../constants/appConstants';
 import {dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 
-let exportZip = ipcHandler(function(event, arg) {
+const exportZip = ipcHandler(function(event, arg) {
 
-  let send = this.send;
-  let name = arg.name;
-  let filename = name + '.zip';
-  let options = {
+  const send = this.send;
+  const name = arg.name;
+  const filename = name + '.zip';
+  const options = {
     title: 'Choose Export Path',
     defaultPath: filename
   };
 
-  dialog.showSaveDialog(options, function(savePath) {
+  dialog.showSaveDialog(options, savePath => {
 
     if (! savePath) {
       send({message: 'Export was canceled'});
       return;
     }
 
-    let archive = archiver('zip');
-    let sourcePath = Path.resolve(PATH_APP_DOC, name);
-    let output = fs.createWriteStream(savePath);
+
+    const archive = archiver('zip');
+    const sourcePath = Path.resolve(PATH_APP_DOC, name);
+    const output = fs.createWriteStream(savePath);
 
     output.on('close', () => {
       send({message: filename + ' exported successfully'});
