@@ -15,7 +15,7 @@ sed -i '' -e 's/http:\/\/localhost:3000\///g' dist/index.html
 cp -r assets/images/*.ico assets/images/*.icns .babelrc package.json index.js main.js main dist/
 
 cd dist
-npm install --verbose --production
+npm install --verbose --production &&
 
 electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.ico &&
 zip -r "${ZIP_WIN}" KETAKA-Lite-win32-ia32
