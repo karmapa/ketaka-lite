@@ -36,6 +36,10 @@ app.on('ready', () => {
       });
 
       ipc.on('close', () => {
+        if (app._isExportingZip) {
+          mainWindow.webContents.send('app-still-exporting-zip');
+          return false;
+        }
         closeConfirmed = true;
         mainWindow.close();
       });
