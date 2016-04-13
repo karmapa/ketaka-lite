@@ -390,21 +390,22 @@ export default class EditorArea extends React.Component {
     }
   }
 
-  exportFileWithPb() {
+  async exportFileWithPb() {
 
-    const self = this;
     const doc = self.getDoc();
 
     if (! doc) {
-      self.refs.toast.error('Open a bamboo then try export again');
+      this.refs.toast.error('Open a bamboo then try export again');
       return false;
     }
 
-    Api.send('export-file-with-pb', {name: doc.name})
-      .then(res => {
-        self.refs.toast.success(res.message);
-      })
-      .catch(res => self.refs.toast.error(res.message));
+    try {
+      const res = await Api.send('export-file-with-pb', {name: doc.name});
+      this.refs.toast.success(res.message);
+    }
+    catch (err) {
+      this.refs.toast.error(err.message);
+    }
   }
 
   cancel = () => {
