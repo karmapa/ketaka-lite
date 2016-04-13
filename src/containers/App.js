@@ -42,9 +42,8 @@ export default class App extends React.Component {
     eventHelper.off();
   }
 
-  handleAppAbout = async () => {
-    this.getWrappedInstance('modalAbout').openModal();
-  };
+  handleAppAbout = () => this.getWrappedInstance('modalAbout').openModal();
+
 
   changeTheme(args) {
 
