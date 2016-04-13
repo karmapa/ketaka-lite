@@ -9,7 +9,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
   ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
   Resizer, PrintArea} from '.';
-import {Helper, Ime, History, Event, Api} from '../services/';
+import {Helper, Ime, History, Event, Api, getWrappedInstance} from '../services/';
 import CodeMirror from 'codemirror';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -107,8 +107,10 @@ export default class EditorArea extends React.Component {
     });
   }
 
+  getWrappedInstance = getWrappedInstance;
+
   closeModalSettings = () => {
-    this.getSettingsModal().close();
+    this.getWrappedInstance('modalSettings').close();
     this.bindKeyboardEvents();
   };
 
@@ -670,9 +672,7 @@ export default class EditorArea extends React.Component {
     simpleCombo(shortcuts.prevWord, this.prevWord);
   };
 
-  getModalEditDocs = () => this.refs.modalEditDocs.getWrappedInstance();
-
-  handleAppEditDocs = () => this.getModalEditDocs().openModal();
+  handleAppEditDocs = () => this.getWrappedInstance('modalEditDocs').openModal();
 
   handleAppImport = () => this.import();
 
@@ -709,11 +709,11 @@ export default class EditorArea extends React.Component {
 
   handleAppExportFileWithPb = () => this.exportFileWithPb();
 
-  handleImportStart = () => this.getImportModal().open();
+  handleImportStart = () => this.getWrappedInstance('modalImport').open();
 
   handleImportProgress = (event, res) => {
 
-    const importModal = this.getImportModal();
+    const importModal = this.getWrappedInstance('modalImport');
 
     if (res.clean) {
       importModal.setMessages(res);
@@ -766,7 +766,7 @@ export default class EditorArea extends React.Component {
     }
   };
 
-  handleAppSpellcheckExceptionList = () => this.getSpellCheckExceptionListModal().open();
+  handleAppSpellcheckExceptionList = () => this.getWrappedInstance('modalSpellCheckExceptionList').open();
 
   handleAppClose = () => {
     this.closeConfirm();
@@ -849,7 +849,7 @@ export default class EditorArea extends React.Component {
 
   handleFileCountWarning = paths => {
 
-    const modalImport = this.getImportModal();
+    const modalImport = this.getWrappedInstance('modalImport');
 
     modalImport.setMessages({
       type: 'warning',
@@ -909,7 +909,7 @@ export default class EditorArea extends React.Component {
 
   handleImportError = message => {
 
-    const modalImport = this.getImportModal();
+    const modalImport = this.getWrappedInstance('modalImport');
     this.refs.toast.error(message);
 
     modalImport.setMessages({
@@ -928,7 +928,7 @@ export default class EditorArea extends React.Component {
 
   import = async () => {
 
-    const modalImport = this.getImportModal();
+    const modalImport = this.getWrappedInstance('modalImport');
 
     try {
       const {doc, message} = await Api.send('import-button-clicked');
@@ -958,7 +958,7 @@ export default class EditorArea extends React.Component {
   importZip(args) {
 
     const self = this;
-    const modalImport = self.getImportModal();
+    const modalImport = self.getWrappedInstance('modalImport');
 
     Api.send('import-zip', args)
       .then(res => {
@@ -990,7 +990,7 @@ export default class EditorArea extends React.Component {
   }
 
   handleDuplicatedImportZip = ({paths, duplicatedDocName}) => {
-    const modalImport = this.getImportModal();
+    const modalImport = this.getWrappedInstance('modalImport');
     modalImport.setMessages({
       type: 'warning',
       message: 'Doc ' + duplicatedDocName + ' already exists. Are you sure you want to override ?'
@@ -1018,14 +1018,8 @@ export default class EditorArea extends React.Component {
       });
   }
 
-  getSettingsModal = () => this.refs.modalSettings.getWrappedInstance();
-
-  getSpellCheckExceptionListModal = () => this.refs.modalSpellCheckExceptionList.getWrappedInstance();
-
-  getImportModal = () => this.refs.modalImport.getWrappedInstance();
-
   openSettingsModal() {
-    this.getSettingsModal().open();
+    this.getWrappedInstance('modalSettings').open();
   }
 
   componentWillUnmount() {
