@@ -334,26 +334,18 @@ export default class EditorArea extends React.Component {
     return get(doc, 'pageIndex', 0);
   }
 
-  save = (doc = this.getDoc()) => {
+  save = async (doc = this.getDoc()) => {
 
     const self = this;
 
-    if (self.isSaving) {
+    if (self.isSaving || (! doc)) {
       return false;
     }
 
-    if (doc) {
-
-      self.isSaving = true;
-
-      Api.send('save', doc)
-        .then(() => {
-          return self.props.save(doc.uuid);
-        })
-        .then(() => {
-          self.isSaving = false;
-        });
-    }
+    self.isSaving = true;
+    await Api.send('save', doc);
+    await self.props.save(doc.uuid);
+    self.isSaving = false;
   };
 
   saveAs = newDocName => {
