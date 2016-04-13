@@ -5,7 +5,7 @@ import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {ContextMenu, getWrappedInstance, Api} from '../services';
 import {Event} from '../services';
-import {ModalAbout} from '../components';
+import {ModalAbout, ModalAlert} from '../components';
 
 const eventHelper = new Event();
 
@@ -30,6 +30,7 @@ export default class App extends React.Component {
     this.changeTheme({newTheme: theme});
     ContextMenu.init();
     eventHelper.on('app-about', this.handleAppAbout);
+    eventHelper.on('app-still-exporting-zip', this.handleAppStillExportingZip);
 
     Api.send('get-versions')
       .then(({versions}) => {
@@ -44,6 +45,13 @@ export default class App extends React.Component {
 
   handleAppAbout = () => this.getWrappedInstance('modalAbout').openModal();
 
+  handleAppStillExportingZip = () => {
+    return this.getWrappedInstance('modalAlert')
+      .openModal({
+        title: 'Oops',
+        message: 'It\'s still exporting zip. Please close later.'
+      });
+  };
 
   changeTheme(args) {
 
@@ -76,6 +84,7 @@ export default class App extends React.Component {
       <div className="container-fluid root">
         <EditorArea className="editor-area" />
         <ModalAbout ref="modalAbout" />
+        <ModalAlert ref="modalAlert" />
       </div>
     );
   }
