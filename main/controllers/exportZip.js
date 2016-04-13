@@ -2,7 +2,7 @@ import Path from 'path';
 import archiver from 'archiver';
 import fs from 'fs';
 import {PATH_APP_DOC} from '../constants/appConstants';
-import {dialog} from 'electron';
+import {app, dialog} from 'electron';
 import {ipcHandler} from '../decorators';
 
 const exportZip = ipcHandler(function(event, arg) {
@@ -22,16 +22,19 @@ const exportZip = ipcHandler(function(event, arg) {
       return;
     }
 
+    app._isExportingZip = true;
 
     const archive = archiver('zip');
     const sourcePath = Path.resolve(PATH_APP_DOC, name);
     const output = fs.createWriteStream(savePath);
 
     output.on('close', () => {
+      app._isExportingZip = false;
       send({message: filename + ' exported successfully'});
     });
 
     archive.on('error', err => {
+      app._isExportingZip = false;
       send({error: true, message: err});
     });
 
