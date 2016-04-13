@@ -368,7 +368,7 @@ export default class EditorArea extends React.Component {
     }
   };
 
-  async exportZip() {
+  exportZip = async () => {
 
     const doc = this.getDoc();
 
@@ -388,15 +388,19 @@ export default class EditorArea extends React.Component {
     catch (err) {
       this.refs.toast.error(err.message);
     }
-  }
+  };
 
-  async exportFileWithPb() {
+  exportFileWithPb = async () => {
 
-    const doc = self.getDoc();
+    const doc = this.getDoc();
 
     if (! doc) {
       this.refs.toast.error('Open a bamboo then try export again');
       return false;
+    }
+
+    if (doc.changed) {
+      await this.save(doc);
     }
 
     try {
@@ -406,7 +410,7 @@ export default class EditorArea extends React.Component {
     catch (err) {
       this.refs.toast.error(err.message);
     }
-  }
+  };
 
   cancel = () => {
     const searchBar = this.refs.searchBar;
