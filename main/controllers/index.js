@@ -1,39 +1,18 @@
-import addPbFiles from './addPbFiles';
-import getAppData from './getAppData';
-import exportFileWithPb from './exportFileWithPb';
-import exportZip from './exportZip';
-import deleteDoc from './deleteDoc';
-import deleteDocs from './deleteDocs';
-import openBamboo from './openBamboo';
-import open from './open';
-import changeDocSettings from './changeDocSettings';
-import listDocName from './listDocName';
-import addDoc from './addDoc';
-import pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
-import saveAs from './saveAs';
-import save from './save';
-import importZip from './importZip';
-import importButtonClicked from './importButtonClicked';
-import getVersions from './getVersions';
-import deletePageImage from './deletePageImage';
-
-export {
-  importButtonClicked,
-  importZip,
-  save,
-  saveAs,
-  addDoc,
-  open,
-  pageImageUploadButtonClicked,
-  listDocName,
-  changeDocSettings,
-  addPbFiles,
-  exportFileWithPb,
-  getAppData,
-  getVersions,
-  exportZip,
-  deleteDoc,
-  deleteDocs,
-  openBamboo,
-  deletePageImage
-};
+export addPbFiles from './addPbFiles';
+export getAppData from './getAppData';
+export exportFileWithPb from './exportFileWithPb';
+export exportZip from './exportZip';
+export deleteDoc from './deleteDoc';
+export deleteDocs from './deleteDocs';
+export openBamboo from './openBamboo';
+export open from './open';
+export changeDocSettings from './changeDocSettings';
+export listDocName from './listDocName';
+export addDoc from './addDoc';
+export pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
+export saveAs from './saveAs';
+export save from './save';
+export importZip from './importZip';
+export importButtonClicked from './importButtonClicked';
+export getVersions from './getVersions';
+export deletePageImage from './deletePageImage';
