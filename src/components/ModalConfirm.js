@@ -34,9 +34,6 @@ export default class ModalConfirm extends React.Component {
     });
   }
 
-  onModalHide() {
-  }
-
   shouldComponentUpdate = shouldPureComponentUpdate;
 
   render() {
@@ -44,7 +41,7 @@ export default class ModalConfirm extends React.Component {
     const {show, title, message} = this.state;
 
     return (
-      <Modal show={show} onHide={this.onModalHide}>
+      <Modal show={show}>
         <Modal.Header>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
