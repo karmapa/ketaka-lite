@@ -52,7 +52,7 @@ function getDoc(name) {
 
 function getImageFilenameByDoc(doc) {
   let page = doc.pages[doc.pageIndex];
-  return doc.name + '-' + page.name.replace(/(\d+[abcde]?)\.(\d+)/, function(all, volume, page) {
+  return page.name.replace(/(\d+[abcde]?)\.(\d+)/, function(all, volume, page) {
     return zpad(volume, 3) + '-' + zpad(page, 3);
   }) + '.jpg';
 }
@@ -217,6 +217,10 @@ function changeDocSettings(args) {
   }
 }
 
+function isValidPageName(pageName) {
+  return REGEXP_PAGE.exec(pageName);
+}
+
 function sortPages(pages) {
 
   let validPages = _.filter(pages, function(page) {
@@ -263,5 +267,6 @@ module.exports = {
   getPageNameByImageFilename: getPageNameByImageFilename,
   getExistedDocNames: getExistedDocNames,
   sortPages: sortPages,
-  writeDoc: writeDoc
+  writeDoc: writeDoc,
+  isValidPageName
 };

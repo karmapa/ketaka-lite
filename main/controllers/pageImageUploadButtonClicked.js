@@ -23,7 +23,9 @@ let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
     let source = first(paths);
     let page = doc.pages[doc.pageIndex];
-    let filename = get(page, 'name') ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
+
+    let filename = Doc.isValidPageName(page.name) ? Doc.getImageFilenameByDoc(doc) : Path.basename(source);
+
     let dest = Path.resolve(PATH_APP_DOC, doc.name, 'images', filename);
     let pathData = Path.parse(dest);
     let fileType = Helper.getFileType(source);
