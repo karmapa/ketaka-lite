@@ -1451,11 +1451,22 @@ export default class EditorArea extends React.Component {
     return (window.innerWidth - (RESIZER_SIZE / 2)) * (1 - deltaRatio);
   }
 
-  handleImageZoomerCloseButtonClick = async () => {
+  handleImageZoomerCloseButtonClick = () => {
+    this.refs.modalPageImageDeleteConfirm.open({
+      title: 'Oops',
+      message: 'Are you sure to delete this image ?'
+    });
+  };
+
+  cancelDeletePageImage = () => this.refs.modalPageImageDeleteConfirm.close();
+
+  confirmPageImageDelete = async () => {
     const doc = this.getDoc();
     const page = this.getCurrentPage();
     const imageFilename = get(page, 'pathData.base');
-    this.props.deletePageImage({docName: doc.name, imageFilename});
+    await this.props.deletePageImage({docName: doc.name, imageFilename});
+    await this.save();
+    this.refs.modalPageImageDeleteConfirm.close();
   };
 
   renderImageArea(key, src) {
@@ -1817,6 +1828,10 @@ export default class EditorArea extends React.Component {
 
           <ModalConfirm ref="modalPageDeleteConfirm" confirmText="Delete"
             confirm={this.deleteCurrentPage} cancelText="Cancel" cancel={this.cancelDeletePage} />
+
+          <ModalConfirm ref="modalPageImageDeleteConfirm" confirmText="Delete"
+            confirm={this.confirmPageImageDelete} cancelText="Cancel" cancel={this.cancelDeletePageImage} />
+
           <ModalDocSettings ref="modalDocSettings" confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
           <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
