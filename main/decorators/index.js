@@ -1,7 +1,2 @@
-import bindEventName from './bindEventName';
-import ipcHandler from './ipcHandler';
-
-export {
-  bindEventName,
-  ipcHandler
-};
+export bindEventName from './bindEventName';
+export ipcHandler from './ipcHandler';
