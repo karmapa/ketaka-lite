@@ -7,8 +7,6 @@ const PATH_APP_DOC = constants.PATH_APP_DOC;
 
 const deletePageImage = ipcHandler(async function(event, res) {
 
-  console.log('???', res);
-
   const send = this.send;
   const path = Path.resolve(PATH_APP_DOC, res.docName, 'images', res.imageFilename);
 
@@ -16,9 +14,6 @@ const deletePageImage = ipcHandler(async function(event, res) {
     send();
     return;
   }
-
-  console.log('here', path);
-
   await Helper.rimraf(path)
   send();
 });
