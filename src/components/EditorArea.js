@@ -27,7 +27,7 @@ const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck,
   setTextOnly, toggleSpellCheck} from '../modules/app';
-import {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc, saveFontRecord,
+import {addDoc, addPage, closeDoc, createDoc, deletePage, deletePageImage, importDoc, saveFontRecord,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 import uuid from 'node-uuid';
 
@@ -48,6 +48,7 @@ const eventHelper = new Event();
   spellCheckOn: state.app.spellCheckOn
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, saveFontRecord, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
+  deletePageImage,
   setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck, setCloseConfirmStatus})
 export default class EditorArea extends React.Component {
 
@@ -58,6 +59,7 @@ export default class EditorArea extends React.Component {
     closeDoc: PropTypes.func.isRequired,
     createDoc: PropTypes.func.isRequired,
     deletePage: PropTypes.func.isRequired,
+    deletePageImage: PropTypes.func.isRequired,
     docs: PropTypes.array.isRequired,
     ewRatio: PropTypes.number.isRequired,
     exceptionWords: PropTypes.array.isRequired,
@@ -1449,6 +1451,13 @@ export default class EditorArea extends React.Component {
     return (window.innerWidth - (RESIZER_SIZE / 2)) * (1 - deltaRatio);
   }
 
+  handleImageZoomerCloseButtonClick = async () => {
+    const doc = this.getDoc();
+    const page = this.getCurrentPage();
+    const imageFilename = get(page, 'pathData.base');
+    this.props.deletePageImage({docName: doc.name, imageFilename});
+  };
+
   renderImageArea(key, src) {
 
     const style = {};
@@ -1461,7 +1470,15 @@ export default class EditorArea extends React.Component {
     }
 
     if (src) {
-      return <ImageZoomer style={style} key={key} className="image-zoomer" direction={this.props.direction} src={src} />;
+      const props = {
+        style,
+        key,
+        onImageZoomerCloseButtonClick: this.handleImageZoomerCloseButtonClick,
+        className: 'image-zoomer',
+        direction: this.props.direction,
+        src
+      };
+      return <ImageZoomer {...props} />;
     }
     return <ImageUploader style={style} key={key} className="image-uploader" onUploadButtonClick={this.onUploadButtonClick} />;
   }

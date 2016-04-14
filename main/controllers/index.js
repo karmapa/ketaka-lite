@@ -15,6 +15,7 @@ import save from './save';
 import importZip from './importZip';
 import importButtonClicked from './importButtonClicked';
 import getVersions from './getVersions';
+import deletePageImage from './deletePageImage';
 
 export {
   importButtonClicked,
@@ -33,5 +34,6 @@ export {
   exportZip,
   deleteDoc,
   deleteDocs,
-  openBamboo
+  openBamboo,
+  deletePageImage
 };

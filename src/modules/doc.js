@@ -4,20 +4,21 @@ import naturalSort from 'javascript-natural-sort';
 import uuid from 'node-uuid';
 import {REGEXP_PAGE} from '../constants/AppConstants';
 
-const ADD_PAGE = 'ADD_PAGE';
-const CLOSE_DOC = 'CLOSE_DOC';
-const DELETE_PAGE = 'DELETE_PAGE';
-const EXPORT_DATA = 'EXPORT_DATA';
-const IMPORT_DATA = 'IMPORT_DATA';
-const IMPORT_DOC = 'IMPORT_DOC';
-const RECEIVE_DOC = 'RECEIVE_DOC';
-const SAVE = 'SAVE';
-const SAVE_FONT_RECORD = 'SAVE_FONT_RECORD';
-const SET_PAGE_INDEX = 'SET_PAGE_INDEX';
-const TO_NEXT_PAGE = 'TO_NEXT_PAGE';
-const TO_PREVIOUS_PAGE = 'TO_PREVIOUS_PAGE';
-const UPDATE_PAGE_IMAGE_PATH = 'UPDATE_PAGE_IMAGE_PATH';
-const WRITE_PAGE_CONTENT = 'WRITE_PAGE_CONTENT';
+const ADD_PAGE = 'ketaka-Lite/doc/ADD_PAGE';
+const CLOSE_DOC = 'ketaka-Lite/doc/CLOSE_DOC';
+const DELETE_PAGE = 'ketaka-Lite/doc/DELETE_PAGE';
+const EXPORT_DATA = 'ketaka-Lite/doc/EXPORT_DATA';
+const IMPORT_DATA = 'ketaka-Lite/doc/IMPORT_DATA';
+const IMPORT_DOC = 'ketaka-Lite/doc/IMPORT_DOC';
+const RECEIVE_DOC = 'ketaka-Lite/doc/RECEIVE_DOC';
+const SAVE = 'ketaka-Lite/doc/SAVE';
+const SAVE_FONT_RECORD = 'ketaka-Lite/doc/SAVE_FONT_RECORD';
+const SET_PAGE_INDEX = 'ketaka-Lite/doc/SET_PAGE_INDEX';
+const TO_NEXT_PAGE = 'ketaka-Lite/doc/TO_NEXT_PAGE';
+const TO_PREVIOUS_PAGE = 'ketaka-Lite/doc/TO_PREVIOUS_PAGE';
+const UPDATE_PAGE_IMAGE_PATH = 'ketaka-Lite/doc/UPDATE_PAGE_IMAGE_PATH';
+const WRITE_PAGE_CONTENT = 'ketaka-Lite/doc/WRITE_PAGE_CONTENT';
+const CLEAR_DOC_PAGE_IMAGE = 'ketaka-Lite/doc/CLEAR_DOC_PAGE_IMAGE';
 
 const actionsMap = {
 
@@ -53,6 +54,20 @@ const actionsMap = {
     return state.filter(doc => {
       return doc.uuid !== action.uuid;
     });
+  },
+
+  [CLEAR_DOC_PAGE_IMAGE]: (state, action) => {
+
+    const {doc, index} = findDocDataByName(state, action.docName);
+    const page = doc.pages[doc.pageIndex];
+    doc.changed = true;
+    page.pathData = {};
+
+    return [
+      ...state.slice(0, index),
+      Object.assign({}, doc),
+      ...state.slice(index + 1)
+    ];
   },
 
   [DELETE_PAGE]: (state, action) => {
@@ -347,10 +362,24 @@ export function receiveDoc(doc) {
   };
 }
 
+export function clearDocPageImage(docName) {
+  return {
+    type: CLEAR_DOC_PAGE_IMAGE,
+    docName
+  };
+}
+
 export function createDoc() {
   return dispatch => {
     return Api.send('add-doc')
       .then(res => dispatch(receiveDoc(res.doc)));
+  };
+}
+
+export function deletePageImage({docName, imageFilename}) {
+  return dispatch => {
+    return Api.send('delete-page-image', {docName, imageFilename})
+      .then(res => dispatch(clearDocPageImage(docName)));
   };
 }
 

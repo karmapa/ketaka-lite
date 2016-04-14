@@ -1,18 +1,20 @@
-import Animator from '../services/Animator';
+import {Animator} from '../services/';
 import ImageZoomerToolbar from './ImageZoomerToolbar';
-import React, {PropTypes} from 'react';
+import ImageZoomerCloseButton from './ImageZoomerCloseButton';
+import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import Path from 'path';
 
-export default class ImageZoomer extends React.Component {
+export default class ImageZoomer extends Component {
 
   static PropTypes = {
     style: PropTypes.prop,
     direction: PropTypes.bool.isRequired,
     movingSpeed: PropTypes.number,
     pageName: PropTypes.string.isRequired,
+    onImageZoomerCloseButtonClick: PropTypes.func.isRequired,
     src: PropTypes.string.isRequired
   };
 
@@ -240,7 +242,7 @@ export default class ImageZoomer extends React.Component {
   render() {
 
     const {translateX, translateY, percent, isDragging, isHolding} = this.state;
-    const {src, style} = this.props;
+    const {src, style, onImageZoomerCloseButtonClick} = this.props;
 
     const classes = {
       [this.props.className]: true,
@@ -255,6 +257,7 @@ export default class ImageZoomer extends React.Component {
         <ImageZoomerToolbar className="image-zoomer-toolbar" inputValue={this.state.inputValue} onInputChange={this.handleInputChange}
                             onInputBlur={this.handleInputBlur} onAddButtonClick={this.enlarge} onMinusButtonClick={this.shrink} />
         <span className="filename">{Path.basename(src.replace(/\\/g, '/'))}</span>
+        <ImageZoomerCloseButton onClick={onImageZoomerCloseButtonClick} />
       </div>
     );
   }

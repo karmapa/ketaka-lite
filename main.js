@@ -101,3 +101,5 @@ ipc.on('add-pb-files', controllers.addPbFiles);
 ipc.on('get-app-data', controllers.getAppData);
 
 ipc.on('get-versions', controllers.getVersions);
+
+ipc.on('delete-page-image', controllers.deletePageImage);
