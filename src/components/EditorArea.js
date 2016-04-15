@@ -7,7 +7,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, ModalSaveConfirm,
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
-  ModalImport, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
+  ModalProgress, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
   Resizer, PrintArea} from '.';
 import {Helper, Ime, History, Event, Api, getWrappedInstance} from '../services/';
 import CodeMirror from 'codemirror';
@@ -1834,7 +1834,7 @@ export default class EditorArea extends React.Component {
           <ModalDocSettings ref="modalDocSettings" confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
           <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
-          <ModalImport className="modal-import" ref="modalImport" />
+          <ModalProgress className="modal-import" ref="modalImport" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
 
           <ModalEditDocs ref="modalEditDocs" />

@@ -7,7 +7,7 @@ export ImageZoomer from './ImageZoomer';
 export ImageZoomerToolbar from './ImageZoomerToolbar';
 export ModalConfirm from './ModalConfirm';
 export ModalDocSettings from './ModalDocSettings';
-export ModalImport from './ModalImport';
+export ModalProgress from './ModalProgress';
 export ModalEditDocs from './ModalEditDocs';
 export ModalOpen from './ModalOpen';
 export ModalPageAdd from './ModalPageAdd';

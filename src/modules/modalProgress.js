@@ -1,11 +1,11 @@
 import {each, isFunction} from 'lodash';
 
-const INIT_MODAL = 'ketaka-lite/modalImport/INIT_MODAL';
-const ADD_MESSAGES = 'ketaka-lite/modalImport/ADD_MESSAGES';
-const CLOSE_MODAL = 'ketaka-lite/modalImport/CLOSE_MODAL';
-const OPEN_MODAL = 'ketaka-lite/modalImport/OPEN_MODAL';
-const SET_MESSAGES = 'ketaka-lite/modalImport/SET_MESSAGES';
-const SET_OPTIONS = 'ketaka-lite/modalImport/SET_OPTIONS';
+const INIT_MODAL = 'ketaka-lite/modalProgress/INIT_MODAL';
+const ADD_MESSAGES = 'ketaka-lite/modalProgress/ADD_MESSAGES';
+const CLOSE_MODAL = 'ketaka-lite/modalProgress/CLOSE_MODAL';
+const OPEN_MODAL = 'ketaka-lite/modalProgress/OPEN_MODAL';
+const SET_MESSAGES = 'ketaka-lite/modalProgress/SET_MESSAGES';
+const SET_OPTIONS = 'ketaka-lite/modalProgress/SET_OPTIONS';
 
 const initialState = {
   title: '',

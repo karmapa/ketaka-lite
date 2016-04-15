@@ -3,26 +3,25 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 import {Alert, Button, Modal, ProgressBar} from 'react-bootstrap';
 import {connect} from 'react-redux';
 import {isArray, isFunction, groupBy, map} from 'lodash';
-import {initModal, openModal, closeModal, addMessages, setOptions, setMessages} from '../modules/modalImport';
+import {initModal, openModal, closeModal, addMessages, setOptions, setMessages} from '../modules/modalProgress';
 
 @connect(state => ({
-  title: state.modalImport.title,
-  firstButtonStyle: state.modalImport.firstButtonStyle,
-  firstButtonText: state.modalImport.firstButtonText,
-  isModalVisible: state.modalImport.isModalVisible,
-  messages: state.modalImport.messages,
-  progress: state.modalImport.progress,
-  progressBarActive: state.modalImport.progressBarActive,
-  progressBarStyle: state.modalImport.progressBarStyle,
-  secondButtonStyle: state.modalImport.secondButtonStyle,
-  secondButtonText: state.modalImport.secondButtonText,
-  showFirstButton: state.modalImport.showFirstButton,
-  showSecondButton: state.modalImport.showSecondButton
+  firstButtonStyle: state.modalProgress.firstButtonStyle,
+  firstButtonText: state.modalProgress.firstButtonText,
+  isModalVisible: state.modalProgress.isModalVisible,
+  messages: state.modalProgress.messages,
+  progress: state.modalProgress.progress,
+  progressBarActive: state.modalProgress.progressBarActive,
+  progressBarStyle: state.modalProgress.progressBarStyle,
+  secondButtonStyle: state.modalProgress.secondButtonStyle,
+  secondButtonText: state.modalProgress.secondButtonText,
+  showFirstButton: state.modalProgress.showFirstButton,
+  showSecondButton: state.modalProgress.showSecondButton,
+  title: state.modalProgress.title
 }), {initModal, openModal, closeModal, addMessages, setOptions, setMessages}, null, {withRef: true})
-export default class ModalImportStatus extends React.Component {
+export default class ModalProgress extends React.Component {
 
   static propTypes = {
-    title: PropTypes.func.isRequired,
     addMessages: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
     firstButtonStyle: PropTypes.string.isRequired,
@@ -39,7 +38,8 @@ export default class ModalImportStatus extends React.Component {
     setMessages: PropTypes.func.isRequired,
     setOptions: PropTypes.func.isRequired,
     showFirstButton: PropTypes.bool.isRequired,
-    showSecondButton: PropTypes.bool.isRequired
+    showSecondButton: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired
   };
 
   handleFirstButtonClick = () => this.close();
