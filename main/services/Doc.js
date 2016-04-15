@@ -52,8 +52,8 @@ function getDoc(name) {
 
 function getImageFilenameByDoc(doc) {
   let page = doc.pages[doc.pageIndex];
-  return page.name.replace(/(\d+[abcde]?)\.(\d+)/, function(all, volume, page) {
-    return zpad(volume, 3) + '-' + zpad(page, 3);
+  return page.name.replace(/(\d+)([abcde])?\.(\d+)/, (all, volume, char = '', page) => {
+    return zpad(volume, 3) + char + '-' + zpad(page, 3);
   }) + '.jpg';
 }
 
