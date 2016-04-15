@@ -28,7 +28,6 @@ let pageImageUploadButtonClicked = ipcHandler(function(event, doc) {
 
     let dest = Path.resolve(PATH_APP_DOC, doc.name, 'images', filename);
     let pathData = Path.parse(dest);
-    let fileType = Helper.getFileType(source);
 
     let destDir = Path.dirname(dest);
 
