@@ -22,6 +22,12 @@ function getTemplate(args) {
       }
     },
     {
+      label: 'Undo PageBreak',
+      click: () => {
+        webContents.send('app-undo-pb');
+      }
+    },
+    {
       label: 'Cut',
       accelerator: 'CmdOrCtrl+X',
       role: 'cut'
