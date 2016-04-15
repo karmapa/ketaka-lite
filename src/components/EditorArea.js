@@ -1465,7 +1465,6 @@ export default class EditorArea extends React.Component {
     const page = this.getCurrentPage();
     const imageFilename = get(page, 'pathData.base');
     await this.props.deletePageImage({docName: doc.name, imageFilename});
-    await this.save();
     this.refs.modalPageImageDeleteConfirm.close();
   };
 
