@@ -14,7 +14,7 @@ import CodeMirror from 'codemirror';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
   NON_EDITOR_AREA_HEIGHT, RESIZER_SIZE, INPUT_METHOD_SYSTEM, INPUT_METHOD_TIBETAN_EWTS,
-  INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2} from '../constants/AppConstants';
+  INPUT_METHOD_TIBETAN_SAMBHOTA, INPUT_METHOD_TIBETAN_SAMBHOTA2, IS_MAC} from '../constants/AppConstants';
 
 import {ToastContainer, ToastMessage} from 'react-toastr';
 
@@ -33,6 +33,8 @@ import uuid from 'node-uuid';
 
 const jsdiff = require('diff');
 const eventHelper = new Event();
+
+const UNDO_PB_HISTORY_SIZE = 200;
 
 @connect(state => ({
   closeConfirmStatus: state.app.closeConfirmStatus,
@@ -455,7 +457,11 @@ export default class EditorArea extends React.Component {
       const nextPage = pages[nextPageIndex];
       const nextPageContent = secondPart + nextPage.content;
 
-      const fromPageContent = firstPart.replace(/([\n])$/, '') + originalSecondPart;
+      let fromPageContent = firstPart + originalSecondPart;
+
+      if (IS_MAC) {
+        fromPageContent = firstPart.replace(/([\n])$/, '') + originalSecondPart;
+      }
 
       this.lastPageBreakRecords.push({
         docId: doc.uuid,
@@ -465,6 +471,10 @@ export default class EditorArea extends React.Component {
         toPageId: nextPage.uuid,
         toPageContent: nextPage.content
       });
+
+      if (this.lastPageBreakRecords.length > UNDO_PB_HISTORY_SIZE) {
+        this.lastPageBreakRecords.shift();
+      }
 
       writePageContent(doc.uuid, nextPageIndex, nextPageContent);
       setPageIndex(this.state.docKey, nextPageIndex);

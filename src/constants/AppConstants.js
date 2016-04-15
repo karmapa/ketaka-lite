@@ -1,7 +1,7 @@
 const USER_AGENT = navigator.userAgent;
 const PLATFORM = navigator.platform;
 const IOS = /AppleWebKit/.test(USER_AGENT) && /Mobile\/\w+/.test(USER_AGENT);
-const IS_MAC = IOS || /Mac/.test(PLATFORM);
+export const IS_MAC = IOS || /Mac/.test(PLATFORM);
 
 export const APP_NAME = 'KETAKA Lite';
 
