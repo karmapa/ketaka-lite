@@ -713,11 +713,11 @@ export default class EditorArea extends React.Component {
 
   handleAppExportFileWithPb = () => this.exportFileWithPb();
 
-  handleImportStart = () => this.getWrappedInstance('modalImport').open({title: 'Import Status'});
+  handleImportStart = () => this.getWrappedInstance('modalProgress').open({title: 'Import Status'});
 
   handleImportProgress = (event, res) => {
 
-    const importModal = this.getWrappedInstance('modalImport');
+    const importModal = this.getWrappedInstance('modalProgress');
 
     if (res.clean) {
       importModal.setMessages(res);
@@ -853,9 +853,9 @@ export default class EditorArea extends React.Component {
 
   handleFileCountWarning = paths => {
 
-    const modalImport = this.getWrappedInstance('modalImport');
+    const modalProgress = this.getWrappedInstance('modalProgress');
 
-    modalImport.setMessages({
+    modalProgress.setMessages({
       type: 'warning',
       message: 'You are importing a large folder. Are you sure to import?'
     })
@@ -864,7 +864,7 @@ export default class EditorArea extends React.Component {
       showFirstButton: true,
       firstButtonStyle: '',
       firstButtonText: 'Cancel',
-      handleFirstButtonClick: () => modalImport.close(),
+      handleFirstButtonClick: () => modalProgress.close(),
       showSecondButton: true,
       secondButtonStyle: 'warning',
       secondButtonText: 'Proceed',
@@ -873,7 +873,7 @@ export default class EditorArea extends React.Component {
 
     async function handleSecondButtonClick() {
 
-      modalImport.setMessages([])
+      modalProgress.setMessages([])
         .setOptions({
           progressBarStyle: 'info',
           showFirstButton: false,
@@ -886,7 +886,7 @@ export default class EditorArea extends React.Component {
         this.props.importDoc(doc);
         this.refs.toast.success(message);
 
-        modalImport.setOptions({
+        modalProgress.setOptions({
           showFirstButton: true,
           firstButtonStyle: 'primary',
           firstButtonText: 'OK'
@@ -895,7 +895,7 @@ export default class EditorArea extends React.Component {
       catch (err) {
         const {message} = err;
         this.refs.toast.error(message);
-        modalImport.setMessages({
+        modalProgress.setMessages({
           type: 'danger',
           message
         })
@@ -903,7 +903,7 @@ export default class EditorArea extends React.Component {
           progressBarStyle: 'danger',
           progressBarActive: false,
           showFirstButton: true,
-          handleFirstButtonClick: () => modalImport.close(),
+          handleFirstButtonClick: () => modalProgress.close(),
           firstButtonStyle: 'danger',
           firstButtonText: 'I understand.'
         });
@@ -913,10 +913,10 @@ export default class EditorArea extends React.Component {
 
   handleImportError = message => {
 
-    const modalImport = this.getWrappedInstance('modalImport');
+    const modalProgress = this.getWrappedInstance('modalProgress');
     this.refs.toast.error(message);
 
-    modalImport.setMessages({
+    modalProgress.setMessages({
       type: 'danger',
       message
     })
@@ -924,7 +924,7 @@ export default class EditorArea extends React.Component {
       progressBarStyle: 'danger',
       progressBarActive: false,
       showFirstButton: true,
-      handleFirstButtonClick: () => modalImport.close(),
+      handleFirstButtonClick: () => modalProgress.close(),
       firstButtonStyle: 'danger',
       firstButtonText: 'I understand.'
     });
@@ -932,7 +932,7 @@ export default class EditorArea extends React.Component {
 
   import = async () => {
 
-    const modalImport = this.getWrappedInstance('modalImport');
+    const modalProgress = this.getWrappedInstance('modalProgress');
 
     try {
       const {doc, message} = await Api.send('import-button-clicked');
@@ -940,7 +940,7 @@ export default class EditorArea extends React.Component {
       this.props.importDoc(doc);
       this.refs.toast.success(message);
 
-      modalImport.setOptions({
+      modalProgress.setOptions({
         showFirstButton: true,
         firstButtonText: 'OK',
         firstButtonStyle: 'primary'
@@ -962,18 +962,18 @@ export default class EditorArea extends React.Component {
   importZip(args) {
 
     const self = this;
-    const modalImport = self.getWrappedInstance('modalImport');
+    const modalProgress = self.getWrappedInstance('modalProgress');
 
     Api.send('import-zip', args)
       .then(res => {
         self.props.importDoc(res.doc);
         self.refs.toast.success(res.message);
-        modalImport.setOptions({
+        modalProgress.setOptions({
           showFirstButton: true,
           firstButtonStyle: 'primary',
           firstButtonText: 'OK',
           showSecondButton: false,
-          handleFirstButtonClick: modalImport.close
+          handleFirstButtonClick: modalProgress.close
         });
       })
       .catch(err => {
@@ -982,28 +982,28 @@ export default class EditorArea extends React.Component {
         }
         else {
           self.refs.toast.error(err.message);
-          modalImport.setOptions({
+          modalProgress.setOptions({
             showFirstButton: true,
             firstButtonStyle: '',
             firstButtonText: 'Cancel',
             showSecondButton: false,
-            handleFirstButtonClick: modalImport.close
+            handleFirstButtonClick: modalProgress.close
           });
         }
       });
   }
 
   handleDuplicatedImportZip = ({paths, duplicatedDocName}) => {
-    const modalImport = this.getWrappedInstance('modalImport');
-    modalImport.setMessages({
+    const modalProgress = this.getWrappedInstance('modalProgress');
+    modalProgress.setMessages({
       type: 'warning',
       message: 'Doc ' + duplicatedDocName + ' already exists. Are you sure you want to override ?'
     });
-    modalImport.setOptions({
+    modalProgress.setOptions({
       showFirstButton: true,
       firstButtonStyle: '',
       firstButtonText: 'Cancel',
-      handleFirstButtonClick: () => modalImport.close(),
+      handleFirstButtonClick: () => modalProgress.close(),
       showSecondButton: true,
       secondButtonStyle: 'warning',
       secondButtonText: 'Override',
@@ -1834,7 +1834,7 @@ export default class EditorArea extends React.Component {
           <ModalDocSettings ref="modalDocSettings" confirm={this.saveAndCloseModalDocSettings} />
           <ModalPageAdd ref="modalPageAdd" cancel={this.closeModalPageAdd} confirm={this.addPageAndCloseModal} />
           <ModalSettings ref="modalSettings" close={this.closeModalSettings} />
-          <ModalProgress className="modal-import" ref="modalImport" />
+          <ModalProgress className="modal-import" ref="modalProgress" />
           <ModalOpen ref="modalOpen" onBambooClick={this.onBambooClick} onBambooDeleteClick={this.onBambooDeleteClick} />
 
           <ModalEditDocs ref="modalEditDocs" />
