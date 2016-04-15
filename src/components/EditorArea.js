@@ -458,15 +458,17 @@ export default class EditorArea extends React.Component {
       const nextPageContent = secondPart + nextPage.content;
 
       let fromPageContent = firstPart + originalSecondPart;
+      let cursorIndex = index;
 
       if (IS_MAC) {
         fromPageContent = firstPart.replace(/([\n])$/, '') + originalSecondPart;
+        cursorIndex = index - 1;
       }
 
       this.lastPageBreakRecords.push({
         docId: doc.uuid,
         fromPageId: page.uuid,
-        cursorIndex: index - 1,
+        cursorIndex,
         fromPageContent,
         toPageId: nextPage.uuid,
         toPageContent: nextPage.content
