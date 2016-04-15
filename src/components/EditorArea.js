@@ -713,7 +713,7 @@ export default class EditorArea extends React.Component {
 
   handleAppExportFileWithPb = () => this.exportFileWithPb();
 
-  handleImportStart = () => this.getWrappedInstance('modalImport').open();
+  handleImportStart = () => this.getWrappedInstance('modalImport').open({title: 'Import Status'});
 
   handleImportProgress = (event, res) => {
 

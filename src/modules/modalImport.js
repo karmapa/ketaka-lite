@@ -8,6 +8,7 @@ const SET_MESSAGES = 'ketaka-lite/modalImport/SET_MESSAGES';
 const SET_OPTIONS = 'ketaka-lite/modalImport/SET_OPTIONS';
 
 const initialState = {
+  title: '',
   firstButtonStyle: 'link',
   firstButtonText: 'First Button',
   messages: [],

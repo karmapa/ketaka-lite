@@ -6,6 +6,7 @@ import {isArray, isFunction, groupBy, map} from 'lodash';
 import {initModal, openModal, closeModal, addMessages, setOptions, setMessages} from '../modules/modalImport';
 
 @connect(state => ({
+  title: state.modalImport.title,
   firstButtonStyle: state.modalImport.firstButtonStyle,
   firstButtonText: state.modalImport.firstButtonText,
   isModalVisible: state.modalImport.isModalVisible,
@@ -21,6 +22,7 @@ import {initModal, openModal, closeModal, addMessages, setOptions, setMessages} 
 export default class ModalImportStatus extends React.Component {
 
   static propTypes = {
+    title: PropTypes.func.isRequired,
     addMessages: PropTypes.func.isRequired,
     closeModal: PropTypes.func.isRequired,
     firstButtonStyle: PropTypes.string.isRequired,
@@ -115,7 +117,7 @@ export default class ModalImportStatus extends React.Component {
     return (
       <Modal show={isModalVisible} className={className}>
         <Modal.Header>
-          <Modal.Title>Import Status</Modal.Title>
+          <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ProgressBar active={progressBarActive} bsStyle={progressBarStyle} now={progress} />
