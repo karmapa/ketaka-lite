@@ -1,19 +1,19 @@
-let constants = require('../constants/appConstants');
+const constants = require('../constants/appConstants');
 
-let REGEXP_IMAGE = constants.REGEXP_IMAGE;
-let PATH_APP_DOC = constants.PATH_APP_DOC;
-let REGEXP_PAGE = constants.REGEXP_PAGE;
+const REGEXP_IMAGE = constants.REGEXP_IMAGE;
+const PATH_APP_DOC = constants.PATH_APP_DOC;
+const REGEXP_PAGE = constants.REGEXP_PAGE;
 
-let Helper = require('./Helper');
-let Path = require('path');
-let _ = require('lodash');
-let uuid = require('node-uuid');
-let zpad = require('zpad');
+const Helper = require('./Helper');
+const Path = require('path');
+const _ = require('lodash');
+const uuid = require('node-uuid');
+const zpad = require('zpad');
 
 import {tagToStr} from './Tag';
 
-let mkdirp = require('mkdirp');
-let naturalSort = require('javascript-natural-sort');
+const mkdirp = require('mkdirp');
+const naturalSort = require('javascript-natural-sort');
 
 function genId(prefix = '') {
   return prefix + uuid.v4();
@@ -44,7 +44,7 @@ function createPage(args) {
 }
 
 function getDoc(name) {
-  let path = Path.resolve(PATH_APP_DOC, name, name + '.json');
+  const path = Path.resolve(PATH_APP_DOC, name, name + '.json');
   return Helper.readFile(path)
     .then(function(json) {
       return JSON.parse(json);
@@ -66,7 +66,7 @@ function addMissingPageUuid(doc) {
 }
 
 function getImageFilenameByDoc(doc) {
-  let page = doc.pages[doc.pageIndex];
+  const page = doc.pages[doc.pageIndex];
   return page.name.replace(/(\d+)([abcde])?\.(\d+)/, (all, volume, char = '', page) => {
     return zpad(volume, 3) + char + '-' + zpad(page, 3);
   }) + '.jpg';
@@ -77,8 +77,8 @@ function getPageNameByImageFilename(filename) {
     if (! all) {
       return Path.basename(filename);
     }
+    const lastChar = volume.slice(-1);
     let trailingChar = '';
-    let lastChar = volume.slice(-1);
 
     if (lastChar.match(/[abcde]/)) {
       trailingChar = lastChar;
