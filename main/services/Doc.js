@@ -15,6 +15,10 @@ import {tagToStr} from './Tag';
 let mkdirp = require('mkdirp');
 let naturalSort = require('javascript-natural-sort');
 
+function genId(prefix = '') {
+  return prefix + uuid.v4();
+}
+
 function createDoc(args) {
   return _.extend({
     chunk: '',
@@ -24,13 +28,13 @@ function createDoc(args) {
     pageIndex: 0,
     pages: [],
     nodes: [],
-    uuid: 'doc:' + uuid.v4()
+    uuid: genId('doc:')
   }, args);
 }
 
 function createPage(args) {
   return _.extend({
-    uuid: 'page:' + uuid.v4(),
+    uuid: genId('page:'),
     name: '',
     content: '',
     imagePath: '',
@@ -48,6 +52,17 @@ function getDoc(name) {
     .catch(function() {
       return null;
     });
+}
+
+// fix legacy page data
+function addMissingPageUuid(doc) {
+  doc.pages = doc.pages.map(page => {
+    if (! page.uuid) {
+      page.uuid = genId('page:');
+    }
+    return page;
+  });
+  return doc;
 }
 
 function getImageFilenameByDoc(doc) {
@@ -257,6 +272,8 @@ function genPbFileContent(doc) {
 }
 
 module.exports = {
+  genId,
+  addMissingPageUuid,
   createDoc: createDoc,
   createPage: createPage,
   changeDocSettings: changeDocSettings,

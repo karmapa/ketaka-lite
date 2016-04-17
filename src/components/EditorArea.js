@@ -1058,7 +1058,13 @@ export default class EditorArea extends React.Component {
       showSecondButton: true,
       secondButtonStyle: 'warning',
       secondButtonText: 'Override',
-      handleSecondButtonClick: () => this.importZip({override: true, paths})
+      handleSecondButtonClick: () => {
+        modalProgress.setOptions({
+          showFirstButton: false,
+          showSecondButton: false
+        });
+        this.importZip({override: true, paths});
+      }
     });
   };
 

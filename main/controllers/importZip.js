@@ -51,7 +51,8 @@ const importZip = ipcHandler(function(event, args) {
     if (doc) {
 
       // make sure every new import uses a new id
-      doc.uuid = uuid.v4();
+      doc.uuid = Doc.genId('doc:');
+      doc = Doc.addMissingPageUuid(doc);
       await Doc.writeDoc(doc);
 
       broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully', clean: true});
