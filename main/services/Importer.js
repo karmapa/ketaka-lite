@@ -14,6 +14,8 @@ let REGEXP_PAGE = constants.REGEXP_PAGE;
 
 let htmlparser = require('htmlparser');
 
+import {each} from 'lodash';
+
 import getNonContinuousPageNames from './getNonContinuousPageNames';
 import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr, getMissingTags} from './Tag';
 import {getMissingTagsMessage} from './Message';
@@ -205,6 +207,8 @@ async function createPageDataByPbRows(pbRows) {
   let tags = _.flatten(_.map(resArr, 'tags'));
   let countData = _.countBy(tags, tag => tag.name);
 
+  each(pages, page => checkUnclosedTags({content: page.content, path: page.pathData.base}));
+
   _.each(countData, (value, name) => {
     if (['division', 'vol'].includes(name) && (value > 1)) {
       throw 'Invalid division or vol count: ' + JSON.stringify(countData);
@@ -341,6 +345,15 @@ function readTextRow(row) {
     .then(function(buffer) {
       return buffer.toString();
     });
+}
+
+function checkUnclosedTags({content, path}) {
+
+  const missingTags = getMissingTags(content);
+
+  if (missingTags.length > 0) {
+    throw getMissingTagsMessage(path, missingTags);
+  }
 }
 
 async function createDocByRows(bambooName, rows, onProgress) {
