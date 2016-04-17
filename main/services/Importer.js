@@ -373,10 +373,8 @@ async function createDocByRows(bambooName, rows, onProgress) {
     return content;
   });
 
-  const missingTags = getMissingTags(textContent);
-
-  if (missingTags.length > 0) {
-    throw getMissingTagsMessage(textRow.pathData.base, missingTags);
+  if (textRow) {
+    checkUnclosedTags({content: textContent, path: textRow.pathData.base});
   }
 
   let pageData = await createPageDataByPbRows(pbRows);
