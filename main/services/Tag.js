@@ -1,4 +1,4 @@
-import {map, last} from 'lodash';
+import {map, last, flatten} from 'lodash';
 
 export function attrsToStr(attrs) {
   return map(attrs, (value, attr) => attr + '="' + value + '"').join(' ');
@@ -88,6 +88,30 @@ export function getTagData(tag = '') {
   return null;
 }
 
+
+export function findBrokenTags(content = '') {
+
+  let currentPbId = null;
+
+  return (content || '').split('\n')
+    .map(line => {
+
+      const pbTag = strToTags(line).map(getTagData)
+        .filter(row => 'pb' === row.name)[0];
+
+      if (pbTag) {
+        currentPbId = pbTag.attrs.id;
+      }
+      const [all, name] = ((line + '\n').match(/<([\w\-]*)[^>^\n]*[\n<]/) || []);
+      if (all) {
+        return {name, pbId: currentPbId};
+      }
+      return null;
+    })
+    .filter(row => null !== row)
+    .reduce((a, b) => a.concat(b), []);    // flatten
+}
+
 export function getMissingTags(content = '') {
 
   content = content || '';
@@ -119,5 +143,6 @@ export function getMissingTags(content = '') {
     .map(row => {
       row.type = ('open' === row.type) ? 'close' : 'open';
       return row;
-    });
+    })
+    .concat(findBrokenTags(content));
 }
