@@ -5,7 +5,7 @@ export function getMissingTagsMessage(filename = '', missingTags = []) {
       return 'known - ' + tag.name;
     }
     return tag.pbId + ' - ' + tag.name;
-  }).join(', ');
+  }).join('\n');
 
-  return `The following tags in ${filename} are not finished: ${list}`;
+  return `The following tags in ${filename} are not finished:\n ${list}`;
 }
