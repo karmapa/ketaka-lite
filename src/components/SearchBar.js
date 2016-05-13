@@ -50,6 +50,14 @@ export default class SearchBar extends React.Component {
     this.findKeyword();
   };
 
+  doDefault = () => {
+    if (this.isOpened()) {
+      if (MODE_SEARCH === this.state.mode) {
+        this.find();
+      }
+    }
+  };
+
   findMatchCount = keyword => {
     if (isEmpty(keyword)) {
       this.setState({matchCount: 0});
@@ -422,6 +430,8 @@ export default class SearchBar extends React.Component {
       advance();
     }
   }
+
+  isOpened = () => this.state.opened;
 
   renderSearch = () => {
 

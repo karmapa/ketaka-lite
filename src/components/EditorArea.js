@@ -201,6 +201,10 @@ export default class EditorArea extends React.Component {
     if (((previousState.docKey !== this.state.docKey) || (previousProps.docs.length !== docs.length)) && codemirror) {
       codemirror.refresh();
       this.markFontColor(codemirror);
+
+      if (searchBar) {
+        searchBar.doDefault();
+      }
     }
 
     if (previousProps.direction !== this.props.direction) {
