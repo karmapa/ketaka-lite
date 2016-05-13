@@ -191,15 +191,16 @@ export default class EditorArea extends React.Component {
       this.activateTab(docs.length - 1);
     }
 
+    const searchBar = this.refs.searchBar;
+
+    if (searchBar) {
+      searchBar.cm = codemirror;
+    }
+
     // doc changed and codemirror exists
     if (((previousState.docKey !== this.state.docKey) || (previousProps.docs.length !== docs.length)) && codemirror) {
       codemirror.refresh();
       this.markFontColor(codemirror);
-    }
-
-    const searchBar = this.refs.searchBar;
-    if (searchBar) {
-      searchBar.cm = codemirror;
     }
 
     if (previousProps.direction !== this.props.direction) {
