@@ -197,12 +197,6 @@ export default class EditorArea extends React.Component {
       this.markFontColor(codemirror);
     }
 
-    const doc = this.getDoc();
-    const previousDoc = this.getDoc(this.state.docKey, previousProps);
-
-    if (previousDoc && doc && previousDoc.editChunk && (false === doc.editChunk)) {
-      codemirror.refresh();
-    }
     const searchBar = this.refs.searchBar;
     if (searchBar) {
       searchBar.cm = codemirror;
@@ -214,6 +208,7 @@ export default class EditorArea extends React.Component {
         editor.refresh();
       }
     }
+
   }
 
   getDocIndexByUuid(uuid) {
@@ -1650,7 +1645,6 @@ export default class EditorArea extends React.Component {
 
   renderEditorArea = (doc, pageIndex) => {
 
-    const {editChunk} = doc;
     const page = doc.pages[pageIndex];
 
     const style = {
@@ -1663,7 +1657,7 @@ export default class EditorArea extends React.Component {
 
     const editorProps = {
       style,
-      className: classNames({'editor': true, 'hidden': editChunk}),
+      className: classNames({'editor': true}),
       code: page.content || '',
       ref: editorKey,
       key: editorKey,
