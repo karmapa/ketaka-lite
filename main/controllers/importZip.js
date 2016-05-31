@@ -46,9 +46,8 @@ const importZip = ipcHandler(function(event, args) {
       return send({error: true, duplicated: true, paths, duplicatedDocName: incomingDocName});
     }
 
-    let doc = await Importer.handleImportZip(paths, onProgress);
-
-    if (doc) {
+    try {
+      let doc = await Importer.handleImportZip(paths, onProgress);
 
       // make sure every new import uses a new id
       doc.uuid = Doc.genId('doc:');
@@ -58,8 +57,8 @@ const importZip = ipcHandler(function(event, args) {
       broadcast('import-progress', {progress: 100, type: 'info', message: 'Imported successfully', clean: true});
       send({message: 'Imported successfully', doc});
     }
-    else {
-      send({error: true, message: 'Doc not created'});
+    catch (err) {
+      send({error: true, message: err});
     }
   }
 });
