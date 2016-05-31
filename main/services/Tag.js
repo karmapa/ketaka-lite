@@ -93,7 +93,7 @@ export function findBrokenTags(content = '') {
 
   let currentPbId = null;
 
-  return (content || '').split('\n')
+  const brokenTags = (content || '').split('\n')
     .map(line => {
 
       const pbTag = strToTags(line).map(getTagData)
@@ -102,14 +102,16 @@ export function findBrokenTags(content = '') {
       if (pbTag) {
         currentPbId = pbTag.attrs.id;
       }
-      const [all, name] = ((line + '\n').match(/<([\w\-]*)[^>^\n]*[\n<]/) || []);
-      if (all) {
+      const [name] = ((line + '\n').match(/<([\w\-]*)[^>^\n]*[\n<]/) || []);
+      if (name) {
         return {name, pbId: currentPbId};
       }
       return null;
     })
     .filter(row => null !== row)
     .reduce((a, b) => a.concat(b), []);    // flatten
+
+  return brokenTags;
 }
 
 export function getMissingTags(content = '') {
@@ -118,8 +120,9 @@ export function getMissingTags(content = '') {
 
   let currentPbId = null;
 
-  return strToTags(content)
+  const missingTags = strToTags(content)
     .map(getTagData)
+    .filter(row => !! row)
     .reduce((stacks, row) => {
 
       if ('self-closing' === row.type) {
@@ -145,4 +148,6 @@ export function getMissingTags(content = '') {
       return row;
     })
     .concat(findBrokenTags(content));
+
+    return missingTags;
 }
