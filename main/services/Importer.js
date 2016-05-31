@@ -513,10 +513,25 @@ async function handleImportZip(paths, onProgress) {
     }
   }
 
+  const filePaths = Object.keys(entries).map(path => Path.resolve(PATH_APP_DOC, path));
+
   if (! bambooName) {
-    return null;
+    await rollback(filePaths);
+    throw 'Cannot find bamboo name from imported file entries.';
   }
-  return Doc.getDoc(bambooName);
+
+  if (! isValidImportEntries(bambooName, entries)) {
+    await rollback(filePaths);
+    throw 'Invalid imported file entries. Bamboo folder cannot be found.';
+  }
+
+  const doc = await Doc.getDoc(bambooName);
+
+  if (! doc) {
+    await rollback(filePaths);
+    throw 'Doc was not created due to unknown reason.';
+  }
+  return doc;
 }
 
 async function handleImportPaths(paths, onProgress = _.noop, force = false) {
