@@ -220,6 +220,24 @@ function recursiveRemove(path) {
   });
 }
 
+function rimrafs(paths) {
+
+  let index = -1;
+
+  return new Promise(function(resolve, reject) {
+
+    (function recurse() {
+      let path = paths[++index];
+      if (! path) {
+        resolve();
+      }
+      return recursiveRemove(path)
+        .then(() => recurse())
+        .catch(err => reject(err));
+    })();
+  });
+}
+
 function readZip(path) {
 
   return new Promise((resolve, reject) => {
@@ -285,6 +303,7 @@ module.exports = {
   readFile: readFile,
   readFiles: readFiles,
   rimraf: recursiveRemove,
+  rimrafs,
   unzip: unzip,
   writeFile: writeFile
 };
