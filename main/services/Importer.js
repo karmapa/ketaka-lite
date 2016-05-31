@@ -470,7 +470,7 @@ function isZipUpload(paths) {
   return ('.zip' === Path.extname(_.first(paths))) && (1 === paths.length);
 }
 
-function getBamboonNameFromEntries(entries) {
+function getBambooNameFromEntries(entries) {
 
   const re = new RegExp(/([a-zA-Z0-9\-]+)\.json$/);
   const entry = _.find(entries, row => (! row.isDirectory) && re.test(row.name));
@@ -485,7 +485,7 @@ async function handleImportZip(paths, onProgress) {
 
   const zipPath = _.first(paths);
   const entries = await Helper.unzip(zipPath, PATH_APP_DOC, onExtract);
-  const bambooName = getBamboonNameFromEntries(entries);
+  const bambooName = getBambooNameFromEntries(entries);
 
   let lastProgress = 0;
 
