@@ -481,6 +481,10 @@ function getBambooNameFromEntries(entries) {
   return null;
 }
 
+function rollback(paths) {
+  return Helper.rimrafs(paths);
+}
+
 async function handleImportZip(paths, onProgress) {
 
   const zipPath = _.first(paths);
