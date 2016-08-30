@@ -49,7 +49,8 @@ function getDoc(name) {
     .then(function(json) {
       return JSON.parse(json);
     })
-    .catch(function() {
+    .catch(function(err) {
+      console.error('JSON.parse error', err);
       return null;
     });
 }
