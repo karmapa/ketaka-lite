@@ -10,7 +10,7 @@
 
 ## Front-end environment setup
 ```
-npm install electron-prebuilt -g
+sudo npm install -g electron-prebuilt
 npm install
 npm run dev
 ```
