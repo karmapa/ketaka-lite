@@ -20,7 +20,9 @@
     position: absolute;
   }
   .filename {
+    opacity: 0;
     max-width: 12em;
+    transition: $transition-global;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -30,6 +32,9 @@
     bottom: 0.7em;
     background: $bg-image-zoomer-toolbar;
     color: $color-border-toolbar;
+  }
+  &:hover .filename {
+    opacity: 1;
   }
 
   .image-zoomer-button-close {
