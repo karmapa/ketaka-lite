@@ -8,6 +8,10 @@
 
 ![KETAKA Lite](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/assets/files/documentation/ketaka-lite-explain.png)
 
+## Note:
+Currently only support Node.js v5.8.0,
+be sure to use node version manager to switch your Node.js version to 5.8.0
+
 ## Front-end environment setup
 ```
 sudo npm install -g electron-prebuilt
