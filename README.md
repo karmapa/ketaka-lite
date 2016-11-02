@@ -15,7 +15,7 @@ be sure to use node version manager to switch your Node.js version to 5.8.0
 
 ## Front-end environment setup
 ```
-sudo npm install -g electron-prebuilt
+sudo npm install -g electron-prebuilt@1.1.0
 npm install
 npm run dev
 ```
