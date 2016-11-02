@@ -9,7 +9,8 @@
 ![KETAKA Lite](https://raw.githubusercontent.com/kmsheng/ketaka-lite/master/assets/files/documentation/ketaka-lite-explain.png)
 
 ## Note:
-Currently only support Node.js v5.8.0,
+Currently only support Node.js 5.8.0,
+if your Node.js version isn't 5.8.0,
 be sure to use node version manager to switch your Node.js version to 5.8.0
 
 ## Front-end environment setup
