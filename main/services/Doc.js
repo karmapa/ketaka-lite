@@ -1,3 +1,6 @@
+import naturalSort from 'javascript-natural-sort';
+import {compare} from '.';
+
 const constants = require('../constants/appConstants');
 
 const REGEXP_IMAGE = constants.REGEXP_IMAGE;
@@ -13,7 +16,6 @@ const zpad = require('zpad');
 import {tagToStr} from './Tag';
 
 const mkdirp = require('mkdirp');
-const naturalSort = require('javascript-natural-sort');
 
 function genId(prefix = '') {
   return prefix + uuid.v4();
@@ -237,25 +239,30 @@ function isValidPageName(pageName) {
   return REGEXP_PAGE.exec(pageName);
 }
 
+function byCompare(a, b) {
+  return compare(a.name, b.name);
+}
+
 function sortPages(pages) {
 
-  let validPages = _.filter(pages, function(page) {
-    return REGEXP_PAGE.exec(page.name);
-  });
+  const validPagesWithoutChar = _.filter(pages, (page) => {
+    const match = REGEXP_PAGE.exec(page.name);
+    const [all, num1, num2, num3, char] = match || [];
+    return (!! match) && (! char);
+  })
+  .sort(byCompare);
 
-  function compare(a, b) {
-    return naturalSort(a.name, b.name);
-  }
+  const validPagesWithChar = _.filter(pages, (page) => {
+    const match = REGEXP_PAGE.exec(page.name);
+    const [all, num1, num2, num3, char] = match || [];
+    return (!! match) && char;
+  })
+  .sort(byCompare);
 
-  validPages = validPages.sort(compare);
+  const invalidPages = _.filter(pages, (page) => (! REGEXP_PAGE.test(page.name)))
+    .sort((a, b) => naturalSort(a.name, b.name));
 
-  let invalidPages = _.filter(pages, function(page) {
-    return ! REGEXP_PAGE.exec(page.name);
-  });
-
-  invalidPages = invalidPages.sort(compare);
-
-  return validPages.concat(invalidPages);
+  return validPagesWithoutChar.concat(validPagesWithChar).concat(invalidPages);
 }
 
 function genPbFileContent(doc) {
