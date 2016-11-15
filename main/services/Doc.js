@@ -1,21 +1,16 @@
+import Path from 'path';
+import _ from 'lodash';
+import mkdirp from 'mkdirp';
 import naturalSort from 'javascript-natural-sort';
-import {compare} from '.';
+import uuid from 'node-uuid';
+import zpad from 'zpad';
+
+import REGEXP_IMAGE from './../constants/regexpImage';
 import REGEXP_PAGE from './../constants/regexpPage';
-
-const constants = require('../constants/appConstants');
-
-const REGEXP_IMAGE = constants.REGEXP_IMAGE;
-const PATH_APP_DOC = constants.PATH_APP_DOC;
-
-const Helper = require('./Helper');
-const Path = require('path');
-const _ = require('lodash');
-const uuid = require('node-uuid');
-const zpad = require('zpad');
-
+import {compare, Helper} from '.';
 import {tagToStr} from './Tag';
 
-const mkdirp = require('mkdirp');
+const PATH_APP_DOC = require('../constants/appConstants').PATH_APP_DOC;
 
 function genId(prefix = '') {
   return prefix + uuid.v4();
