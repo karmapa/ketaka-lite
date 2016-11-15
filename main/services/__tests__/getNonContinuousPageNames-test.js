@@ -1,6 +1,7 @@
 jest.unmock('lodash');
-jest.unmock('javascript-natural-sort');
-jest.unmock('../getNonContinuousPageNames');
+jest.unmock('./../getNonContinuousPageNames');
+jest.unmock('./../../constants/regexpPage');
+
 const getNonContinuousPageNames = require('../getNonContinuousPageNames').default;
 
 describe('getNonContinuousPageNames', () => {
