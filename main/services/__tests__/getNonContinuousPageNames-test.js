@@ -5,35 +5,75 @@ const getNonContinuousPageNames = require('../getNonContinuousPageNames').defaul
 
 describe('getNonContinuousPageNames', () => {
 
-  it('getNonContinuousPageNames case 1: ', () => {
-    const input = ['1.1a', '1.2a', '1.2b', '1.3a', '1.3b'];
-    const output = ['1.1b'];
+  it('should be able to check missing [abcd]', () => {
+    const input = ['1-1-1b'];
+    const output = {
+      missingIds: ['1-1-1a'],
+      breakPoints: []
+    };
     expect(getNonContinuousPageNames(input)).toEqual(output);
   });
 
-  it('getNonContinuousPageNames case 2: ', () => {
-    const input = ['1.1a', '1.1b', '1.2a', '1.2b', '1.2c', '1.3a', '1.3b'];
-    const output = ['1.2d'];
+  it('1-1-1 -> 1-1-3 should be checked', () => {
+    const input = ['1-1-1', '1-1-3'];
+    const output = {
+      missingIds: [],
+      breakPoints: [
+        ['1-1-1', '1-1-3']
+      ]
+    };
     expect(getNonContinuousPageNames(input)).toEqual(output);
   });
 
-  it('getNonContinuousPageNames case 3: ', () => {
-    const input = ['1.1a', '1.1b', '1.3a', '1.3b'];
-    const output = [];
+  it('1-1-1 -> 1-2-0 should NOT be checked', () => {
+    const input = ['1-1-1', '1-2-0'];
+    const output = {
+      missingIds: [],
+      breakPoints: []
+    };
     expect(getNonContinuousPageNames(input)).toEqual(output);
   });
 
-  it('getNonContinuousPageNames case 4: ', () => {
-    const input = ['1.1a', '1.1b', '2.1a', '2.1b'];
-    const output = [];
+  it('1-1-1 -> 1-2-1 should NOT be checked', () => {
+    const input = ['1-1-1', '1-2-1'];
+    const output = {
+      missingIds: [],
+      breakPoints: []
+    };
     expect(getNonContinuousPageNames(input)).toEqual(output);
   });
 
-  it('getNonContinuousPageNames case 5: ', () => {
-    const input = ['1.1a', '1.1b', '1.1c', '1.1d', '1.2a', '1.2b', '1.3a', '1.3b', '1.3c', '1.3d'];
-    const output = [];
+  it('1-1-1 -> 1-2-3 should be checked', () => {
+    const input = ['1-1-1', '1-2-3'];
+    const output = {
+      missingIds: [],
+      breakPoints: [
+        ['1-1-1', '1-2-3']
+      ]
+    };
     expect(getNonContinuousPageNames(input)).toEqual(output);
   });
 
+  it('1-1-1 -> 3-2-1 should be checked', () => {
+    const input = ['1-1-1', '3-2-1'];
+    const output = {
+      missingIds: [],
+      breakPoints: [
+        ['1-1-1', '3-2-1']
+      ]
+    };
+    expect(getNonContinuousPageNames(input)).toEqual(output);
+  });
+
+  it('1-1-1a -> 3-2-1b should be checked', () => {
+    const input = ['1-1-1a', '3-2-1b'];
+    const output = {
+      missingIds: ['1-1-1b', '3-2-1a'],
+      breakPoints: [
+        ['1-1-1a', '3-2-1b']
+      ]
+    };
+    expect(getNonContinuousPageNames(input)).toEqual(output);
+  });
 });
 
