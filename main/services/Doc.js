@@ -1,11 +1,11 @@
 import naturalSort from 'javascript-natural-sort';
 import {compare} from '.';
+import REGEXP_PAGE from './../constants/regexpPage';
 
 const constants = require('../constants/appConstants');
 
 const REGEXP_IMAGE = constants.REGEXP_IMAGE;
 const PATH_APP_DOC = constants.PATH_APP_DOC;
-const REGEXP_PAGE = constants.REGEXP_PAGE;
 
 const Helper = require('./Helper');
 const Path = require('path');
