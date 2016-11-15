@@ -1955,6 +1955,14 @@ export default class EditorArea extends React.Component {
     const unsavedDoc = this.props.docs.find(doc => doc.changed);
 
     if (unsavedDoc) {
+
+      const {uuid} = unsavedDoc;
+
+      // fix https://github.com/karmapa/ketaka-lite/issues/115
+      if (uuid !== this.state.docKey) {
+        this.activateTab(this.getDocIndexByUuid(uuid));
+      }
+
       return this.refs.modalCloseConfirm.open({
         title: 'Oops! ' + unsavedDoc.name + ' is not saved !',
         message: 'Do you want to save it ?'
