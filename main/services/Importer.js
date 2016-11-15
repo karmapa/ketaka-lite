@@ -1,24 +1,16 @@
-let Path = require('path');
-let _ = require('lodash');
-let app = require('app');
-let fs = require('fs');
-let readChunk = require('read-chunk');
-let Helper = require('./Helper');
-let Doc = require('./Doc');
+import Path from 'path';
+import _, {each} from 'lodash';
+import app from 'app';
+import fs from 'fs';
+import readChunk from 'read-chunk';
+import htmlparser from 'htmlparser';
 
-let constants = require('../constants/appConstants');
-let PATH_APP_CACHE = constants.PATH_APP_CACHE;
-let PATH_APP_DOC = constants.PATH_APP_DOC;
-let REGEXP_IMAGE = constants.REGEXP_IMAGE;
-let REGEXP_PAGE = constants.REGEXP_PAGE;
-
-let htmlparser = require('htmlparser');
-
-import {each} from 'lodash';
-
+import Doc from './Doc';
+import Helper from './Helper';
 import getNonContinuousPageNames from './getNonContinuousPageNames';
-import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr, getMissingTags} from './Tag';
+import {PATH_APP_DOC, REGEXP_PAGE} from './../constants/appConstants';
 import {getMissingTagsMessage} from './Message';
+import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr, getMissingTags} from './Tag';
 
 function isDirectory(row) {
   return row.stats.isDirectory();
@@ -87,18 +79,6 @@ function findPbRows(rows) {
 
 function findTextRow(rows) {
   return rows.filter(isValidTextRow);
-}
-
-function imageFileWithBambooName(bambooName, row) {
-  return _.isObject(row.pathData) ? (bambooName === _.get(REGEXP_IMAGE.exec(row.pathData.name), 1)) : false;
-}
-
-function pbRowWithBambooName(bambooName, row) {
-  return _.isObject(row.pathData) ? (row.pathData.name === bambooName) : false;
-}
-
-function textRowWithBambooName(bambooName, row) {
-  return _.isObject(row.pathData) ? (row.pathData.name === bambooName) : false;
 }
 
 function filterImageRows(rows, bambooName) {
@@ -216,16 +196,6 @@ async function createPageDataByPbRows(pbRows) {
   });
 
   return {pages, tags};
-}
-
-function createChunkByTextRow(textRow) {
-  if (! textRow) {
-    return null;
-  }
-  return Helper.readFile(textRow.path)
-    .then(function(buffer) {
-      return buffer.toString();
-    });
 }
 
 function getDuplicatedPbPages(pbPages) {
@@ -425,25 +395,36 @@ function copyImages(doc) {
 
 function warnNonContinuousPageNames(pages, onProgress) {
 
-  const validPages = pages.filter(page => page.name.match(/^(\d+).(\d+)([abcd])$/));
+  const validPages = pages.filter(page => page.name.match(REGEXP_PAGE));
   const names = _.map(validPages, 'name');
-  const reportedNames = getNonContinuousPageNames(names) || [];
+  const {missingIds, breakPoints} = getNonContinuousPageNames(names) || [];
 
-  let messages = _.map(reportedNames, name => {
+  const messages = _.chain(missingIds)
+    .map(idToMessage)
+    .concat(_.map(breakPoints, breakPointToMessage))
+    .value();
 
+  if (messages.length > 0) {
+    onProgress(messages);
+  }
+
+  function idToMessage(id) {
     // cut [abcd]
-    const num = name.slice(0, -1);
-    const page = _.find(validPages, page => page.name.slice(0, -1) === num);
+    const num = id.slice(0, -1);
+    const page = _.find(validPages, (page) => page.name.slice(0, -1) === num);
     const filename = _.get(page, 'pathData.base', 'unknown');
 
     return {
       type: 'warning',
-      message: `${name} might be missing in ${filename}`
+      message: `${id} might be missing in ${filename}`
     };
-  });
+  }
 
-  if (messages.length > 0) {
-    onProgress(messages);
+  function breakPointToMessage([id1, id2]) {
+    return {
+      type: 'warning',
+      message: `Found non-continious between ${id1} and ${id2}`
+    };
   }
 }
 
