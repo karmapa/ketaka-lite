@@ -1,4 +1,4 @@
-import {REGEXP_PAGE} from './../constants/appConstants';
+import REGEXP_PAGE from './../constants/regexpPage';
 
 export default function(name1, name2) {
   const [match1, firstNum1, firstNum2, firstNum3, firstChar] = REGEXP_PAGE.exec(name1) || [];
