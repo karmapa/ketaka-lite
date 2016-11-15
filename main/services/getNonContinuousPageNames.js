@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import naturalSort from 'natural-sort';
-import {REGEXP_PAGE} from './../constants/appConstants';
-import {compare} from '.';
+import compare from './compare';
+import REGEXP_PAGE from './../constants/regexpPage';
 
 function byCompare(a, b) {
   return compare(a.name, b.name);
