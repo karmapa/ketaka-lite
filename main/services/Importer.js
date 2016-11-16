@@ -397,12 +397,10 @@ function warnNonContinuousPageNames(pages, onProgress) {
 
   const validPages = pages.filter(page => page.name.match(REGEXP_PAGE));
   const names = _.map(validPages, 'name');
-  const {missingIds, breakPoints} = getNonContinuousPageNames(names) || [];
+  const {pageNames, breakPoints} = getNonContinuousPageNames(names) || [];
 
-  const messages = _.chain(missingIds)
-    .map(idToMessage)
-    .concat(_.map(breakPoints, breakPointToMessage))
-    .value();
+  const messages = pageNames.map(idToMessage)
+    .concat(breakPoints.map(breakPointToMessage));
 
   if (messages.length > 0) {
     onProgress(messages);
