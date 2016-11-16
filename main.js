@@ -105,3 +105,5 @@ ipc.on('get-versions', controllers.getVersions);
 ipc.on('delete-page-image', controllers.deletePageImage);
 
 ipc.on('add-history', controllers.addHistory);
+
+ipc.on('redo-history', controllers.redoHistory);

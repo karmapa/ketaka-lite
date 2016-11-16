@@ -12,6 +12,7 @@ export listDocName from './listDocName';
 export addDoc from './addDoc';
 export pageImageUploadButtonClicked from './pageImageUploadButtonClicked';
 export saveAs from './saveAs';
+export redoHistory from './redoHistory';
 export save from './save';
 export importZip from './importZip';
 export importButtonClicked from './importButtonClicked';
