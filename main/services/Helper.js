@@ -86,7 +86,7 @@ function readFile(path) {
         bufferHelper.concat(chunk);
       })
       .on('error', function(err) {
-        reject('readFile failed');
+        reject(`readFile failed: ${err}`);
       })
       .on('end', function() {
         resolve(bufferHelper.toBuffer());
