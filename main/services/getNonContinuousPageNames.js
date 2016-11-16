@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, {first, each} from 'lodash';
 import compare from './compare';
 import REGEXP_PAGE from './../constants/regexpPage';
 
@@ -6,9 +6,8 @@ function byCompare(a, b) {
   return compare(a.name, b.name);
 }
 
-function hasChar(name) {
-  const [all, num1, num2, num3, char] = REGEXP_PAGE.exec(name);
-  return !! char;
+function hasChar(row) {
+  return !! row.char;
 }
 
 function parse(name) {
@@ -20,28 +19,6 @@ function parse(name) {
     num3: parseInt(num3, 10),
     char
   };
-}
-
-function handleNamesWithoutChar(names) {
-
-  return _.chain(names)
-    .map(parse)
-    .sort(byCompare)
-    .reduce((res, row, index, arr) => {
-      const prevRow = arr[index - 1];
-
-      if (prevRow) {
-        const point = getBreakPoint(prevRow, row);
-        if (point) {
-          res.breakPoints.push(point);
-        }
-      }
-      return res;
-    }, {
-      breakPoints: [],
-      prevArr: null
-    })
-    .value().breakPoints;
 }
 
 function getBreakPoint(row1, row2) {
@@ -77,15 +54,13 @@ function getBreakPoint(row1, row2) {
   return [row1.name, row2.name];
 }
 
-function handleNamesWithChar(names) {
+function handleRowsWithChar(rows) {
 
-  return _.chain(names)
-    .map(parse)
-    .sort(byCompare)
+  return _.chain(rows)
     .groupBy(({num1, num2, num3}) => `${num1}-${num2}-${num3}`)
     .reduce((res, arr) => {
 
-      const firstRow = _.first(arr);
+      const firstRow = first(arr);
       const {num1, num2, num3} = firstRow;
       const num = `${num1}-${num2}-${num3}`;
 
@@ -99,13 +74,13 @@ function handleNamesWithChar(names) {
         delete record.d;
       }
 
-      _.each(record, (value, char) => {
+      each(record, (value, char) => {
         if (! record[char]) {
           res.result.pageNames.push(num + char);
         }
       });
 
-      const prevRow = _.first(res.prevArr);
+      const prevRow = first(res.prevArr);
 
       if (prevRow) {
         const point = getBreakPoint(prevRow, firstRow);
@@ -127,14 +102,43 @@ function handleNamesWithChar(names) {
     .value().result;
 }
 
+function handleRowsWithoutChar(rows) {
+
+  return _.chain(rows)
+    .reduce((res, row, index, arr) => {
+      const prevRow = arr[index - 1];
+
+      if (prevRow) {
+        const point = getBreakPoint(prevRow, row);
+        if (point) {
+          res.breakPoints.push(point);
+        }
+      }
+      return res;
+    }, {
+      breakPoints: [],
+      prevArr: null
+    })
+    .value().breakPoints;
+}
+
 export default function getNonContinuousPageNames(names) {
 
-  const namesWithChars = names.filter(hasChar);
-  const namesWithoutChars = names.filter((name) => (! hasChar(name)));
-  const res = handleNamesWithChar(namesWithChars);
-  const res2 = handleNamesWithoutChar(namesWithoutChars);
+  const rows = names.map(parse);
+  const rowsWithChars = rows.filter(hasChar)
+    .sort(byCompare);
+
+  const rowsWithoutChars = rows.filter((name) => (! hasChar(name)))
+    .sort(byCompare);
+
+  const res = handleRowsWithChar(rowsWithChars);
+  const res2 = handleRowsWithoutChar(rowsWithoutChars);
+
+  const hasMixedPageNames = (rowsWithChars.length > 0) && (rowsWithoutChars.length > 0);
+  const mixedStartedIds = hasMixedPageNames ? [first(rowsWithoutChars).name, first(rowsWithChars).name] : [];
 
   return {
+    mixedStartedIds,
     pageNames: res.pageNames,
     breakPoints: res.breakPoints.concat(res2)
   };

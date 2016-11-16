@@ -397,10 +397,17 @@ function warnNonContinuousPageNames(pages, onProgress) {
 
   const validPages = pages.filter(page => page.name.match(REGEXP_PAGE));
   const names = _.map(validPages, 'name');
-  const {pageNames, breakPoints} = getNonContinuousPageNames(names) || [];
+  const {pageNames, breakPoints, mixedStartedIds} = getNonContinuousPageNames(names) || [];
 
   const messages = pageNames.map(idToMessage)
     .concat(breakPoints.map(breakPointToMessage));
+
+  if (mixedStartedIds.length > 0) {
+    messages.unshift({
+      type: 'warning',
+      message: `Detected mixed ID format: ${mixedStartedIds[0]} ${mixedStartedIds[1]}`
+    });
+  }
 
   if (messages.length > 0) {
     onProgress(messages);
