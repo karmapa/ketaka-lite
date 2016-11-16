@@ -391,7 +391,36 @@ function copyImages(doc) {
     .then(function() {
       return doc;
     });
-};
+}
+
+function warnFlawPages(pages, onProgress) {
+  let messages = [];
+  const textOnlyPages = pages.filter((page) => {
+    return (0 === page.imagePath.length) && (page.content.length > 0);
+  });
+  const imageOnlyPages = pages.filter((page) => {
+    return (0 === page.content.length) && (page.imagePath.length > 0);
+  });
+
+  if (textOnlyPages.length > 0) {
+    const textOnlyMessages = textOnlyPages.map((page) => ({
+      type: 'warning',
+      message: `Page ${page.name} DOES NOT have an image.`
+    }));
+    messages = messages.concat(textOnlyMessages);
+  }
+  if (imageOnlyPages.length > 0) {
+    const imageOnlyMessages = imageOnlyPages.map((page) => ({
+      type: 'warning',
+      message: `Page ${page.name} DOES NOT have text content.`
+    }));
+    messages = messages.concat(imageOnlyMessages);
+  }
+
+  if (messages.length) {
+    onProgress(messages);
+  }
+}
 
 function warnNonContinuousPageNames(pages, onProgress) {
 
@@ -567,6 +596,9 @@ async function handleImportPaths(paths, onProgress = _.noop, force = false) {
   onProgress({progress: 80, type: 'info', message: 'Step7: Copy Images'});
 
   doc = await copyImages(doc);
+
+  // https://github.com/karmapa/ketaka-lite/issues/171
+  warnFlawPages(doc.pages, onProgress);
 
   warnNonContinuousPageNames(doc.pages, onProgress);
 
