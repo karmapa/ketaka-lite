@@ -431,6 +431,16 @@ function warnFlawPages(pages, onProgress) {
   }
 }
 
+function warnEmptyTag(pages, onProgress) {
+  const page = _.find(pages, (page) => ('txt' === page.name));
+  if (page && hasEmptyTag(page.content)) {
+    onProgress([{
+      type: 'warning',
+      message: `Page txt has empty tag <>.`
+    }]);
+  }
+}
+
 function warnNonContinuousPageNames(pages, onProgress) {
 
   const validPages = pages.filter(page => REGEXP_PAGE.test(page.name));
@@ -608,6 +618,8 @@ async function handleImportPaths(paths, onProgress = _.noop, force = false) {
 
   // https://github.com/karmapa/ketaka-lite/issues/171
   warnFlawPages(doc.pages, onProgress);
+
+  warnEmptyTag(doc.pages, onProgress);
 
   warnNonContinuousPageNames(doc.pages, onProgress);
 
