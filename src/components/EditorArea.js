@@ -9,7 +9,7 @@ import {Editor, ImageZoomer, ImageUploader, TabBox, TabItem, ModalConfirm, Modal
   ModalDocSettings, ModalPageAdd, SearchBar, ModalSettings, ModalSaveAs,
   ModalProgress, ModalOpen, ModalSpellCheckExceptionList, EditorToolbar, ModalEditDocs,
   Resizer, PrintArea} from '.';
-import {Helper, Ime, History, Event, Api, getWrappedInstance} from '../services/';
+import {Helper, Ime, Event, Api, getWrappedInstance, Cursor} from '../services/';
 import CodeMirror from 'codemirror';
 
 import {MAP_COLORS, MAP_INPUT_METHODS, DIRECTION_VERTICAL, DIRECTION_HORIZONTAL,
@@ -26,12 +26,11 @@ const ToastMessageFactory = React.createFactory(ToastMessage.animation);
 const KEY_ADD_DOC = 'KEY_ADD_DOC';
 
 import {setCloseConfirmStatus, setInputMethod, setImageOnly, setSpellCheck,
-  setTextOnly, toggleSpellCheck} from '../modules/app';
+  setTextOnly, toggleSpellCheck, setHistoryProcessingStatus} from '../modules/app';
 import {addDoc, addPage, closeDoc, createDoc, deletePage, deletePageImage, importDoc, saveFontRecord,
   receiveDoc, save, setPageIndex, updatePageImagePath, writePageContent} from '../modules/doc';
 import uuid from 'node-uuid';
 
-const jsdiff = require('diff');
 const eventHelper = new Event();
 
 const UNDO_PB_HISTORY_SIZE = 200;
@@ -50,7 +49,7 @@ const UNDO_PB_HISTORY_SIZE = 200;
   spellCheckOn: state.app.spellCheckOn
 }), {addDoc, addPage, closeDoc, createDoc, deletePage, importDoc,
   save, saveFontRecord, setPageIndex, updatePageImagePath, writePageContent, receiveDoc,
-  deletePageImage,
+  deletePageImage, setHistoryProcessingStatus,
   setInputMethod, setImageOnly, setSpellCheck, setTextOnly, toggleSpellCheck, setCloseConfirmStatus})
 export default class EditorArea extends React.Component {
 
@@ -76,6 +75,7 @@ export default class EditorArea extends React.Component {
     setPageIndex: PropTypes.func.isRequired,
     setSpellCheck: PropTypes.func.isRequired,
     setTextOnly: PropTypes.func.isRequired,
+    setHistoryProcessingStatus: PropTypes.func.isRequired,
     shortcuts: PropTypes.object.isRequired,
     showImageOnly: PropTypes.bool.isRequired,
     showTextOnly: PropTypes.bool.isRequired,
@@ -99,6 +99,7 @@ export default class EditorArea extends React.Component {
     };
 
     this.isSaving = false;
+    this.isProcessingHistory = false;
     this.lastPageBreakRecords = [];
   }
 
@@ -1105,103 +1106,6 @@ export default class EditorArea extends React.Component {
     }
   };
 
-  diffChars = (addedLineRow, removedLineRow) => {
-
-    const rows = jsdiff.diffChars(addedLineRow.value, removedLineRow.value);
-
-    // paste
-    if (rows.length > 3) {
-      return null;
-    }
-
-    const addedRow = find(rows, {added: true});
-    const removedRow = find(rows, {removed: true});
-
-    // paste
-    if (addedRow && removedRow) {
-      return null;
-    }
-
-    let pos = 0;
-
-    each(rows, row => {
-
-      if (row.added) {
-        addedRow.from = addedLineRow.from + pos;
-        addedRow.to = addedRow.from + addedRow.value.length;
-      }
-      else if (row.removed) {
-        removedRow.from = removedLineRow.from + pos;
-        removedRow.to = removedRow.from + removedRow.value.length;
-      }
-      else {
-        pos += row.count;
-      }
-    });
-
-    return addedRow || removedRow;
-  };
-
-  getActionByContents = (content1, content2) => {
-
-    const diffRows = jsdiff.diffLines(content1, content2);
-
-    let pos = 0;
-    const action = [];
-
-    let addedRow = null;
-    let removedRow = null;
-
-    each(diffRows, diffRow => {
-
-      const diffRowValueLength = diffRow.value.length;
-
-      if (diffRow.added) {
-        addedRow = {
-          added: true,
-          value: diffRow.value,
-          from: pos,
-          to: pos + diffRowValueLength
-        };
-      }
-      else if (diffRow.removed) {
-
-        removedRow = {
-          removed: true,
-          value: diffRow.value,
-          from: pos,
-          to: pos + diffRowValueLength
-        };
-      }
-      else {
-        pos += diffRowValueLength;
-      }
-    });
-
-    let charRow = null;
-
-    if (addedRow && removedRow) {
-      charRow = this.diffChars(removedRow, addedRow);
-    }
-
-    if (charRow && charRow.added) {
-      addedRow.charRow = charRow;
-    }
-    if (charRow && charRow.removed) {
-      removedRow.charRow = charRow;
-    }
-
-    if (addedRow) {
-      action.push(addedRow);
-    }
-
-    if (removedRow) {
-      action.push(removedRow);
-    }
-
-    return action;
-  };
-
   handleHistory = (cm, content) => {
 
     if (cm.disableHistory) {
@@ -1209,16 +1113,21 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
+    const {setHistoryProcessingStatus} = this.props;
     const page = this.getCurrentPage();
-    this.handleLegacyPage(page);
-
     const key = this.getHistoryKey();
 
-    const action = this.getActionByContents(page.content, content);
+    this.handleLegacyPage(page);
 
-    if (action.length > 0) {
-      History.add(key, action);
-    }
+    this.isProcessingHistory = true;
+    setHistoryProcessingStatus(true);
+
+    // adding history
+    Api.send('add-history', {key, prevContent: page.content, content})
+      .then(res => {
+        this.isProcessingHistory = false;
+        setHistoryProcessingStatus(false);
+      });
   };
 
   getPageIndexByPageUuid = uuid => {
@@ -1741,17 +1650,43 @@ export default class EditorArea extends React.Component {
   }
 
   redo = () => {
+
+    if (this.isProcessingHistory) {
+      return false;
+    }
+
     const key = this.getHistoryKey();
     const cm = this.getCurrentCodemirror();
-    History.redo(key, cm);
+    const content = cm.getValue();
+
+    Api.send('redo-history', {key, content})
+      .then((res) => {
+        cm.disableHistory = true;
+        cm.setValue(res.content);
+        Cursor.setRedoCursor(cm, res.addedRow, res.removedRow);
+        cm.focus();
+      });
   };
 
   handleRedoButtonClick = () => this.redo();
 
   undo = () => {
+
+    if (this.isProcessingHistory) {
+      return false;
+    }
+
     const key = this.getHistoryKey();
     const cm = this.getCurrentCodemirror();
-    History.undo(key, cm);
+    const content = cm.getValue();
+
+    Api.send('undo-history', {key, content})
+      .then((res) => {
+        cm.disableHistory = true;
+        cm.setValue(res.content);
+        Cursor.setUndoCursor(cm, res.addedRow, res.removedRow);
+        cm.focus();
+      });
   };
 
   handleUndoButtonClick = () => this.undo();

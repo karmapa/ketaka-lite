@@ -6,6 +6,7 @@ const SET_CLOSE_CONFIRM_STATUS = 'ketaka-lite/app/SET_CLOSE_CONFIRM_STATUS';
 const RECEIVE_SETTINGS = 'ketaka-lite/app/RECEIVE_SETTINGS';
 const SET_APP_VERSION = 'ketaka-lite/app/SET_APP_VERSION';
 const SET_ELECTRON_VERSION = 'ketaka-lite/app/SET_ELECTRON_VERSION';
+const SET_HISTORY_PROCESSING_STATUS = 'ketaka-lite/app/SET_HISTORY_PROCESSING_STATUS';
 
 const cacheSettings = Store.get('settings') || {};
 
@@ -26,7 +27,8 @@ const settings = {
   showImageOnly: cacheSettings.showImageOnly || false,
   showTextOnly: cacheSettings.showTextOnly || false,
   spellCheckOn: cacheSettings.spellCheckOn || false,
-  theme: cacheSettings.theme || 'default'
+  theme: cacheSettings.theme || 'default',
+  isProcessingHistory: false
 };
 
 const actionsMap = {
@@ -45,6 +47,10 @@ const actionsMap = {
 
   [SET_ELECTRON_VERSION]: (state, action) => {
     return Object.assign({}, state, {electronVersion: action.electronVersion});
+  },
+
+  [SET_HISTORY_PROCESSING_STATUS]: (state, action) => {
+    return Object.assign({}, state, {isProcessingHistory: action.isProcessingHistory});
   }
 
 };
@@ -52,6 +58,13 @@ const actionsMap = {
 export default function reducer(state = settings, action) {
   const reduceFn = actionsMap[action.type];
   return reduceFn ? reduceFn(state, action) : state;
+}
+
+export function setHistoryProcessingStatus(isProcessingHistory) {
+  return {
+    type: SET_HISTORY_PROCESSING_STATUS,
+    isProcessingHistory
+  };
 }
 
 export function setCloseConfirmStatus(closeConfirmStatus) {

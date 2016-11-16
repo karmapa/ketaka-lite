@@ -17,7 +17,8 @@ import {setFontSize, setInputMethod, setLineHeight, setLetterSpacing,
   readonly: state.app.readonly,
   showImageOnly: state.app.showImageOnly,
   showTextOnly: state.app.showTextOnly,
-  spellCheckOn: state.app.spellCheckOn
+  spellCheckOn: state.app.spellCheckOn,
+  isProcessingHistory: state.app.isProcessingHistory
 }), {setFontSize, setLineHeight, setLetterSpacing, toggleDirection,
   toggleReadonly, setInputMethod})
 export default class EditorToolbar extends React.Component {
@@ -37,6 +38,7 @@ export default class EditorToolbar extends React.Component {
     onSettingsButtonClick: PropTypes.func,
     onSpellCheckButtonClick: PropTypes.func,
     onTextOnlyButtonClick: PropTypes.func,
+    isProcessingHistory: PropTypes.bool.isRequired,
     onUndoButtonClick: PropTypes.func,
     pageIndex: PropTypes.number,
     pageNames: PropTypes.array,
@@ -112,6 +114,7 @@ export default class EditorToolbar extends React.Component {
       onSettingsButtonClick, onPageAddButtonClick, pageNames, pageIndex,
       onSpellCheckButtonClick, onAddPbFileButtonClick, readonly, spellCheckOn, direction,
       showImageOnly, showTextOnly, fontSize, lineHeight, letterSpacing,
+      isProcessingHistory,
       onImageOnlyButtonClick, onTextOnlyButtonClick, toggleDirection} = this.props;
 
     const pageSwitchProps = {
@@ -143,13 +146,13 @@ export default class EditorToolbar extends React.Component {
         <div className="section section-codemirror">
 
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-undo">Undo</Tooltip>}>
-            <button className="button-undo" onClick={onUndoButtonClick}>
+            <button className="button-undo" onClick={onUndoButtonClick} disabled={isProcessingHistory}>
               <i className="glyphicon glyphicon-repeat"></i>
             </button>
           </OverlayTrigger>
 
           <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-redo">Redo</Tooltip>}>
-            <button className="button-redo" onClick={onRedoButtonClick}>
+            <button className="button-redo" onClick={onRedoButtonClick} disabled={isProcessingHistory}>
               <i className="glyphicon glyphicon-repeat"></i>
             </button>
           </OverlayTrigger>
