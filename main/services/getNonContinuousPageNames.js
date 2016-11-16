@@ -101,7 +101,7 @@ function handleNamesWithChar(names) {
 
       _.each(record, (value, char) => {
         if (! record[char]) {
-          res.result.missingIds.push(num + char);
+          res.result.pageNames.push(num + char);
         }
       });
 
@@ -119,7 +119,7 @@ function handleNamesWithChar(names) {
       return res;
     }, {
       result: {
-        missingIds: [],
+        pageNames: [],
         breakPoints: []
       },
       prevArr: null
@@ -135,7 +135,7 @@ export default function getNonContinuousPageNames(names) {
   const res2 = handleNamesWithoutChar(namesWithoutChars);
 
   return {
-    missingIds: res.missingIds,
+    pageNames: res.pageNames,
     breakPoints: res.breakPoints.concat(res2)
   };
 }
