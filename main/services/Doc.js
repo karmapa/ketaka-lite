@@ -47,7 +47,6 @@ function getDoc(name) {
       return JSON.parse(json);
     })
     .catch(function(err) {
-      console.error('JSON.parse error', err);
       return null;
     });
 }
