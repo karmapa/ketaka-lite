@@ -1,6 +1,7 @@
 export Animator from './Animator';
 export Api from './Api';
 export ContextMenu from './ContextMenu';
+export Cursor from './Cursor';
 export Event from './Event';
 export Helper from './Helper';
 export Ime from './Ime';
