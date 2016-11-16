@@ -1,3 +1,4 @@
+export addHistory from './addHistory';
 export addPbFiles from './addPbFiles';
 export getAppData from './getAppData';
 export exportFileWithPb from './exportFileWithPb';
