@@ -425,7 +425,7 @@ function warnFlawPages(pages, onProgress) {
 
 function warnNonContinuousPageNames(pages, onProgress) {
 
-  const validPages = pages.filter(page => page.name.match(REGEXP_PAGE));
+  const validPages = pages.filter(page => REGEXP_PAGE.test(page.name));
   const names = _.map(validPages, 'name');
   const {pageNames, breakPoints, mixedStartedIds} = getNonContinuousPageNames(names) || [];
 
