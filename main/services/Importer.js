@@ -8,7 +8,8 @@ import htmlparser from 'htmlparser';
 import Doc from './Doc';
 import Helper from './Helper';
 import getNonContinuousPageNames from './getNonContinuousPageNames';
-import {PATH_APP_DOC, REGEXP_PAGE} from './../constants/appConstants';
+import {PATH_APP_DOC} from './../constants/appConstants';
+import REGEXP_PAGE from './../constants/regexpPage';
 import {getMissingTagsMessage} from './Message';
 import {isTag, isPbTag, isTextNode, tagToStr, attrsToStr, getMissingTags} from './Tag';
 
