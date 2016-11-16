@@ -363,7 +363,7 @@ async function createDocByRows(bambooName, rows, onProgress) {
   let imagePages = await createPagesByImageRows(imageRows);
   let pages = await mergePages(textContent, pbPages, imagePages, onProgress);
 
-  if (0 === pages.length) {
+  if (_.isEmpty(pages)) {
     throw 'Import failed';
   }
 
