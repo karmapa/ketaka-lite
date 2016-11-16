@@ -18,3 +18,4 @@ export importZip from './importZip';
 export importButtonClicked from './importButtonClicked';
 export getVersions from './getVersions';
 export deletePageImage from './deletePageImage';
+export undoHistory from './undoHistory';

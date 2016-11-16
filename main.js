@@ -106,4 +106,6 @@ ipc.on('delete-page-image', controllers.deletePageImage);
 
 ipc.on('add-history', controllers.addHistory);
 
+ipc.on('undo-history', controllers.undoHistory);
+
 ipc.on('redo-history', controllers.redoHistory);
