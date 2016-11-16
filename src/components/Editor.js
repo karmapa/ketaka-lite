@@ -185,7 +185,10 @@ export default class Editor extends React.Component {
         undoDepth: 0,
         styleActiveLine: true,
         extraKeys: {
-          Tab: cm => {
+          Enter: (cm) => {
+            cm.replaceSelection('\n', 'end');
+          },
+          Tab: (cm) => {
             // indent with 2 spaces
             cm.replaceSelection('  ');
           }
