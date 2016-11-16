@@ -98,9 +98,17 @@ function createPagesByImageRows(imageRows) {
   }));
 }
 
+function hasEmptyTag(content) {
+  return -1 !== content.indexOf('<>');
+}
+
 function createPagesByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
+
+    if (hasEmptyTag(content)) {
+      throw `Found empty tag <> in ${pathData.base}`;
+    }
 
     const missingTags = getMissingTags(content);
 
