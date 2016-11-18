@@ -465,11 +465,17 @@ function warnNonContinuousPageNames(pages, onProgress) {
     // cut [abcd]
     const num = id.slice(0, -1);
     const page = _.find(validPages, (page) => page.name.slice(0, -1) === num);
-    const filename = _.get(page, 'pathData.base', 'unknown');
+    const filename = _.get(page, 'pathData.base');
+
+    let message = `Page ${id} is missing.`;
+
+    if (filename) {
+      message = `Found file ${filename}, but page ${id} is missing.`;
+    }
 
     return {
       type: 'warning',
-      message: `${id} might be missing in ${filename}`
+      message
     };
   }
 
