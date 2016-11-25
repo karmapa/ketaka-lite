@@ -10,6 +10,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1b'];
     const output = {
       pageNames: ['1-1-1a'],
+      mixedStartedIds: [],
       breakPoints: []
     };
     expect(getNonContinuousPageNames(input)).toEqual(output);
@@ -19,6 +20,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1', '1-1-3'];
     const output = {
       pageNames: [],
+      mixedStartedIds: [],
       breakPoints: [
         ['1-1-1', '1-1-3']
       ]
@@ -30,6 +32,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1', '1-2-0'];
     const output = {
       pageNames: [],
+      mixedStartedIds: [],
       breakPoints: []
     };
     expect(getNonContinuousPageNames(input)).toEqual(output);
@@ -39,6 +42,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1', '1-2-1'];
     const output = {
       pageNames: [],
+      mixedStartedIds: [],
       breakPoints: []
     };
     expect(getNonContinuousPageNames(input)).toEqual(output);
@@ -48,6 +52,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1', '1-2-3'];
     const output = {
       pageNames: [],
+      mixedStartedIds: [],
       breakPoints: [
         ['1-1-1', '1-2-3']
       ]
@@ -59,6 +64,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1', '3-2-1'];
     const output = {
       pageNames: [],
+      mixedStartedIds: [],
       breakPoints: [
         ['1-1-1', '3-2-1']
       ]
@@ -70,6 +76,7 @@ describe('getNonContinuousPageNames', () => {
     const input = ['1-1-1a', '3-2-1b'];
     const output = {
       pageNames: ['1-1-1b', '3-2-1a'],
+      mixedStartedIds: [],
       breakPoints: [
         ['1-1-1a', '3-2-1b']
       ]
