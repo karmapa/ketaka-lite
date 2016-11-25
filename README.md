@@ -16,6 +16,7 @@ be sure to use node version manager to switch your Node.js version to 5.8.0
 ## Front-end environment setup
 ```
 sudo npm install -g electron-prebuilt@1.1.0 --unsafe-perm=true --allow-root
+# if you have problem installing, follow https://github.com/electron-userland/electron-prebuilt/issues/48
 npm install
 npm run dev
 ```
