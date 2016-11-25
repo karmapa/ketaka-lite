@@ -7,3 +7,4 @@ export Message from './Message';
 export Tag from './Tag';
 export compare from './compare';
 export getNonContinuousPageNames from './getNonContinuousPageNames';
+export parsePbId from './parsePbId';
