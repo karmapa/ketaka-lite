@@ -1,8 +1,13 @@
-import REGEXP_PAGE from './../constants/regexpPage';
+import parsePbId from './parsePbId';
 
 export default function(name1, name2) {
-  const [match1, firstNum1, firstNum2, firstNum3, firstChar] = REGEXP_PAGE.exec(name1) || [];
-  const [match2, secondNum1, secondNum2, secondNum3, secondChar] = REGEXP_PAGE.exec(name2) || [];
+
+  const [match1, firstNum1, firstNum2, firstNum3, firstChar] = parsePbId(name1);
+  const [match2, secondNum1, secondNum2, secondNum3, secondChar] = parsePbId(name2);
+
+  if ((! match1) || (! match2)) {
+    return 0;
+  }
 
   if (firstNum1 > secondNum1) {
     return 1;
