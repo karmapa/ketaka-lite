@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ELECTRON_VERSION=1.7.6
+ELECTRON_VERSION=0.36.9
 FOLDER_ID=0B0sfHY8vpXYhSGVLUmpuQ0JKbEE
 PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | xargs)
 ROOT_DIR=$(cd $(dirname $0)/..; pwd)
