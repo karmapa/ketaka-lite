@@ -59,7 +59,6 @@
     "babel-runtime": "5.8.20",
     "concurrently": "1.0.0",
     "css-loader": "0.15.4",
-    "electron-prebuilt": "0.36.8",
     "eslint": "2.2.0",
     "eslint-loader": "1.0.0",
     "eslint-plugin-react": "4.0.0",
