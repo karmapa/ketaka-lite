@@ -97,6 +97,6 @@
   "author": "karmapa",
   "license": "MIT",
   "engines": {
-    "node": "5.8.0"
+    "node": "8.4.0"
   }
 }
