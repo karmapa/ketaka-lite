@@ -20,7 +20,7 @@ zip -r "./../zips/KETAKA-Lite-win32-ia32-v${PACKAGE_VERSION}.zip" KETAKA-Lite-wi
 rm -rf KETAKA-Lite-win32-ia32*
 
 electron-packager ./ KETAKA-Lite --platform=win32 --arch=x64 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.ico
-zip -r "./../zips/KETAKA-Lite-win32-x64-v${PACKAGE_VERSION}.zip" KETAKA-Lite-win32-ia32
+zip -r "./../zips/KETAKA-Lite-win32-x64-v${PACKAGE_VERSION}.zip" KETAKA-Lite-win32-x64
 rm -rf KETAKA-Lite-win32-x64*
 
 electron-packager ./ KETAKA-Lite --platform=darwin --arch=x64 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.icns
