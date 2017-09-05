@@ -1,4 +1,4 @@
-import Path from 'path';
+import Path, {basename} from 'path';
 import _ from 'lodash';
 import mkdirp from 'mkdirp';
 import naturalSort from 'javascript-natural-sort';
@@ -194,8 +194,7 @@ function changeDocSettings(args) {
 
           // replace image paths
           if (page.destImagePath) {
-            let newBasename = replaceImageName(docName, page.destImagePath);
-            page.destImagePath = Path.resolve(imagePath, newBasename);
+            page.destImagePath = Path.resolve(imagePath, basename(page.destImagePath));
           }
           return page;
         });
@@ -210,8 +209,7 @@ function changeDocSettings(args) {
       .then(function(subImagePaths) {
         // move image files
         let rows = subImagePaths.map(function(subImagePath) {
-          let newBasename = replaceImageName(docName, subImagePath);
-          let newSubImagePath = Path.resolve(imagePath, newBasename);
+          let newSubImagePath = Path.resolve(imagePath, basename(subImagePath));
           return {
             source: subImagePath,
             dest: newSubImagePath
