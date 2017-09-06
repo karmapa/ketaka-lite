@@ -51,6 +51,7 @@
     "zpad": "0.5.0"
   },
   "devDependencies": {
+    "cross-env": "5.0.0",
     "babel": "6.23.0",
     "babel-core": "6.23.1",
     "babel-eslint": "5.0.0",
@@ -80,7 +81,9 @@
   },
   "scripts": {
     "lint": "eslint *.js",
-    "build": "./bin/build.sh",
+    "build-mac": "cross-env APP_PLATFORM=darwin ./bin/build.sh",
+    "build-windows-ia32": "cross-env APP_PLATFORM=win32-ia32 ./bin/build.sh",
+    "build-windows-x64": "cross-env APP_PLATFORM=win32-x64 ./bin/build.sh",
     "dev": "NODE_ENV=development concurrent --kill-others \"node server.js\" \"nodemon --watch main/ --watch main.js --exec electron .\"",
     "test": "jest"
   },

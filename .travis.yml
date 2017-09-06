@@ -4,13 +4,13 @@ node_js:
   - 8.4.0
 cache: yarn
 before_install:
-- sudo add-apt-repository -y ppa:ricotz/unstable
-- sudo apt-get install -y wine
-- npm i -g electron-packager@9.0.0
-- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
-- export PATH="$HOME/.yarn/bin:$PATH"
+  - sudo add-apt-repository -y ppa:ricotz/unstable
+  - sudo apt-get install -y wine
+  - npm i -g electron-packager@9.0.0
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
+  - export PATH="$HOME/.yarn/bin:$PATH"
 script:
-- test $TRAVIS_BRANCH = "master" && yarn build
+  - test $TRAVIS_BRANCH = "master" && yarn build-mac
 addons:
   artifacts:
     branch: master
