@@ -1,0 +1,41 @@
+-
+  branches:
+    only:
+      - master
+
+  image:
+    - Visual Studio 2017
+
+  platform:
+    - x64
+
+  environment:
+    matrix:
+    - nodejs_version: '8.1.4'
+      MSYSTEM: MINGW64
+      PATH: C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Windows\System32;C:\Windows;%PATH%
+
+  test: off
+
+  install:
+    - ps: Install-Product node $env:nodejs_version x64
+    - npm i -g npm@5.4.0
+    - npm i -g electron-packager@9.0.0
+    - npm i --force
+
+  build_script:
+    - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; npm run build-windows-ia32"
+    - C:\msys64\usr\bin\bash -lc "cd $APPVEYOR_BUILD_FOLDER; npm run build-windows-x64"
+
+  deploy:
+    name: s3-deployment
+    provider: S3
+    access_key_id: $(AWS_ACCESS_KEY_ID)
+    secret_access_key: $(AWS_SECRET_ACCESS_KEY)
+    bucket: $(AWS_S3_BUCKET)
+    region: ap-northeast-1
+    unzip: false
+    set_public: false
+
+  after_build:
+    - ps: Get-ChildItem .\zips\*.zip | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName s3-deployment }

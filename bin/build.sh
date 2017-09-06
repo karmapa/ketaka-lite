@@ -17,13 +17,13 @@ npm install
 
 if [ "$APP_PLATFORM" == "win32-ia32" ]; then
   electron-packager ./ KETAKA-Lite --platform=win32 --arch=ia32 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.ico
-  zip -r "./../zips/KETAKA-Lite-win32-ia32-v${PACKAGE_VERSION}.zip" KETAKA-Lite-win32-ia32
+  7z -a -tzip -r "./../zips/KETAKA-Lite-win32-ia32-v${PACKAGE_VERSION}.zip" KETAKA-Lite-win32-ia32
   rm -rf KETAKA-Lite-win32-ia32*
 fi
 
 if [ "$APP_PLATFORM" == "win32-x64" ]; then
   electron-packager ./ KETAKA-Lite --platform=win32 --arch=x64 --version="${ELECTRON_VERSION}" --app-version="${PACKAGE_VERSION}" --icon=treasure_logo.ico
-  zip -r "./../zips/KETAKA-Lite-win32-x64-v${PACKAGE_VERSION}.zip" KETAKA-Lite-win32-x64
+  7z -a -tzip -r "./../zips/KETAKA-Lite-win32-x64-v${PACKAGE_VERSION}.zip" KETAKA-Lite-win32-x64
   rm -rf KETAKA-Lite-win32-x64*
 fi
 

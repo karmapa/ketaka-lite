@@ -1,10 +1,3 @@
-require('codemirror/addon/selection/active-line');
-require('codemirror/addon/search/search');
-require('codemirror/addon/search/searchcursor');
-require('codemirror/addon/fold/xml-fold');
-require('codemirror/addon/edit/matchtags');
-require('codemirror/mode/xml/xml');
-
 import React, {PropTypes} from 'react';
 import Codemirror from 'react-codemirror';
 import Ime from '../services/Ime';

@@ -10,10 +10,6 @@ before_install:
   - npm i -g electron-packager@9.0.0
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
   - export PATH="$HOME/.yarn/bin:$PATH"
+  - brew install awscli
 script:
-  - test $TRAVIS_BRANCH = "master" && yarn build-mac
-addons:
-  artifacts:
-    branch: master
-    paths:
-    - $(ls ./zips/*.zip | tr "\n" ":")
+  - test $TRAVIS_BRANCH = "master" && yarn build-mac && yarn upload-mac
