@@ -1,6 +1,6 @@
 {
   "name": "ketaka-lite",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -36,7 +36,7 @@
     "path": "0.12.7",
     "react": "0.14.7",
     "react-bootstrap": "0.28.3",
-    "react-codemirror": "https://github.com/kmsheng/react-codemirror.git#fix-performance-hit",
+    "react-codemirror": "https://github.com/kmsheng/react-codemirror.git#custom-addons",
     "react-dom": "0.14.7",
     "react-pure-render": "1.0.2",
     "react-redux": "4.4.0",
