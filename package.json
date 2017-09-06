@@ -84,6 +84,7 @@
     "build-mac": "cross-env APP_PLATFORM=darwin ./bin/build.sh",
     "build-windows-ia32": "cross-env APP_PLATFORM=win32-ia32 ./bin/build.sh",
     "build-windows-x64": "cross-env APP_PLATFORM=win32-x64 ./bin/build.sh",
+    "upload-mac": "cross-env APP_PLATFORM=darwin ./bin/upload.sh",
     "dev": "NODE_ENV=development concurrent --kill-others \"node server.js\" \"nodemon --watch main/ --watch main.js --exec electron .\"",
     "test": "jest"
   },
