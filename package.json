@@ -1,6 +1,6 @@
 {
   "name": "ketaka-lite",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -51,10 +51,10 @@
     "zpad": "0.5.0"
   },
   "devDependencies": {
+    "cross-env": "5.0.0",
     "babel": "6.23.0",
     "babel-core": "6.23.1",
     "babel-eslint": "5.0.0",
-    "babel-jest": "6.0.1",
     "babel-loader": "6.2.3",
     "babel-runtime": "5.8.20",
     "concurrently": "1.0.0",
@@ -66,7 +66,7 @@
     "file-loader": "0.8.4",
     "html-loader": "0.3.0",
     "imports-loader": "0.6.4",
-    "jest-cli": "0.9.2",
+    "jest-cli": "20.0.4",
     "node-libs-browser": "0.5.3",
     "node-sass": "4.5.3",
     "nodemon": "1.9.0",
@@ -81,12 +81,14 @@
   },
   "scripts": {
     "lint": "eslint *.js",
-    "build": "./bin/build.sh",
+    "build-mac": "cross-env APP_PLATFORM=darwin ./bin/build.sh",
+    "build-windows-ia32": "cross-env APP_PLATFORM=win32-ia32 ./bin/build.sh",
+    "build-windows-x64": "cross-env APP_PLATFORM=win32-x64 ./bin/build.sh",
+    "upload-mac": "cross-env APP_PLATFORM=darwin ./bin/upload.sh",
     "dev": "NODE_ENV=development concurrent --kill-others \"node server.js\" \"nodemon --watch main/ --watch main.js --exec electron .\"",
     "test": "jest"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
     "unmockedModulePathPatterns": [
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/react-dom",
@@ -97,6 +99,6 @@
   "author": "karmapa",
   "license": "MIT",
   "engines": {
-    "node": "5.8.0"
+    "node": "8.4.0"
   }
 }
