@@ -7,6 +7,8 @@ node_js:
   - 8.4.0
 cache: yarn
 before_install:
+  - npm i -g npm@5.5.1
+  - brew update
   - npm i -g electron-packager@9.0.0
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
   - export PATH="$HOME/.yarn/bin:$PATH"
