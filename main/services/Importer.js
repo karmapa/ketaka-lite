@@ -168,7 +168,7 @@ function createPagesByPbContent(content, pathData) {
       });
 
       // https://github.com/karmapa/ketaka-lite/issues/120
-      pages = pages.map((page) => Object.assign({}, page, {content: _.trim(page.content)}));
+      pages = pages.map((page) => Object.assign({}, page, {content: page.content.replace(/\n$/, '').replace(/^\n/, '')}));
 
       resolve({pages, tags});
     }));
