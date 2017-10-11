@@ -155,8 +155,7 @@ function createPagesByPbContent(content, pathData) {
           pages.push(currentPage);
         }
         else if (isTextNode(node) && currentPage) {
-          // https://github.com/karmapa/ketaka-lite/issues/120
-          currentPage.content += _.trim(node.data);
+          currentPage.content += node.data;
         }
         else if (isTag(node) && currentPage) {
           currentPage.content += tagToStr(node);
@@ -167,6 +166,9 @@ function createPagesByPbContent(content, pathData) {
           node.data = '';
         }
       });
+
+      // https://github.com/karmapa/ketaka-lite/issues/120
+      pages = pages.map((page) => Object.assign({}, page, {content: _.trim(page.content)}));
 
       resolve({pages, tags});
     }));
