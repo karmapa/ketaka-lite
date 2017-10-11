@@ -129,17 +129,24 @@ function createPagesByPbContent(content, pathData) {
       let pages = [];
       let currentPage = null;
       let tags = [];
+      let pbStarted = false;
 
       dom.forEach(function(node) {
 
-        // store only for division and vol
-        if (isTag(node) && ('division' === node.name)) {
+        const isTagNode = isTag(node);
+
+        // store only for sutra, division and vol
+        if ((! pbStarted) && isTagNode && ('sutra' === node.name)) {
+          tags.push(node);
+        }
+        else if (isTag(node) && ('division' === node.name)) {
           tags.push(node);
         }
         else if (isTag(node) && ('vol' === node.name)) {
           tags.push(node);
         }
         else if (isPbTag(node)) {
+          pbStarted = true;
           currentPage = Doc.createPage({
             name: node.attribs.id,
             content: '',
