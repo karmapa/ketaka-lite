@@ -139,10 +139,10 @@ function createPagesByPbContent(content, pathData) {
         if ((! pbStarted) && isTagNode && ('sutra' === node.name)) {
           tags.push(node);
         }
-        else if (isTag(node) && ('division' === node.name)) {
+        else if (isTagNode && ('division' === node.name)) {
           tags.push(node);
         }
-        else if (isTag(node) && ('vol' === node.name)) {
+        else if (isTagNode && ('vol' === node.name)) {
           tags.push(node);
         }
         else if (isPbTag(node)) {
