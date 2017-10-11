@@ -157,7 +157,8 @@ function createPagesByPbContent(content, pathData) {
         else if (isTextNode(node) && currentPage) {
           // https://github.com/karmapa/ketaka-lite/issues/120
           currentPage.content += _.trim(node.data);
-        } else if (isTag(node) && currentPage) {
+        }
+        else if (isTag(node) && currentPage) {
           currentPage.content += tagToStr(node);
         }
 
