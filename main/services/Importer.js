@@ -164,6 +164,13 @@ function createPagesByPbContent(content, pathData) {
       throw `Found empty tag <> in ${pathData.base}`;
     }
 
+    const pbTagRegex = /^<pb[^>]+?>/;
+
+    const pbTag = (pbTagRegex.exec(content) || [])[0];
+    if (pbTag) {
+      content = content.replace(pbTag, '');
+    }
+
     // new tags like p could cross pb
     /*
     const missingTags = getMissingTags(content);
@@ -194,12 +201,22 @@ function createPagesByPbContent(content, pathData) {
       let pages = payloads.pages;
       let tags = payloads.tags;
 
+      if (1 === pages.length && ! pages[0].content) {
+        pages[0].content = content;
+      }
+
       // https://github.com/karmapa/ketaka-lite/issues/120
       pages = pages.map((page) => Object.assign({}, page, {content: page.content.replace(/\n$/, '').replace(/^\n/, '')}));
 
       resolve({pages, tags});
     }));
-    parser.parseComplete(content);
+
+    if (pbTag) {
+      parser.parseComplete(pbTag);
+    }
+    else {
+      parser.parseComplete(content);
+    }
   });
 }
 
