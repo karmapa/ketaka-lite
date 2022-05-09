@@ -259,7 +259,7 @@ function sortPages(pages) {
 
 function genPbFileContent(doc) {
 
-  let content = _.map(doc.tags, tagToStr).join('\n');
+  let content = _.map(doc.tags, tagToStr.bind(null, true)).join('\n');
 
   // https://github.com/karmapa/ketaka-lite/issues/121
   if (content) {
