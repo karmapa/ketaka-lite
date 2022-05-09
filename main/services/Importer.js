@@ -102,6 +102,60 @@ function hasEmptyTag(content) {
   return -1 !== content.indexOf('<>');
 }
 
+function recursiveCreatePagesByPb(payloads, dom, pathData) {
+  if (0 === dom.length) {
+    return payloads;
+  }
+
+  const node = dom.shift();
+  const isTagNode = isTag(node);
+
+  // store only for sutra, division and vol
+  if ((! payloads.pbStarted) && isTagNode && ('sutra' === node.name)) {
+    payloads.tags.push(node);
+  }
+  else if (isTagNode && ('division' === node.name)) {
+    payloads.tags.push(node);
+  }
+  else if (isTagNode && ('vol' === node.name)) {
+    payloads.tags.push(node);
+  }
+  else if (isPbTag(node)) {
+    payloads.pbStarted = true;
+    payloads.currentPage = Doc.createPage({
+      name: node.attribs.id,
+      content: '',
+      pathData: pathData
+    });
+    payloads.pages.push(payloads.currentPage);
+  }
+  else if (isTextNode(node) && payloads.currentPage) {
+    payloads.currentPage.content += node.data;
+  }
+  else if (isTag(node) && payloads.currentPage) {
+    payloads.currentPage.content += tagToStr(false, node);
+
+    const children = node.children;
+    if (children) {
+      payloads = recursiveCreatePagesByPb(payloads, children, pathData);
+      const endingNode = {
+        raw: "/" + node.name,
+        data: "/" + node.name,
+        type: "tag",
+        name: node.name,
+      };
+      payloads.currentPage.content += tagToStr(false, endingNode);
+    }
+  }
+
+  // release memory
+  if (isTextNode(node)) {
+    node.data = '';
+  }
+
+  return recursiveCreatePagesByPb(payloads, dom, pathData);
+}
+
 function createPagesByPbContent(content, pathData) {
 
   return new Promise(function(resolve, reject) {
@@ -110,6 +164,8 @@ function createPagesByPbContent(content, pathData) {
       throw `Found empty tag <> in ${pathData.base}`;
     }
 
+    // new tags like p could cross pb
+    /*
     const missingTags = getMissingTags(content);
 
     if (missingTags.length > 0) {
@@ -119,6 +175,7 @@ function createPagesByPbContent(content, pathData) {
         message: getMissingTagsMessage(pathData.base, missingTags)
       });
     }
+    */
 
     let parser = new htmlparser.Parser(new htmlparser.DefaultHandler(function(err, dom) {
 
@@ -126,46 +183,16 @@ function createPagesByPbContent(content, pathData) {
         return reject(error);
       }
 
-      let pages = [];
-      let currentPage = null;
-      let tags = [];
-      let pbStarted = false;
+      const initPayloads = {
+        pages: [],
+        currentPage: null,
+        tags: [],
+        pbStarted: false
+      };
 
-      dom.forEach(function(node) {
-
-        const isTagNode = isTag(node);
-
-        // store only for sutra, division and vol
-        if ((! pbStarted) && isTagNode && ('sutra' === node.name)) {
-          tags.push(node);
-        }
-        else if (isTagNode && ('division' === node.name)) {
-          tags.push(node);
-        }
-        else if (isTagNode && ('vol' === node.name)) {
-          tags.push(node);
-        }
-        else if (isPbTag(node)) {
-          pbStarted = true;
-          currentPage = Doc.createPage({
-            name: node.attribs.id,
-            content: '',
-            pathData: pathData
-          });
-          pages.push(currentPage);
-        }
-        else if (isTextNode(node) && currentPage) {
-          currentPage.content += node.data;
-        }
-        else if (isTag(node) && currentPage) {
-          currentPage.content += tagToStr(node);
-        }
-
-        // release memory
-        if (isTextNode(node)) {
-          node.data = '';
-        }
-      });
+      const payloads = recursiveCreatePagesByPb(initPayloads, dom, pathData);
+      let pages = payloads.pages;
+      let tags = payloads.tags;
 
       // https://github.com/karmapa/ketaka-lite/issues/120
       pages = pages.map((page) => Object.assign({}, page, {content: page.content.replace(/\n$/, '').replace(/^\n/, '')}));
@@ -185,10 +212,27 @@ async function createPageDataByPbRows(pbRows) {
   let paths = _.map(pbRows, 'path');
   let pathDataSets = _.map(pbRows, 'pathData');
 
-  let contents = await Helper.readFiles(paths);
+  let fileTexts = await Helper.readFiles(paths);
 
-  let promises = contents.map((content, index) => {
-    return createPagesByPbContent(content.toString(), pathDataSets[index]);
+  let contents = fileTexts.reduce(function(contents, fileText, index) {
+    let chunks = fileText.toString()
+      .replace(/<pb /g, '~!@#%#@$&')
+      .split('~!@#%#@');
+
+    const is1stChunkEmpty = ! chunks[0].trim();
+
+    if (is1stChunkEmpty) {
+      chunks.shift();
+    }
+
+    chunks = chunks.map(chunk => ({ content: chunk, fnIdx: index }))
+
+    Array.prototype.push.apply(contents, chunks);
+    return contents;
+  }, []);
+
+  let promises = contents.map(content => {
+    return createPagesByPbContent(content.content, pathDataSets[content.fnIdx]);
   });
 
   let resArr = await Promise.all(promises);
@@ -206,7 +250,8 @@ async function createPageDataByPbRows(pbRows) {
   let tags = _.flatten(_.map(resArr, 'tags'));
   let countData = _.countBy(tags, tag => tag.name);
 
-  each(pages, page => checkUnclosedTags({content: page.content, path: page.pathData.base}));
+  // new tags like p could cross pb
+  // each(pages, page => checkUnclosedTags({content: page.content, path: page.pathData.base}));
 
   _.each(countData, (value, name) => {
     if (['division', 'vol'].includes(name) && (value > 1)) {
@@ -362,9 +407,12 @@ async function createDocByRows(bambooName, rows, onProgress) {
     return content;
   });
 
+  // new tags like p could cross xml files
+  /*
   if (textRow) {
     checkUnclosedTags({content: textContent, path: textRow.pathData.base});
   }
+  */
 
   let pageData = await createPageDataByPbRows(pbRows);
   let pbPages = pageData.pages;

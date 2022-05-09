@@ -16,16 +16,20 @@ export function isTextNode(node) {
   return 'text' === node.type;
 }
 
-export function tagToStr(node) {
+export function tagToStr(shouldProcessChildren, node) {
+
+  const nodeAttribs = node.attribs;
+  const attrStr = nodeAttribs ? ' ' + attrsToStr(nodeAttribs) : '';
 
   // non-self-closing tag
-  if (node.children) {
-    return '<' + node.name + ' ' + attrsToStr(node.attribs) + '>' + node.children.map(tagToStr).join('') + '</' + node.name + '>';
+  if (node.children && shouldProcessChildren) {
+    return '<' + node.name + attrStr + '>' + node.children.map(tagToStr.bind(null, shouldProcessChildren)).join('') + '</' + node.name + '>';
   }
 
   // self-closing tag
   if (isTag(node)) {
-    return '<' + node.name + ' ' + attrsToStr(node.attribs) + '/>';
+    return '<' + node.data + '>';
+    // return '<' + node.name + ' ' + attrsToStr(node.attribs) + '/>';
   }
 
   if (isTextNode(node)) {
