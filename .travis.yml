@@ -2,7 +2,7 @@ language: node_js
 matrix:
   include:
   - os: osx
-    osx_image: xcode9
+    osx_image: xcode9.4
 node_js:
 - 9.2.0
 cache: yarn
@@ -16,5 +16,7 @@ before_install:
 script:
 - test $TRAVIS_BRANCH = "master" && yarn build-mac && yarn upload-mac
 notifications:
-  slack:
-    secure: LU6mKKi8YbuiyI9qjorpP5D1n1+2oOgmFnl6ew03WLZiBp6lTmi2ATod2wmB833xJoLstxOI3A/+Roa9U8UiX7aa76xqqrKtE5b8WzW5Oqhn7RQ806GQZo/cr+7q0jUU+606m4b10W6Fd3Fu8PSdQmWjF9O5bo20Rnsmt4OJ6LsMHkFVuxe/zHTSYfjJ0lO35+mZCW1VVq4XjDPJhGqVFHEGcZcWtf7jPreMC3CWXNpnyo+BTK96WHJmTfBpMWd4iHBM65dVAJGlKw7PRZE1hqmgMqIqjA9/ChZRgZsOHrHJGdTE6kWQU2F/S8JN/08CpSN6pFHJb58GiRkd5+MegSDxMvzMEXA0zYuQ3pAN3hCXr1e+Kl9jy/HUuVT77cJRXlkvcRfLfYjT5BlwfHalsPkjHrES4iZd+VZ+jfmKgHwZkVFqyBgH8RT6aGDZ+OMKsjGw0YcHaZZYpCkjI6pVQUTskfmjmCs8xJkiGmqF9gUV02J2X7gS4U9J1g9OHTGnp+po18WW5XZY0dilUH4z4E29iFA4wRCwh6JqHBZwNKi+VtjJdYvmFG0E2B9BIlt55PrR0QGv1Z/nbgHfxRsnmKX+iJwappwrjrqKY12G6MZX7qH9BeBSlozH/cbxzm9CmVtypNoTIwZdJe7c3aqye+QWGzgFnvK3RjlZOLdph+g=
+  email:
+    - chieh.an.hsu@gmail.com
+#  slack:
+#    secure: LU6mKKi8YbuiyI9qjorpP5D1n1+2oOgmFnl6ew03WLZiBp6lTmi2ATod2wmB833xJoLstxOI3A/+Roa9U8UiX7aa76xqqrKtE5b8WzW5Oqhn7RQ806GQZo/cr+7q0jUU+606m4b10W6Fd3Fu8PSdQmWjF9O5bo20Rnsmt4OJ6LsMHkFVuxe/zHTSYfjJ0lO35+mZCW1VVq4XjDPJhGqVFHEGcZcWtf7jPreMC3CWXNpnyo+BTK96WHJmTfBpMWd4iHBM65dVAJGlKw7PRZE1hqmgMqIqjA9/ChZRgZsOHrHJGdTE6kWQU2F/S8JN/08CpSN6pFHJb58GiRkd5+MegSDxMvzMEXA0zYuQ3pAN3hCXr1e+Kl9jy/HUuVT77cJRXlkvcRfLfYjT5BlwfHalsPkjHrES4iZd+VZ+jfmKgHwZkVFqyBgH8RT6aGDZ+OMKsjGw0YcHaZZYpCkjI6pVQUTskfmjmCs8xJkiGmqF9gUV02J2X7gS4U9J1g9OHTGnp+po18WW5XZY0dilUH4z4E29iFA4wRCwh6JqHBZwNKi+VtjJdYvmFG0E2B9BIlt55PrR0QGv1Z/nbgHfxRsnmKX+iJwappwrjrqKY12G6MZX7qH9BeBSlozH/cbxzm9CmVtypNoTIwZdJe7c3aqye+QWGzgFnvK3RjlZOLdph+g=
