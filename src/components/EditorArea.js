@@ -171,11 +171,13 @@ export default class EditorArea extends React.Component {
       return false;
     }
 
+    /*
     const fontRecords = get(page, 'config.fontRecords', []);
     fontRecords.forEach(record => {
       const {from, to, css} = record;
       codemirror.markText(from, to, css);
     });
+    */
   }
 
   componentDidUpdate(previousProps, previousState) {
